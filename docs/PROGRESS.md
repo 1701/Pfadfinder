@@ -2,6 +2,10 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 2B: Antwortprüfung
+- **Gebaut:** `src/domain/evaluation`: `evaluate(item, answer)` für alle 9 Formate mit `detail` fürs Feedback. Dazu Answer-Schemas (Zod) mit `parseAnswer()`, `parseGermanNumber()` und `correctnessScore()`. 72 Tests.
+- **Entscheidungen:** Auswertung über eine Tabelle je Format, ohne Format-Switch im aufrufenden Code. `multi-choice` und `find-error` prüfen Mengen, doppelte Einträge sind egal. `match` ist falsch, sobald es ein zusätzliches Paar gibt oder der Distraktor benutzt wird. `parseGermanNumber` gibt `null` zurück für leere, unvollständige (`3,`) und mehrdeutige (`1.5`) Eingaben; der Punkt gilt nur in Dreiergruppen als Tausendertrenner. `short-answer`: Bewertung 1 → `true`, 0 → `false`, 0,5 → `0.5`; der Freitext ist optional.
+
 ## 2026-10-11 – Aufgabe 2A: Aufräumen
 - **Gebaut:** Upgrade auf Vite 8, React Router 7 (Paket `react-router`), Tailwind 4 CSS-first (`@tailwindcss/vite`, Tokens per `@theme`), Vitest 5, Playwright 1.63. Neue `.npmrc` mit `min-release-age=14`. Schema 1.0.1: `minSelect` = Anzahl richtiger Optionen. Doku nachgezogen (CLAUDE.md, ARCHITECTURE §2, PRODUCT §11).
 - **Entscheidungen:** React Router 7 statt 8, weil 8 React 19 voraussetzt. vite-plugin-pwa bleibt 1.3, weil 2.0 jünger als 14 Tage ist. `react-router-dom` → `react-router`, `postcss`/`autoprefixer` → `@tailwindcss/vite` in der Dependency-Liste. `schemaVersion` bleibt `"1.0"` (nur Major.Minor).
