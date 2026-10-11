@@ -1,0 +1,28 @@
+[
+  {
+    "id": "d-rss-1-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz ist ein Wort falsch geschrieben. Tippe es an.",
+    "payload": {
+      "words": [
+        { "id": "w1", "text": "Am" }, { "id": "w2", "text": "samstag" }, { "id": "w3", "text": "fahren" },
+        { "id": "w4", "text": "wir" }, { "id": "w5", "text": "zum" }, { "id": "w6", "text": "See." }
+      ],
+      "errorCount": 1
+    },
+    "solution": { "errorIds": ["w2"], "corrections": { "w2": "Samstag" } },
+    "feedback": {
+      "correct": "Richtig: Wochentage sind Nomen und werden großgeschrieben.",
+      "incorrect": "Suche ein Wort, vor das du 'der', 'die' oder 'das' setzen kannst. Das ist ein Nomen.",
+      "misconception": "Wochentage werden oft kleingeschrieben, weil sie nach 'am' stehen."
+    },
+    "tags": ["grossschreibung", "nomen", "wochentage"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "m-zo-1-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 4 735 + 2 868",
+    "readAloud": "Rechne aus: 4735 plus 2868",
+    "payload": { "maxDigits": 5 },
+    "solution": { "value": 7603 },
+    "feedback": {
+      "correct": "Richtig! Du hast an jeder Stelle den Übertrag mitgenommen.",
+      "incorrect": "Rechne stellenweise von rechts: 5 + 8 = 13, die 1 wandert zur nächsten Stelle. Prüfe jede Stelle so.",
+      "misconception": "Viele vergessen den Übertrag in die Hunderterstelle."
+    },
+    "tags": ["schriftliche-addition", "uebertrag"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  }
+]

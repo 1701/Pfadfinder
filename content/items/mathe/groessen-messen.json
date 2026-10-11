@@ -1,0 +1,30 @@
+[
+  {
+    "id": "m-gm-2-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Leyla kauft 3 Hefte für je 1,20 € und einen Füller für 8,50 €. Sie bezahlt mit einem 20-Euro-Schein." },
+    "prompt": "Wie viel Geld bekommt sie zurück?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "7,90 €" },
+        { "id": "b", "text": "10,30 €" },
+        { "id": "c", "text": "8,10 €" },
+        { "id": "d", "text": "12,10 €" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau: 3 · 1,20 € = 3,60 €, plus 8,50 € sind 12,10 €. 20 € − 12,10 € = 7,90 €.",
+      "incorrect": "Rechne erst alles zusammen, was Leyla kauft. Dann ziehe das von 20 € ab.",
+      "misconception": "Wer 12,10 € wählt, hat den Preis ausgerechnet, aber das Rückgeld vergessen."
+    },
+    "tags": ["geld", "sachaufgabe", "zweischrittig"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  }
+]

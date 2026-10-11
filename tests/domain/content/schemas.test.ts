@@ -1,0 +1,222 @@
+import { describe, expect, it } from 'vitest';
+import {
+  FORMATS,
+  formatIssuePath,
+  itemSchema,
+  probetestSchema,
+  readingTextSchema,
+  schemaVersionFileSchema,
+  type Item,
+} from '../../../src/domain/content';
+import {
+  clozeSelect,
+  findError,
+  markInText,
+  match,
+  multiChoice,
+  numberInput,
+  order,
+  sachtext,
+  shortAnswer,
+  singleChoice,
+  validItemsByFormat,
+} from '../../fixtures/items';
+import { buildMatheProbetest } from '../../fixtures/builders';
+
+/** Returns the formatted paths of all issues, or [] if the data is valid. */
+function issuePaths(schema: { safeParse(d: unknown): { success: boolean; error?: { issues: { path: PropertyKey[] }[] } } }, data: unknown): string[] {
+  const result = schema.safeParse(data);
+  return result.success ? [] : (result.error?.issues ?? []).map((i) => formatIssuePath(i.path));
+}
+
+/** Deep-clones an item and applies a mutation. */
+function mutate<T extends Item>(item: T, fn: (draft: T) => void): T {
+  const draft = structuredClone(item);
+  fn(draft);
+  return draft;
+}
+
+describe('itemSchema – one valid example per format', () => {
+  it('covers all 9 formats', () => {
+    expect(Object.keys(validItemsByFormat).sort()).toEqual([...FORMATS].sort());
+  });
+
+  it.each(Object.entries(validItemsByFormat))('%s is valid', (_format, item) => {
+    expect(issuePaths(itemSchema, item)).toEqual([]);
+  });
+});
+
+describe('itemSchema – one invalid example per format', () => {
+  const cases: [string, Item, string][] = [
+    ['single-choice: solution points to a missing option', mutate(singleChoice, (d) => (d.solution.optionId = 'z')), 'solution.optionId'],
+    ['multi-choice: solution contains an unknown option', mutate(multiChoice, (d) => (d.solution.optionIds = ['a', 'x'])), 'solution.optionIds[1]'],
+    ['number-input: decimal solution without allowDecimal', mutate(numberInput, (d) => (d.solution.value = 7603.5)), 'solution.value'],
+    ['match: a left entry is not paired', mutate(match, (d) => (d.solution.pairs = d.solution.pairs.slice(0, 2))), 'solution.pairs'],
+    ['order: orderedIds misses an element', mutate(order, (d) => (d.solution.orderedIds = ['b', 'd', 'a'])), 'solution.orderedIds'],
+    ['cloze-select: solution is not one of the gap options', mutate(clozeSelect, (d) => (d.solution.gaps['2'] = 'Hunnd')), 'solution.gaps.2'],
+    ['mark-in-text: index outside the text', mutate(markInText, (d) => (d.solution.indices = [1, 4, 7])), 'solution.indices[2]'],
+    ['find-error: errorId does not exist', mutate(findError, (d) => { d.solution.errorIds = ['w9']; d.solution.corrections = { w9: 'See' }; }), 'solution.errorIds[0]'],
+    ['short-answer: no key points', mutate(shortAnswer, (d) => (d.solution.keyPoints = [])), 'solution.keyPoints'],
+  ];
+
+  it('has a case for every format', () => {
+    expect(new Set(cases.map(([, item]) => item.format))).toEqual(new Set(FORMATS));
+  });
+
+  it.each(cases)('%s', (_name, item, expectedPath) => {
+    expect(issuePaths(itemSchema, item)).toContain(expectedPath);
+  });
+});
+
+describe('itemSchema – format bounds from CONTENT_SCHEMA.md §4', () => {
+  it.each<[string, Item, string]>([
+    ['single-choice needs 3–4 options', mutate(singleChoice, (d) => (d.payload.options = d.payload.options.slice(0, 2))), 'payload.options'],
+    ['multi-choice needs 2–3 correct options', mutate(multiChoice, (d) => (d.solution.optionIds = ['a'])), 'solution.optionIds'],
+    ['multi-choice minSelect cannot exceed correct options', mutate(multiChoice, (d) => (d.payload.minSelect = 4)), 'payload.minSelect'],
+    ['number-input solution must fit maxDigits', mutate(numberInput, (d) => (d.payload.maxDigits = 3)), 'payload.maxDigits'],
+    ['match allows at most one distractor', mutate(match, (d) => d.payload.right.push({ id: 'r5', text: '10 m' })), 'payload.right'],
+    ['match pairs each right entry at most once', mutate(match, (d) => (d.solution.pairs[2] = ['l3', 'r1'])), 'solution.pairs'],
+    ['order needs 3–5 elements', mutate(order, (d) => (d.payload.items = d.payload.items.slice(0, 2))), 'payload.items'],
+    ['cloze-select gaps have exactly 3 options', mutate(clozeSelect, (d) => d.payload.gaps[0]?.options.push('kaltt')), 'payload.gaps[0].options'],
+    ['cloze-select template placeholders must match gaps', mutate(clozeSelect, (d) => (d.payload.template = 'Im Winter ist es oft {1}.')), 'payload.template'],
+    ['mark-in-text respects maxSelect', mutate(markInText, (d) => (d.payload.maxSelect = 2)), 'solution.indices'],
+    ['find-error has 1–2 errors', mutate(findError, (d) => (d.payload.errorCount = 3)), 'payload.errorCount'],
+    ['find-error needs a correction per error', mutate(findError, (d) => (d.solution.corrections = {})), 'solution.corrections'],
+    ['short-answer has at most 3 key points', mutate(shortAnswer, (d) => (d.solution.keyPoints = ['a', 'b', 'c', 'd'])), 'solution.keyPoints'],
+  ])('%s', (_name, item, expectedPath) => {
+    expect(issuePaths(itemSchema, item)).toContain(expectedPath);
+  });
+
+  it('number-input accepts a decimal solution when allowDecimal is set', () => {
+    const item = mutate(numberInput, (d) => {
+      d.payload.allowDecimal = true;
+      d.solution.value = 7603.5;
+    });
+    expect(issuePaths(itemSchema, item)).toEqual([]);
+  });
+
+  it('mark-in-text counts sentences when unit is "sentence"', () => {
+    const item = mutate(markInText, (d) => {
+      d.payload = { text: 'Mia geht los. Es regnet! Ist das schlimm?', unit: 'sentence', maxSelect: 1 };
+      d.solution.indices = [2];
+    });
+    expect(issuePaths(itemSchema, item)).toEqual([]);
+    expect(issuePaths(itemSchema, mutate(item, (d) => (d.solution.indices = [3])))).toContain('solution.indices[0]');
+  });
+});
+
+describe('itemSchema – common fields (§2, §3)', () => {
+  it('rejects an unknown format', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, format: 'drawing' })).toContain('format');
+  });
+
+  it('rejects unknown keys (typos must not slip through)', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, readaloud: 'x' })).toEqual(['']);
+  });
+
+  it('rejects an id that does not follow {fach}-{bereich}-{niveau}-{laufnr}', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-zo-1-1' })).toContain('id');
+  });
+
+  it('rejects an id whose prefix contradicts fach/bereich/niveau', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-zo-2-001' })).toContain('id');
+    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-gm-1-001' })).toContain('id');
+  });
+
+  it('rejects a bereich that belongs to the other fach', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, bereich: 'rs-strategien' })).toContain('bereich');
+  });
+
+  it('rejects niveau outside 1–3 and an unknown status', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, niveau: 4 })).toContain('niveau');
+    expect(issuePaths(itemSchema, { ...numberInput, status: 'published' })).toContain('status');
+  });
+
+  it('requires assetAlt when assetId is set', () => {
+    const item = { ...numberInput, stimulus: { assetId: 'zahlenstrahl-01' } };
+    expect(issuePaths(itemSchema, item)).toContain('stimulus.assetAlt');
+    expect(issuePaths(itemSchema, { ...item, stimulus: { ...item.stimulus, assetAlt: 'Ein Zahlenstrahl' } })).toEqual([]);
+  });
+
+  it('rejects asset ids that are not safe file names', () => {
+    const item = { ...numberInput, stimulus: { assetId: '../secret', assetAlt: 'x' } };
+    expect(issuePaths(itemSchema, item)).toContain('stimulus.assetId');
+  });
+
+  it('allows textRef only in reading areas', () => {
+    expect(issuePaths(itemSchema, { ...findError, stimulus: { textRef: 't-sach-001' } })).toContain('stimulus.textRef');
+    const reading = { ...findError, id: 'd-lsa-1-002', bereich: 'lesen-sachtext', stimulus: { textRef: 't-sach-001' } };
+    expect(issuePaths(itemSchema, reading)).toEqual([]);
+  });
+
+  it('requires schemaVersion "1.0" and an ISO date in meta.createdAt', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, schemaVersion: '1.1' })).toContain('schemaVersion');
+    expect(issuePaths(itemSchema, { ...numberInput, meta: { ...numberInput.meta, createdAt: '11.10.2026' } })).toContain(
+      'meta.createdAt',
+    );
+  });
+
+  it('rejects empty prompt and non-positive estimatedSeconds', () => {
+    expect(issuePaths(itemSchema, { ...numberInput, prompt: '  ' })).toContain('prompt');
+    expect(issuePaths(itemSchema, { ...numberInput, estimatedSeconds: 0 })).toContain('estimatedSeconds');
+  });
+});
+
+describe('readingTextSchema (§5)', () => {
+  it('accepts a valid text', () => {
+    expect(issuePaths(readingTextSchema, sachtext)).toEqual([]);
+  });
+
+  it.each<[string, object, string]>([
+    ['wordCount below 150', { wordCount: 120 }, 'wordCount'],
+    ['fewer than 4 items', { itemIds: sachtext.itemIds.slice(0, 3) }, 'itemIds'],
+    ['more than 6 items', { itemIds: [...sachtext.itemIds, 'd-lsa-3-902', 'd-lsa-3-903'] }, 'itemIds'],
+    ['id prefix does not match kind', { kind: 'literarisch' }, 'id'],
+    ['malformed id', { id: 'igel' }, 'id'],
+  ])('rejects %s', (_name, patch, expectedPath) => {
+    expect(issuePaths(readingTextSchema, { ...sachtext, ...patch })).toContain(expectedPath);
+  });
+});
+
+describe('probetestSchema (§6)', () => {
+  const { probetest } = buildMatheProbetest();
+
+  it('accepts a valid probetest', () => {
+    expect(issuePaths(probetestSchema, probetest)).toEqual([]);
+  });
+
+  it('requires durationMinutes 45', () => {
+    expect(issuePaths(probetestSchema, { ...probetest, durationMinutes: 30 })).toContain('durationMinutes');
+  });
+
+  it('requires 18–24 items', () => {
+    const itemIds = probetest.itemIds.slice(0, 17);
+    expect(issuePaths(probetestSchema, { ...probetest, itemIds })).toContain('itemIds');
+  });
+
+  it('requires the niveau mix within ±1 item of 40/40/20', () => {
+    const p = { ...probetest, niveauMix: { 1: 11, 2: 6, 3: 3 } };
+    expect(issuePaths(probetestSchema, p)).toEqual(expect.arrayContaining(['niveauMix.1', 'niveauMix.2']));
+  });
+
+  it('requires at least 2 items in every bereich of the fach', () => {
+    const p = { ...probetest, bereichMix: { ...probetest.bereichMix, 'raum-form': 1, 'zahlen-operationen': 7 } };
+    expect(issuePaths(probetestSchema, p)).toContain('bereichMix.raum-form');
+  });
+
+  it('rejects bereiche of the other fach and sums that do not match the item count', () => {
+    const p = { ...probetest, bereichMix: { ...probetest.bereichMix, 'rs-strategien': 2 } };
+    expect(issuePaths(probetestSchema, p)).toEqual(expect.arrayContaining(['bereichMix.rs-strategien', 'bereichMix']));
+  });
+
+  it('rejects an id that does not start with the fach', () => {
+    expect(issuePaths(probetestSchema, { ...probetest, id: 'deutsch-01' })).toContain('id');
+  });
+});
+
+describe('schemaVersionFileSchema (§1)', () => {
+  it('accepts version 1.0 only', () => {
+    expect(issuePaths(schemaVersionFileSchema, { version: '1.0' })).toEqual([]);
+    expect(issuePaths(schemaVersionFileSchema, { version: '2.0' })).toContain('version');
+  });
+});

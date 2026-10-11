@@ -1,0 +1,3 @@
+#!/bin/sh
+# Content errors must never reach a commit (ARCHITECTURE.md §8).
+npm run --silent content:validate
