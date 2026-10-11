@@ -188,7 +188,7 @@ Nicht drin: alles aus Abschnitt 4 und Abschnitt 11.
 - **v2:** Optionale Accounts (Eltern), Multi-Kind, Sync über Geräte, Eltern-Dashboard, Content-Editor mit Review-Workflow, Item-Statistiken (Basis für IRT-Kalibrierung)
 - **v3:** Lehrkräfte-Modus (Klasse anlegen, Übungspläne), weitere Bundesländer/Übergangsformate (Bayern Übertritt, NRW), Monetarisierungsoptionen prüfen (Schullizenz, Eltern-Premium, Non-Profit/Spenden)
 
-Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: Datenmodell kennt "Lernende" als Entität (auch wenn nur eine existiert); Fortschrittsdaten sind serialisierbar (Export = späteres Sync-Format); Items tragen Bundesland/Testformat als Metadatum; Content ist vom Code getrennt (JSON, versioniert).
+Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: Datenmodell kennt "Lernende" als Entität (auch wenn nur eine existiert); Fortschrittsdaten sind serialisierbar (Export = späteres Sync-Format); Bundesland: `Learner.settings.bundesland` im MVP, `Item.region` ab Schema 1.1; Content ist vom Code getrennt (JSON, versioniert).
 
 ## 12. Rechtliches und Datenschutz
 

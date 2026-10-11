@@ -1,6 +1,7 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.1 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln, ohne Felder zu ändern.
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
 ---
@@ -100,7 +101,7 @@ solution: { optionId: string }
 
 ### 4.2 `multi-choice`
 ```ts
-payload:  { options: { id: string; text: string }[]; minSelect: number }  // 4–5 Optionen, 2–3 richtig
+payload:  { options: { id: string; text: string }[]; minSelect: number }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1)
 solution: { optionIds: string[] }                                         // exakt diese Menge
 ```
 

@@ -72,7 +72,8 @@ describe('itemSchema – format bounds from CONTENT_SCHEMA.md §4', () => {
   it.each<[string, Item, string]>([
     ['single-choice needs 3–4 options', mutate(singleChoice, (d) => (d.payload.options = d.payload.options.slice(0, 2))), 'payload.options'],
     ['multi-choice needs 2–3 correct options', mutate(multiChoice, (d) => (d.solution.optionIds = ['a'])), 'solution.optionIds'],
-    ['multi-choice minSelect cannot exceed correct options', mutate(multiChoice, (d) => (d.payload.minSelect = 4)), 'payload.minSelect'],
+    ['multi-choice minSelect above the number of correct options', mutate(multiChoice, (d) => (d.payload.minSelect = 4)), 'payload.minSelect'],
+    ['multi-choice minSelect below the number of correct options', mutate(multiChoice, (d) => (d.payload.minSelect = 2)), 'payload.minSelect'],
     ['number-input solution must fit maxDigits', mutate(numberInput, (d) => (d.payload.maxDigits = 3)), 'payload.maxDigits'],
     ['match allows at most one distractor', mutate(match, (d) => d.payload.right.push({ id: 'r5', text: '10 m' })), 'payload.right'],
     ['match pairs each right entry at most once', mutate(match, (d) => (d.solution.pairs[2] = ['l3', 'r1'])), 'solution.pairs'],

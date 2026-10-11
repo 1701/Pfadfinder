@@ -23,6 +23,8 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Keine Änderung an `docs/CONTENT_SCHEMA.md` ohne Versionssprung und CHANGELOG-Eintrag; im Zweifel Rückfrage
 - Keine Netzwerkaufrufe zur Laufzeit außer dem Laden der eigenen Assets
 - Keine Platzhalter-Items im Code erfinden; nutze `content/` oder frage nach Testdaten
+- Renderer für mark-in-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
+- Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex).
 
 ## Kinder-UX-Checkliste (vor jedem UI-Commit)
 - [ ] Touch-Ziele ≥ 48 px, eine Aufgabe pro Screen, kein Scrollen innerhalb der Aufgabe (iPad quer und hoch)
@@ -40,10 +42,10 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 
 ## Dependencies (Laufzeit, genehmigt)
-react, react-dom, react-router-dom, zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
+react, react-dom, react-router (v7, Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
 
 ## Dependencies (Dev, genehmigt)
-vite, @vitejs/plugin-react, typescript, tailwindcss, postcss, autoprefixer, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node (nur Typdefinitionen: React 18 und Node bringen keine eigenen Typen mit, ohne sie läuft TypeScript strict nicht; nachgetragen 2026-10-11, Bestätigung durch Markus offen)
+vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node
 
 ## Befehle
 ```

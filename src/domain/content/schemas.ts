@@ -140,8 +140,13 @@ const multiChoiceItem = z
     item.solution.optionIds.forEach((id, i) => {
       if (!ids.includes(id)) fail(ctx, ['solution', 'optionIds', i], `Option "${id}" existiert nicht in payload.options`);
     });
-    if (item.payload.minSelect > item.solution.optionIds.length) {
-      fail(ctx, ['payload', 'minSelect'], 'minSelect ist größer als die Anzahl richtiger Optionen');
+    // Since schema 1.0.1: minSelect tells the child exactly how many options to pick.
+    if (item.payload.minSelect !== item.solution.optionIds.length) {
+      fail(
+        ctx,
+        ['payload', 'minSelect'],
+        `minSelect (${item.payload.minSelect}) muss der Anzahl richtiger Optionen (${item.solution.optionIds.length}) entsprechen`,
+      );
     }
   });
 

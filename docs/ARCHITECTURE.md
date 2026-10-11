@@ -8,11 +8,13 @@ Client-only PWA. Kein Backend, keine Datenbank außerhalb des Geräts, kein Netz
 
 ## 2. Stack (festgelegt)
 
+Versionen: aktuelle stabile Majors, Stand siehe `package.json`.
+
 | Zweck | Wahl | Begründung |
 |---|---|---|
-| Build | Vite 5 + TypeScript strict | schnell, PWA-Plugin ausgereift |
-| UI | React 18, React Router 6 | Claude-Code-Stärke, großes Ökosystem |
-| Styling | Tailwind CSS + CSS-Variablen für Theme | schnell iterierbar, Design-Tokens zentral |
+| Build | Vite + TypeScript strict | schnell, PWA-Plugin ausgereift |
+| UI | React, React Router (Library-Modus, kein Framework-Modus) | Claude-Code-Stärke, großes Ökosystem |
+| Styling | Tailwind CSS (CSS-first, Tokens per `@theme`) | schnell iterierbar, Design-Tokens zentral |
 | State | Zustand | klein, kein Boilerplate; Persistenz über eigenen Adapter |
 | Persistenz | Dexie (IndexedDB) | strukturiert, migrierbar, Export/Import als JSON |
 | Validierung | Zod | Schema aus `CONTENT_SCHEMA.md` 1:1 als Zod-Types; Build-Zeit-Validierung |

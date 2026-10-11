@@ -1,8 +1,12 @@
-/* Design tokens (ARCHITECTURE.md §7). Palette is provisional until the visual style is defined. */
-:root {
+/* Design tokens (ARCHITECTURE.md §7). Palette is provisional until the visual style is defined.
+   Tokens in @theme become CSS variables on :root and Tailwind utilities (bg-bg, text-primary, font-sans). */
+@theme {
   --color-bg: #fdf8ee;
   --color-ink: #1f2a24;
   --color-primary: #2f6b4f;
-  --font-body: 'Andika', system-ui, sans-serif;
+  --font-sans: 'Andika', system-ui, sans-serif;
+}
+
+:root {
   --font-size-base: 18px;
 }

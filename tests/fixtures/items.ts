@@ -54,7 +54,7 @@ export const multiChoice: ItemOf<'multi-choice'> = {
       { id: 'd', text: '505' },
       { id: 'e', text: '74' },
     ],
-    minSelect: 2,
+    minSelect: 3,
   },
   solution: { optionIds: ['a', 'c', 'd'] },
   feedback: {
