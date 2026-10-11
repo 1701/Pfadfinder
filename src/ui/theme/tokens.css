@@ -1,12 +1,84 @@
-/* Design tokens (ARCHITECTURE.md §7). Palette is provisional until the visual style is defined.
-   Tokens in @theme become CSS variables on :root and Tailwind utilities (bg-bg, text-primary, font-sans). */
-@theme {
-  --color-bg: #fdf8ee;
-  --color-ink: #1f2a24;
-  --color-primary: #2f6b4f;
-  --font-sans: 'Andika', system-ui, sans-serif;
+/* Design tokens – single source for colors, type, spacing, radii and motion
+   (ARCHITECTURE.md §7, .claude/skills/pfadfinder-ui). Components never use literal values.
+   World: a hiking map on cool paper. Ink is map-green, the signal is the yellow of trail marks.
+   Contrast pairs are checked in tests/ui/tokens.test.ts (WCAG AA). */
+
+@theme static {
+  /* Only these colors exist as utilities; Tailwind's default palette is removed on purpose. */
+  --color-*: initial;
+  --color-paper: #eef3f1; /* page ground: cool paper */
+  --color-surface: #f9fbfa; /* task sheet, panels */
+  --color-ink: #163a2f; /* text: map ink */
+  --color-ink-muted: #46645a; /* secondary text, "3 von 10" */
+  --color-line: #c3d1cb; /* dividers, map contour lines (decorative) */
+  --color-line-strong: #6f8a80; /* outline of options and inputs */
+  --color-signal: #f2b83a; /* primary button only (Prüfen, Weiter) */
+  --color-signal-edge: #8c5e00; /* border of primary button and of a selected option */
+  --color-signal-soft: #fbe7b0; /* selected option, marked words */
+  --color-correct: #1c5e78; /* "richtig": calm water blue, not green (green is the ink) */
+  --color-correct-surface: #e0eef3;
+  --color-notyet: #5b5449; /* "noch nicht ganz": stone grey, never red */
+  --color-notyet-surface: #ece8e1;
+
+  /* Andika for everything readable; no second family. */
+  --font-*: initial;
+  --font-sans: 'Andika', 'Trebuchet MS', system-ui, sans-serif;
+
+  /* 1rem = 18px (html font-size). Nothing below 18px (PRODUCT.md §7). */
+  --text-*: initial;
+  --text-body: 1rem;
+  --text-body--line-height: 1.45;
+  --text-option: 1.2222rem; /* 22px: answer options, digit pad */
+  --text-option--line-height: 1.35;
+  --text-prompt: 1.5556rem; /* 28px: the task itself */
+  --text-prompt--line-height: 1.25;
+  --text-heading: 1.7778rem; /* 32px */
+  --text-heading--line-height: 1.25;
+  --text-display: 2.2222rem; /* 40px: map title */
+  --text-display--line-height: 1.2;
+
+  /* Named spacing; also used for sizes (min-h-touch, size-primary). */
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-touch: 48px; /* minimum touch target */
+  --spacing-primary: 56px; /* Prüfen / Weiter / Vorlesen */
+  --spacing-focus: 3px; /* focus ring width and offset */
+
+  /* Readable column width for text-heavy pages (Eltern-Bereich, dev pages). */
+  --container-page: 60rem;
+
+  /* Radii carry meaning: sheets are square like a map, controls are round to the touch. */
+  --radius-*: initial;
+  --radius-sheet: 4px;
+  --radius-control: 14px;
+  --radius-round: 9999px;
+
+  /* No shadows: depth comes from paper tone and fine lines. */
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+
+  --ease-*: initial;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --animate-*: initial;
 }
 
 :root {
-  --font-size-base: 18px;
+  --font-size-root: 18px;
+  /* Motion only in response to the child's action, max. 300ms. */
+  --duration-press: 120ms;
+  --duration-feedback: 250ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-press: 0ms;
+    --duration-feedback: 0ms;
+  }
 }

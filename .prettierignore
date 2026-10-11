@@ -9,3 +9,4 @@ package-lock.json
 docs/
 content/
 CLAUDE.md
+.claude/

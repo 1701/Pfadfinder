@@ -1,0 +1,17 @@
+/* Andika 7.000 (SIL, OFL 1.1, see public/fonts/andika/OFL.txt). Self-hosted and precached
+   by the service worker: no network access at runtime or build time. */
+@font-face {
+  font-family: 'Andika';
+  src: url('/fonts/andika/Andika-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Andika';
+  src: url('/fonts/andika/Andika-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

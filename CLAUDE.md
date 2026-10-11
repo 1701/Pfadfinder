@@ -55,5 +55,6 @@ npm run check            lint + content:validate + test + build
 npm run content:validate scripts/validate-content.ts
 npm run test             Vitest
 npm run e2e              Playwright
-npm run build            Produktions-Build inkl. PWA
+npm run build            Produktions-Build inkl. PWA und Bundle-Prüfung
+npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/screenshots
 ```

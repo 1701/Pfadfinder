@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 4: Design-Tokens
+- **Gebaut:** `tokens.css` nach Token-Plan v1 (`@theme static`; Tailwind-Standardfarben, -radien und -schatten entfernt). Andika 7.000 Regular und Bold mit OFL.txt unter `public/fonts/andika/`. Router mit `/dev/tokens` nur im Dev-Build. Tests: Kontraste aus `tokens.css` (AA), keine Hex- und Pixelwerte in `src/ui` und `src/app`. `check-bundle.ts` nach dem Build prüft Dev-Seiten und Schrift-Precache. `npm run screenshots`.
+- **Entscheidungen:** Eine gewählte Option bekommt `signal-soft` + `signal-edge`, volles Gelb gibt es nur für Prüfen/Weiter. Die Schrift ist einmalig heruntergeladen und committet; der Build geht nie ins Netz (Archiv SHA-256 `88ba6ea4…c070`). Keine Schatten. Keine zweite Schriftfamilie. `.claude/` ist von Prettier ausgenommen (seit dem Skill-Commit war `check` unbemerkt rot).
+- **Palette:** Wegmarke-Gelb und Seeblau, von Markus über die Farbprobe bestätigt (Alternativen waren Ocker/Sonnengelb und Fjordblau/Petrol).
+- **Offen:** Andika ist nicht verkleinert (≈ 290 KB je Schnitt); wer sie verkleinert, muss sie nach OFL umbenennen.
+
 ## 2026-10-11 – Aufgabe 3C: Scheduler
 - **Gebaut:** `src/domain/scheduler`: `seededShuffle` (xmur3 + mulberry32) mit `presentationSeed(itemId, attemptIndex)`, `pickNext`, `enqueueReview`, `onReviewResult` und `isReviewDue`, außerdem `buildCheck` und `nextCheckItem`. 47 Tests.
 - **Entscheidungen:** `pickNext` braucht zusätzlich `now`, `reviewsInSession` (für max. 3) und `seed`; das Ergebnis enthält `source: 'review' | 'practice'`. Fallback-Reihenfolge: gleiches Niveau ungesehen → ±1 ungesehen → Wiederholung (nicht das letzte Item) → jedes Niveau. `null` kommt nur, wenn der Bereich leer ist. Bei Reviews gilt die 20er-Sperre nicht. `enqueueReview` bekommt `learnerId` als ersten Parameter. Ein Review ist ab Beginn des Fälligkeitstags fällig, gemessen in lokaler Zeit. Ein 0,5 zählt bei Reviews als „noch nicht“. Der Check ist ein Plan plus `nextCheckItem`, im Rundlauf über die Bereiche (die ersten Items sind alle Niveau 1). Fehlt eine Stufe, wird das nächstgelegene Niveau genommen, bei Gleichstand das leichtere.

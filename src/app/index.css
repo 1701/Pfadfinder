@@ -1,14 +1,24 @@
 @import 'tailwindcss';
+@import '../ui/theme/fonts.css';
 @import '../ui/theme/tokens.css';
 
-html {
-  font-size: var(--font-size-base);
-}
+@layer base {
+  html {
+    font-size: var(--font-size-root);
+  }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  :focus-visible {
+    outline: var(--spacing-focus) solid var(--color-ink);
+    outline-offset: var(--spacing-focus);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

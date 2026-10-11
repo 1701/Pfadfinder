@@ -14,6 +14,12 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## App
 
+### 0.4.0 – 2026-10-11
+- Design-Tokens nach Token-Plan v1 (Kartentinte, kühles Papier, Wegmarken-Gelb, Seeblau, Felsgrau); Tailwind-Standardpalette entfernt.
+- Andika 7.000 (SIL, OFL) selbst gehostet unter `public/fonts/andika/`, im Precache.
+- Router (React Router 8), Entwicklerseite `/dev/tokens` nur im Dev-Build; `scripts/check-bundle.ts` prüft das nach jedem Build.
+- `npm run screenshots` für iPad quer und hoch.
+
 ### 0.3.0 – 2026-10-11
 - React 19 und React Router 8 (Library-Modus); `@dnd-kit` erlaubt React ≥ 16.8.
 - Content: `items/mathe/zahlen-operationen.json` mit 21 Items (Pilot-Batch).
