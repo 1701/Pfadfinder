@@ -94,14 +94,16 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 `src/ui/formats/registry.ts` mappt `Item.format` → React-Komponente mit einheitlichem Vertrag:
 
 ```ts
-type FormatProps<P, A> = {
-  item: Item & { payload: P };
-  answer: A | null;
-  onChange(answer: A): void;
+type FormatProps<F extends Format> = {
+  item: ItemOf<F>;
+  attemptIndex: number;           // Seed fürs Mischen: presentationSeed(item.id, attemptIndex)
+  answer: AnswerOf<F> | null;
+  onChange(answer: AnswerOf<F> | null): void;  // null = noch keine gültige Eingabe ("3,"), Prüfen bleibt aus
   disabled: boolean;              // nach Abgabe
-  revealed?: { correct: boolean; solution: Solution };  // Feedback-Darstellung
+  revealed?: { correct: Correctness; solution: SolutionOf<F> };  // Feedback-Darstellung
 };
 ```
+Seit 2026-10-11: `attemptIndex` und `onChange(… | null)` ergänzt, weil das Mischen formatspezifisch ist und unfertige Eingaben gemeldet werden müssen. Übbar sind nur Items, deren Format hier registriert ist (`SUPPORTED_FORMATS`).
 
 Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/evaluation`. Kein Format-Switch im Screen-Code.
 

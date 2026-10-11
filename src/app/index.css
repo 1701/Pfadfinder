@@ -21,6 +21,32 @@
   }
 }
 
+/* One screen, no page scroll: 100vh as fallback, dynamic viewport where supported (Safari bars). */
+@utility screen-fit {
+  height: 100vh;
+  height: 100dvh;
+}
+
+@layer components {
+  /* Answer options hide the native radio; its keyboard focus shows on the whole option. */
+  .choice:has(input:focus-visible) {
+    outline: var(--spacing-focus) solid var(--color-ink);
+    outline-offset: var(--spacing-focus);
+  }
+
+  /* The checking moment: the message rises from the bottom band. */
+  .feedback-in {
+    animation: feedback-in var(--duration-feedback) var(--ease-standard);
+  }
+}
+
+@keyframes feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-xs));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

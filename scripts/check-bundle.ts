@@ -14,7 +14,7 @@ const errors: string[] = [];
 
 for (const file of files) {
   const text = readFileSync(path.join(dist, file), 'utf8');
-  for (const marker of ['/dev/tokens', 'TokensPage', 'Token-Übersicht']) {
+  for (const marker of ['/dev/tokens', 'TokensPage', 'Token-Übersicht', '/dev/item', 'ItemPage']) {
     if (text.includes(marker)) errors.push(`${file}: enthält Entwicklerseite ("${marker}")`);
   }
 }

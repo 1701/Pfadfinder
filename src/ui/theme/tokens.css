@@ -49,6 +49,8 @@
   --spacing-touch: 48px; /* minimum touch target */
   --spacing-primary: 56px; /* Prüfen / Weiter / Vorlesen */
   --spacing-focus: 3px; /* focus ring width and offset */
+  --spacing-action: 180px; /* width of Prüfen/Weiter: the button never moves between the two */
+  --spacing-key: 72px; /* digit pad key width */
 
   /* Readable column width for text-heavy pages (Eltern-Bereich, dev pages). */
   --container-page: 60rem;

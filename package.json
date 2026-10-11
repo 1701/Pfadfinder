@@ -18,7 +18,8 @@
     "content:validate": "tsx scripts/validate-content.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test --pass-with-no-tests",
+    "e2e": "playwright test",
+    "e2e:chromium": "playwright test --project=chromium-* --project=layout",
     "check": "npm run lint && npm run content:validate && npm run test && npm run build",
     "prepare": "git config core.hooksPath .githooks",
     "screenshots": "tsx scripts/screenshots.ts"
