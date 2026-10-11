@@ -110,6 +110,8 @@ Pro Bereich und Fach ein **Mastery-Score** = Trefferquote der letzten 8 Items di
 - < 50 % → Niveau sinkt (nie unter I)
 - dazwischen → bleibt
 
+Präzisierungen (2026-10-11): Eine Selbsteinschätzung "teils" zählt 0,5. Entschieden wird erst ab 6 Einträgen im Fenster. Nach einem Niveauwechsel wird das Fenster geleert. "Gemeistert" wird nie zurückgesetzt, auch nicht, wenn das Niveau später wieder sinkt. Einstiegscheck und Probetest verändern das Fenster nicht.
+
 Die Schwellen sind absichtlich identisch mit den Kompass-Niveaugrenzen. Kein IRT, keine Item-Parameter im MVP – Erweiterungspunkt für später (siehe Roadmap).
 
 ### 5.6 Feedback-Design

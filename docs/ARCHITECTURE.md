@@ -65,7 +65,7 @@ pfadfinder/
 Learner        { id; name?: string; createdAt; settings: { readAloud: boolean; bundesland: "BW" } }
 Attempt        { id; learnerId; itemId; fach; bereich; niveau; format; correct: boolean | 0.5; answer: unknown;
                  durationMs; mode: "check" | "practice" | "review" | "probetest"; at: ISO }
-MasteryState   { learnerId; fach; bereich; niveau: 1|2|3; window: boolean[] /* letzte 8 */; mastered: boolean; updatedAt }
+MasteryState   { learnerId; fach; bereich; niveau: 1|2|3; window: (0 | 0.5 | 1)[] /* letzte 8, Kurzantwort "teils" = 0.5 */; mastered: boolean; updatedAt }
 ReviewEntry    { learnerId; itemId; dueAt: ISO; stage: 1 | 2 | "done" }         // Fehlerkiste: +1 Tag, +3 Tage
 Session        { id; learnerId; mode; startedAt; endedAt?; attemptIds: string[]; goalReached: boolean }
 ProbetestRun   { id; learnerId; probetestId; startedAt; submittedAt?; attemptIds; result?: { byBereich: Record<Bereich, {correct, total}>; percent } }

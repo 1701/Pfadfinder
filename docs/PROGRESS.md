@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 2C: Mastery
+- **Gebaut:** `src/domain/mastery`: `updateMastery(state, result)` → `{ state, transition }`, `initialMasteryFromCheck()`, `checkLadderNiveau()` (liefert auch das Niveau des nächsten Check-Items) und `masteryStateSchema`. 29 Tests.
+- **Entscheidungen:** Neben `probetest` lassen auch `check`-Attempts Mastery unverändert, damit das Fenster nach dem Einstiegscheck leer startet (ARCHITECTURE §5). Auf der Leiter steigt nur `true`, ein 0,5 bleibt stehen. Eine Rückmeldung `mastered` gibt es nur einmal; dabei wird das Fenster nicht geleert. Bereiche ohne Check-Ergebnis starten auf Niveau 1. Ob es 2–3 Items je Bereich sind, prüft die Check-Zusammenstellung, nicht diese Funktion. ARCHITECTURE §4: `window` ist jetzt `(0 | 0.5 | 1)[]`. PRODUCT §5.5: Präzisierungen eingetragen.
+- **Offen:** `AttemptMode` liegt vorerst in `mastery` und zieht nach `learner` um, sobald es das Attempt-Modell gibt.
+
 ## 2026-10-11 – Aufgabe 2B: Antwortprüfung
 - **Gebaut:** `src/domain/evaluation`: `evaluate(item, answer)` für alle 9 Formate mit `detail` fürs Feedback. Dazu Answer-Schemas (Zod) mit `parseAnswer()`, `parseGermanNumber()` und `correctnessScore()`. 72 Tests.
 - **Entscheidungen:** Auswertung über eine Tabelle je Format, ohne Format-Switch im aufrufenden Code. `multi-choice` und `find-error` prüfen Mengen, doppelte Einträge sind egal. `match` ist falsch, sobald es ein zusätzliches Paar gibt oder der Distraktor benutzt wird. `parseGermanNumber` gibt `null` zurück für leere, unvollständige (`3,`) und mehrdeutige (`1.5`) Eingaben; der Punkt gilt nur in Dreiergruppen als Tausendertrenner. `short-answer`: Bewertung 1 → `true`, 0 → `false`, 0,5 → `0.5`; der Freitext ist optional.
