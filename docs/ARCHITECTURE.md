@@ -78,9 +78,9 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 
 **Üben.** `scheduler.pickNext(bereich, masteryState, recentItemIds, pool)` → Item auf aktuellem Niveau, nicht in den letzten 20 gesehen, Formatwechsel bevorzugt. Nach Antwort: `evaluation.check(item, answer)` → `mastery.update(state, correct)` → bei falsch `scheduler.enqueueReview(itemId, now)`. Session-Ziel 10 Items, danach Abschluss-Screen.
 
-**Einstiegscheck.** Pro Fach 12 Items: je Bereich 2–3, Niveau-Leiter 1→2→3 adaptiv (richtig: hoch, falsch: bleibt). Ergebnis setzt `MasteryState.niveau` je Bereich; `window` startet leer.
+**Einstiegscheck.** Pro Fach 12 Items: je Bereich 2–3, Niveau-Leiter 1→2→3 adaptiv (richtig: hoch, falsch: bleibt). Ergebnis setzt `MasteryState.niveau` je Bereich; `window` startet leer. Weil die Leiter adaptiv ist, liefert `scheduler.buildCheck(fach, pool)` einen Plan (Reihenfolge der Bereiche im Rundlauf + Kandidaten), `nextCheckItem(plan, answers)` wählt das Item der aktuellen Stufe.
 
-**Fehlerkiste.** `ReviewEntry` fällig → erscheint vor neuen Items im Üben-Modus (max. 3 pro Session). Richtig: stage 1→2 (+3 Tage) → done. Falsch: stage bleibt, +1 Tag.
+**Fehlerkiste.** `ReviewEntry` fällig → erscheint vor neuen Items im Üben-Modus (max. 3 pro Session). Richtig: stage 1→2 (+3 Tage) → done. Falsch: stage bleibt, +1 Tag. Fällig ist ein Eintrag ab Beginn seines Fälligkeitstags (lokale Zeit des Geräts).
 
 **Probetest.** Timer läuft im Domain-Modell (startedAt + 45 Min.), UI zeigt verbleibende Zeit nur dezent (kein rotes Blinken). Navigation vor/zurück erlaubt wie auf Papier. Abgabe manuell oder bei Ablauf. Auswertung pro Bereich und gesamt; Attempts fließen **nicht** in Mastery (Probetest ist Messung, nicht Training).
 

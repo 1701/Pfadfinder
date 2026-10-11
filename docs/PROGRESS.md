@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 3C: Scheduler
+- **Gebaut:** `src/domain/scheduler`: `seededShuffle` (xmur3 + mulberry32) mit `presentationSeed(itemId, attemptIndex)`, `pickNext`, `enqueueReview`, `onReviewResult` und `isReviewDue`, außerdem `buildCheck` und `nextCheckItem`. 47 Tests.
+- **Entscheidungen:** `pickNext` braucht zusätzlich `now`, `reviewsInSession` (für max. 3) und `seed`; das Ergebnis enthält `source: 'review' | 'practice'`. Fallback-Reihenfolge: gleiches Niveau ungesehen → ±1 ungesehen → Wiederholung (nicht das letzte Item) → jedes Niveau. `null` kommt nur, wenn der Bereich leer ist. Bei Reviews gilt die 20er-Sperre nicht. `enqueueReview` bekommt `learnerId` als ersten Parameter. Ein Review ist ab Beginn des Fälligkeitstags fällig, gemessen in lokaler Zeit. Ein 0,5 zählt bei Reviews als „noch nicht“. Der Check ist ein Plan plus `nextCheckItem`, im Rundlauf über die Bereiche (die ersten Items sind alle Niveau 1). Fehlt eine Stufe, wird das nächstgelegene Niveau genommen, bei Gleichstand das leichtere.
+- **Offen:** Beim Lesen sollten die Check-Items aus demselben Lesetext kommen; das wird erst mit den Lesetexten relevant.
+
 ## 2026-10-11 – Aufgabe 3B: Learner-Modell und Export
 - **Gebaut:** `src/domain/learner`: Zod-Schemas für Learner, Attempt, ReviewEntry, Session, ProbetestRun und Collectibles; `AttemptMode` ist aus `mastery` hierher umgezogen. `serialize(data, exportedAt)` erzeugt ExportFile v1, `parseImport(json)` liefert `{ ok, data } | { ok: false, errors[] }`. 18 Tests, darunter ein Roundtrip.
 - **Entscheidungen:** `Attempt.answer` wird gegen das Answer-Schema des jeweiligen Formats geprüft. Der Import prüft zusätzlich Bezüge: alle Daten gehören zu einem Learner, IDs sind eindeutig, Mastery gibt es je Bereich und Fehlerkiste-Einträge je Item nur einmal, Sessions und Probetest-Läufe verweisen nur auf vorhandene Attempts. Die Fehlermeldungen sind deutsch, weil Eltern sie sehen. Eine Datei aus einer neueren App-Version bekommt einen eigenen Hinweis. Migrationen gibt es erst, wenn eine Version 2 existiert. ESLint: Variablen mit `_`-Präfix gelten als absichtlich ungenutzt.
