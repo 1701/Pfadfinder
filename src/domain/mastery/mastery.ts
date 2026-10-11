@@ -13,6 +13,7 @@ import {
   type Niveau,
 } from '../content';
 import { correctnessScore, type Correctness } from '../evaluation';
+import type { AttemptMode } from '../learner';
 
 export const MASTERY_WINDOW_SIZE = 8;
 export const MASTERY_MIN_ENTRIES = 6;
@@ -21,8 +22,6 @@ export const MASTERY_LEVEL_UP = 0.75;
 export const MASTERY_LEVEL_DOWN = 0.5;
 /** The Einstiegscheck serves 2–3 items per Bereich (ARCHITECTURE.md §5); enforced by the composer. */
 export const CHECK_ITEMS_PER_BEREICH = { min: 2, max: 3 } as const;
-
-export type AttemptMode = 'check' | 'practice' | 'review' | 'probetest';
 
 /**
  * Modes that never change mastery: the probetest is a measurement, not training;

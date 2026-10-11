@@ -7,6 +7,16 @@ export default tseslint.config(
   ...tseslint.configs.strict,
   {
     files: ['**/*.{ts,tsx}'],
+    rules: {
+      // A leading underscore marks intentionally unused bindings, e.g. when omitting fields.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },

@@ -2,6 +2,10 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 3B: Learner-Modell und Export
+- **Gebaut:** `src/domain/learner`: Zod-Schemas für Learner, Attempt, ReviewEntry, Session, ProbetestRun und Collectibles; `AttemptMode` ist aus `mastery` hierher umgezogen. `serialize(data, exportedAt)` erzeugt ExportFile v1, `parseImport(json)` liefert `{ ok, data } | { ok: false, errors[] }`. 18 Tests, darunter ein Roundtrip.
+- **Entscheidungen:** `Attempt.answer` wird gegen das Answer-Schema des jeweiligen Formats geprüft. Der Import prüft zusätzlich Bezüge: alle Daten gehören zu einem Learner, IDs sind eindeutig, Mastery gibt es je Bereich und Fehlerkiste-Einträge je Item nur einmal, Sessions und Probetest-Läufe verweisen nur auf vorhandene Attempts. Die Fehlermeldungen sind deutsch, weil Eltern sie sehen. Eine Datei aus einer neueren App-Version bekommt einen eigenen Hinweis. Migrationen gibt es erst, wenn eine Version 2 existiert. ESLint: Variablen mit `_`-Präfix gelten als absichtlich ungenutzt.
+
 ## 2026-10-11 – Aufgabe 3A: React 19, Doku, Content
 - **Gebaut:** React 19.3 und React Router 8.4. Das ist möglich, weil `@dnd-kit/core` und `@dnd-kit/sortable` nur `react >=16.8` verlangen. `engines.node` steht auf ≥ 22.22 (Vorgabe von React Router 8). Ergänzt: PRODUCT §5.4 „Einstiegscheck nur Auto-Check“, CLAUDE.md Ziffernblock-Regel. `zahlen-operationen.json` mit 21 Items eingespielt, Validierung grün ohne Änderungen.
 - **Offen:** Mathe Zahlen & Operationen hat 9/8/4 Items auf Niveau I/II/III; Ziel bei 30 Items ist 12/12/6.

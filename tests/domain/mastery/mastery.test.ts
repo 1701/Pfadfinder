@@ -6,10 +6,10 @@ import {
   masteryScore,
   masteryStateSchema,
   updateMastery,
-  type AttemptMode,
   type MasteryState,
   type MasteryUpdate,
 } from '../../../src/domain/mastery';
+import type { AttemptMode } from '../../../src/domain/learner';
 
 const T0 = '2026-10-11T08:00:00.000Z';
 const T1 = '2026-10-11T08:05:00.000Z';
