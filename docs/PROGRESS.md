@@ -1,6 +1,11 @@
 # PROGRESS
 
-Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
+Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
+
+## 2026-10-11 – Aufgabe 5.0: pre-commit
+- **Gebaut:** `.githooks/pre-commit` prüft gestagete Dateien mit ESLint (`*.ts`, `*.tsx`, `*.js`) und `prettier --check`, danach wie bisher `content:validate`. Von Hand getestet: ein Lint-Fehler und ein Format-Fehler brechen den Commit ab.
+- **Entscheidungen:** Geprüft wird die Datei im Arbeitsverzeichnis, nicht der gestagete Stand (steht im Hook). Ab jetzt nennt jeder Eintrag den CI-Status (CLAUDE.md DoD 3).
+- **CI:** Es gibt kein Git-Remote, deshalb lief GitHub Actions nicht. Lokal ist `npm run check` grün.
 
 ## 2026-10-11 – Aufgabe 4: Design-Tokens
 - **Gebaut:** `tokens.css` nach Token-Plan v1 (`@theme static`; Tailwind-Standardfarben, -radien und -schatten entfernt). Andika 7.000 Regular und Bold mit OFL.txt unter `public/fonts/andika/`. Router mit `/dev/tokens` nur im Dev-Build. Tests: Kontraste aus `tokens.css` (AA), keine Hex- und Pixelwerte in `src/ui` und `src/app`. `check-bundle.ts` nach dem Build prüft Dev-Seiten und Schrift-Precache. `npm run screenshots`.

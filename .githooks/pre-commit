@@ -1,3 +1,20 @@
 #!/bin/sh
-# Content errors must never reach a commit (ARCHITECTURE.md §8).
+# Lint and formatting of staged files, then content validation (ARCHITECTURE.md §8).
+# Limitation: the checks read the working-tree version of each staged file, so a file that
+# is only partially staged is checked as it is on disk, not as it will be committed.
+set -e
+
+staged() {
+  git diff --cached --name-only -z --diff-filter=ACMR -- "$@"
+}
+
+if [ -n "$(staged '*.ts' '*.tsx' '*.js' | tr -d '\0')" ]; then
+  staged '*.ts' '*.tsx' '*.js' | xargs -0 npx --no-install eslint --no-warn-ignored --
+fi
+
+if [ -n "$(staged | tr -d '\0')" ]; then
+  staged | xargs -0 npx --no-install prettier --check --ignore-unknown --
+fi
+
+# Content errors must never reach a commit.
 npm run --silent content:validate
