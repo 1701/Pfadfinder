@@ -19,5 +19,517 @@
     "tags": ["schriftliche-addition", "uebertrag"],
     "estimatedSeconds": 60,
     "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-1-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 7 004 − 2 358",
+    "readAloud": "Rechne aus: 7004 minus 2358",
+    "payload": { "maxDigits": 5 },
+    "solution": { "value": 4646 },
+    "feedback": {
+      "correct": "Richtig! Die Nullen in 7 004 hast du sauber mit Übertrag gelöst.",
+      "incorrect": "Rechne von rechts: 4 − 8 geht nicht, also 14 − 8 = 6 und eine 1 wandert weiter. Mach das an jeder Stelle.",
+      "misconception": "Bei Nullen in der oberen Zahl geht der Übertrag oft verloren."
+    },
+    "tags": ["schriftliche-subtraktion", "uebertrag", "nullen"],
+    "estimatedSeconds": 70,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-1-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Schau dir die Zahl 358 214 an." },
+    "prompt": "Welche Ziffer steht an der Tausenderstelle?",
+    "readAloud": "Schau dir die Zahl 358214 an. Welche Ziffer steht an der Tausenderstelle?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "3" },
+        { "id": "b", "text": "5" },
+        { "id": "c", "text": "8" },
+        { "id": "d", "text": "2" }
+      ]
+    },
+    "solution": { "optionId": "c" },
+    "feedback": {
+      "correct": "Genau. Von rechts: Einer 4, Zehner 1, Hunderter 2, Tausender 8.",
+      "incorrect": "Zähle die Stellen von rechts: Einer, Zehner, Hunderter, Tausender. Die vierte Ziffer von rechts ist die Tausenderstelle.",
+      "misconception": "Wer 5 wählt, hat die Zehntausenderstelle erwischt – eine Stelle zu weit links."
+    },
+    "tags": ["stellenwert", "grosse-zahlen"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-1-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 6 · 48",
+    "readAloud": "Rechne aus: 6 mal 48",
+    "payload": { "maxDigits": 3 },
+    "solution": { "value": 288 },
+    "feedback": {
+      "correct": "Richtig! 6 · 40 = 240 und 6 · 8 = 48, zusammen 288.",
+      "incorrect": "Zerlege die 48: 6 · 40 und 6 · 8. Dann beide Ergebnisse zusammenzählen.",
+      "misconception": "Oft wird nur 6 · 40 gerechnet und der Rest vergessen."
+    },
+    "tags": ["multiplikation", "halbschriftlich", "zerlegen"],
+    "estimatedSeconds": 45,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "m-zo-1-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Ordne die Zahlen. Die kleinste zuerst.",
+    "payload": {
+      "items": [
+        { "id": "a", "text": "21 009" },
+        { "id": "b", "text": "20 909" },
+        { "id": "c", "text": "21 090" },
+        { "id": "d", "text": "20 999" }
+      ]
+    },
+    "solution": { "orderedIds": ["b", "d", "a", "c"] },
+    "feedback": {
+      "correct": "Richtig! Du hast Stelle für Stelle von links verglichen.",
+      "incorrect": "Vergleiche von links: Erst die Zehntausender, dann die Tausender, dann die Hunderter. Erst wenn die gleich sind, schaust du weiter rechts.",
+      "misconception": "20 999 sieht wegen der vielen Neunen groß aus, ist aber kleiner als 21 009."
+    },
+    "tags": ["zahlen-vergleichen", "ordnen", "stellenwert"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-1-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 84 : 4",
+    "readAloud": "Rechne aus: 84 geteilt durch 4",
+    "payload": { "maxDigits": 2 },
+    "solution": { "value": 21 },
+    "feedback": {
+      "correct": "Richtig! 80 : 4 = 20 und 4 : 4 = 1.",
+      "incorrect": "Zerlege die 84 in 80 und 4. Teile beide durch 4 und zähle die Ergebnisse zusammen.",
+      "misconception": "Manche rechnen 84 : 4 wie 84 − 4 oder vertauschen Teilen und Malnehmen."
+    },
+    "tags": ["division", "halbschriftlich"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "m-zo-1-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle die passenden Zahlen aus.",
+    "payload": {
+      "template": "Die Zahl 40 507 hat {1} Zehntausender, {2} Hunderter und 7 Einer.",
+      "gaps": [
+        { "key": "1", "options": ["4", "40", "0"] },
+        { "key": "2", "options": ["5", "50", "0"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "4", "2": "5" } },
+    "feedback": {
+      "correct": "Genau. Die Null in der Mitte ist die Tausenderstelle, die ist leer.",
+      "incorrect": "Schreibe die Zahl in eine Stellenwerttafel: ZT T H Z E. Dann siehst du, welche Ziffer wo steht.",
+      "misconception": "Die 0 an der Tausenderstelle verschiebt beim Lesen oft alle Stellen."
+    },
+    "tags": ["stellenwert", "stellenwerttafel", "nullen"],
+    "estimatedSeconds": 50,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-1-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Welche Zahl ist um 100 kleiner als 20 050?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "19 950" },
+        { "id": "b", "text": "20 040" },
+        { "id": "c", "text": "19 050" },
+        { "id": "d", "text": "19 550" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! 20 050 − 100: erst auf 20 000 zurück, dann noch 50 weiter.",
+      "incorrect": "Gehe in zwei Schritten: Von 20 050 erst 50 zurück auf 20 000, dann noch 50 zurück.",
+      "misconception": "Wer 20 040 wählt, hat 10 statt 100 abgezogen. Wer 19 050 wählt, hat 1 000 abgezogen."
+    },
+    "tags": ["zahlenraum", "hunderterschritte", "zehnerübergang"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "m-zo-1-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Verbinde jede Rechnung mit ihrem Ergebnis. Ein Ergebnis bleibt übrig.",
+    "payload": {
+      "left": [
+        { "id": "l1", "text": "25 · 4" },
+        { "id": "l2", "text": "120 : 6" },
+        { "id": "l3", "text": "300 − 175" },
+        { "id": "l4", "text": "48 + 72" }
+      ],
+      "right": [
+        { "id": "r1", "text": "125" },
+        { "id": "r2", "text": "100" },
+        { "id": "r3", "text": "150" },
+        { "id": "r4", "text": "20" },
+        { "id": "r5", "text": "120" }
+      ]
+    },
+    "solution": { "pairs": [["l1", "r2"], ["l2", "r4"], ["l3", "r1"], ["l4", "r5"]] },
+    "feedback": {
+      "correct": "Alles richtig verbunden! 150 war das Ergebnis, das übrig bleibt.",
+      "incorrect": "Rechne jede Aufgabe einzeln aus und suche dann das passende Ergebnis. Streiche verbundene Ergebnisse durch.",
+      "misconception": "300 − 175 wird oft zu 135 oder 225 verrechnet. Rechne 300 − 100 − 75."
+    },
+    "tags": ["kopfrechnen", "grundrechenarten"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "m-zo-2-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Jonas will 489 + 312 im Kopf überschlagen." },
+    "prompt": "Welcher Überschlag passt am besten?",
+    "readAloud": "Jonas will 489 plus 312 im Kopf überschlagen. Welcher Überschlag passt am besten?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "500 + 300 = 800" },
+        { "id": "b", "text": "400 + 300 = 700" },
+        { "id": "c", "text": "500 + 400 = 900" },
+        { "id": "d", "text": "489 + 312 = 801" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau. Beide Zahlen auf volle Hunderter gerundet: 489 wird 500, 312 wird 300.",
+      "incorrect": "Beim Überschlag rundest du jede Zahl auf den nächsten vollen Hunderter. 489 liegt näher an 500, 312 näher an 300.",
+      "misconception": "Wer 489 + 312 = 801 wählt, hat genau gerechnet. Das ist richtig, aber kein Überschlag."
+    },
+    "tags": ["ueberschlag", "runden"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-2-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Im Kinosaal gibt es 3 Reihen mit je 24 Plätzen. Der Film dauert 95 Minuten. 15 Plätze bleiben leer." },
+    "prompt": "Wie viele Plätze sind besetzt?",
+    "payload": { "maxDigits": 3 },
+    "solution": { "value": 57 },
+    "feedback": {
+      "correct": "Richtig! 3 · 24 = 72 Plätze, davon 15 leer: 72 − 15 = 57.",
+      "incorrect": "Erst alle Plätze ausrechnen: 3 Reihen mal 24. Dann die leeren Plätze abziehen. Die Filmdauer brauchst du nicht.",
+      "misconception": "Die 95 Minuten verführen zum Mitrechnen. Nicht jede Zahl im Text gehört zur Rechnung."
+    },
+    "tags": ["sachaufgabe", "zweischrittig", "ablenkzahl"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-2-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "95 Kinder essen in der Mensa. An jeden Tisch passen 7 Kinder." },
+    "prompt": "Wie viele Tische werden voll? Wie viele Kinder bleiben übrig?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "13 Tische voll, 4 Kinder übrig" },
+        { "id": "b", "text": "13 Tische voll, 2 Kinder übrig" },
+        { "id": "c", "text": "14 Tische voll, 3 Kinder übrig" },
+        { "id": "d", "text": "12 Tische voll, 11 Kinder übrig" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! 13 · 7 = 91, und 95 − 91 = 4 Kinder bleiben übrig.",
+      "incorrect": "Suche das größte Vielfache von 7, das in 95 passt: 7 · 13 = 91. Der Rest ist 95 − 91.",
+      "misconception": "Wer 12 Tische wählt, hat aufgehört, obwohl noch ein voller Tisch möglich war."
+    },
+    "tags": ["division-mit-rest", "sachaufgabe"],
+    "estimatedSeconds": 80,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-2-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Rechnungen haben das Ergebnis 240? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "4 · 60" },
+        { "id": "b", "text": "480 : 2" },
+        { "id": "c", "text": "200 + 4" },
+        { "id": "d", "text": "1 000 − 760" },
+        { "id": "e", "text": "24 · 100" }
+      ],
+      "minSelect": 3
+    },
+    "solution": { "optionIds": ["a", "b", "d"] },
+    "feedback": {
+      "correct": "Alle drei gefunden! 4 · 60, 480 : 2 und 1 000 − 760 ergeben 240.",
+      "incorrect": "Rechne jede Zeile aus und schreibe das Ergebnis daneben. Dann siehst du, welche 240 ergeben.",
+      "misconception": "24 · 100 sieht nach 240 aus, ist aber 2 400. Die Nullen zählen!"
+    },
+    "tags": ["grundrechenarten", "ergebnis-pruefen", "nullen"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "m-zo-2-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Eine Zahl hat 3 Hunderttausender, 0 Zehntausender, 7 Tausender, 2 Hunderter, 0 Zehner und 9 Einer." },
+    "prompt": "Schreibe die Zahl.",
+    "payload": { "maxDigits": 6 },
+    "solution": { "value": 307209 },
+    "feedback": {
+      "correct": "Richtig! Die Nullen hast du an die richtigen Stellen gesetzt: 307 209.",
+      "incorrect": "Male eine Stellenwerttafel mit 6 Spalten: HT ZT T H Z E. Trage jede Ziffer ein, auch die Nullen.",
+      "misconception": "Wer die Nullen weglässt, bekommt 3 729. Jede Stelle braucht eine Ziffer."
+    },
+    "tags": ["stellenwert", "grosse-zahlen", "nullen"],
+    "estimatedSeconds": 70,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-2-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Auf einem Zahlenstrahl geht es von 0 bis 10 000. Von Strich zu Strich sind es 500." },
+    "prompt": "Welche Zahl steht am 7. Strich nach der 0?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "3 500" },
+        { "id": "b", "text": "700" },
+        { "id": "c", "text": "7 000" },
+        { "id": "d", "text": "3 000" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau: 7 · 500 = 3 500.",
+      "incorrect": "Jeder Strich ist 500 mehr. Zähle in 500er-Schritten: 500, 1 000, 1 500 … bis zum 7. Strich.",
+      "misconception": "Wer 7 000 wählt, hat gedacht, jeder Strich wäre 1 000."
+    },
+    "tags": ["zahlenstrahl", "schrittweite"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-zo-2-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Ein Bus fährt 4 Touren mit je 38 Fahrgästen. Bei der letzten Tour fahren nur 19 mit." },
+    "prompt": "Wie viele Fahrgäste sind insgesamt mitgefahren?",
+    "payload": { "maxDigits": 3 },
+    "solution": { "value": 171 },
+    "feedback": {
+      "correct": "Richtig! 4 · 38 = 152, plus 19 = 171.",
+      "incorrect": "Zwei Schritte: Erst 4 · 38 für die vollen Touren. Dann die 19 von der letzten Tour dazu.",
+      "misconception": "Wer 5 · 38 rechnet, hat die letzte Tour wie eine volle gezählt."
+    },
+    "tags": ["sachaufgabe", "zweischrittig", "multiplikation"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-2-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Ergänze die Rechnung, damit sie stimmt.",
+    "payload": {
+      "template": "7 · 15 = 7 · 10 + 7 · {1} = 70 + {2} = 105",
+      "gaps": [
+        { "key": "1", "options": ["5", "15", "10"] },
+        { "key": "2", "options": ["35", "105", "15"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "5", "2": "35" } },
+    "feedback": {
+      "correct": "Genau. 15 zerlegt in 10 und 5, dann beides mal 7.",
+      "incorrect": "15 wird in 10 + 5 zerlegt. Rechne 7 · 10 und 7 · 5 getrennt, dann zusammenzählen.",
+      "misconception": "Wer in die zweite Lücke 105 setzt, hat das Endergebnis statt des Zwischenschritts eingetragen."
+    },
+    "tags": ["rechenstrategie", "zerlegen", "verteilungsgesetz"],
+    "estimatedSeconds": 70,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-3-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Mia rechnet schriftlich: 526 − 187 = 461. Das Ergebnis ist nicht richtig." },
+    "prompt": "Welchen Fehler hat Mia gemacht?",
+    "readAloud": "Mia rechnet schriftlich: 526 minus 187 gleich 461. Das Ergebnis ist nicht richtig. Welchen Fehler hat Mia gemacht?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Sie zieht an jeder Stelle die kleinere Ziffer von der größeren ab." },
+        { "id": "b", "text": "Sie hat den Übertrag doppelt gezählt." },
+        { "id": "c", "text": "Sie hat die beiden Zahlen vertauscht." },
+        { "id": "d", "text": "Sie hat die Hunderter vergessen." }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig erkannt! Bei den Einern hat sie 7 − 6 statt 16 − 7 gerechnet. Richtig wäre 339.",
+      "incorrect": "Schau dir jede Stelle an: Einer 6 − 7, Zehner 2 − 8. Was hat Mia wohl gerechnet, damit 1 und 6 herauskommen?",
+      "misconception": "Das ist der häufigste Fehler beim Abziehen: oben und unten vertauschen, wenn es nicht aufgeht."
+    },
+    "tags": ["fehler-finden", "schriftliche-subtraktion", "uebertrag"],
+    "estimatedSeconds": 100,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-3-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": { "text": "Lena sagt: „Wenn ich zu einer Zahl 1 000 dazuzähle und dann 999 abziehe, ist das Ergebnis immer um 1 größer als die Zahl am Anfang.“" },
+    "prompt": "Hat Lena recht? Begründe.",
+    "payload": { "maxChars": 200, "hint": "Probiere es mit einer Zahl aus. Was bleibt von 1 000 übrig, wenn du 999 abziehst?" },
+    "solution": {
+      "model": "Ja, Lena hat recht. 1 000 dazu und 999 weg ist dasselbe wie 1 dazu, weil 1 000 − 999 = 1. Beispiel: 250 + 1 000 = 1 250, 1 250 − 999 = 251.",
+      "keyPoints": ["Ja, sie hat recht", "1 000 − 999 = 1, also bleibt 1 übrig", "Ein Beispiel genannt"]
+    },
+    "feedback": {
+      "correct": "Stark! Du hast den Trick erkannt: Dazuzählen und Abziehen kann man zusammenfassen.",
+      "incorrect": "Rechne mit einer Beispielzahl, zum Beispiel 250. Vergleiche das Ergebnis mit 250. Um wie viel ist es größer?",
+      "misconception": "Viele rechnen zwei getrennte Schritte und sehen nicht, dass 1 000 − 999 nur 1 ist."
+    },
+    "tags": ["begruenden", "rechenvorteil", "zusammenfassen"],
+    "estimatedSeconds": 120,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-3-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Aussagen stimmen? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "4 500 : 5 ist kleiner als 1 000." },
+        { "id": "b", "text": "48 : 6 ergibt dasselbe wie 480 : 60." },
+        { "id": "c", "text": "Wenn man eine Zahl durch 1 teilt, wird sie kleiner." },
+        { "id": "d", "text": "Wenn man beide Zahlen einer Teilaufgabe verdoppelt, bleibt das Ergebnis gleich." },
+        { "id": "e", "text": "900 : 3 ist größer als 900 : 2." }
+      ],
+      "minSelect": 3
+    },
+    "solution": { "optionIds": ["a", "b", "d"] },
+    "feedback": {
+      "correct": "Alle drei gefunden! Du kennst dich mit dem Teilen richtig gut aus.",
+      "incorrect": "Prüfe jede Aussage mit einer Rechnung: 4 500 : 5 = ?, 48 : 6 und 480 : 60 = ?, 900 : 3 und 900 : 2 = ?",
+      "misconception": "Durch eine größere Zahl teilen ergibt ein kleineres Ergebnis – das wird oft andersherum gedacht."
+    },
+    "tags": ["division", "aussagen-pruefen", "begruenden"],
+    "estimatedSeconds": 110,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-zo-3-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Elias denkt sich eine Zahl. Er verdoppelt sie und zieht dann 15 ab. Sein Ergebnis ist 61." },
+    "prompt": "Welche Zahl hat sich Elias gedacht?",
+    "payload": { "maxDigits": 2 },
+    "solution": { "value": 38 },
+    "feedback": {
+      "correct": "Richtig! Rückwärts gerechnet: 61 + 15 = 76, und die Hälfte von 76 ist 38.",
+      "incorrect": "Gehe den Weg rückwärts: Zuerst die 15 wieder dazuzählen, dann halbieren. Rückwärts heißt immer: Umkehraufgabe.",
+      "misconception": "Wer 61 : 2 rechnet, hat das Abziehen vergessen. Rückwärts kommt das Abziehen zuerst dran."
+    },
+    "tags": ["zahlenraetsel", "umkehraufgabe", "rueckwaerts-rechnen"],
+    "estimatedSeconds": 100,
+    "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
   }
 ]
