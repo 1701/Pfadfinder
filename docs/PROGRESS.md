@@ -2,6 +2,10 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen.
 
+## 2026-10-11 – Aufgabe 3A: React 19, Doku, Content
+- **Gebaut:** React 19.3 und React Router 8.4. Das ist möglich, weil `@dnd-kit/core` und `@dnd-kit/sortable` nur `react >=16.8` verlangen. `engines.node` steht auf ≥ 22.22 (Vorgabe von React Router 8). Ergänzt: PRODUCT §5.4 „Einstiegscheck nur Auto-Check“, CLAUDE.md Ziffernblock-Regel. `zahlen-operationen.json` mit 21 Items eingespielt, Validierung grün ohne Änderungen.
+- **Offen:** Mathe Zahlen & Operationen hat 9/8/4 Items auf Niveau I/II/III; Ziel bei 30 Items ist 12/12/6.
+
 ## 2026-10-11 – Aufgabe 2C: Mastery
 - **Gebaut:** `src/domain/mastery`: `updateMastery(state, result)` → `{ state, transition }`, `initialMasteryFromCheck()`, `checkLadderNiveau()` (liefert auch das Niveau des nächsten Check-Items) und `masteryStateSchema`. 29 Tests.
 - **Entscheidungen:** Neben `probetest` lassen auch `check`-Attempts Mastery unverändert, damit das Fenster nach dem Einstiegscheck leer startet (ARCHITECTURE §5). Auf der Leiter steigt nur `true`, ein 0,5 bleibt stehen. Eine Rückmeldung `mastered` gibt es nur einmal; dabei wird das Fenster nicht geleert. Bereiche ohne Check-Ergebnis starten auf Niveau 1. Ob es 2–3 Items je Bereich sind, prüft die Check-Zusammenstellung, nicht diese Funktion. ARCHITECTURE §4: `window` ist jetzt `(0 | 0.5 | 1)[]`. PRODUCT §5.5: Präzisierungen eingetragen.

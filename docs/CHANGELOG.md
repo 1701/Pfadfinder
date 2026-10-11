@@ -14,6 +14,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## App
 
+### 0.3.0 – 2026-10-11
+- React 19 und React Router 8 (Library-Modus); `@dnd-kit` erlaubt React ≥ 16.8.
+- Content: `items/mathe/zahlen-operationen.json` mit 21 Items (Pilot-Batch).
+
 ### 0.2.0 – 2026-10-11
 - Upgrade: Vite 8, React Router 7 (statt `react-router-dom` 6), Tailwind 4 CSS-first mit `@tailwindcss/vite` (ersetzt PostCSS/Autoprefixer und `tailwind.config.ts`), Vitest 5, Playwright 1.63. vite-plugin-pwa bleibt 1.3 (2.0 ist jünger als 14 Tage).
 - `.npmrc` mit `min-release-age=14`; `npm audit --omit=dev`: 0 Lücken.

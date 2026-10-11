@@ -98,7 +98,7 @@ Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
 
 ### 5.4 Modi
 
-1. **Einstiegscheck** (einmalig, pro Fach ~12 Items, ~10 Min.): bestimmt das Startniveau je Bereich. Rahmung: "Wir schauen, wo deine Reise losgeht" – nie "Test".
+1. **Einstiegscheck** (einmalig, pro Fach ~12 Items, ~10 Min.): bestimmt das Startniveau je Bereich; nur Formate mit Auto-Check, keine Kurzantwort. Rahmung: "Wir schauen, wo deine Reise losgeht" – nie "Test".
 2. **Üben** (Kern): Kind wählt Bereich (oder "Überrasch mich"), bekommt Items auf aktuellem Niveau, sofortiges Feedback, Erklärung. Session-Ziel: 8–10 Items, dann Pause-Vorschlag.
 3. **Fehlerkiste**: falsch beantwortete Items kommen nach 1 Tag und nach 3 Tagen wieder (einfaches Intervall, kein SRS-Algorithmus im MVP).
 4. **Probetest**: 45 Min., Timer, gemischte Bereiche, Niveau-Verteilung wie Original, am Ende Auswertung pro Bereich. Zusätzlich **als PDF druckbar** (Aufgaben + separates Lösungsblatt), weil der echte Test auf Papier stattfindet. Empfehlung in der App: höchstens 2 Probetests pro Woche.

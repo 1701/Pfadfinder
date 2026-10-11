@@ -33,6 +33,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - [ ] Vorlesen-Button vorhanden, wo Text zu lesen ist
 - [ ] Fokus sichtbar, `alt` an Bildern, `prefers-reduced-motion` beachtet
 - [ ] Funktioniert offline nach erstem Laden
+- [ ] Ziffernblock bietet nur bei allowDecimal ein Komma an, nie einen Punkt.
 
 ## Definition of Done (je Aufgabe)
 1. `npm run check` grün
@@ -42,7 +43,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 
 ## Dependencies (Laufzeit, genehmigt)
-react, react-dom, react-router (v7, Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
+react, react-dom, react-router (Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
 
 ## Dependencies (Dev, genehmigt)
 vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node
