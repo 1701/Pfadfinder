@@ -126,8 +126,8 @@ Metapher: **Pfadfinder-Expedition.** Die Kompetenzlandkarte ist eine Karte mit 9
 
 **Tun**
 - Fortschritt als Fläche auf der Karte, nicht als Prozentzahl
-- Sammelobjekte pro erschlossener Etappe (Fundstücke), rein dekorativ
-- Tagesziel klein und fix: "10 Fundstücke" ≈ 10 Items ≈ 10–15 Min.
+- Sammelobjekte pro erschlossener Etappe (**Entdeckungen**), rein dekorativ
+- Tagesziel klein und fix: "10 Fundstücke" = 10 bearbeitete Items ≈ 10–15 Min. (Begriffe seit 2026-10-11: Fundstück = bearbeitetes Item, Entdeckung = Sammelobjekt einer Etappe)
 - Streak mit automatischem Freeze (ein verpasster Tag bricht nichts)
 - Session endet immer mit etwas Positivem ("Heute 3 Gebiete besucht")
 

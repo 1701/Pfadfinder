@@ -6,6 +6,7 @@ import { z } from 'zod';
 import {
   BEREICHE_BY_FACH,
   bereichSchema,
+  fachOfBereich,
   fachSchema,
   niveauSchema,
   type Bereich,
@@ -142,4 +143,17 @@ export function initialMasteryFromCheck(
       updatedAt: context.at,
     })),
   );
+}
+
+/** Starting state for a Bereich without Einstiegscheck result: niveau 1, empty window. */
+export function initialMastery(learnerId: string, bereich: Bereich, at: string): MasteryState {
+  return {
+    learnerId,
+    fach: fachOfBereich(bereich),
+    bereich,
+    niveau: 1,
+    window: [],
+    mastered: false,
+    updatedAt: at,
+  };
 }

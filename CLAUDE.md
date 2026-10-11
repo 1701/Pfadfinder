@@ -12,7 +12,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 
 ## Sprache
 - Code, Kommentare, Commits, Dateinamen: Englisch
-- Alles, was ein Kind oder Elternteil sieht: Deutsch, Du-Form, kindgerecht (siehe PRODUCT.md Abschnitt 7). Keine Anglizismen in der UI ("Weiter", nicht "Next"; "Fundstücke", nicht "Badges")
+- Alles, was ein Kind oder Elternteil sieht: Deutsch, Du-Form, kindgerecht (siehe PRODUCT.md Abschnitt 7). Keine Anglizismen in der UI ("Weiter", nicht "Next"; "Entdeckungen", nicht "Badges")
 - Content-Dateien: Deutsch
 
 ## Arbeitsweise
@@ -46,7 +46,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 react, react-dom, react-router (Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
 
 ## Dependencies (Dev, genehmigt)
-vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node
+vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node, fake-indexeddb (dieselbe Repository-Contract-Suite läuft gegen Dexie: Indizes, Sortierung, Transaktionen)
 
 ## Befehle
 ```

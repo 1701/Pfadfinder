@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { enqueueReview, isReviewDue, onReviewResult } from '../../../src/domain/scheduler';
+import {
+  enqueueReview,
+  isReviewDue,
+  onReviewResult,
+  reviewDueCutoff,
+} from '../../../src/domain/scheduler';
 
 const MON_NOON = '2026-10-12T10:00:00.000Z'; // 12:00 in Berlin
 
@@ -65,5 +70,27 @@ describe('isReviewDue', () => {
 
   it('is never due when done', () => {
     expect(isReviewDue({ ...entry, stage: 'done' }, '2026-10-20T06:00:00.000Z')).toBe(false);
+  });
+});
+
+describe('reviewDueCutoff', () => {
+  it('is the start of the next local day (Europe/Berlin in tests)', () => {
+    expect(reviewDueCutoff('2026-10-12T10:00:00.000Z')).toBe('2026-10-12T22:00:00.000Z');
+    expect(reviewDueCutoff('2026-10-12T22:30:00.000Z')).toBe('2026-10-13T22:00:00.000Z');
+  });
+
+  it('covers every entry that isReviewDue accepts', () => {
+    const now = '2026-10-12T10:00:00.000Z';
+    const lateToday = {
+      learnerId: 'l',
+      itemId: 'm-zo-1-001',
+      stage: 1 as const,
+      dueAt: '2026-10-12T21:59:00.000Z',
+    };
+    const tomorrow = { ...lateToday, dueAt: '2026-10-12T22:00:00.000Z' };
+    expect(isReviewDue(lateToday, now)).toBe(true);
+    expect(lateToday.dueAt < reviewDueCutoff(now)).toBe(true);
+    expect(isReviewDue(tomorrow, now)).toBe(false);
+    expect(tomorrow.dueAt < reviewDueCutoff(now)).toBe(false);
   });
 });

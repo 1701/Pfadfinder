@@ -110,7 +110,7 @@ export const probetestRunSchema = z.strictObject({
 });
 export type ProbetestRun = z.infer<typeof probetestRunSchema>;
 
-/** Fundstücke: one id per mastered Etappe, purely decorative. */
+/** Entdeckungen: one id per mastered Etappe, purely decorative (Fundstücke are answered items). */
 export const collectiblesSchema = z.strictObject({
   learnerId: id,
   unlocked: z.array(z.string().min(1)),

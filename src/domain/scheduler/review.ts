@@ -34,3 +34,13 @@ export function isReviewDue(entry: ReviewEntry, now: string): boolean {
   dueDay.setHours(0, 0, 0, 0);
   return dueDay.getTime() <= Date.parse(now);
 }
+
+/**
+ * Every entry due at `now` has dueAt before this instant (start of the next local day), so
+ * storage can pre-filter with dueAt < cutoff and isReviewDue decides the rest.
+ */
+export function reviewDueCutoff(now: string): string {
+  const nextDay = new Date(now);
+  nextDay.setHours(24, 0, 0, 0);
+  return nextDay.toISOString();
+}

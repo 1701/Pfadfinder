@@ -45,7 +45,8 @@ pfadfinder/
       probetest/               Zusammenstellung, Timer-Modell, Auswertung
       evaluation/              Antwortprüfung je Format (pure)
       learner/                 Learner-Modell, Export/Import, Migrationen
-    data/                      Dexie-DB, Repositories, Zustand-Stores
+      practice/                ein Übungsschritt: Antwort → Attempt, Mastery, Fehlerkiste, Session
+    data/                      Dexie-DB, Repositories (Dexie + In-Memory), Anwendungsdienste, Zustand-Stores
     content-runtime/           lazy Loader für content/*.json (per Bereich)
     ui/
       formats/                 ein Renderer je Format, registriert in formats/registry.ts
@@ -69,14 +70,14 @@ MasteryState   { learnerId; fach; bereich; niveau: 1|2|3; window: (0 | 0.5 | 1)[
 ReviewEntry    { learnerId; itemId; dueAt: ISO; stage: 1 | 2 | "done" }         // Fehlerkiste: +1 Tag, +3 Tage
 Session        { id; learnerId; mode; startedAt; endedAt?; attemptIds: string[]; goalReached: boolean }
 ProbetestRun   { id; learnerId; probetestId; startedAt; submittedAt?; attemptIds; result?: { byBereich: Record<Bereich, {correct, total}>; percent } }
-Collectibles   { learnerId; unlocked: string[] }                                 // Fundstücke je gemeisterter Etappe
+Collectibles   { learnerId; unlocked: string[] }                                 // Entdeckungen je gemeisterter Etappe
 ```
 
 Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews, sessions, probetestRuns, collectibles }` als JSON-Datei. Import validiert mit Zod und migriert nach Versionsnummer. Das Export-Format ist das spätere Sync-Format (Roadmap v2).
 
 ## 5. Kernabläufe
 
-**Üben.** `scheduler.pickNext(bereich, masteryState, recentItemIds, pool)` → Item auf aktuellem Niveau, nicht in den letzten 20 gesehen, Formatwechsel bevorzugt. Nach Antwort: `evaluation.check(item, answer)` → `mastery.update(state, correct)` → bei falsch `scheduler.enqueueReview(itemId, now)`. Session-Ziel 10 Items, danach Abschluss-Screen.
+**Üben.** `scheduler.pickNext(bereich, masteryState, recentItemIds, pool)` → Item auf aktuellem Niveau, nicht in den letzten 20 gesehen, Formatwechsel bevorzugt. Nach Antwort: `evaluation.check(item, answer)` → `mastery.update(state, correct)` → bei falsch `scheduler.enqueueReview(itemId, now)`; gebündelt in `practice.recordPracticeAnswer`. Session-Ziel 10 Items, danach Abschluss-Screen. Gezogen werden nur Items mit registriertem Renderer; ein Bereich ist erst ab `MIN_ITEMS_FOR_PRACTICE` (10) solcher Items übbar. Eine Session ohne `endedAt`, deren Attempts alle im gewählten Bereich liegen, wird beim nächsten Start fortgesetzt.
 
 **Einstiegscheck.** Pro Fach 12 Items: je Bereich 2–3, Niveau-Leiter 1→2→3 adaptiv (richtig: hoch, falsch: bleibt). Ergebnis setzt `MasteryState.niveau` je Bereich; `window` startet leer. Weil die Leiter adaptiv ist, liefert `scheduler.buildCheck(fach, pool)` einen Plan (Reihenfolge der Bereiche im Rundlauf + Kandidaten), `nextCheckItem(plan, answers)` wählt das Item der aktuellen Stufe.
 
