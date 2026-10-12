@@ -16,7 +16,7 @@
     <rect x="330" y="160" width="30" height="30"/><rect x="360" y="160" width="30" height="30"/>
     <rect x="300" y="190" width="30" height="30"/>
   </g>
-  <g font-family="inherit" font-size="24" font-weight="700" fill="currentColor" text-anchor="middle">
+  <g font-family="inherit" font-size="38" font-weight="700" fill="currentColor" text-anchor="middle">
     <text x="60" y="150">A</text>
     <text x="290" y="150">B</text>
     <text x="110" y="260">C</text>

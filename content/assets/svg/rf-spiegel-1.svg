@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 185" role="img">
   <polygon points="30,40 110,100 30,100" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
   <line x1="130" y1="20" x2="130" y2="120" stroke="currentColor" stroke-width="3" stroke-dasharray="10 8"/>
-  <text x="70" y="135" font-family="inherit" font-size="22" fill="currentColor" text-anchor="middle">Figur</text>
-  <text x="130" y="170" font-family="inherit" font-size="22" fill="currentColor" text-anchor="middle">Spiegelachse</text>
+  <text x="70" y="135" font-family="inherit" font-size="24" fill="currentColor" text-anchor="middle">Figur</text>
+  <text x="130" y="170" font-family="inherit" font-size="24" fill="currentColor" text-anchor="middle">Spiegelachse</text>
   <g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round">
     <polygon points="190,40 270,100 190,100"/>
     <polygon points="290,100 370,40 370,100"/>
