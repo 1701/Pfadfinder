@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Karte nachgeschärft, Schriftregel als Fehler
+- **Gebaut:** Schrift unter 22 im SVG-viewBox ist ein Fehler im Validator (CONTENT_SCHEMA 1.0.5; die Gegenprobe bricht ab). Karte: innere Höhenlinien 1 px (`non-scaling-stroke`), Farbe `line`, runde Ecken; Konturen 24 und 44 statt 14 und 28. Der Marker des aktuellen Niveaus hat immer einen Ring, auch wenn die Etappe schon erreicht ist (gefüllt plus Ring). `rs-strategien` heißt „Schreibtricks“ (einzeilig).
+- **Entscheidungen:** Füllung und Ring sind zwei getrennte Zeichen: die Füllung für „erreicht“, der Ring für „hier bist du“. Damit sieht der aktuelle offene Marker auf der Karte anders aus als der aktuelle Wegstrich im Item-Screen (dort Rand ohne Abstand). Der Name „Rechtschreib-Tricks“ aus Teil 0 ist damit ersetzt.
+- **Offen:** Durch das kleinere Plateau ragen längere Namen in den Hang; der Halo in Plateaufarbe zeigt dort einen leichten hellen Schein (am deutlichsten bei „Zahlen und Rechnen“ quer).
+- **CI:** [CI #38249249951](https://github.com/1701/Pfadfinder/actions/runs/38249249951) grün (a124b71…91ad144); 477 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (15/15).
+
 ## 2026-10-12 – Schema 1.0.4: keepOrder, Bildregeln
 - **Gebaut:** Neues optionales Feld `payload.keepOrder` für `single-choice`/`multi-choice`. SingleChoice behält damit die Reihenfolge, ein Test prüft fünf Attempts. `content:validate` warnt, wenn alle Optionen nur Bildbeschriftungen sind und `keepOrder` fehlt, und wenn Schrift im SVG kleiner als 22 ist. CONTENT_SCHEMA 1.0.4 (§4.1/4.2, §7: assetAlt verrät die Lösung nicht, Schrift ≥ 22), CLAUDE.md und Skill nennen die Ausnahme vom Mischen.
 - **Entscheidungen:** 1.0.4 statt 1.1, obwohl ein Feld dazukommt. Die Versionsregel im Kopf nennt jetzt optionale Felder, mit denen alle bisherigen Items gültig bleiben, als Patch. Die Schriftregel ist vorerst eine Warnung, weil `rf-spiegel-1` (18) und `rf-bauplan-1` (20) sie noch verletzen.
