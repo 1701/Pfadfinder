@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Schema 1.0.6: SVG-Schrift relativ zur viewBox, Layout-Test in CI
+- **Gebaut:** SVG-Schrift muss mindestens viewBox-Höhe / 8 groß sein, statt fest 22 (144 px × font / Höhe ≥ 18 px). CONTENT_SCHEMA §7, CHANGELOG 1.0.6, Validator; jede zu kleine Größe wird je Datei einmal gemeldet. `svg-schrift-patch.zip` ist eingespielt (gm-uhr-1 Ziffern 33 mit kürzeren Zeigern, die „9“ ist frei; rf-spiegel-1 24; rf-wuerfelnetz-1 38). Alle SVGs halten die neue Regel ein; die Gegenprobe mit der alten Uhr schlägt an. Der Layout-Test läuft in CI nur in 1024×660 und 768×900, lokal in allen vier (ARCHITECTURE §8).
+- **Befund:** Lokal liefen zwei Layout-Tests in die Zeitgrenze. Der Vite-Entwicklungsserver lieferte unter paralleler Last einmal „Failed to fetch dynamically imported module“ (`daten-zufall.json`), und die Testseite wartete dann ewig. Ein erneuter Lauf war grün. Jetzt lädt der Test eine Seite, die nach 20 s nicht steht, einmal neu, und die Zeitgrenze wächst mit der Zahl der Items.
+- **Offen:** Die Ursache des vorübergehenden Ladefehlers ist nicht geklärt (nur unter paralleler Last auf dem Entwicklungsserver gesehen).
+- **CI:** [CI #38297317019](https://github.com/1701/Pfadfinder/actions/runs/38297317019) grün (99f6603…1c54005), Workers Builds grün; 493 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Der e2e-Job braucht 6,2 statt 9,5 min. Lokal grün: `npm run check`, Layout-Test in allen vier Viewports (je etwa 2 min).
+
 ## 2026-10-12 – iPad-Test, Batch 3 groessen-messen, Geldbeträge
 - **iPad:** Markus hat „Zum Home-Bildschirm“, Start ohne Safari-Leiste und Offline-Start auf dem iPad bestätigt (ohne Foto). Damit ist das Kriterium „installierbar auf dem iPad“ (ARCHITECTURE §8) erfüllt.
 - **Content:** `groessen-messen.json` ersetzt (20 Items, `m-gm-2-004` unverändert) und `gm-uhr-1.svg` (7:45 Uhr, Zeiger nachgerechnet, Lösung passt). 13 Items haben einen Renderer, „Größen und Messen“ ist auf der Karte offen. `content:validate` grün, 78 Items.
