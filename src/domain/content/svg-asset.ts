@@ -7,14 +7,6 @@ const COLOR_ATTRIBUTE = /\s(fill|stroke|color|stop-color)="([^"]*)"/g;
 /** Smallest font size in viewBox units: still about 18 px when a picture is shown small. */
 export const SVG_MIN_FONT_SIZE = 22;
 
-/** Hints that do not block the build (yet): text in the picture that may end up too small. */
-export function svgAssetWarnings(svg: string): string[] {
-  return [...svg.matchAll(/\sfont-size="([\d.]+)"/g)]
-    .map(([, size]) => Number(size))
-    .filter((size) => size < SVG_MIN_FONT_SIZE)
-    .map((size) => `font-size="${size}": mindestens ${SVG_MIN_FONT_SIZE} im viewBox`);
-}
-
 /** Problems of one SVG file as German messages for authors; empty when the file is fine. */
 export function checkSvgAsset(svg: string): string[] {
   const problems: string[] = [];
@@ -32,6 +24,11 @@ export function checkSvgAsset(svg: string): string[] {
   for (const [, name, value] of svg.matchAll(COLOR_ATTRIBUTE)) {
     if (value !== 'currentColor' && value !== 'none') {
       problems.push(`${name}="${value}": nur currentColor oder none`);
+    }
+  }
+  for (const [, size] of svg.matchAll(/\sfont-size="([\d.]+)"/g)) {
+    if (Number(size) < SVG_MIN_FONT_SIZE) {
+      problems.push(`font-size="${size}": mindestens ${SVG_MIN_FONT_SIZE} im viewBox`);
     }
   }
   for (const [, value] of svg.matchAll(/\sfont-family="([^"]*)"/g)) {

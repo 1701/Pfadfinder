@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.5 – 2026-10-12
+- §7 Bilder: Schrift unter 22 im viewBox ist jetzt ein Fehler statt einer Warnung. Keine Feldänderung.
+
 ### 1.0.4 – 2026-10-12
 - §4.1/§4.2: optionales `payload.keepOrder` (boolean) für `single-choice` und `multi-choice`: Optionen, die Beschriftungen im Bild benennen, werden nicht gemischt. Alle bisherigen Items bleiben gültig, `schemaVersion` bleibt `"1.0"`; die Versionsregel im Kopf nennt solche optionalen Felder jetzt ausdrücklich als Patch.
 - §7 Bilder: `assetAlt` verrät die Lösung nicht; Schrift in SVGs mindestens 22 im viewBox (Warnung im Validator).

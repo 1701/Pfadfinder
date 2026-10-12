@@ -9,7 +9,6 @@ import { fileURLToPath } from 'node:url';
 import {
   buildContentManifest,
   checkSvgAsset,
-  svgAssetWarnings,
   validateContent,
   type ContentFile,
   type ContentIssue,
@@ -49,7 +48,6 @@ const { issues, bundle } = validateContent(files, {
 
 // SVG assets are embedded inline by the app: check every file, referenced or not.
 const assetErrors: string[] = [];
-const assetWarnings: string[] = [];
 const svgDir = path.join(contentRoot, 'assets', 'svg');
 for (const name of readdirSync(svgDir)
   .filter((f) => f.endsWith('.svg'))
@@ -58,21 +56,16 @@ for (const name of readdirSync(svgDir)
   for (const problem of checkSvgAsset(svg)) {
     assetErrors.push(`FEHLER   content/assets/svg/${name} ${problem}`);
   }
-  for (const hint of svgAssetWarnings(svg)) {
-    assetWarnings.push(`WARNUNG  content/assets/svg/${name} ${hint}`);
-  }
 }
 
 for (const line of [...parseErrors, ...assetErrors]) console.error(line);
-for (const line of assetWarnings) console.warn(line);
 for (const issue of issues) {
   (issue.severity === 'error' ? console.error : console.warn)(formatIssue(issue));
 }
 
 const errorCount =
   parseErrors.length + assetErrors.length + issues.filter((i) => i.severity === 'error').length;
-const warningCount =
-  assetWarnings.length + issues.length - issues.filter((i) => i.severity === 'error').length;
+const warningCount = issues.length - issues.filter((i) => i.severity === 'error').length;
 const summary =
   `${files.length + parseErrors.length} Dateien · ${bundle.items.size} Items · ` +
   `${bundle.texts.size} Lesetexte · ${bundle.probetests.size} Probetests · ` +
