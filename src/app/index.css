@@ -39,6 +39,24 @@
     outline: none;
   }
 
+  /* Task pictures (ContentAsset): fixed height, width from the viewBox, centered. */
+  .content-asset {
+    display: flex;
+    justify-content: center;
+  }
+  /* Landscape: smaller only where the screen is short (Safari bars, 1024×660). */
+  .content-asset > svg {
+    height: min(var(--spacing-asset), 100vh - var(--spacing-asset-reserve));
+    height: min(var(--spacing-asset), 100dvh - var(--spacing-asset-reserve));
+    width: auto;
+    max-width: 100%;
+  }
+  @media (orientation: portrait) {
+    .content-asset > svg {
+      height: var(--spacing-asset-tall);
+    }
+  }
+
   /* The checking moment: the message rises from the bottom band. */
   .feedback-in {
     animation: feedback-in var(--duration-feedback) var(--ease-standard);

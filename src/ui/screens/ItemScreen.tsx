@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import { readAloudText, type Item } from '../../domain/content';
 import type { Correctness } from '../../domain/evaluation';
 import { Button } from '../components/Button';
+import { ContentAsset, isWideAsset } from '../components/ContentAsset';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Fortschritt, type FortschrittProps } from '../components/Fortschritt';
 import { VorlesenButton } from '../components/VorlesenButton';
@@ -31,6 +32,9 @@ export interface ItemScreenProps {
 export function ItemScreen(props: ItemScreenProps) {
   const { item, phase, correct } = props;
   const revealed = phase === 'feedback' && correct !== null ? { correct } : undefined;
+  const { assetId, assetAlt = '' } = item.stimulus ?? {};
+  const asset = assetId && <ContentAsset assetId={assetId} alt={assetAlt} />;
+  const assetBeside = assetId !== undefined && !isWideAsset(assetId);
 
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_1fr_auto] gap-sm px-lg py-sm">
@@ -46,9 +50,14 @@ export function ItemScreen(props: ItemScreenProps) {
 
       <section className="flex items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
         {props.readAloud && <VorlesenButton key={item.id} text={readAloudText(item)} />}
-        <div className="grid gap-xs">
-          {item.stimulus?.text && <p className="text-option">{nb(item.stimulus.text)}</p>}
-          <h1 className="text-prompt font-bold">{nb(item.prompt)}</h1>
+        {/* A narrow picture stands beside the text, a wide one below the stimulus. */}
+        <div className="flex min-w-0 flex-1 items-start gap-lg">
+          <div className="grid min-w-0 flex-1 gap-xs">
+            {item.stimulus?.text && <p className="text-option">{nb(item.stimulus.text)}</p>}
+            {!assetBeside && asset}
+            <h1 className="text-prompt font-bold">{nb(item.prompt)}</h1>
+          </div>
+          {assetBeside && asset}
         </div>
       </section>
 

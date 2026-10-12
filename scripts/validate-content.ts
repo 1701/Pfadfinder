@@ -8,6 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildContentManifest,
+  checkSvgAsset,
   validateContent,
   type ContentFile,
   type ContentIssue,
@@ -45,12 +46,24 @@ const { issues, bundle } = validateContent(files, {
   assetExists: (assetId) => existsSync(path.join(contentRoot, 'assets', 'svg', `${assetId}.svg`)),
 });
 
-for (const line of parseErrors) console.error(line);
+// SVG assets are embedded inline by the app: check every file, referenced or not.
+const assetErrors: string[] = [];
+const svgDir = path.join(contentRoot, 'assets', 'svg');
+for (const name of readdirSync(svgDir)
+  .filter((f) => f.endsWith('.svg'))
+  .sort()) {
+  for (const problem of checkSvgAsset(readFileSync(path.join(svgDir, name), 'utf8'))) {
+    assetErrors.push(`FEHLER   content/assets/svg/${name} ${problem}`);
+  }
+}
+
+for (const line of [...parseErrors, ...assetErrors]) console.error(line);
 for (const issue of issues) {
   (issue.severity === 'error' ? console.error : console.warn)(formatIssue(issue));
 }
 
-const errorCount = parseErrors.length + issues.filter((i) => i.severity === 'error').length;
+const errorCount =
+  parseErrors.length + assetErrors.length + issues.filter((i) => i.severity === 'error').length;
 const warningCount = issues.length - issues.filter((i) => i.severity === 'error').length;
 const summary =
   `${files.length + parseErrors.length} Dateien · ${bundle.items.size} Items · ` +

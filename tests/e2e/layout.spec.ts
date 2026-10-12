@@ -23,10 +23,19 @@ const worst = [...ITEMS].sort((a, b) => {
   return len(b) - len(a);
 })[0]!;
 
+/** The picture item with the most text: picture, text and number pad compete for height. */
+const pictureItem = ITEMS.filter((i) => i.stimulus?.assetId).sort(
+  (a, b) =>
+    (b.stimulus?.text ?? '').length +
+    b.prompt.length -
+    ((a.stimulus?.text ?? '').length + a.prompt.length),
+)[0];
+
 for (const viewport of VIEWPORTS) {
   test(`alle Items passen auf ${viewport.name} (${viewport.width}×${viewport.height})`, async ({
     page,
   }) => {
+    test.setTimeout(300_000);
     await page.setViewportSize(viewport);
     for (const item of ITEMS) {
       for (const state of STATES) {
@@ -41,5 +50,12 @@ for (const viewport of VIEWPORTS) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
     await page.screenshot({ path: `${SCREENSHOTS}/layout-laengstes-item-${viewport.name}.png` });
+    if (pictureItem) {
+      await page.goto(`/dev/item/${pictureItem.id}?state=noch-nicht`);
+      await page.locator('[data-region="band"] > button').waitFor();
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: `${SCREENSHOTS}/layout-bild-${viewport.name}.png` });
+    }
   });
 }

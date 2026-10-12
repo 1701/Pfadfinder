@@ -6,3 +6,4 @@ export * from './integrity';
 export type { ContentLoader } from './loader';
 export * from './read-aloud';
 export * from './manifest';
+export * from './svg-asset';

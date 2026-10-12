@@ -1,19 +1,24 @@
 import { expect, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 
 export interface ContentItem {
   id: string;
   format: string;
+  status: string;
   prompt: string;
-  stimulus?: { text?: string };
+  stimulus?: { text?: string; assetId?: string };
   payload: { options?: { id: string; text: string }[] };
   solution: { optionId?: string; value?: number };
   feedback: { correct: string; incorrect: string; misconception?: string };
 }
 
-export const ITEMS: ContentItem[] = (
-  JSON.parse(readFileSync('content/items/mathe/zahlen-operationen.json', 'utf8')) as ContentItem[]
-).filter((i) => i.format === 'single-choice' || i.format === 'number-input');
+/** Every practiceable item: formats with a renderer, from all content files. */
+export const ITEMS: ContentItem[] = readdirSync('content/items', { recursive: true })
+  .map(String)
+  .filter((file) => file.endsWith('.json'))
+  .flatMap((file) => JSON.parse(readFileSync(`content/items/${file}`, 'utf8')) as ContentItem[])
+  .filter((i) => i.format === 'single-choice' || i.format === 'number-input')
+  .filter((i) => i.status !== 'retired');
 
 export const SCREENSHOTS = 'tests/e2e/screenshots';
 
