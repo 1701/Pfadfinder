@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 import '../dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FeedbackPanel } from '../../../src/ui/components/FeedbackPanel';
+import { QUIET_FOCUS } from '../../../src/ui/focus';
 import { singleChoice } from '../../fixtures/items';
 
 const { feedback } = singleChoice;
@@ -24,6 +25,24 @@ describe('FeedbackPanel', () => {
     expect(container.textContent).toContain(feedback.incorrect);
     expect(container.textContent).toContain(feedback.misconception);
     expect(container.textContent).not.toMatch(/falsch/i);
+    expect(screen.getByText(feedback.misconception!).className).toContain('text-ink-muted');
+  });
+
+  it('moves focus to "Weiter" without a ring after a tap, with one after a key press', () => {
+    fireEvent.pointerDown(document.body);
+    const { unmount } = render(
+      <FeedbackPanel correct={false} feedback={feedback} onNext={vi.fn()} />,
+    );
+    const weiter = screen.getByRole('button', { name: 'Weiter' });
+    expect(weiter.hasAttribute(QUIET_FOCUS)).toBe(true);
+    fireEvent.keyDown(window, { key: 'Tab' });
+    expect(weiter.hasAttribute(QUIET_FOCUS)).toBe(false);
+    unmount();
+
+    render(<FeedbackPanel correct={false} feedback={feedback} onNext={vi.fn()} />);
+    const again = screen.getByRole('button', { name: 'Weiter' });
+    expect(document.activeElement).toBe(again);
+    expect(again.hasAttribute(QUIET_FOCUS)).toBe(false);
   });
 
   it('focuses "Weiter", which describes the message and calls onNext', async () => {

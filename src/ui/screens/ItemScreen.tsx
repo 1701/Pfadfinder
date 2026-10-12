@@ -10,7 +10,7 @@ import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Fortschritt, type FortschrittProps } from '../components/Fortschritt';
 import { VorlesenButton } from '../components/VorlesenButton';
 import { FormatRenderer } from '../formats/registry';
-import { keepNumbersTogether as nb } from '../text/numbers';
+import { keepNumbersWithWords as nb } from '../text/numbers';
 
 export interface ItemScreenProps {
   item: Item;

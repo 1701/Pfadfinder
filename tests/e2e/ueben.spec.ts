@@ -36,6 +36,24 @@ async function answer(page: Page, item: ContentItem, correct: boolean) {
   }
 }
 
+test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
+  const outline = () =>
+    page
+      .getByRole('button', { name: 'Weiter' })
+      .evaluate((el) => el === document.activeElement && getComputedStyle(el).outlineStyle);
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Zahlen und Rechnen' }).click();
+  await expect(page.getByText('1 von 10')).toBeVisible();
+  await answer(page, await currentItem(page), true);
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  // Tapped: "Weiter" has the focus, but no ring.
+  await expect.poll(outline).toBe('none');
+  // Keyboard: back and forth with Tab, the ring is there.
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  await expect.poll(outline).toBe('solid');
+});
+
 test('Üben: 10 Items, Fortsetzen nach Neuladen, Abschluss', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: "Wohin geht's heute?" })).toBeVisible();

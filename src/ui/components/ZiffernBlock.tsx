@@ -40,7 +40,7 @@ const ROWS: Key[][] = [
 ];
 
 const keyClass =
-  'min-h-touch min-w-key rounded-control border-2 border-line-strong bg-surface font-bold transition-transform duration-(--duration-press) enabled:active:translate-y-px disabled:text-ink-muted';
+  'min-h-touch min-w-key rounded-control border-2 border-line-strong bg-surface font-bold transition-transform duration-(--duration-press) enabled:active:translate-y-px disabled:border-line disabled:text-ink-muted';
 
 export function ZiffernBlock({ value, onChange, disabled = false, ...options }: ZiffernBlockProps) {
   const { allowDecimal, maxDigits } = options;

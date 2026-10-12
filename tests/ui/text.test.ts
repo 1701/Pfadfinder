@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { BEREICHE, FAECHER } from '../../src/domain/content';
 import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/number-format';
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
-import { keepNumbersTogether } from '../../src/ui/text/numbers';
+import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
 const NB = '\u00a0';
 
@@ -24,6 +24,17 @@ describe('numbers on screen', () => {
     expect(keepNumbersTogether('von 0 bis 10 000.')).toBe(`von 0 bis 10${NB}000.`);
     expect(keepNumbersTogether('3 Reihen mit je 24 Plätzen')).toBe('3 Reihen mit je 24 Plätzen');
     expect(keepNumbersTogether('1 000 000')).toBe(`1${NB}000${NB}000`);
+  });
+
+  it('keeps a number with the word after it in the task', () => {
+    expect(keepNumbersWithWords('3 Reihen mit je 24 Plätzen')).toBe(
+      `3${NB}Reihen mit je 24${NB}Plätzen`,
+    );
+    expect(keepNumbersWithWords('Sie kostet 10 000 Euro und 5 €.')).toBe(
+      `Sie kostet 10${NB}000${NB}Euro und 5${NB}€.`,
+    );
+    expect(keepNumbersWithWords('4 735 + 2 868 = ?')).toBe(`4${NB}735 + 2${NB}868 = ?`);
+    expect(keepNumbersWithWords('Um 8:30 Uhr in Klasse 4a')).toBe(`Um 8:30${NB}Uhr in Klasse 4a`);
   });
 
   it('formats numbers the German way', () => {

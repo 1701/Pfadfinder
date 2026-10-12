@@ -7,6 +7,7 @@ import { useEffect, useId, useRef } from 'react';
 import { speakable } from '../../domain/content/read-aloud';
 import type { Feedback } from '../../domain/content';
 import type { Correctness } from '../../domain/evaluation';
+import { focusQuietly } from '../focus';
 import { keepNumbersTogether as nb } from '../text/numbers';
 import { Button } from './Button';
 import { VorlesenButton } from './VorlesenButton';
@@ -36,7 +37,7 @@ export function FeedbackPanel({
   const messageId = useId();
   const next = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => next.current?.focus(), []);
+  useEffect(() => focusQuietly(next.current), []);
 
   const speech = [verdict, explanation, misconception]
     .filter((part): part is string => Boolean(part))
@@ -63,7 +64,7 @@ export function FeedbackPanel({
             {verdict}
           </h2>
           <p>{nb(explanation)}</p>
-          {misconception && <p>{nb(misconception)}</p>}
+          {misconception && <p className="text-ink-muted">{nb(misconception)}</p>}
         </div>
       </section>
       <Button ref={next} variant="primary" onClick={onNext} aria-describedby={messageId}>

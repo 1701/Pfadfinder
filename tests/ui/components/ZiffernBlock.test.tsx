@@ -66,7 +66,7 @@ describe('ZiffernBlock', () => {
     expect(screen.getByTestId('value').textContent).toBe('4,2');
   });
 
-  it('does nothing while disabled', () => {
+  it('does nothing while disabled and looks dimmed', () => {
     render(
       <ZiffernBlock
         value="1"
@@ -78,6 +78,9 @@ describe('ZiffernBlock', () => {
       />,
     );
     fireEvent.keyDown(window, { key: '2' });
-    expect((screen.getByRole('button', { name: '2' }) as HTMLButtonElement).disabled).toBe(true);
+    const key = screen.getByRole('button', { name: '2' }) as HTMLButtonElement;
+    expect(key.disabled).toBe(true);
+    expect(key.className).toMatch(/disabled:border-line(\s|$)/);
+    expect(key.className).toContain('disabled:text-ink-muted');
   });
 });

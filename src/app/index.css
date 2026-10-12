@@ -34,6 +34,11 @@
     outline-offset: var(--spacing-focus);
   }
 
+  /* Focus moved by the app after a tap shows no ring (src/ui/focus.ts). */
+  [data-quiet-focus]:focus-visible {
+    outline: none;
+  }
+
   /* The checking moment: the message rises from the bottom band. */
   .feedback-in {
     animation: feedback-in var(--duration-feedback) var(--ease-standard);
