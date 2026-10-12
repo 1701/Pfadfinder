@@ -1,16 +1,21 @@
 // Every practiceable item in every state on four viewports: the two iPad sizes from the skill
 // and the same iPad in Safari with its bars (1024×660 landscape, 768×900 portrait).
+// In CI only the two Safari sizes run (ARCHITECTURE.md §8): they are the tightest, and an item
+// that fits there also fits on the full iPad screens. Locally all four run.
 // Runs against /dev/item (dev build only).
 
-import { test } from '@playwright/test';
+import { test, type Page } from '@playwright/test';
 import { ITEMS, SCREENSHOTS, expectFitsScreen } from './helpers';
 
-const VIEWPORTS = [
+const ALL_VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
   { name: 'ipad-portrait', width: 768, height: 1024 },
   { name: 'safari-landscape', width: 1024, height: 660 },
   { name: 'safari-portrait', width: 768, height: 900 },
 ];
+const VIEWPORTS = process.env.CI
+  ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
+  : ALL_VIEWPORTS;
 const STATES = ['answering', 'richtig', 'noch-nicht'] as const;
 
 /** Longest text on screen: stimulus + prompt + the "noch nicht" explanation. */
@@ -31,29 +36,41 @@ const pictureItem = ITEMS.filter((i) => i.stimulus?.assetId).sort(
     ((a.stimulus?.text ?? '').length + a.prompt.length),
 )[0];
 
+/**
+ * Opens a dev item page. Under parallel load the dev server occasionally fails the first import
+ * of a content chunk ("Failed to fetch dynamically imported module"); the page then waits
+ * forever, so it gets one reload instead of hanging until the test times out.
+ */
+async function openItem(page: Page, url: string) {
+  const band = page.locator('[data-region="band"] > button');
+  await page.goto(url);
+  try {
+    await band.waitFor({ timeout: 20_000 });
+  } catch {
+    await page.goto(url);
+    await band.waitFor();
+  }
+  await page.evaluate(() => document.fonts.ready);
+}
+
 for (const viewport of VIEWPORTS) {
   test(`alle Items passen auf ${viewport.name} (${viewport.width}×${viewport.height})`, async ({
     page,
   }) => {
-    test.setTimeout(300_000);
+    // About 0.8 s per item and state locally; grows with every batch.
+    test.setTimeout(Math.max(300_000, ITEMS.length * STATES.length * 3_000));
     await page.setViewportSize(viewport);
     for (const item of ITEMS) {
       for (const state of STATES) {
-        await page.goto(`/dev/item/${item.id}?state=${state}`);
-        await page.locator('[data-region="band"] > button').waitFor();
-        await page.evaluate(() => document.fonts.ready);
+        await openItem(page, `/dev/item/${item.id}?state=${state}`);
         await expectFitsScreen(page, `${item.id} ${state} ${viewport.name}`);
       }
     }
-    await page.goto(`/dev/item/${worst.id}?state=noch-nicht`);
-    await page.locator('[data-region="band"] > button').waitFor();
-    await page.evaluate(() => document.fonts.ready);
+    await openItem(page, `/dev/item/${worst.id}?state=noch-nicht`);
     await page.waitForTimeout(300);
     await page.screenshot({ path: `${SCREENSHOTS}/layout-laengstes-item-${viewport.name}.png` });
     if (pictureItem) {
-      await page.goto(`/dev/item/${pictureItem.id}?state=noch-nicht`);
-      await page.locator('[data-region="band"] > button').waitFor();
-      await page.evaluate(() => document.fonts.ready);
+      await openItem(page, `/dev/item/${pictureItem.id}?state=noch-nicht`);
       await page.waitForTimeout(300);
       await page.screenshot({ path: `${SCREENSHOTS}/layout-bild-${viewport.name}.png` });
     }

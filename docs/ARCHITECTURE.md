@@ -126,6 +126,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - E2E: (1) Einstiegscheck → Karte zeigt Niveaus, (2) Üben 10 Items → Abschluss-Screen, (3) Probetest starten → abgeben → Auswertung
 - `scripts/validate-content.ts` läuft in CI und als pre-commit
 - PWA (seit 2026-10-12, Lighthouse hat keine PWA-Kategorie mehr): installierbar auf dem iPad (manuell bestätigt), Offline-E2E grün
+- Layout-Test (jedes übbare Item × 3 Zustände): lokal in allen vier Viewports, in CI nur in 1024 × 660 und 768 × 900. Das sind die engsten (iPad mit Safari-Leisten); was dort ohne Scrollen passt, passt auch auf 1024 × 768 und 768 × 1024. Er wächst mit jedem Batch, vier Viewports hätten die CI-Laufzeit mit jedem Batch weiter verlängert. Die Karte (`karte.spec`) läuft weiter in allen vier
 - Lighthouse gegen die Live-URL, mobil: Performance ≥ 90, Barrierefreiheit 100, Best Practices 100 (SEO zählt nicht, solange `noindex` gilt)
 
 ## 9. Erweiterungspunkte (nicht bauen, aber nicht verbauen)
