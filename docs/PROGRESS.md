@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – iPad-Test, Batch 3 groessen-messen, Geldbeträge
+- **iPad:** Markus hat „Zum Home-Bildschirm“, Start ohne Safari-Leiste und Offline-Start auf dem iPad bestätigt (ohne Foto). Damit ist das Kriterium „installierbar auf dem iPad“ (ARCHITECTURE §8) erfüllt.
+- **Content:** `groessen-messen.json` ersetzt (20 Items, `m-gm-2-004` unverändert) und `gm-uhr-1.svg` (7:45 Uhr, Zeiger nachgerechnet, Lösung passt). 13 Items haben einen Renderer, „Größen und Messen“ ist auf der Karte offen. `content:validate` grün, 78 Items.
+- **Fix:** Bei Geld stand „Richtig ist: 2,2 €“. Beträge in € mit Cent haben jetzt immer zwei Nachkommastellen, auch wenn eine gespeicherte Antwort wieder angezeigt wird.
+- **Tests:** Komma-Eingabe über den Ziffernblock mit den echten Items: „2,20“ und „4,55“ zählen als richtig, „2,2“ auch, ohne Punkttaste. Tests, die ein dünnes Gebiet oder die offenen Gebiete brauchen, lesen das jetzt aus dem Manifest (`tests/fixtures/content-state.ts`); vorher brachen sie, weil Batch 3 ein Gebiet öffnete.
+- **Offen:** Batch-README nannte drei Komma-Items, es sind zwei (2,20 € und 4,55 €). In `gm-uhr-1` verdeckt der Minutenzeiger die „9“. Die Schriftregel „≥ 22 im viewBox“ passt nicht zu großen viewBoxen: Die Uhr (260 hoch) zeigt ihre Ziffern bei 144 px Bildhöhe mit etwa 12 px.
+- **CI:** [CI #38292065730](https://github.com/1701/Pfadfinder/actions/runs/38292065730) grün (e9acff3…6eb2209), Workers Builds grün; 493 Tests, e2e 23 bestanden, 2 übersprungen (WebKit offline). Der e2e-Job braucht wegen des Layout-Tests über mehr Items jetzt 9,5 statt 6,5 min. Lokal grün: `npm run check`, `npm run e2e:chromium` (17/17).
+
 ## 2026-10-12 – App-Icon „Wegstriche“, nicht öffentlich, neues PWA-Kriterium
 - **Gebaut:** Quelle `public/icon.svg` (Entwurf B3: drei Wegstriche bergauf, 16 % dick, 66 % breit, ganz in der maskable-Zone). `npm run icons` rendert daraus mit Playwright 180 (`apple-touch-icon`), 192, 512 und 512 maskable als RGB-PNG ohne Alpha (eigener Kodierer mit `node:zlib`, keine neue Dependency). Manifest mit Icons (`any`/`maskable`), `display: standalone`, `theme_color` Tinte, `background_color` Papier; `index.html` mit `apple-touch-icon`, SVG-Favicon, `theme-color`. Icons im Precache; `check-bundle` prüft Manifest und Precache und jetzt auch `/dev/karte`. `robots.txt` sperrt alles, dazu `noindex`. ARCHITECTURE §8: neues PWA-Kriterium.
 - **Geprüft:** Live liefern alle vier PNGs `image/png` mit Farbtyp 2 (RGB), das Manifest hat `standalone`/Tinte/Papier. e2e `pwa.spec` in Chromium und WebKit grün.
