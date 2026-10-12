@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Content: zahlen-operationen mit retired-Items
+- **Eingespielt:** `zahlen-operationen.json` (von Markus ersetzt, nicht umgeschrieben): 15 neue Items, 7 auf `retired` gesetzt (nur `status` und `meta` geändert, keine ID entfernt). Aktiv sind 29 Items, Niveau 11/12/6; 20 davon haben einen Renderer. `content:validate` grün, Manifest neu erzeugt.
+- **Geprüft:** `retired` wird schon überall ausgeschlossen: Manifest/Karte, `practiceableItems`, `pickNext` (auch fällige Fehlerkiste-Einträge), Einstiegscheck (`isCheckable`), Probetest-Validator, e2e-Helfer (Layout-Test). Attempts und Fehlerkiste-Einträge auf solche Items bleiben gespeichert, lesbar und importierbar; der Import prüft keine Item-IDs gegen den Content. Kein `fix:` nötig.
+- **Ergänzt:** Zwei Tests, die das festhalten: eine Fehlerkiste mit einem stillgelegten Item, und ein Lernstand mit Attempts auf später stillgelegte Items (echter Content). Gegenprobe: Ohne die Filter schlagen drei Tests fehl.
+- **Offen:** Fehlerkiste-Einträge auf stillgelegte Items bleiben dauerhaft fällig, aber unsichtbar. Sie stören nicht (kein Zähler zeigt sie), könnten aber im Eltern-Bereich auftauchen, sobald es ihn gibt.
+- **CI:** [CI #38267759646](https://github.com/1701/Pfadfinder/actions/runs/38267759646) grün (7f40642…699dbc2), Workers Builds grün; 482 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (15/15).
+
 ## 2026-10-12 – Aufgabe 5c: Live-URL geprüft, Lighthouse
 - **Geprüft:** https://pfadfinder.accounts-ea5.workers.dev/ liefert den aktuellen Build (Bundle-Hash wie lokal). Antworten und Header sind wie mit `wrangler dev`. Der Service Worker hat Scope `/`, 20 Einträge im Precache, offline laden Unterseite und Karte. Ein Push auf `main` war nach etwa 60 s live (`2e2c58e`).
 - **Lighthouse 13.5:** Barrierefreiheit, Best Practices und SEO 100 (mobil und Desktop), Performance Desktop 100. Mobil schwankt sie zwischen 73 und 100 (erster Inhalt nach 1,5 s oder 4,4 s). Eine PWA-Kategorie gibt es nicht mehr.
