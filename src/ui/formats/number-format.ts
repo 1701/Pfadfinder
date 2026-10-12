@@ -13,12 +13,21 @@ export function groupDraft(draft: string): string {
   return rest.length > 0 ? `${groupInteger(int)},${rest.join('')}` : groupInteger(int);
 }
 
-export function formatGermanNumber(value: number): string {
-  const [int = '', frac] = String(value).split('.');
+/** Units whose amounts are written with cents: 2.2 € is "2,20 €", never "2,2 €". */
+const CENT_UNITS: ReadonlySet<string> = new Set(['€']);
+
+function plain(value: number, unit?: string): string {
+  return unit !== undefined && CENT_UNITS.has(unit) && !Number.isInteger(value)
+    ? value.toFixed(2)
+    : String(value);
+}
+
+export function formatGermanNumber(value: number, unit?: string): string {
+  const [int = '', frac] = plain(value, unit).split('.');
   return frac ? `${groupInteger(int)},${frac}` : groupInteger(int);
 }
 
 /** Digit-pad text for a stored answer, e.g. when a renderer is shown again. */
-export function toDraft(value: number): string {
-  return String(value).replace('.', ',');
+export function toDraft(value: number, unit?: string): string {
+  return plain(value, unit).replace('.', ',');
 }

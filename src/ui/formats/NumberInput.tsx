@@ -17,7 +17,7 @@ export function NumberInput({
   revealed,
 }: FormatProps<'number-input'>) {
   const { unit, allowDecimal = false, maxDigits } = item.payload;
-  const [draft, setDraft] = useState(() => (answer ? toDraft(answer.value) : ''));
+  const [draft, setDraft] = useState(() => (answer ? toDraft(answer.value, unit) : ''));
 
   const update = (next: string) => {
     setDraft(next);
@@ -44,7 +44,7 @@ export function NumberInput({
         </div>
         {revealed && revealed.correct !== true && (
           <p className="text-option text-correct">
-            Richtig ist: {formatGermanNumber(revealed.solution.value)}
+            Richtig ist: {formatGermanNumber(revealed.solution.value, unit)}
             {unit && ` ${unit}`}
           </p>
         )}

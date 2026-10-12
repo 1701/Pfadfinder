@@ -45,4 +45,13 @@ describe('numbers on screen', () => {
     expect(groupDraft('0,5')).toBe('0,5');
     expect(toDraft(2.5)).toBe('2,5');
   });
+
+  it('writes euro amounts with cents', () => {
+    expect(formatGermanNumber(2.2, '€')).toBe('2,20');
+    expect(formatGermanNumber(4.55, '€')).toBe('4,55');
+    expect(formatGermanNumber(5, '€')).toBe('5');
+    expect(formatGermanNumber(1250.5, '€')).toBe(`1${NB}250,50`);
+    expect(formatGermanNumber(2.2, 'm')).toBe('2,2');
+    expect(toDraft(2.2, '€')).toBe('2,20');
+  });
 });
