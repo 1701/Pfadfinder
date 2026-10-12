@@ -7,7 +7,7 @@
 // and the hidden one is display:none, so it has no tab stops.
 
 import clsx from 'clsx';
-import { useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { Fragment, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { useHref, useLinkClickHandler } from 'react-router';
 import { BEREICHE, fachOfBereich, type Bereich, type Fach } from '../../domain/content/taxonomy';
 import type { Niveau } from '../../domain/content/types';
@@ -211,12 +211,15 @@ function Label({
           textAnchor="middle"
           className={clsx('font-bold', muted ? 'fill-ink-muted' : 'fill-ink')}
         >
+          {/* A space between the lines keeps the visible name whole ("Formen und Raum") for
+              tools that read the text, so it matches the link's accessible name (WCAG 2.5.3). */}
           {lines.map((line, i) => (
-            <tspan key={line} x={x} y={textTop + (i + 1) * labelLineHeight - labelLineHeight / 4}>
-              {/* The space keeps the visible name whole ("Formen und Raum"), so it matches the
-                  link's accessible name (WCAG 2.5.3, voice control). */}
-              {i < lines.length - 1 ? `${line} ` : line}
-            </tspan>
+            <Fragment key={line}>
+              {i > 0 && ' '}
+              <tspan x={x} y={textTop + (i + 1) * labelLineHeight - labelLineHeight / 4}>
+                {line}
+              </tspan>
+            </Fragment>
           ))}
         </text>
         {state &&
