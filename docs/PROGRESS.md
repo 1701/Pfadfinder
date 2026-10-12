@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 5, Teil 0: Nacharbeiten
+- **Gebaut:** Die Tagesgrenze gilt jetzt ab der letzten Antwort statt ab `startedAt` (`lastActivity`): Beginn 23:55 und Antwort 00:03 heißt, dass die Session um 00:10 fortgesetzt wird. Die misconception steht in `ink-muted`. Nach dem Prüfen ist der Ziffernblock gedimmt (`line` + `ink-muted`). Fokus, den die App nach einem Tipp selbst setzt, zeigt keinen Ring (`focusQuietly`); nach einer Taste ist er wieder sichtbar. In Stimulus und Prompt bleibt eine Zahl mit dem folgenden Wort zusammen (`keepNumbersWithWords`, auch „5 €“). CONTENT_SCHEMA 1.0.2: §1 nennt `manifest.json` als erzeugte Datei.
+- **Entschieden (offene Punkte aus 4C/4F):** Der Name „Rechtschreib-Tricks“ bleibt. Die Wegstriche im Fortschritt bleiben. Feedback hat bis zu 3 Sätze Erklärung plus 1 Satz misconception. WebKit läuft nur extern in CI, nicht lokal.
+- **Befund:** Chromium zeigt den Ring nach einem Tipp auch ohne die Korrektur nicht (Gegenprobe lokal). Der neue e2e-Test schützt die Korrektur also nur in den WebKit-Projekten in CI.
+- **Offen:** Eine über Mitternacht fortgesetzte Session endet mit „Heute geschafft: 10 Fundstücke“, obwohl ein Teil davon am Vortag beantwortet wurde.
+- **CI:** [CI #38212964128](https://github.com/1701/Pfadfinder/actions/runs/38212964128) grün (9d14a57…5ff7366); e2e 14 bestanden, 2 übersprungen (WebKit offline), der Fokustest auch in WebKit grün. Lokal grün: `npm run check` (418 Tests), `npm run e2e:chromium`.
+
 ## 2026-10-12 – Aufgabe 4F: Bundle der Startseite
 - **Messung** (`npm run analyze`, minifiziert/gzip): Das Hauptbundle hatte vorher **542,7 kB / 167,4 kB**, jetzt **262,5 kB / 82,8 kB**. Der neue lazy Chunk `practice-route` hat 226,1 kB / 69,1 kB, die Content-Chunks je Bereich sind unverändert (z. B. 18,5 kB).
 - **Befund:** Der Content lag nicht im Hauptbundle. Hineingezogen wurden aber Zod (Startseite parste alle Items), Dexie (Store in `main.tsx`) und der Daten-Router von React Router.
