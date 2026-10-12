@@ -6,7 +6,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Geprüft:** https://pfadfinder.accounts-ea5.workers.dev/ liefert den aktuellen Build (Bundle-Hash wie lokal). Antworten und Header sind wie mit `wrangler dev`. Der Service Worker hat Scope `/`, 20 Einträge im Precache, offline laden Unterseite und Karte. Ein Push auf `main` war nach etwa 60 s live (`2e2c58e`).
 - **Lighthouse 13.5:** Barrierefreiheit, Best Practices und SEO 100 (mobil und Desktop), Performance Desktop 100. Mobil schwankt sie zwischen 73 und 100 (erster Inhalt nach 1,5 s oder 4,4 s). Eine PWA-Kategorie gibt es nicht mehr.
 - **Behoben:** `public/robots.txt`, weil der SPA-Fallback HTML lieferte (SEO 91 → 100). Die Karten-Namen „Formenund Raum“ passten nicht zum Link-Namen; jetzt steht ein Leerzeichen-Knoten zwischen den Zeilen, ein Test sichert das. `account_id` steht in `wrangler.jsonc`.
-- **Offen:** Für `a6c3f89` gibt es keinen Workers-Builds-Check; live läuft noch `2e2c58e` (Namensfix nur lokal geprüft). Icons für die Installierbarkeit fehlen weiterhin. Die Mobil-Performance ist unklar.
+- **Offen:** `a6c3f89` hat Cloudflare nicht eigens gebaut (kein Workers-Builds-Check). Der nächste Push (`f1bed82`) hat ihn mitgebracht, der Namensfix ist live bestätigt. Icons für die Installierbarkeit fehlen weiterhin. Die Mobil-Performance ist unklar. SEO schwankt zwischen 91 und 100, wenn Lighthouse robots.txt nicht rechtzeitig abruft.
 - **CI:** [CI #38263459386](https://github.com/1701/Pfadfinder/actions/runs/38263459386) grün (a6c3f89); 480 Tests, e2e grün. Lokal grün: `npm run check`.
 
 ## 2026-10-12 – Aufgabe 5c: Deployment über Cloudflare Workers Builds

@@ -61,8 +61,8 @@ Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem
 
 - Eine PWA-Kategorie gibt es seit Lighthouse 12 nicht mehr; Installierbarkeit muss anders geprüft werden.
 - Mobil-Performance schwankt zwischen zwei Zuständen: erster Inhalt nach 1,5 s oder nach 4,4 s. Vermutung: Ob Cloudflare die Dateien an der Kante schon im Cache hat. Die Seite rendert erst nach dem JavaScript (88 kB gzip), und die beiden Andika-Schnitte (zusammen 582 kB) teilen sich die Bandbreite.
-- SEO war vor `public/robots.txt` bei 91 (der SPA-Fallback lieferte HTML als robots.txt).
-- Barrierefreiheit 100. Die versteckte Regel `label-content-name-mismatch` schlug bei den Karten-Links an (sichtbarer Name „Formenund Raum“); behoben in `a6c3f89`, lokal geprüft.
+- SEO war vor `public/robots.txt` bei 91 (der SPA-Fallback lieferte HTML als robots.txt). Seitdem 100; vereinzelt 91, wenn Lighthouse beim Abruf von robots.txt in eine Zeitüberschreitung läuft (Datei kommt korrekt als `text/plain`, der nächste Lauf ist wieder 100).
+- Barrierefreiheit 100. Die versteckte Regel `label-content-name-mismatch` schlug bei den Karten-Links an (sichtbarer Name „Formenund Raum“); behoben in `a6c3f89`, live bestätigt mit `f1bed82`.
 
 ## 6. Bekanntes Verhalten
 
