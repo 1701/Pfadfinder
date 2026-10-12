@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 5c: Deployment über Cloudflare Workers Builds
+- **Gebaut:** `wrangler.jsonc` (`pfadfinder`, `compatibility_date` 2026-09-26, Assets aus `dist/` mit SPA-Fallback, workers.dev und Vorschau-URLs). wrangler 4.142.0 als Dev-Dependency (in CLAUDE.md eingetragen), `npm run deploy:preview`. `docs/DEPLOY.md` beschreibt Ablauf, einmalige Einrichtung im Dashboard, wo die URL steht und wie man die Vorschau eines Branches findet. ARCHITECTURE §2 Hosting ist angepasst.
+- **Geprüft (lokal mit `wrangler dev`, kein Deploy):** Router-Pfade liefern `index.html`. `sw.js` kommt als JavaScript, das Manifest als `application/manifest+json`, alles mit `max-age=0, must-revalidate`. Der Service Worker hat Scope `/` und steuert die Seite, der Precache hat 20 Einträge, offline lädt eine direkt aufgerufene Unterseite. `wrangler deploy --dry-run` liest 26 Dateien.
+- **Entscheidungen:** Empfohlener Build-Befehl bei Cloudflare ist `npm run check`, weil Cloudflare nicht auf die GitHub-CI wartet. Fehlende Assets liefern wegen des SPA-Fallbacks `index.html` (200); das bleibt so, Begründung in DEPLOY.md §6.
+- **Offen:** Das Repo ist noch nicht im Cloudflare-Dashboard verbunden, und hier ist niemand angemeldet; es gibt deshalb noch keinen Deploy und keine Live-URL. Lighthouse hat seit Version 12 keine PWA-Kategorie mehr (Konflikt mit ARCHITECTURE §8). Das Manifest hat keine Icons, die App ist damit nicht installierbar (seit Aufgabe 1 offen).
+- **CI:** [CI #38259197020](https://github.com/1701/Pfadfinder/actions/runs/38259197020) grün (69f5043); 479 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-12 – Namensschilder statt Halo, ein Ring für „hier bist du“
 - **Gebaut:** Die Namen auf der Karte stehen auf einem abgerundeten Schild in Plateaufarbe (7 Einheiten Rand, keine Kontur). Das Schild unterbricht die Höhenlinien, den Halo gibt es nicht mehr. Die Größe wird an der Textbox gemessen (`getBBox`, erneut nach dem Laden der Schrift), in jsdom aus der Zeichenzahl geschätzt. Wegstriche im Item-Screen und im Tagesziel sprechen die Sprache der Karte: gefüllt = erledigt, Ring mit Abstand = hier bist du (auch nach dem Prüfen: gefüllt plus Ring).
 - **Entscheidungen:** Der Abstand zwischen den Wegstrichen ist jetzt `xs` statt `2xs`, damit sich die Ringe nicht berühren. Dadurch passte die Kopfzeile der Karte bei 1024 px nicht mehr in eine Zeile (Namen 17,75 px; der Layout-Test schlug an). Im Tagesziel stehen die Striche deshalb quer über dem Text und hoch daneben.
