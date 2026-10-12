@@ -214,6 +214,53 @@ describe('practice session (store + in-memory repositories + real content)', () 
     expect(day2Attempts.slice(0, 3).every((a) => a.mode === 'review')).toBe(true);
   });
 
+  it('never serves retired items, but keeps attempts and Fehlerkiste entries on them', async () => {
+    const repos = createMemoryRepositories();
+    const deps = testDeps(repos);
+    const store = createSessionStore(deps);
+    const { id: learnerId } = await store.getState().init();
+    const content = await deps.content.loadItems('mathe', 'zahlen-operationen');
+    const retired = content.filter((i) => i.status === 'retired');
+    expect(retired.length).toBeGreaterThan(0);
+    const old = retired.find((i) => i.format === 'number-input')!;
+
+    // Practised yesterday, before the item was retired: a wrong answer, now due in the Fehlerkiste.
+    await repos.attempts.put({
+      id: 'old-attempt',
+      learnerId,
+      itemId: old.id,
+      fach: 'mathe',
+      bereich: 'zahlen-operationen',
+      niveau: old.niveau,
+      format: old.format,
+      correct: false,
+      answer: { value: 1 },
+      durationMs: 5000,
+      mode: 'practice',
+      at: '2026-10-10T08:00:00.000Z',
+    });
+    const entry = {
+      learnerId,
+      itemId: old.id,
+      stage: 1 as const,
+      dueAt: '2026-10-11T08:00:00.000Z',
+    };
+    await repos.reviews.put(entry);
+
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    for (let i = 0; i < SESSION_GOAL; i++) {
+      await answer(store, true);
+      await store.getState().next();
+    }
+    const retiredIds = new Set(retired.map((i) => i.id));
+    const attempts = await repos.attempts.listByLearner(learnerId);
+    expect(
+      attempts.filter((a) => a.id !== 'old-attempt').some((a) => retiredIds.has(a.itemId)),
+    ).toBe(false);
+    expect(attempts.find((a) => a.id === 'old-attempt')).toMatchObject({ itemId: old.id });
+    expect(await repos.reviews.get(learnerId, old.id)).toEqual(entry);
+  });
+
   it('starts fresh after midnight and closes the session of the day before', async () => {
     const repos = createMemoryRepositories();
     // 23:55 in Berlin (UTC+2): four answers before midnight.

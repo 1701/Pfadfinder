@@ -53,6 +53,22 @@ describe('pickNext – Fehlerkiste first', () => {
     expect(result).toEqual({ source: 'review', item: zoLevel1, review: review(zoLevel1.id) });
   });
 
+  it('skips a due review whose item was retired; the entry itself stays untouched', () => {
+    const retiredPool = pool.map((i) =>
+      i.id === zoLevel1.id ? ({ ...i, status: 'retired' } as Item) : i,
+    );
+    const other = pool.find((i) => i.bereich === ZO && i.id !== zoLevel1.id)!;
+    const dueReviews = [review(zoLevel1.id, '2026-10-11T07:00:00.000Z'), review(other.id)];
+    expect(pickNext(input({ pool: retiredPool, dueReviews }))).toEqual({
+      source: 'review',
+      item: other,
+      review: review(other.id),
+    });
+    const onlyRetired = pickNext(input({ pool: retiredPool, dueReviews: [review(zoLevel1.id)] }));
+    expect(onlyRetired?.source).toBe('practice');
+    expect(onlyRetired?.item.status).not.toBe('retired');
+  });
+
   it('serves reviews even if the item was seen recently ("only reviews due")', () => {
     const allZo = pool.filter((i) => i.bereich === ZO).map((i) => i.id);
     expect(
