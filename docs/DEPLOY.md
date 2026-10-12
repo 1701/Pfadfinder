@@ -52,16 +52,17 @@ Lokal lässt sich dieselbe Auslieferung mit `npm run build && npx wrangler dev` 
 
 Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem lokalen Build) dieselben Punkte: Antworten und Header wie oben. Der Service Worker hat Scope `/`, steuert die Seite und hat 20 Einträge im Precache. Offline laden `/ueben/mathe/raum-form` und die Karte.
 
-**Lighthouse 13.5** (Chromium von Playwright, `npx lighthouse <url>` bzw. mit `--preset=desktop`):
+**Lighthouse 13.5** (Chromium von Playwright, `npx lighthouse <url>` bzw. mit `--preset=desktop`), Stand `2e2c58e`:
 
 | | Performance | Barrierefreiheit | Best Practices | SEO |
 |---|---|---|---|---|
-| Mobil (simuliertes langsames 4G, 4× CPU) | 73 | 100 | 100 | 91 |
-| Desktop | 100 | 100 | 100 | 91 |
+| Mobil (simuliertes langsames 4G, 4× CPU), 4 Läufe | 73, 98, 100, 74 | 100 | 100 | 100 |
+| Desktop | 100 | 100 | 100 | 100 |
 
 - Eine PWA-Kategorie gibt es seit Lighthouse 12 nicht mehr; Installierbarkeit muss anders geprüft werden.
-- Mobil-Performance: Der erste Inhalt kommt nach 4,3 s, weil die Seite erst nach dem JavaScript rendert (88 kB gzip) und die beiden Andika-Schnitte (zusammen 582 kB) Bandbreite teilen.
-- SEO 91 lag an der fehlenden `robots.txt` (der SPA-Fallback lieferte HTML). Seitdem gibt es `public/robots.txt`.
+- Mobil-Performance schwankt zwischen zwei Zuständen: erster Inhalt nach 1,5 s oder nach 4,4 s. Vermutung: Ob Cloudflare die Dateien an der Kante schon im Cache hat. Die Seite rendert erst nach dem JavaScript (88 kB gzip), und die beiden Andika-Schnitte (zusammen 582 kB) teilen sich die Bandbreite.
+- SEO war vor `public/robots.txt` bei 91 (der SPA-Fallback lieferte HTML als robots.txt).
+- Barrierefreiheit 100. Die versteckte Regel `label-content-name-mismatch` schlug bei den Karten-Links an (sichtbarer Name „Formenund Raum“); behoben in `a6c3f89`, lokal geprüft.
 
 ## 6. Bekanntes Verhalten
 

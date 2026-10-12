@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 5c: Live-URL geprüft, Lighthouse
+- **Geprüft:** https://pfadfinder.accounts-ea5.workers.dev/ liefert den aktuellen Build (Bundle-Hash wie lokal). Antworten und Header sind wie mit `wrangler dev`. Der Service Worker hat Scope `/`, 20 Einträge im Precache, offline laden Unterseite und Karte. Ein Push auf `main` war nach etwa 60 s live (`2e2c58e`).
+- **Lighthouse 13.5:** Barrierefreiheit, Best Practices und SEO 100 (mobil und Desktop), Performance Desktop 100. Mobil schwankt sie zwischen 73 und 100 (erster Inhalt nach 1,5 s oder 4,4 s). Eine PWA-Kategorie gibt es nicht mehr.
+- **Behoben:** `public/robots.txt`, weil der SPA-Fallback HTML lieferte (SEO 91 → 100). Die Karten-Namen „Formenund Raum“ passten nicht zum Link-Namen; jetzt steht ein Leerzeichen-Knoten zwischen den Zeilen, ein Test sichert das. `account_id` steht in `wrangler.jsonc`.
+- **Offen:** Für `a6c3f89` gibt es keinen Workers-Builds-Check; live läuft noch `2e2c58e` (Namensfix nur lokal geprüft). Icons für die Installierbarkeit fehlen weiterhin. Die Mobil-Performance ist unklar.
+- **CI:** [CI #38263459386](https://github.com/1701/Pfadfinder/actions/runs/38263459386) grün (a6c3f89); 480 Tests, e2e grün. Lokal grün: `npm run check`.
+
 ## 2026-10-12 – Aufgabe 5c: Deployment über Cloudflare Workers Builds
 - **Gebaut:** `wrangler.jsonc` (`pfadfinder`, `compatibility_date` 2026-09-26, Assets aus `dist/` mit SPA-Fallback, workers.dev und Vorschau-URLs). wrangler 4.142.0 als Dev-Dependency (in CLAUDE.md eingetragen), `npm run deploy:preview`. `docs/DEPLOY.md` beschreibt Ablauf, einmalige Einrichtung im Dashboard, wo die URL steht und wie man die Vorschau eines Branches findet. ARCHITECTURE §2 Hosting ist angepasst.
 - **Geprüft (lokal mit `wrangler dev`, kein Deploy):** Router-Pfade liefern `index.html`. `sw.js` kommt als JavaScript, das Manifest als `application/manifest+json`, alles mit `max-age=0, must-revalidate`. Der Service Worker hat Scope `/` und steuert die Seite, der Precache hat 20 Einträge, offline lädt eine direkt aufgerufene Unterseite. `wrangler deploy --dry-run` liest 26 Dateien.
