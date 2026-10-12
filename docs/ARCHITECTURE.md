@@ -125,7 +125,8 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - UI: je Format ein Rendering-/Interaktionstest
 - E2E: (1) Einstiegscheck → Karte zeigt Niveaus, (2) Üben 10 Items → Abschluss-Screen, (3) Probetest starten → abgeben → Auswertung
 - `scripts/validate-content.ts` läuft in CI und als pre-commit
-- Lighthouse PWA ≥ 90, Accessibility ≥ 90
+- PWA (seit 2026-10-12, Lighthouse hat keine PWA-Kategorie mehr): installierbar auf dem iPad (manuell bestätigt), Offline-E2E grün
+- Lighthouse gegen die Live-URL, mobil: Performance ≥ 90, Barrierefreiheit 100, Best Practices 100 (SEO zählt nicht, solange `noindex` gilt)
 
 ## 9. Erweiterungspunkte (nicht bauen, aber nicht verbauen)
 

@@ -1,2 +1,3 @@
+# Not public yet: no search engine may index Pfadfinder until it is released on purpose.
 User-agent: *
-Allow: /
+Disallow: /

@@ -64,7 +64,11 @@ Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem
 - SEO war vor `public/robots.txt` bei 91 (der SPA-Fallback lieferte HTML als robots.txt). Seitdem 100; vereinzelt 91, wenn Lighthouse beim Abruf von robots.txt in eine Zeitüberschreitung läuft (Datei kommt korrekt als `text/plain`, der nächste Lauf ist wieder 100).
 - Barrierefreiheit 100. Die versteckte Regel `label-content-name-mismatch` schlug bei den Karten-Links an (sichtbarer Name „Formenund Raum“); behoben in `a6c3f89`, live bestätigt mit `f1bed82`.
 
-## 6. Bekanntes Verhalten
+## 6. Noch nicht öffentlich
+
+Bis Pfadfinder bewusst veröffentlicht wird, sperrt `public/robots.txt` alle Crawler (`Disallow: /`), und `index.html` trägt `<meta name="robots" content="noindex">`. Beides zusammen entfernen, wenn es so weit ist. Lighthouse-SEO ist bis dahin niedrig; das ist gewollt und zählt nicht (ARCHITECTURE §8).
+
+## 7. Bekanntes Verhalten
 
 - **Fehlende Dateien liefern `index.html` mit Status 200**, auch für Skripte (SPA-Fallback gilt für alle Anfragen). Normalfall: Nach einem Deploy liefert der alte Service Worker die alten Chunks aus seinem Precache, bis die neue Version übernimmt (`registerType: autoUpdate`). Nur ohne Service Worker (erster Besuch, gelöschte Website-Daten) und mitten in einem Deploy könnte ein alter Chunk als HTML ankommen; ein Neuladen behebt das. Falls das je auffällt: ein kleiner Worker mit `run_worker_first` für `/assets/*`, der bei fehlender Datei 404 liefert.
 - **Keine Laufzeit-Netzwerkaufrufe:** Die App lädt nur ihre eigenen Assets (CLAUDE.md); der Worker hat keine Bindings.
