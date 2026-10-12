@@ -20,6 +20,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## App
 
+### 0.5.0 – 2026-10-12
+- Startseite ist die Expeditionskarte: 9 Gebiete auf zwei Inseln, Höhenstufen als Etappen, unerforschte Gebiete gestrichelt; zwei Layouts für quer und hoch. Tagesziel mit Wegstrichen. Liste unter `/?liste`.
+- Entdeckungen je erreichter Etappe in `Collectibles`; Abschluss-Screen zählt wie die Karte.
+- Aufgabenbilder (SVG) inline im Aufgabenblatt.
+
 ### 0.4.0 – 2026-10-11
 - Design-Tokens nach Token-Plan v1 (Kartentinte, kühles Papier, Wegmarken-Gelb, Seeblau, Felsgrau); Tailwind-Standardpalette entfernt.
 - Andika 7.000 (SIL, OFL) selbst gehostet unter `public/fonts/andika/`, im Precache.
