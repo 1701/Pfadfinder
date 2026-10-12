@@ -5,7 +5,8 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 ## 2026-10-12 – Schema 1.0.4: keepOrder, Bildregeln
 - **Gebaut:** Neues optionales Feld `payload.keepOrder` für `single-choice`/`multi-choice`. SingleChoice behält damit die Reihenfolge, ein Test prüft fünf Attempts. `content:validate` warnt, wenn alle Optionen nur Bildbeschriftungen sind und `keepOrder` fehlt, und wenn Schrift im SVG kleiner als 22 ist. CONTENT_SCHEMA 1.0.4 (§4.1/4.2, §7: assetAlt verrät die Lösung nicht, Schrift ≥ 22), CLAUDE.md und Skill nennen die Ausnahme vom Mischen.
 - **Entscheidungen:** 1.0.4 statt 1.1, obwohl ein Feld dazukommt. Die Versionsregel im Kopf nennt jetzt optionale Felder, mit denen alle bisherigen Items gültig bleiben, als Patch. Die Schriftregel ist vorerst eine Warnung, weil `rf-spiegel-1` (18) und `rf-bauplan-1` (20) sie noch verletzen.
-- **Offen:** `raum-form-patch.zip` liegt nicht vor (in `~/Downloads` sind nur Batch 2 und ein groessen-messen-Batch). Bis dahin stehen 6 Warnungen in `content:validate`.
+- **Nachtrag Patch:** `raum-form-patch.zip` ist eingespielt: `keepOrder` bei den drei A–D-Items, neutrale `assetAlt` (keine Zählhilfe, keine gefragte Eigenschaft), SVG-Schrift 22–26. `content:validate`: 0 Fehler, 0 Warnungen; Layout-Test grün in 4 Viewports. CI: [CI #38223737536](https://github.com/1701/Pfadfinder/actions/runs/38223737536) grün (92a9a23).
+- **Offen:** Die Schriftregel könnte jetzt ein Fehler statt einer Warnung sein (Entscheidung Markus).
 - **CI:** [CI #38221352735](https://github.com/1701/Pfadfinder/actions/runs/38221352735) grün (c02e35d…3da7ed7); 477 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`.
 
 ## 2026-10-12 – Aufgabe 5, Teil B: Expeditionskarte
