@@ -5,6 +5,7 @@ import type { Bereich } from '../../../src/domain/content';
 import {
   SESSION_GOAL,
   isSameLocalDay,
+  lastActivity,
   planSessionStart,
   recordPracticeAnswer,
   startPracticeSession,
@@ -148,16 +149,17 @@ describe('recordPracticeAnswer', () => {
   });
 });
 
-describe('planSessionStart (day boundary, Europe/Berlin in tests)', () => {
+describe('planSessionStart (day boundary by last answer, Europe/Berlin in tests)', () => {
   const ZO_ = 'zahlen-operationen' as const;
   const open = (id: string, startedAt: string, attemptIds: string[]): Session => ({
     ...startPracticeSession(id, 'learner-1', startedAt),
     attemptIds,
   });
-  const bereiche = new Map<string, Bereich>([
-    ['a1', ZO_],
-    ['a2', ZO_],
-    ['b1', 'raum-form'],
+  const at = (bereich: Bereich, time: string) => ({ bereich, at: time });
+  const attempts = new Map([
+    ['a1', at(ZO_, '2026-10-12T06:05:00.000Z')],
+    ['a2', at(ZO_, '2026-10-12T07:05:00.000Z')],
+    ['b1', at('raum-form', '2026-10-12T06:05:00.000Z')],
   ]);
 
   it('compares calendar days in local time', () => {
@@ -166,28 +168,49 @@ describe('planSessionStart (day boundary, Europe/Berlin in tests)', () => {
     expect(isSameLocalDay('2026-10-11T22:01:00.000Z', '2026-10-12T21:59:00.000Z')).toBe(true);
   });
 
+  it('takes the newest answer as last activity, else startedAt', () => {
+    const s = open('s1', '2026-10-12T06:00:00.000Z', ['a2', 'a1', 'missing']);
+    expect(lastActivity(s, attempts)).toBe('2026-10-12T07:05:00.000Z');
+    expect(lastActivity(open('s2', '2026-10-12T06:00:00.000Z', []), attempts)).toBe(
+      '2026-10-12T06:00:00.000Z',
+    );
+  });
+
   it("continues today's open session of the same Bereich", () => {
     const today = open('s1', '2026-10-12T06:00:00.000Z', ['a1', 'a2']);
     const plan = planSessionStart({
       sessions: [today],
-      attemptBereich: bereiche,
+      attempts,
       bereich: ZO_,
       now: '2026-10-12T15:00:00.000Z',
     });
     expect(plan).toEqual({ resume: today, close: [] });
   });
 
-  it('closes open sessions of earlier days and starts fresh after midnight', () => {
-    const yesterday = open('s1', '2026-10-11T21:55:00.000Z', ['a1']);
+  it('closes sessions whose last answer was on an earlier day and starts fresh', () => {
+    // Last answer 23:58 Berlin, next start 00:01.
+    const evening = new Map([['e1', at(ZO_, '2026-10-11T21:58:00.000Z')]]);
+    const yesterday = open('s1', '2026-10-11T21:55:00.000Z', ['e1']);
     const now = '2026-10-11T22:01:00.000Z';
-    const plan = planSessionStart({
-      sessions: [yesterday],
-      attemptBereich: bereiche,
-      bereich: ZO_,
-      now,
-    });
+    const plan = planSessionStart({ sessions: [yesterday], attempts: evening, bereich: ZO_, now });
     expect(plan.resume).toBeNull();
     expect(plan.close).toEqual([{ ...yesterday, endedAt: now, goalReached: false }]);
+  });
+
+  it('continues a session that began before midnight but was answered after it', () => {
+    // Started 23:55 Berlin, last answer 00:03, next start 00:10: still today's session.
+    const late = new Map([
+      ['e1', at(ZO_, '2026-10-11T21:57:00.000Z')],
+      ['e2', at(ZO_, '2026-10-11T22:03:00.000Z')],
+    ]);
+    const session = open('s1', '2026-10-11T21:55:00.000Z', ['e1', 'e2']);
+    const plan = planSessionStart({
+      sessions: [session],
+      attempts: late,
+      bereich: ZO_,
+      now: '2026-10-11T22:10:00.000Z',
+    });
+    expect(plan).toEqual({ resume: session, close: [] });
   });
 
   it("keeps today's sessions of other Bereiche open and ignores finished ones", () => {
@@ -199,19 +222,20 @@ describe('planSessionStart (day boundary, Europe/Berlin in tests)', () => {
     const mixed = open('s3', '2026-10-12T07:00:00.000Z', ['a1', 'b1']);
     const plan = planSessionStart({
       sessions: [otherBereich, finished, mixed],
-      attemptBereich: bereiche,
+      attempts,
       bereich: ZO_,
       now: '2026-10-12T08:00:00.000Z',
     });
     expect(plan).toEqual({ resume: null, close: [] });
   });
 
-  it('picks the newest of several open sessions of today', () => {
-    const older = open('s1', '2026-10-12T06:00:00.000Z', ['a1']);
-    const newer = open('s2', '2026-10-12T07:00:00.000Z', ['a2']);
+  it('picks the most recently answered of several open sessions of today', () => {
+    // s1 started later, but s2 was answered last.
+    const startedLater = open('s1', '2026-10-12T06:30:00.000Z', ['a1']);
+    const answeredLater = open('s2', '2026-10-12T06:00:00.000Z', ['a2']);
     const plan = planSessionStart({
-      sessions: [newer, older],
-      attemptBereich: bereiche,
+      sessions: [startedLater, answeredLater],
+      attempts,
       bereich: ZO_,
       now: '2026-10-12T08:00:00.000Z',
     });

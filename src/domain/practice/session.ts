@@ -30,8 +30,8 @@ export function isSameLocalDay(a: string, b: string): boolean {
 export interface SessionStartInput {
   /** All sessions of the learner, any order. */
   sessions: readonly Session[];
-  /** Bereich of each stored attempt of the open sessions. */
-  attemptBereich: ReadonlyMap<string, Bereich>;
+  /** Bereich and time of each stored attempt of the open sessions. */
+  attempts: ReadonlyMap<string, Pick<Attempt, 'bereich' | 'at'>>;
   bereich: Bereich;
   now: string;
 }
@@ -43,26 +43,40 @@ export interface SessionStartPlan {
   close: Session[];
 }
 
+/** Time of the session's newest stored answer; startedAt when none is known. */
+export function lastActivity(
+  session: Session,
+  attempts: ReadonlyMap<string, Pick<Attempt, 'at'>>,
+): string {
+  return session.attemptIds.reduce((latest, id) => {
+    const at = attempts.get(id)?.at;
+    return at !== undefined && at > latest ? at : latest;
+  }, session.startedAt);
+}
+
 /**
- * "Pause" keeps today's progress, but a new day starts fresh: open practice sessions that began
- * on an earlier local day are closed; the newest open session of today whose answers all belong
- * to this Bereich is continued. Sessions without answers are never stored, so they never count.
+ * "Pause" keeps today's progress, but a new day starts fresh: open practice sessions whose last
+ * answer was on an earlier local day are closed; the most recently active open session of today
+ * whose answers all belong to this Bereich is continued. Sessions without answers are never
+ * stored, so they never count.
  */
 export function planSessionStart(input: SessionStartInput): SessionStartPlan {
-  const { attemptBereich, bereich, now } = input;
-  const open = input.sessions.filter((s) => s.mode === 'practice' && s.endedAt === undefined);
+  const { attempts, bereich, now } = input;
+  const open = input.sessions
+    .filter((s) => s.mode === 'practice' && s.endedAt === undefined)
+    .map((session) => ({ session, last: lastActivity(session, attempts) }));
   const close = open
-    .filter((s) => !isSameLocalDay(s.startedAt, now))
-    .map((s) => ({ ...s, endedAt: now, goalReached: false }));
+    .filter(({ last }) => !isSameLocalDay(last, now))
+    .map(({ session }) => ({ ...session, endedAt: now, goalReached: false }));
   const resume =
     open
       .filter(
-        (s) =>
-          isSameLocalDay(s.startedAt, now) &&
-          s.attemptIds.length > 0 &&
-          s.attemptIds.every((id) => attemptBereich.get(id) === bereich),
+        ({ session, last }) =>
+          isSameLocalDay(last, now) &&
+          session.attemptIds.length > 0 &&
+          session.attemptIds.every((id) => attempts.get(id)?.bereich === bereich),
       )
-      .sort((a, b) => b.startedAt.localeCompare(a.startedAt))[0] ?? null;
+      .sort((a, b) => b.last.localeCompare(a.last))[0]?.session ?? null;
   return { resume, close };
 }
 

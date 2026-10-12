@@ -87,8 +87,8 @@ export async function startPractice(
   const sessions = await repos.sessions.listByLearner(learnerId);
   const openAttemptIds = sessions.filter((s) => !s.endedAt).flatMap((s) => s.attemptIds);
   const attempts = await Promise.all(openAttemptIds.map((id) => repos.attempts.get(id)));
-  const attemptBereich = new Map(attempts.flatMap((a) => (a ? [[a.id, a.bereich] as const] : [])));
-  const plan = planSessionStart({ sessions, attemptBereich, bereich, now });
+  const attemptsById = new Map(attempts.flatMap((a) => (a ? [[a.id, a] as const] : [])));
+  const plan = planSessionStart({ sessions, attempts: attemptsById, bereich, now });
 
   if (plan.close.length > 0) {
     await repos.transaction(async () => {
