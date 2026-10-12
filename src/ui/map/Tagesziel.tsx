@@ -10,7 +10,9 @@ export function tageszielText({ count, goal, reached }: TodayProgress): string {
 
 export function Tagesziel(today: TodayProgress) {
   return (
-    <div className="flex items-center gap-md text-ink-muted">
+    // Landscape: dashes above the text, so the header stays one row at 1024 px.
+    // Portrait: side by side, so the header needs only a second row.
+    <div className="flex flex-col items-end gap-xs text-ink-muted portrait:flex-row portrait:items-center portrait:gap-md">
       <Wegstriche
         total={today.goal}
         done={today.count}

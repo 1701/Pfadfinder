@@ -100,6 +100,21 @@ describe('Karte', () => {
     expect(marks(rf)).toEqual(['reached', 'reached', 'reached+here']);
   });
 
+  it('sets each name on a sign in the plateau color, without a halo', () => {
+    renderMap();
+    const zo = within(wide()).getByRole('link', { name: 'Zahlen und Rechnen, Niveau 2' });
+    expect(zo.querySelector('[data-plate]')!.getAttribute('class')).toBe('fill-surface');
+    const rf = within(wide()).getByRole('link', { name: 'Formen und Raum, Niveau 3, gemeistert' });
+    expect(rf.querySelector('[data-plate]')!.getAttribute('class')).toBe('fill-land');
+    // Blank spots have no contour lines, so their names need no sign.
+    const blank = within(wide()).getByRole('img', { name: 'Daten und Zufall, noch unerforscht' });
+    expect(blank.querySelector('[data-plate]')).toBeNull();
+    for (const text of wide().querySelectorAll('text')) {
+      expect(text.getAttribute('paint-order')).toBeNull();
+      expect(text.getAttribute('stroke-width')).toBeNull();
+    }
+  });
+
   it('tabs through the Gebiete island by island in reading order', async () => {
     renderMap();
     const order = within(wide())
@@ -143,7 +158,8 @@ describe('Tagesziel', () => {
     expect(screen.getByText('Heute: 4 von 10 Fundstücken')).toBeTruthy();
     const dashes = [...document.querySelectorAll('header li')].map((li) => li.className);
     expect(dashes.filter((c) => c.includes('bg-ink'))).toHaveLength(4);
-    expect(dashes[4]).toContain('border-ink bg-surface');
+    expect(dashes[4]).toContain('outline-ink');
+    expect(dashes[4]).toContain('bg-line');
   });
 
   it('is calm when reached: all dashes walked, "Geschafft."', () => {
@@ -151,6 +167,7 @@ describe('Tagesziel', () => {
     expect(screen.getByText('Heute: 10 von 10 Fundstücken. Geschafft.')).toBeTruthy();
     const dashes = [...document.querySelectorAll('header li')].map((li) => li.className);
     expect(dashes.every((c) => c.includes('border-ink bg-ink'))).toBe(true);
+    expect(dashes.some((c) => c.includes('outline'))).toBe(false);
     expect(document.querySelector('header [class*="animate"]')).toBeNull();
   });
 });

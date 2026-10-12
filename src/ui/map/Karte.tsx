@@ -7,6 +7,7 @@
 // and the hidden one is display:none, so it has no tab stops.
 
 import clsx from 'clsx';
+import { useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { useHref, useLinkClickHandler } from 'react-router';
 import { BEREICHE, fachOfBereich, type Bereich, type Fach } from '../../domain/content/taxonomy';
 import type { Niveau } from '../../domain/content/types';
@@ -23,13 +24,6 @@ import {
 } from './geometry';
 
 const ETAPPEN: readonly Niveau[] = [1, 2, 3];
-
-/** The name's halo takes the plateau's color. */
-const HALO = {
-  'fill-land': 'stroke-land',
-  'fill-land-soft': 'stroke-land-soft',
-  'fill-surface': 'stroke-surface',
-} as const;
 
 export interface KarteProps {
   states: Record<Bereich, RegionState>;
@@ -106,7 +100,7 @@ function Gebiet({ bereich, shape, state }: GebietProps) {
           strokeDasharray={MAP_STYLE.unexploredDash}
           strokeLinejoin="round"
         />
-        <Label bereich={bereich} shape={shape} halo="stroke-surface" muted />
+        <Label bereich={bereich} shape={shape} muted />
       </g>
     );
   }
@@ -127,7 +121,7 @@ function GebietLink({
   const gipfel = insetPolygon(shape.points, gipfelDistance);
   const stufen = [shape.points, hang, gipfel];
 
-  const fill = (index: number): keyof typeof HALO =>
+  const fill = (index: number) =>
     state.erschlossen[index]
       ? 'fill-land'
       : state.kind === 'unterwegs' && state.niveau === index + 1
@@ -160,7 +154,7 @@ function GebietLink({
         strokeWidth={MAP_STYLE.outlineWidth}
         strokeLinejoin="round"
       />
-      <Label bereich={bereich} shape={shape} state={state} halo={HALO[fill(2)]} />
+      <Label bereich={bereich} shape={shape} state={state} plate={fill(2)} />
     </a>
   );
 }
@@ -169,14 +163,14 @@ function Label({
   bereich,
   shape,
   state,
-  halo,
+  plate,
   muted = false,
 }: {
   bereich: Bereich;
   shape: RegionShape;
   state?: Exclude<RegionState, { kind: 'unerforscht' }>;
-  /** Stroke class in the color of the area under the name. */
-  halo: string;
+  /** Fill class of the plateau: the name stands on a small sign in this color. */
+  plate?: string;
   muted?: boolean;
 }) {
   const { labelSize, labelLineHeight, mark } = MAP_STYLE;
@@ -186,55 +180,108 @@ function Label({
     y - (lines.length * labelLineHeight + (state ? mark.offset + mark.height : 0)) / 2;
   const marksTop = textTop + lines.length * labelLineHeight + mark.offset;
   const marksLeft = x - (3 * mark.width + 2 * mark.gap) / 2;
+  const content = useRef<SVGGElement>(null);
+  const box = useTextBox(content, `${lines.join('|')}:${state?.niveau ?? ''}`, {
+    // Before the browser can measure (and in tests): estimated from the longest line.
+    x: x - (Math.max(...lines.map((l) => l.length)) * MAP_STYLE.labelCharWidth) / 2,
+    y: textTop,
+    width: Math.max(...lines.map((l) => l.length)) * MAP_STYLE.labelCharWidth,
+    height: marksTop + (state ? mark.height + mark.ring : 0) - textTop,
+  });
+  const { padding, radius } = MAP_STYLE.plate;
 
   return (
     <g aria-hidden="true">
-      <text
-        x={x}
-        fontSize={labelSize}
-        textAnchor="middle"
-        paintOrder="stroke"
-        strokeWidth={MAP_STYLE.labelHalo}
-        strokeLinejoin="round"
-        className={clsx('font-bold', halo, muted ? 'fill-ink-muted' : 'fill-ink')}
-      >
-        {lines.map((line, i) => (
-          <tspan key={line} x={x} y={textTop + (i + 1) * labelLineHeight - labelLineHeight / 4}>
-            {line}
-          </tspan>
-        ))}
-      </text>
-      {state &&
-        ETAPPEN.map((etappe, i) => {
-          // Two separate signs: the fill says "reached", the ring says "you are here".
-          const reached = state.erschlossen[i];
-          const x = marksLeft + i * (mark.width + mark.gap);
-          return (
-            <g key={etappe} data-etappe={etappe}>
-              <rect
-                x={x}
-                y={marksTop}
-                width={mark.width}
-                height={mark.height}
-                rx={mark.height / 2}
-                strokeWidth={MAP_STYLE.outlineWidth}
-                className={reached ? 'fill-ink stroke-ink' : 'fill-line stroke-line'}
-              />
-              {state.niveau === etappe && (
+      {/* A small sign in the plateau's color: it interrupts the contour lines cleanly. */}
+      {plate && (
+        <rect
+          data-plate=""
+          x={box.x - padding}
+          y={box.y - padding}
+          width={box.width + 2 * padding}
+          height={box.height + 2 * padding}
+          rx={radius}
+          className={plate}
+        />
+      )}
+      <g ref={content}>
+        <text
+          x={x}
+          fontSize={labelSize}
+          textAnchor="middle"
+          className={clsx('font-bold', muted ? 'fill-ink-muted' : 'fill-ink')}
+        >
+          {lines.map((line, i) => (
+            <tspan key={line} x={x} y={textTop + (i + 1) * labelLineHeight - labelLineHeight / 4}>
+              {line}
+            </tspan>
+          ))}
+        </text>
+        {state &&
+          ETAPPEN.map((etappe, i) => {
+            // Two separate signs: the fill says "reached", the ring says "you are here".
+            const reached = state.erschlossen[i];
+            const x = marksLeft + i * (mark.width + mark.gap);
+            return (
+              <g key={etappe} data-etappe={etappe}>
                 <rect
-                  data-current=""
-                  x={x - mark.ring}
-                  y={marksTop - mark.ring}
-                  width={mark.width + 2 * mark.ring}
-                  height={mark.height + 2 * mark.ring}
-                  rx={mark.height / 2 + mark.ring}
+                  x={x}
+                  y={marksTop}
+                  width={mark.width}
+                  height={mark.height}
+                  rx={mark.height / 2}
                   strokeWidth={MAP_STYLE.outlineWidth}
-                  className="fill-none stroke-ink"
+                  className={reached ? 'fill-ink stroke-ink' : 'fill-line stroke-line'}
                 />
-              )}
-            </g>
-          );
-        })}
+                {state.niveau === etappe && (
+                  <rect
+                    data-current=""
+                    x={x - mark.ring}
+                    y={marksTop - mark.ring}
+                    width={mark.width + 2 * mark.ring}
+                    height={mark.height + 2 * mark.ring}
+                    rx={mark.height / 2 + mark.ring}
+                    strokeWidth={MAP_STYLE.outlineWidth}
+                    className="fill-none stroke-ink"
+                  />
+                )}
+              </g>
+            );
+          })}
+      </g>
     </g>
   );
+}
+
+interface Box {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/** Bounding box of the label in map units, measured again once the web font has loaded. */
+function useTextBox(
+  ref: RefObject<SVGGElement | null>,
+  /** Changes when the label's content changes: measure again. */
+  contentKey: string,
+  estimate: Box,
+): Box {
+  const [measured, setMeasured] = useState<Box | null>(null);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element || typeof element.getBBox !== 'function') return;
+    let active = true;
+    const measure = () => {
+      if (!active) return;
+      const { x, y, width, height } = element.getBBox();
+      if (width > 0) setMeasured({ x, y, width, height });
+    };
+    measure();
+    void document.fonts?.ready.then(measure);
+    return () => {
+      active = false;
+    };
+  }, [ref, contentKey]);
+  return measured ?? estimate;
 }

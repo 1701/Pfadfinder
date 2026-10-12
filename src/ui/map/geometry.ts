@@ -34,8 +34,10 @@ export const MAP_STYLE = {
   /** Etappen marks below the name, like the Wegstriche of the item screen. */
   /** ring: gap of the outline around the mark of the current niveau. */
   mark: { width: 18, height: 9, gap: 8, offset: 16, ring: 3 },
-  /** Halo around the name in the plateau's color, where a long name meets a contour line. */
-  labelHalo: 6,
+  /** Average width of a bold label character: estimate of the sign before the font is measured. */
+  labelCharWidth: 13,
+  /** The sign behind a name: plateau color, no outline. */
+  plate: { padding: 7, radius: 6 },
   outlineWidth: 2,
   /** Screen pixels (non-scaling stroke). */
   contourWidth: 1,

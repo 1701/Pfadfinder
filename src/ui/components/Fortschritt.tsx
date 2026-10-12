@@ -1,5 +1,5 @@
-// "3 von 10" plus the Wegstriche: walked dashes in ink, the current one outlined, the rest of
-// the way in the faint contour color. No percentages.
+// "3 von 10" plus the Wegstriche: walked dashes in ink, a ring around the item on screen, the
+// rest of the way in the faint contour color. No percentages.
 
 import { Wegstriche } from './Wegstriche';
 
