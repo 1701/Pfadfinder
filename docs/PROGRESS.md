@@ -2,10 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Namensschilder statt Halo, ein Ring für „hier bist du“
+- **Gebaut:** Die Namen auf der Karte stehen auf einem abgerundeten Schild in Plateaufarbe (7 Einheiten Rand, keine Kontur). Das Schild unterbricht die Höhenlinien, den Halo gibt es nicht mehr. Die Größe wird an der Textbox gemessen (`getBBox`, erneut nach dem Laden der Schrift), in jsdom aus der Zeichenzahl geschätzt. Wegstriche im Item-Screen und im Tagesziel sprechen die Sprache der Karte: gefüllt = erledigt, Ring mit Abstand = hier bist du (auch nach dem Prüfen: gefüllt plus Ring).
+- **Entscheidungen:** Der Abstand zwischen den Wegstrichen ist jetzt `xs` statt `2xs`, damit sich die Ringe nicht berühren. Dadurch passte die Kopfzeile der Karte bei 1024 px nicht mehr in eine Zeile (Namen 17,75 px; der Layout-Test schlug an). Im Tagesziel stehen die Striche deshalb quer über dem Text und hoch daneben.
+- **Offen:** keine.
+- **CI:** [CI #38256953028](https://github.com/1701/Pfadfinder/actions/runs/38256953028) grün (98fe8e3); 479 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (15/15).
+
 ## 2026-10-12 – Karte nachgeschärft, Schriftregel als Fehler
 - **Gebaut:** Schrift unter 22 im SVG-viewBox ist ein Fehler im Validator (CONTENT_SCHEMA 1.0.5; die Gegenprobe bricht ab). Karte: innere Höhenlinien 1 px (`non-scaling-stroke`), Farbe `line`, runde Ecken; Konturen 24 und 44 statt 14 und 28. Der Marker des aktuellen Niveaus hat immer einen Ring, auch wenn die Etappe schon erreicht ist (gefüllt plus Ring). `rs-strategien` heißt „Schreibtricks“ (einzeilig).
 - **Entscheidungen:** Füllung und Ring sind zwei getrennte Zeichen: die Füllung für „erreicht“, der Ring für „hier bist du“. Damit sieht der aktuelle offene Marker auf der Karte anders aus als der aktuelle Wegstrich im Item-Screen (dort Rand ohne Abstand). Der Name „Rechtschreib-Tricks“ aus Teil 0 ist damit ersetzt.
-- **Offen:** Durch das kleinere Plateau ragen längere Namen in den Hang; der Halo in Plateaufarbe zeigt dort einen leichten hellen Schein (am deutlichsten bei „Zahlen und Rechnen“ quer).
+- **Offen:** Durch das kleinere Plateau ragen längere Namen in den Hang; der Halo in Plateaufarbe zeigt dort einen leichten hellen Schein (am deutlichsten bei „Zahlen und Rechnen“ quer). Erledigt durch die Namensschilder (Eintrag darüber).
 - **CI:** [CI #38249249951](https://github.com/1701/Pfadfinder/actions/runs/38249249951) grün (a124b71…91ad144); 477 Tests, e2e 19 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (15/15).
 
 ## 2026-10-12 – Schema 1.0.4: keepOrder, Bildregeln
