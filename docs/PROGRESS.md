@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – App-Icon „Wegstriche“, nicht öffentlich, neues PWA-Kriterium
+- **Gebaut:** Quelle `public/icon.svg` (Entwurf B3: drei Wegstriche bergauf, 16 % dick, 66 % breit, ganz in der maskable-Zone). `npm run icons` rendert daraus mit Playwright 180 (`apple-touch-icon`), 192, 512 und 512 maskable als RGB-PNG ohne Alpha (eigener Kodierer mit `node:zlib`, keine neue Dependency). Manifest mit Icons (`any`/`maskable`), `display: standalone`, `theme_color` Tinte, `background_color` Papier; `index.html` mit `apple-touch-icon`, SVG-Favicon, `theme-color`. Icons im Precache; `check-bundle` prüft Manifest und Precache und jetzt auch `/dev/karte`. `robots.txt` sperrt alles, dazu `noindex`. ARCHITECTURE §8: neues PWA-Kriterium.
+- **Geprüft:** Live liefern alle vier PNGs `image/png` mit Farbtyp 2 (RGB), das Manifest hat `standalone`/Tinte/Papier. e2e `pwa.spec` in Chromium und WebKit grün.
+- **Entscheidungen:** B3 statt B2: Bei 18 % Strichdicke passt die Treppe nur steil in die maskable-Zone und liest sich als Stapel. Das maskable-PNG ist dasselbe Bild wie das normale, weil der Grund vollflächig ist und das Motiv in der Zone liegt.
+- **Offen:** iPad „Zum Home-Bildschirm“ und das Foto vom Homescreen (braucht Markus am Gerät). Danach ist das Kriterium „installierbar auf dem iPad“ erfüllt.
+- **CI:** [CI #38272614311](https://github.com/1701/Pfadfinder/actions/runs/38272614311) grün (efba349), Workers Builds grün; 488 Tests, e2e 23 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (17/17).
+
 ## 2026-10-12 – Content: zahlen-operationen mit retired-Items
 - **Eingespielt:** `zahlen-operationen.json` (von Markus ersetzt, nicht umgeschrieben): 15 neue Items, 7 auf `retired` gesetzt (nur `status` und `meta` geändert, keine ID entfernt). Aktiv sind 29 Items, Niveau 11/12/6; 20 davon haben einen Renderer. `content:validate` grün, Manifest neu erzeugt.
 - **Geprüft:** `retired` wird schon überall ausgeschlossen: Manifest/Karte, `practiceableItems`, `pickNext` (auch fällige Fehlerkiste-Einträge), Einstiegscheck (`isCheckable`), Probetest-Validator, e2e-Helfer (Layout-Test). Attempts und Fehlerkiste-Einträge auf solche Items bleiben gespeichert, lesbar und importierbar; der Import prüft keine Item-IDs gegen den Content. Kein `fix:` nötig.
