@@ -10,21 +10,43 @@
     "prompt": "Welche Figur hat vier gleich lange Seiten und vier rechte Winkel?",
     "payload": {
       "options": [
-        { "id": "a", "text": "Quadrat" },
-        { "id": "b", "text": "Rechteck" },
-        { "id": "c", "text": "Dreieck" },
-        { "id": "d", "text": "Kreis" }
+        {
+          "id": "a",
+          "text": "Quadrat"
+        },
+        {
+          "id": "b",
+          "text": "Rechteck"
+        },
+        {
+          "id": "c",
+          "text": "Dreieck"
+        },
+        {
+          "id": "d",
+          "text": "Kreis"
+        }
       ]
     },
-    "solution": { "optionId": "a" },
+    "solution": {
+      "optionId": "a"
+    },
     "feedback": {
       "correct": "Richtig! Beim Quadrat sind alle vier Seiten gleich lang und alle Ecken rechte Winkel.",
       "incorrect": "Denke an ein Blatt kariertes Papier: Ein Kästchen hat vier gleich lange Seiten und vier rechte Winkel. Wie heißt diese Form?",
       "misconception": "Ein Rechteck hat auch vier rechte Winkel, aber nur gegenüberliegende Seiten sind gleich lang."
     },
-    "tags": ["ebene-figuren", "quadrat", "eigenschaften"],
+    "tags": [
+      "ebene-figuren",
+      "quadrat",
+      "eigenschaften"
+    ],
     "estimatedSeconds": 35,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-002",
@@ -36,26 +58,49 @@
     "status": "draft",
     "stimulus": {
       "assetId": "rf-symm-1",
-      "assetAlt": "Vier Figuren mit den Buchstaben A, B, C und D: A ist ein schiefes Viereck, B ein Parallelogramm, C ein Dreieck mit zwei gleich langen Seiten, D ein unregelmäßiges Sechseck."
+      "assetAlt": "Vier verschiedene Figuren mit den Buchstaben A, B, C und D."
     },
     "prompt": "Welche Figur ist achsensymmetrisch?",
     "payload": {
       "options": [
-        { "id": "a", "text": "Figur A" },
-        { "id": "b", "text": "Figur B" },
-        { "id": "c", "text": "Figur C" },
-        { "id": "d", "text": "Figur D" }
-      ]
+        {
+          "id": "a",
+          "text": "Figur A"
+        },
+        {
+          "id": "b",
+          "text": "Figur B"
+        },
+        {
+          "id": "c",
+          "text": "Figur C"
+        },
+        {
+          "id": "d",
+          "text": "Figur D"
+        }
+      ],
+      "keepOrder": true
     },
-    "solution": { "optionId": "c" },
+    "solution": {
+      "optionId": "c"
+    },
     "feedback": {
       "correct": "Genau. Faltest du das Dreieck in der Mitte, liegen beide Hälften genau aufeinander.",
       "incorrect": "Stell dir vor, du faltest jede Figur. Bei welcher passen die beiden Hälften genau aufeinander?",
       "misconception": "Das Parallelogramm B sieht gleichmäßig aus, aber keine Faltlinie bringt beide Hälften zur Deckung."
     },
-    "tags": ["symmetrie", "achsensymmetrie", "erkennen"],
+    "tags": [
+      "symmetrie",
+      "achsensymmetrie",
+      "erkennen"
+    ],
     "estimatedSeconds": 45,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-003",
@@ -66,16 +111,28 @@
     "format": "number-input",
     "status": "draft",
     "prompt": "Wie viele Ecken hat ein Würfel?",
-    "payload": { "maxDigits": 2 },
-    "solution": { "value": 8 },
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 8
+    },
     "feedback": {
       "correct": "Richtig! Vier Ecken unten, vier Ecken oben.",
       "incorrect": "Zähle an einem Spielwürfel nach: Erst alle Ecken auf der Unterseite, dann alle auf der Oberseite.",
       "misconception": "Wer 6 sagt, hat die Flächen gezählt. Wer 12 sagt, die Kanten."
     },
-    "tags": ["koerper", "wuerfel", "ecken"],
+    "tags": [
+      "koerper",
+      "wuerfel",
+      "ecken"
+    ],
     "estimatedSeconds": 30,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-004",
@@ -88,28 +145,82 @@
     "prompt": "Verbinde jeden Körper mit seiner Beschreibung. Eine Beschreibung bleibt übrig.",
     "payload": {
       "left": [
-        { "id": "l1", "text": "Würfel" },
-        { "id": "l2", "text": "Kugel" },
-        { "id": "l3", "text": "Zylinder" },
-        { "id": "l4", "text": "Kegel" }
+        {
+          "id": "l1",
+          "text": "Würfel"
+        },
+        {
+          "id": "l2",
+          "text": "Kugel"
+        },
+        {
+          "id": "l3",
+          "text": "Zylinder"
+        },
+        {
+          "id": "l4",
+          "text": "Kegel"
+        }
       ],
       "right": [
-        { "id": "r1", "text": "rund, rollt in alle Richtungen" },
-        { "id": "r2", "text": "6 gleich große Quadrate" },
-        { "id": "r3", "text": "4 Dreiecke und 1 Quadrat" },
-        { "id": "r4", "text": "2 Kreisflächen, rollt zur Seite" },
-        { "id": "r5", "text": "1 Kreisfläche und eine Spitze" }
+        {
+          "id": "r1",
+          "text": "rund, rollt in alle Richtungen"
+        },
+        {
+          "id": "r2",
+          "text": "6 gleich große Quadrate"
+        },
+        {
+          "id": "r3",
+          "text": "4 Dreiecke und 1 Quadrat"
+        },
+        {
+          "id": "r4",
+          "text": "2 Kreisflächen, rollt zur Seite"
+        },
+        {
+          "id": "r5",
+          "text": "1 Kreisfläche und eine Spitze"
+        }
       ]
     },
-    "solution": { "pairs": [["l1", "r2"], ["l2", "r1"], ["l3", "r4"], ["l4", "r5"]] },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r2"
+        ],
+        [
+          "l2",
+          "r1"
+        ],
+        [
+          "l3",
+          "r4"
+        ],
+        [
+          "l4",
+          "r5"
+        ]
+      ]
+    },
     "feedback": {
       "correct": "Alles richtig! Die übrige Beschreibung passt zur Pyramide.",
       "incorrect": "Überlege bei jedem Körper: Welche Flächen hat er, und kann er rollen?",
       "misconception": "Zylinder und Kegel werden oft vertauscht. Der Kegel hat nur eine Kreisfläche und läuft spitz zu."
     },
-    "tags": ["koerper", "eigenschaften", "zuordnen"],
+    "tags": [
+      "koerper",
+      "eigenschaften",
+      "zuordnen"
+    ],
     "estimatedSeconds": 70,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-005",
@@ -121,19 +232,30 @@
     "status": "draft",
     "stimulus": {
       "assetId": "rf-flaeche-1",
-      "assetAlt": "Eine gefärbte Figur auf Karopapier in L-Form: eine Spalte aus 4 Kästchen, unten rechts daran 3 weitere Kästchen."
+      "assetAlt": "Eine gefärbte Figur auf Karopapier."
     },
     "prompt": "Wie viele Kästchen groß ist die Fläche der Figur?",
-    "payload": { "maxDigits": 2 },
-    "solution": { "value": 7 },
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
     "feedback": {
       "correct": "Richtig! 4 Kästchen in der Spalte und 3 Kästchen in der Reihe, zusammen 7.",
       "incorrect": "Zähle die gefärbten Kästchen einzeln. Tippe beim Zählen mit dem Finger auf jedes Kästchen.",
       "misconception": "Das Eckkästchen unten links gehört zur Spalte und zur Reihe. Zähle es nur einmal."
     },
-    "tags": ["flaecheninhalt", "kaestchen-zaehlen"],
+    "tags": [
+      "flaecheninhalt",
+      "kaestchen-zaehlen"
+    ],
     "estimatedSeconds": 40,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "original-2024"
+    }
   },
   {
     "id": "m-rf-1-006",
@@ -143,25 +265,48 @@
     "niveau": 1,
     "format": "single-choice",
     "status": "draft",
-    "stimulus": { "text": "Zwei Geraden sind parallel zueinander." },
+    "stimulus": {
+      "text": "Zwei Geraden sind parallel zueinander."
+    },
     "prompt": "Was stimmt?",
     "payload": {
       "options": [
-        { "id": "a", "text": "Sie haben überall denselben Abstand." },
-        { "id": "b", "text": "Sie schneiden sich in einem Punkt." },
-        { "id": "c", "text": "Sie bilden einen rechten Winkel." },
-        { "id": "d", "text": "Sie sind gleich lang." }
+        {
+          "id": "a",
+          "text": "Sie haben überall denselben Abstand."
+        },
+        {
+          "id": "b",
+          "text": "Sie schneiden sich in einem Punkt."
+        },
+        {
+          "id": "c",
+          "text": "Sie bilden einen rechten Winkel."
+        },
+        {
+          "id": "d",
+          "text": "Sie sind gleich lang."
+        }
       ]
     },
-    "solution": { "optionId": "a" },
+    "solution": {
+      "optionId": "a"
+    },
     "feedback": {
       "correct": "Genau. Parallele Geraden laufen nebeneinander wie Eisenbahnschienen und treffen sich nie.",
       "incorrect": "Denke an Eisenbahnschienen: Die laufen immer im gleichen Abstand nebeneinander. Das ist parallel.",
       "misconception": "Rechte Winkel gehören zu senkrechten Geraden, nicht zu parallelen."
     },
-    "tags": ["lagebeziehungen", "parallel"],
+    "tags": [
+      "lagebeziehungen",
+      "parallel"
+    ],
     "estimatedSeconds": 40,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-007",
@@ -175,19 +320,46 @@
     "payload": {
       "template": "Ein Rechteck hat {1} rechte Winkel. Gegenüberliegende Seiten sind {2}.",
       "gaps": [
-        { "key": "1", "options": ["4", "2", "6"] },
-        { "key": "2", "options": ["gleich lang", "verschieden lang", "immer 10 cm lang"] }
+        {
+          "key": "1",
+          "options": [
+            "4",
+            "2",
+            "6"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "gleich lang",
+            "verschieden lang",
+            "immer 10 cm lang"
+          ]
+        }
       ]
     },
-    "solution": { "gaps": { "1": "4", "2": "gleich lang" } },
+    "solution": {
+      "gaps": {
+        "1": "4",
+        "2": "gleich lang"
+      }
+    },
     "feedback": {
       "correct": "Richtig! Vier rechte Winkel, und die Seiten gegenüber sind immer gleich lang.",
       "incorrect": "Schau dir ein Blatt Papier an: Zähle die Ecken und vergleiche die Seite oben mit der Seite unten.",
       "misconception": "Manche denken, nur zwei Ecken sind rechte Winkel. Es sind alle vier."
     },
-    "tags": ["ebene-figuren", "rechteck", "eigenschaften"],
+    "tags": [
+      "ebene-figuren",
+      "rechteck",
+      "eigenschaften"
+    ],
     "estimatedSeconds": 45,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-008",
@@ -199,26 +371,48 @@
     "status": "draft",
     "stimulus": {
       "assetId": "rf-spiegel-1",
-      "assetAlt": "Links ein gefärbtes rechtwinkliges Dreieck, dessen rechter Winkel unten links liegt, daneben eine gestrichelte senkrechte Spiegelachse. Rechts vier Dreiecke A bis D in verschiedenen Lagen."
+      "assetAlt": "Links ein gefärbtes Dreieck, daneben eine gestrichelte senkrechte Spiegelachse. Rechts vier Dreiecke A bis D in verschiedenen Lagen."
     },
     "prompt": "Welches Dreieck ist das Spiegelbild der Figur an der Spiegelachse?",
     "payload": {
       "options": [
-        { "id": "a", "text": "A" },
-        { "id": "b", "text": "B" },
-        { "id": "c", "text": "C" },
-        { "id": "d", "text": "D" }
-      ]
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
     },
-    "solution": { "optionId": "b" },
+    "solution": {
+      "optionId": "b"
+    },
     "feedback": {
       "correct": "Richtig! Beim Spiegeln wandert der rechte Winkel von links nach rechts.",
       "incorrect": "Stell dir einen Spiegel auf der gestrichelten Linie vor. Was links ist, erscheint rechts – aber seitenverkehrt.",
       "misconception": "A ist nur verschoben, nicht gespiegelt. Beim Spiegeln dreht sich die Figur um."
     },
-    "tags": ["symmetrie", "spiegeln"],
+    "tags": [
+      "symmetrie",
+      "spiegeln"
+    ],
     "estimatedSeconds": 50,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-1-009",
@@ -228,18 +422,32 @@
     "niveau": 1,
     "format": "number-input",
     "status": "draft",
-    "stimulus": { "text": "Ein Quadrat hat die Seitenlänge 6 cm." },
+    "stimulus": {
+      "text": "Ein Quadrat hat die Seitenlänge 6 cm."
+    },
     "prompt": "Wie lang ist der Umfang?",
-    "payload": { "maxDigits": 2, "unit": "cm" },
-    "solution": { "value": 24 },
+    "payload": {
+      "maxDigits": 2,
+      "unit": "cm"
+    },
+    "solution": {
+      "value": 24
+    },
     "feedback": {
       "correct": "Richtig! Vier Seiten mal 6 cm: 4 · 6 = 24.",
       "incorrect": "Der Umfang ist der Weg einmal außen herum. Ein Quadrat hat vier gleich lange Seiten – zähle sie zusammen.",
       "misconception": "Wer 12 rechnet, hat nur zwei Seiten genommen. Wer 36 rechnet, hat 6 · 6 gerechnet, das ist die Fläche."
     },
-    "tags": ["umfang", "quadrat"],
+    "tags": [
+      "umfang",
+      "quadrat"
+    ],
     "estimatedSeconds": 45,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-2-001",
@@ -251,26 +459,49 @@
     "status": "draft",
     "stimulus": {
       "assetId": "rf-wuerfelnetz-1",
-      "assetAlt": "Vier Figuren aus je sechs Quadraten: A ist ein Block aus 2 mal 3 Quadraten, B ein Kreuz mit einer Reihe aus 4 und je einem Quadrat oben und unten am zweiten, C eine Reihe aus 6, D eine Reihe aus 5 mit einem Quadrat unter dem mittleren."
+      "assetAlt": "Vier Figuren aus je sechs Quadraten mit den Buchstaben A, B, C und D."
     },
     "prompt": "Aus welcher Figur kann man einen Würfel falten?",
     "payload": {
       "options": [
-        { "id": "a", "text": "A" },
-        { "id": "b", "text": "B" },
-        { "id": "c", "text": "C" },
-        { "id": "d", "text": "D" }
-      ]
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
     },
-    "solution": { "optionId": "b" },
+    "solution": {
+      "optionId": "b"
+    },
     "feedback": {
       "correct": "Richtig! Beim Kreuz wird die Reihe aus 4 zum Ring, die zwei Flügel werden Deckel und Boden.",
       "incorrect": "Falte in Gedanken: Jede Fläche muss am Ende eine eigene Seite des Würfels sein. Bei einer Reihe aus 5 oder 6 liegen Flächen doppelt.",
       "misconception": "Der Block A hat 6 Quadrate, aber man kann ihn nicht falten, ohne dass Flächen aufeinanderliegen."
     },
-    "tags": ["wuerfelnetz", "koerper", "falten"],
+    "tags": [
+      "wuerfelnetz",
+      "koerper",
+      "falten"
+    ],
     "estimatedSeconds": 75,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "original-2024"
+    }
   },
   {
     "id": "m-rf-2-002",
@@ -282,20 +513,31 @@
     "status": "draft",
     "stimulus": {
       "assetId": "rf-flaeche-2",
-      "assetAlt": "Eine gefärbte Figur auf Karopapier in Form eines Hauses: unten ein Block aus 3 mal 2 Kästchen, darauf ein volles Kästchen in der Mitte und links und rechts daneben je ein halbes Kästchen.",
+      "assetAlt": "Eine gefärbte Figur auf Karopapier in Form eines Hauses. Einige Kästchen sind nur halb gefärbt.",
       "text": "Zwei halbe Kästchen zählen zusammen als ein ganzes."
     },
     "prompt": "Wie viele Kästchen groß ist die Fläche?",
-    "payload": { "maxDigits": 2 },
-    "solution": { "value": 8 },
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 8
+    },
     "feedback": {
       "correct": "Richtig! 7 ganze Kästchen und 2 halbe, das sind zusammen 8.",
       "incorrect": "Zähle erst die ganzen Kästchen. Dann die halben – zwei halbe ergeben ein ganzes.",
       "misconception": "Wer 9 sagt, hat jedes halbe Kästchen als ganzes gezählt."
     },
-    "tags": ["flaecheninhalt", "halbe-kaestchen"],
+    "tags": [
+      "flaecheninhalt",
+      "halbe-kaestchen"
+    ],
     "estimatedSeconds": 60,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "original-2024"
+    }
   },
   {
     "id": "m-rf-2-003",
@@ -305,18 +547,32 @@
     "niveau": 2,
     "format": "number-input",
     "status": "draft",
-    "stimulus": { "text": "Ein Rechteck ist 8 cm lang und 5 cm breit." },
+    "stimulus": {
+      "text": "Ein Rechteck ist 8 cm lang und 5 cm breit."
+    },
     "prompt": "Wie lang ist der Umfang?",
-    "payload": { "maxDigits": 2, "unit": "cm" },
-    "solution": { "value": 26 },
+    "payload": {
+      "maxDigits": 2,
+      "unit": "cm"
+    },
+    "solution": {
+      "value": 26
+    },
     "feedback": {
       "correct": "Richtig! 8 + 5 + 8 + 5 = 26, oder kürzer: 2 · (8 + 5).",
       "incorrect": "Gehe einmal außen herum: lange Seite, kurze Seite, lange Seite, kurze Seite. Zähle alle vier zusammen.",
       "misconception": "Wer 13 rechnet, ist nur den halben Weg gegangen. Wer 40 rechnet, hat 8 · 5 gerechnet, das ist die Fläche."
     },
-    "tags": ["umfang", "rechteck"],
+    "tags": [
+      "umfang",
+      "rechteck"
+    ],
     "estimatedSeconds": 60,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-2-004",
@@ -329,23 +585,52 @@
     "prompt": "Welche Aussagen über einen Quader stimmen? Wähle 3 aus.",
     "payload": {
       "options": [
-        { "id": "a", "text": "Er hat 6 Flächen." },
-        { "id": "b", "text": "Alle Flächen sind Quadrate." },
-        { "id": "c", "text": "Er hat 12 Kanten." },
-        { "id": "d", "text": "Gegenüberliegende Flächen sind gleich groß." },
-        { "id": "e", "text": "Er hat 6 Ecken." }
+        {
+          "id": "a",
+          "text": "Er hat 6 Flächen."
+        },
+        {
+          "id": "b",
+          "text": "Alle Flächen sind Quadrate."
+        },
+        {
+          "id": "c",
+          "text": "Er hat 12 Kanten."
+        },
+        {
+          "id": "d",
+          "text": "Gegenüberliegende Flächen sind gleich groß."
+        },
+        {
+          "id": "e",
+          "text": "Er hat 6 Ecken."
+        }
       ],
       "minSelect": 3
     },
-    "solution": { "optionIds": ["a", "c", "d"] },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "d"
+      ]
+    },
     "feedback": {
       "correct": "Alle drei gefunden! Ein Quader ist wie eine Schuhschachtel: 6 Flächen, 12 Kanten, 8 Ecken.",
       "incorrect": "Nimm eine Schachtel in die Hand und zähle: Flächen, Kanten, Ecken. Sind alle Flächen gleich?",
       "misconception": "Nur beim Würfel sind alle Flächen Quadrate. Beim Quader sind es Rechtecke."
     },
-    "tags": ["koerper", "quader", "eigenschaften"],
+    "tags": [
+      "koerper",
+      "quader",
+      "eigenschaften"
+    ],
     "estimatedSeconds": 80,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-2-005",
@@ -362,21 +647,43 @@
     "prompt": "Wie viele Symmetrieachsen hat dieses Rechteck?",
     "payload": {
       "options": [
-        { "id": "a", "text": "1" },
-        { "id": "b", "text": "2" },
-        { "id": "c", "text": "4" },
-        { "id": "d", "text": "0" }
+        {
+          "id": "a",
+          "text": "1"
+        },
+        {
+          "id": "b",
+          "text": "2"
+        },
+        {
+          "id": "c",
+          "text": "4"
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
       ]
     },
-    "solution": { "optionId": "b" },
+    "solution": {
+      "optionId": "b"
+    },
     "feedback": {
       "correct": "Richtig! Eine Achse von oben nach unten, eine von links nach rechts.",
       "incorrect": "Falte das Rechteck in Gedanken. Wo liegen die Hälften genau aufeinander? Probiere waagerecht, senkrecht und schräg.",
       "misconception": "Die Diagonalen sind keine Symmetrieachsen: Faltest du schräg, ragen die Ecken über."
     },
-    "tags": ["symmetrie", "symmetrieachsen", "rechteck"],
+    "tags": [
+      "symmetrie",
+      "symmetrieachsen",
+      "rechteck"
+    ],
     "estimatedSeconds": 55,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
   },
   {
     "id": "m-rf-2-006",
@@ -392,16 +699,28 @@
       "text": "Jede Zahl im Bauplan sagt, wie viele Würfel an dieser Stelle übereinanderstehen."
     },
     "prompt": "Wie viele Würfel braucht man für das ganze Gebäude?",
-    "payload": { "maxDigits": 2 },
-    "solution": { "value": 10 },
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 10
+    },
     "feedback": {
       "correct": "Richtig! 1 + 2 + 3 + 1 + 1 + 2 = 10 Würfel.",
       "incorrect": "Jede Zahl ist ein Turm. Zähle alle Zahlen im Bauplan zusammen.",
       "misconception": "Wer 6 sagt, hat die Felder gezählt statt die Würfel."
     },
-    "tags": ["bauplan", "wuerfelgebaeude", "raumvorstellung"],
+    "tags": [
+      "bauplan",
+      "wuerfelgebaeude",
+      "raumvorstellung"
+    ],
     "estimatedSeconds": 60,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "original-2024"
+    }
   },
   {
     "id": "m-rf-2-007",
@@ -411,25 +730,49 @@
     "niveau": 2,
     "format": "single-choice",
     "status": "draft",
-    "stimulus": { "text": "Ein Pfeil zeigt nach oben. Du drehst ihn um eine Vierteldrehung nach rechts, also im Uhrzeigersinn." },
+    "stimulus": {
+      "text": "Ein Pfeil zeigt nach oben. Du drehst ihn um eine Vierteldrehung nach rechts, also im Uhrzeigersinn."
+    },
     "prompt": "Wohin zeigt der Pfeil jetzt?",
     "payload": {
       "options": [
-        { "id": "a", "text": "nach rechts" },
-        { "id": "b", "text": "nach links" },
-        { "id": "c", "text": "nach unten" },
-        { "id": "d", "text": "nach oben" }
+        {
+          "id": "a",
+          "text": "nach rechts"
+        },
+        {
+          "id": "b",
+          "text": "nach links"
+        },
+        {
+          "id": "c",
+          "text": "nach unten"
+        },
+        {
+          "id": "d",
+          "text": "nach oben"
+        }
       ]
     },
-    "solution": { "optionId": "a" },
+    "solution": {
+      "optionId": "a"
+    },
     "feedback": {
       "correct": "Richtig! Eine Vierteldrehung im Uhrzeigersinn: von 12 Uhr auf 3 Uhr.",
       "incorrect": "Denke an eine Uhr. Der Zeiger steht auf 12. Eine Vierteldrehung im Uhrzeigersinn bringt ihn auf 3.",
       "misconception": "Wer „nach unten“ wählt, hat eine halbe Drehung gemacht."
     },
-    "tags": ["drehen", "raumvorstellung", "lagebeziehungen"],
+    "tags": [
+      "drehen",
+      "raumvorstellung",
+      "lagebeziehungen"
+    ],
     "estimatedSeconds": 50,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-2-008",
@@ -442,21 +785,48 @@
     "prompt": "Ordne die Körper nach der Anzahl ihrer Ecken. Der Körper mit den wenigsten Ecken zuerst.",
     "payload": {
       "items": [
-        { "id": "a", "text": "Würfel" },
-        { "id": "b", "text": "Kugel" },
-        { "id": "c", "text": "Pyramide mit quadratischer Grundfläche" },
-        { "id": "d", "text": "Kegel" }
+        {
+          "id": "a",
+          "text": "Würfel"
+        },
+        {
+          "id": "b",
+          "text": "Kugel"
+        },
+        {
+          "id": "c",
+          "text": "Pyramide mit quadratischer Grundfläche"
+        },
+        {
+          "id": "d",
+          "text": "Kegel"
+        }
       ]
     },
-    "solution": { "orderedIds": ["b", "d", "c", "a"] },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "d",
+        "c",
+        "a"
+      ]
+    },
     "feedback": {
       "correct": "Richtig! Kugel 0, Kegel 1, Pyramide 5, Würfel 8 Ecken.",
       "incorrect": "Zähle bei jedem Körper die Ecken: Die Kugel hat keine, der Kegel hat nur die Spitze. Dann die Pyramide, dann der Würfel.",
       "misconception": "Die Pyramide hat 4 Ecken unten und 1 Spitze oben, zusammen 5 – weniger als der Würfel."
     },
-    "tags": ["koerper", "ecken", "ordnen"],
+    "tags": [
+      "koerper",
+      "ecken",
+      "ordnen"
+    ],
     "estimatedSeconds": 70,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
   },
   {
     "id": "m-rf-3-001",
@@ -466,25 +836,49 @@
     "niveau": 3,
     "format": "single-choice",
     "status": "draft",
-    "stimulus": { "text": "Leyla sagt: „Jedes Quadrat ist auch ein Rechteck.“" },
+    "stimulus": {
+      "text": "Leyla sagt: „Jedes Quadrat ist auch ein Rechteck.“"
+    },
     "prompt": "Hat Leyla recht?",
     "payload": {
       "options": [
-        { "id": "a", "text": "Ja, denn ein Quadrat hat alles, was ein Rechteck haben muss: vier rechte Winkel und gleich lange Gegenseiten." },
-        { "id": "b", "text": "Nein, denn ein Rechteck muss zwei lange und zwei kurze Seiten haben." },
-        { "id": "c", "text": "Nein, denn ein Quadrat hat vier gleich lange Seiten." },
-        { "id": "d", "text": "Ja, denn beide haben vier Ecken." }
+        {
+          "id": "a",
+          "text": "Ja, denn ein Quadrat hat alles, was ein Rechteck haben muss: vier rechte Winkel und gleich lange Gegenseiten."
+        },
+        {
+          "id": "b",
+          "text": "Nein, denn ein Rechteck muss zwei lange und zwei kurze Seiten haben."
+        },
+        {
+          "id": "c",
+          "text": "Nein, denn ein Quadrat hat vier gleich lange Seiten."
+        },
+        {
+          "id": "d",
+          "text": "Ja, denn beide haben vier Ecken."
+        }
       ]
     },
-    "solution": { "optionId": "a" },
+    "solution": {
+      "optionId": "a"
+    },
     "feedback": {
       "correct": "Stark! Das Quadrat ist ein besonderes Rechteck, so wie ein Dackel ein besonderer Hund ist.",
       "incorrect": "Prüfe die Regel für Rechtecke: vier rechte Winkel, Gegenseiten gleich lang. Erfüllt ein Quadrat das auch?",
       "misconception": "„Vier Ecken“ allein reicht nicht – das hat auch ein schiefes Viereck. Es kommt auf die rechten Winkel an."
     },
-    "tags": ["ebene-figuren", "begruenden", "quadrat-rechteck"],
+    "tags": [
+      "ebene-figuren",
+      "begruenden",
+      "quadrat-rechteck"
+    ],
     "estimatedSeconds": 90,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
   },
   {
     "id": "m-rf-3-002",
@@ -494,21 +888,37 @@
     "niveau": 3,
     "format": "short-answer",
     "status": "draft",
-    "stimulus": { "text": "Ein Rechteck hat den Umfang 20 cm. Die Seiten sind ganze Zentimeter lang." },
+    "stimulus": {
+      "text": "Ein Rechteck hat den Umfang 20 cm. Die Seiten sind ganze Zentimeter lang."
+    },
     "prompt": "Finde zwei verschiedene Rechtecke, die das erfüllen. Schreibe jeweils Länge und Breite auf.",
-    "payload": { "maxChars": 120, "hint": "Länge und Breite ergeben zusammen die Hälfte des Umfangs." },
+    "payload": {
+      "maxChars": 120,
+      "hint": "Länge und Breite ergeben zusammen die Hälfte des Umfangs."
+    },
     "solution": {
       "model": "Zum Beispiel 8 cm und 2 cm oder 7 cm und 3 cm. Länge und Breite müssen zusammen 10 cm ergeben, weil 2 · 10 = 20.",
-      "keyPoints": ["Zwei verschiedene Paare, die jeweils zusammen 10 ergeben (z. B. 9+1, 8+2, 7+3, 6+4, 5+5)", "Erkannt: Länge + Breite = halber Umfang"]
+      "keyPoints": [
+        "Zwei verschiedene Paare, die jeweils zusammen 10 ergeben (z. B. 9+1, 8+2, 7+3, 6+4, 5+5)",
+        "Erkannt: Länge + Breite = halber Umfang"
+      ]
     },
     "feedback": {
       "correct": "Stark! Du hast gesehen, dass es mehrere Lösungen gibt – das ist bei Umfang-Aufgaben oft so.",
       "incorrect": "Der Umfang ist zweimal Länge plus zweimal Breite. Also ergeben Länge und Breite zusammen 10. Welche Paare passen?",
       "misconception": "Viele suchen nur eine Lösung. Die Aufgabe will zwei – es gibt sogar fünf."
     },
-    "tags": ["umfang", "begruenden", "mehrere-loesungen"],
+    "tags": [
+      "umfang",
+      "begruenden",
+      "mehrere-loesungen"
+    ],
     "estimatedSeconds": 120,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
   },
   {
     "id": "m-rf-3-003",
@@ -521,23 +931,51 @@
     "prompt": "Welche Figuren haben mindestens eine Symmetrieachse? Wähle 3 aus.",
     "payload": {
       "options": [
-        { "id": "a", "text": "Quadrat" },
-        { "id": "b", "text": "Kreis" },
-        { "id": "c", "text": "schiefes Parallelogramm" },
-        { "id": "d", "text": "Dreieck mit drei verschieden langen Seiten" },
-        { "id": "e", "text": "Herz" }
+        {
+          "id": "a",
+          "text": "Quadrat"
+        },
+        {
+          "id": "b",
+          "text": "Kreis"
+        },
+        {
+          "id": "c",
+          "text": "schiefes Parallelogramm"
+        },
+        {
+          "id": "d",
+          "text": "Dreieck mit drei verschieden langen Seiten"
+        },
+        {
+          "id": "e",
+          "text": "Herz"
+        }
       ],
       "minSelect": 3
     },
-    "solution": { "optionIds": ["a", "b", "e"] },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "e"
+      ]
+    },
     "feedback": {
       "correct": "Alle drei! Der Kreis hat sogar unendlich viele Achsen, das Herz genau eine.",
       "incorrect": "Falte jede Figur in Gedanken. Wenn keine Faltlinie beide Hälften zur Deckung bringt, hat sie keine Symmetrieachse.",
       "misconception": "Das Parallelogramm ist die Falle: Es sieht ordentlich aus, hat aber keine Faltlinie, die passt."
     },
-    "tags": ["symmetrie", "aussagen-pruefen"],
+    "tags": [
+      "symmetrie",
+      "aussagen-pruefen"
+    ],
     "estimatedSeconds": 90,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
   },
   {
     "id": "m-rf-3-004",
@@ -547,24 +985,48 @@
     "niveau": 3,
     "format": "single-choice",
     "status": "draft",
-    "stimulus": { "text": "Mia sagt: „Wenn zwei Figuren gleich viele Kästchen groß sind, haben sie auch den gleichen Umfang.“" },
+    "stimulus": {
+      "text": "Mia sagt: „Wenn zwei Figuren gleich viele Kästchen groß sind, haben sie auch den gleichen Umfang.“"
+    },
     "prompt": "Stimmt das?",
     "payload": {
       "options": [
-        { "id": "a", "text": "Nein. Ein Rechteck aus 1 · 4 Kästchen und ein Quadrat aus 2 · 2 Kästchen sind gleich groß, haben aber verschiedene Umfänge." },
-        { "id": "b", "text": "Ja, denn Fläche und Umfang gehören immer zusammen." },
-        { "id": "c", "text": "Ja, denn beide Figuren bestehen aus gleich vielen Kästchen." },
-        { "id": "d", "text": "Nein, denn gleich große Figuren haben nie den gleichen Umfang." }
+        {
+          "id": "a",
+          "text": "Nein. Ein Rechteck aus 1 · 4 Kästchen und ein Quadrat aus 2 · 2 Kästchen sind gleich groß, haben aber verschiedene Umfänge."
+        },
+        {
+          "id": "b",
+          "text": "Ja, denn Fläche und Umfang gehören immer zusammen."
+        },
+        {
+          "id": "c",
+          "text": "Ja, denn beide Figuren bestehen aus gleich vielen Kästchen."
+        },
+        {
+          "id": "d",
+          "text": "Nein, denn gleich große Figuren haben nie den gleichen Umfang."
+        }
       ]
     },
-    "solution": { "optionId": "a" },
+    "solution": {
+      "optionId": "a"
+    },
     "feedback": {
       "correct": "Genau! Das 1·4-Rechteck hat Umfang 10, das 2·2-Quadrat Umfang 8 – gleiche Fläche, verschiedener Umfang.",
       "incorrect": "Zeichne vier Kästchen als lange Reihe und vier Kästchen als Quadrat. Zähle bei beiden den Weg außen herum.",
       "misconception": "Fläche und Umfang hängen nicht fest zusammen. Lange, dünne Figuren haben bei gleicher Fläche einen größeren Umfang."
     },
-    "tags": ["umfang", "flaecheninhalt", "begruenden"],
+    "tags": [
+      "umfang",
+      "flaecheninhalt",
+      "begruenden"
+    ],
     "estimatedSeconds": 100,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
   }
 ]

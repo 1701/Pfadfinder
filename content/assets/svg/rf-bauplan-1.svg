@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 200" role="img">
-  <text x="130" y="30" font-family="inherit" font-size="20" fill="currentColor" text-anchor="middle">Bauplan</text>
+  <text x="130" y="30" font-family="inherit" font-size="26" fill="currentColor" text-anchor="middle">Bauplan</text>
   <g fill="none" stroke="currentColor" stroke-width="2.5">
     <rect x="40" y="50" width="60" height="60"/><rect x="100" y="50" width="60" height="60"/><rect x="160" y="50" width="60" height="60"/>
     <rect x="40" y="110" width="60" height="60"/><rect x="100" y="110" width="60" height="60"/><rect x="160" y="110" width="60" height="60"/>
