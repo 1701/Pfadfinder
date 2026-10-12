@@ -59,4 +59,5 @@ npm run build            Produktions-Build inkl. PWA und Bundle-Prüfung
 npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/screenshots
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
 npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
+npm run icons            public/icon.svg → PNG-Icons in public/icons (RGB, ohne Alpha)
 ```

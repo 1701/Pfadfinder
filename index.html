@@ -7,6 +7,12 @@
     <!-- Not public yet (docs/DEPLOY.md): remove together with Disallow in public/robots.txt. -->
     <meta name="robots" content="noindex" />
     <title>Pfadfinder</title>
+    <!-- Icons from public/icon.svg (npm run icons). iOS ignores the manifest icons and uses the
+         apple-touch-icon: 180×180, no alpha, iOS rounds the corners itself. -->
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180.png" />
+    <meta name="theme-color" content="#163a2f" />
+    <meta name="apple-mobile-web-app-title" content="Pfadfinder" />
   </head>
   <body>
     <div id="root"></div>

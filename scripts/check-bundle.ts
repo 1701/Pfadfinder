@@ -16,7 +16,15 @@ const errors: string[] = [];
 
 for (const file of files) {
   const text = readFileSync(path.join(dist, file), 'utf8');
-  for (const marker of ['/dev/tokens', 'TokensPage', 'Token-Übersicht', '/dev/item', 'ItemPage']) {
+  for (const marker of [
+    '/dev/tokens',
+    'TokensPage',
+    'Token-Übersicht',
+    '/dev/item',
+    'ItemPage',
+    '/dev/karte',
+    'KartePage',
+  ]) {
     if (text.includes(marker)) errors.push(`${file}: enthält Entwicklerseite ("${marker}")`);
   }
 }
@@ -24,6 +32,12 @@ for (const file of files) {
 const sw = readFileSync(path.join(dist, 'sw.js'), 'utf8');
 for (const font of ['fonts/andika/Andika-Regular.woff2', 'fonts/andika/Andika-Bold.woff2']) {
   if (!sw.includes(font)) errors.push(`sw.js: ${font} fehlt im Precache`);
+}
+// App icons: listed in the manifest, linked for iOS, precached for offline start.
+const manifest = readFileSync(path.join(dist, 'manifest.webmanifest'), 'utf8');
+for (const icon of ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png']) {
+  if (!manifest.includes(`/${icon}`)) errors.push(`manifest.webmanifest: ${icon} fehlt`);
+  if (!sw.includes(icon)) errors.push(`sw.js: ${icon} fehlt im Precache`);
 }
 
 /** Minified bytes of all JS the start page loads before it can render. */
@@ -58,6 +72,6 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(
-  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften im Precache, ` +
+  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften und Icons im Precache, ` +
     `Startseite ${initialKb.toFixed(1)} kB JS (Budget ${START_PAGE_BUDGET_KB} kB, ohne Zod/Dexie).`,
 );

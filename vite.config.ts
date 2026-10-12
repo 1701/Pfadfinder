@@ -19,9 +19,20 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#eef3f1',
         theme_color: '#163a2f',
+        // public/icon.svg → npm run icons. The motif lies inside the maskable safe zone.
+        icons: [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          {
+            src: '/icons/icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,json,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,json,woff2,png}'],
       },
     }),
     // npm run analyze: module sizes per chunk → bundle-stats.html (not part of dist).

@@ -1,0 +1,11 @@
+<!-- Pfadfinder app icon (source of all PNGs, npm run icons): three Wegstriche climbing up, the
+     progress language of map and item screen. Ink ground, signal yellow, dashes 16 % thick,
+     the group 66 % wide and entirely inside the maskable safe zone (inner 80 % circle). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#163a2f"/>
+  <g fill="#f2b83a">
+    <rect x="86" y="314" width="156" height="84" rx="42"/>
+    <rect x="178" y="214" width="156" height="84" rx="42"/>
+    <rect x="270" y="114" width="156" height="84" rx="42"/>
+  </g>
+</svg>

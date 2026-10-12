@@ -24,7 +24,8 @@
     "prepare": "git config core.hooksPath .githooks",
     "screenshots": "tsx scripts/screenshots.ts",
     "analyze": "ANALYZE=1 vite build && tsx scripts/bundle-report.ts",
-    "deploy:preview": "npm run build && wrangler versions upload"
+    "deploy:preview": "npm run build && wrangler versions upload",
+    "icons": "tsx scripts/icons.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
