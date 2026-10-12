@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SESSION_GOAL } from '../../src/domain/practice';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
+import { thinMatheBereich } from '../fixtures/content-state';
 import { answerFor, testDeps, tickingClock } from './helpers';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -152,7 +153,7 @@ describe('practice session (store + in-memory repositories + real content)', () 
 
   it('reports a Bereich with too few practiceable items as empty', async () => {
     const store = createSessionStore(testDeps());
-    await store.getState().startPractice('mathe', 'groessen-messen');
+    await store.getState().startPractice('mathe', thinMatheBereich());
     expect(store.getState().status).toBe('empty');
     expect(store.getState().current).toBeNull();
   });

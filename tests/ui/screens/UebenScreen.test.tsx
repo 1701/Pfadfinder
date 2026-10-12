@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { createSessionStore } from '../../../src/data/session-store';
 import { SessionStoreContext } from '../../../src/ui/session-context';
 import { UebenScreen } from '../../../src/ui/screens/UebenScreen';
+import { thinMatheBereich } from '../../fixtures/content-state';
 import { testDeps } from '../../data/helpers';
 
 function renderAt(path: string) {
@@ -46,7 +47,7 @@ describe('UebenScreen', () => {
   });
 
   it('explains when a Bereich has too few items or does not exist', async () => {
-    renderAt('/ueben/mathe/groessen-messen');
+    renderAt(`/ueben/mathe/${thinMatheBereich()}`);
     expect(await screen.findByText('Hier gibt es noch nicht genug Aufgaben.')).toBeTruthy();
   });
 
