@@ -38,7 +38,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 ## Definition of Done (je Aufgabe)
 1. `npm run check` grün
 2. Betroffene Tests ergänzt/aktualisiert
-3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, CI-Status (max. 10 Zeilen)
+3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, CI-Status (max. 10 Zeilen). CI-Status wird nach dem Push mit `gh run list --limit 1` gelesen und als Link eingetragen, nie aus einem früheren Eintrag übernommen. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)
 5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 

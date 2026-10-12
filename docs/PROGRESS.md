@@ -7,7 +7,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Befund:** Der Content lag nicht im Hauptbundle. Hineingezogen wurden aber Zod (Startseite parste alle Items), Dexie (Store in `main.tsx`) und der Daten-Router von React Router.
 - **Gebaut:** `validate-content.ts` schreibt `content/manifest.json` (je Bereich die aktiven Items je Format und Niveau sowie die Text-IDs; in CI ist ein veraltetes Manifest ein Fehler, der pre-commit verlangt das Stagen). Die Startseite liest nur das Manifest. Die Üben-Route mit Store, Dexie, Zod und Renderern ist ein lazy Chunk. React Router läuft deklarativ statt mit `createBrowserRouter` (−55 kB). `check-bundle.ts` prüft ein Budget von 300 kB und dass die Startseite ohne Zod und Dexie auskommt; die Gegenprobe schlägt an.
 - **Offen:** CONTENT_SCHEMA §1 nennt `manifest.json` nicht (das Manifest ist erzeugt, kein Item-Vertrag); soll es dort stehen, wäre das Version 1.0.2.
-- **CI:** kein Remote; lokal `npm run check` und `npm run e2e:chromium` (8/8, inkl. offline) grün.
+- **CI:** [CI #38211577488](https://github.com/1701/Pfadfinder/actions/runs/38211577488) grün (gemeinsamer Lauf für 6183ebc…c764cde, kein eigener Lauf je Commit); e2e 10 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (8/8, inkl. offline).
 
 ## 2026-10-12 – Aufgabe 4E: Vorlesen für Rückmeldung, Start und Abschluss
 - **Gebaut:**
@@ -15,29 +15,29 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
   - Start- und Abschluss-Screen lesen ihre Überschrift vor.
   - Neue reine Funktion `speakable()`: „4 735“ → „4735“, „6 · 40“ → „6 mal 40“, „84 : 4“ → „84 geteilt durch 4“, „−“, „+“, „=“ als Wörter. Sie gilt fürs Feedback und für Items ohne `readAloud`.
 - **Entscheidungen:** Operatoren werden nur mit Leerzeichen auf beiden Seiten ersetzt, sodass „8:30 Uhr“ und „20-Euro-Schein“ bleiben, wie sie sind. Ein `readAloud` aus dem Content wird nie verändert. Der Layout-Test prüft wieder alle Items in 4 Viewports, auch mit dem Button im Feedback.
-- **CI:** kein Remote; lokal `npm run check` und `npm run e2e:chromium` (8/8) grün.
+- **CI:** [CI #38211577488](https://github.com/1701/Pfadfinder/actions/runs/38211577488) grün (gemeinsamer Lauf für 6183ebc…c764cde, kein eigener Lauf je Commit). Lokal grün: `npm run check`, `npm run e2e:chromium` (8/8).
 
 ## 2026-10-12 – Aufgabe 4D: Tagesgrenze der Übungssession
 - **Gebaut:** `planSessionStart` (rein, `domain/practice`): Eine offene Übungssession wird nur am selben Kalendertag (lokale Zeit, gemessen an `startedAt`) fortgesetzt. Offene Sessions früherer Tage schließt `startPractice` beim Start mit `endedAt` = jetzt und `goalReached` = false. Tests: Domain-Fälle und ein Store-Durchlauf mit Uhr über Mitternacht (23:55 → 00:01 Berlin).
 - **Entscheidungen:** Geschlossen werden alle offenen Sessions früherer Tage, egal welcher Bereich. Offene Sessions von heute in anderen Bereichen bleiben offen.
-- **CI:** kein Remote; lokal `npm run check` grün.
+- **CI:** [CI #38211577488](https://github.com/1701/Pfadfinder/actions/runs/38211577488) grün (gemeinsamer Lauf für 6183ebc…c764cde, kein eigener Lauf je Commit). Lokal grün: `npm run check`.
 
 ## 2026-10-11 – Aufgabe 4C: Üben-Flow (Einfachwahl, Zahleneingabe)
 - **Gebaut:** Komponenten Button, ZiffernBlock, VorlesenButton, FeedbackPanel, Fortschritt. Format-Registry mit SingleChoice und NumberInput. Screens: Start (Liste der übbaren Bereiche), `/ueben/:fach/:bereich` (ItemScreen + Abschluss „Heute geschafft: 10 Fundstücke“). Dev-Seite `/dev/item/:id`. Der Store kommt über Context, die Repos sind Dexie. Tests: 13 Testing-Library-Dateien; Playwright `ueben.spec` (Flow, Neuladen, offline) und `layout.spec` (alle Items × 3 Zustände × 4 Viewports).
 - **Entscheidungen:** „Prüfen“ wird an derselben Stelle zu „Weiter“. Der Antwortbereich ist oben ausgerichtet, damit beim Prüfen nichts springt. Für 1024×660 wurden Abstände gekürzt; Optionen und Tasten sind 48 px hoch, die Schrift blieb gleich, „misconception auf Tipp“ war nicht nötig (knappster Fall: 46 px Luft). Zahlengruppen („10 000“) werden auf dem Bildschirm nie umbrochen. Neue Tokens: `spacing-action`, `spacing-key`. Manifest-Farben = Tokens. ARCHITECTURE §6: `attemptIndex` + `onChange(… | null)`.
-- **Offen:** WebKit läuft auf diesem Arch-Rechner nicht (fehlende Bibliotheken: flite, libbacktrace, ICU 74, libxml2.so.2; Docker ohne Rechte). Das Haupt-Bundle hat 541 kB (Vite-Warnung). Die Wegstriche im Fortschritt zur Entscheidung (siehe Bericht). Bereichsname „Rechtschreib-Tricks“ prüfen.
-- **CI:** kein Remote. Lokal sind `npm run check` (387 Tests) und `npm run e2e:chromium` (8/8) grün; WebKit-Projekte scheitern hier beim Start. Der e2e-Job in `ci.yml` installiert WebKit auf Ubuntu.
+- **Offen:** WebKit läuft lokal auf Arch nicht (fehlende Bibliotheken: flite, libbacktrace, ICU 74, libxml2.so.2; kein Docker-Zugriff), nur in CI. Das Haupt-Bundle hat 541 kB (Vite-Warnung). Die Wegstriche im Fortschritt zur Entscheidung (siehe Bericht). Bereichsname „Rechtschreib-Tricks“ prüfen.
+- **CI:** [CI #38211577488](https://github.com/1701/Pfadfinder/actions/runs/38211577488) grün (gemeinsamer Lauf für 6183ebc…c764cde, kein eigener Lauf je Commit). Der e2e-Job lief mit Chromium und WebKit: 10 bestanden, 2 übersprungen (Offline-Test, den Playwright-WebKit nicht unterstützt); der WebKit-Smoke-Flow ist in beiden iPad-Formaten grün. Lokal grün: `npm run check` (387 Tests), `npm run e2e:chromium` (8/8).
 
 ## 2026-10-11 – Aufgabe 4A: Persistenz und Session-Store
 - **Gebaut:** Dexie-DB `pfadfinder` v1 mit 7 Tabellen (Indizes `learnerId`, `[learnerId+bereich]`, `[learnerId+dueAt]`). Dazu 7 Repository-Interfaces mit einer Dexie- und einer In-Memory-Implementierung; dieselbe Contract-Suite läuft gegen beide (Dexie über fake-indexeddb). Neu: `domain/practice` (`recordPracticeAnswer`), `practice.ts` (laden → Domain → speichern), `backup.ts` (Export/Import ersetzt alles in einer Transaktion), Zustand-Store `session` und Content-Loader per `import.meta.glob`. Getestet: eine 10er-Session mit echtem Content, Fortsetzen nach Pause, Fehlerkiste am Folgetag.
 - **Entscheidungen:** Übbar sind nur Items mit Renderer, ein Bereich ab `MIN_ITEMS_FOR_PRACTICE = 10`. Eine Session wird erst mit der ersten Antwort gespeichert. Eine offene Session wird fortgesetzt, wenn alle ihre Attempts im gewählten Bereich liegen; der Bereich wird aus den Attempts abgeleitet, das Schema bleibt gleich. Eine falsche Übungsantwort setzt einen vorhandenen Fehlerkiste-Eintrag auf Stufe 1 zurück. Begriffe: Fundstück = bearbeitetes Item, Entdeckung = Sammelobjekt (PRODUCT §6).
 - **Offen:** Eine offene Session von gestern wird heute fortgesetzt und zählt dann ins „Heute geschafft“.
-- **CI:** kein Remote; lokal `npm run check` grün (333 Tests).
+- **CI:** [CI #38211577488](https://github.com/1701/Pfadfinder/actions/runs/38211577488) grün (gemeinsamer Lauf für 6183ebc…c764cde, kein eigener Lauf je Commit). Lokal grün: `npm run check` (333 Tests).
 
 ## 2026-10-11 – Aufgabe 4 (Teil 0): pre-commit
 - **Gebaut:** `.githooks/pre-commit` prüft gestagete Dateien mit ESLint (`*.ts`, `*.tsx`, `*.js`) und `prettier --check`, danach wie bisher `content:validate`. Von Hand getestet: ein Lint-Fehler und ein Format-Fehler brechen den Commit ab.
 - **Entscheidungen:** Geprüft wird die Datei im Arbeitsverzeichnis, nicht der gestagete Stand (steht im Hook). Ab jetzt nennt jeder Eintrag den CI-Status (CLAUDE.md DoD 3).
-- **CI:** Es gibt kein Git-Remote, deshalb lief GitHub Actions nicht. Lokal ist `npm run check` grün.
+- **CI:** [CI #38175651091](https://github.com/1701/Pfadfinder/actions/runs/38175651091) grün.
 
 ## 2026-10-11 – Aufgabe 4B: Design-Tokens
 - **Gebaut:** `tokens.css` nach Token-Plan v1 (`@theme static`; Tailwind-Standardfarben, -radien und -schatten entfernt). Andika 7.000 Regular und Bold mit OFL.txt unter `public/fonts/andika/`. Router mit `/dev/tokens` nur im Dev-Build. Tests: Kontraste aus `tokens.css` (AA), keine Hex- und Pixelwerte in `src/ui` und `src/app`. `check-bundle.ts` nach dem Build prüft Dev-Seiten und Schrift-Precache. `npm run screenshots`.
