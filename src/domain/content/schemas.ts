@@ -103,6 +103,8 @@ const itemBase = {
 // Formats (§4)
 
 const optionSchema = z.strictObject({ id: localId, text });
+/** Since schema 1.0.4: options keep their order, e.g. when they name labels A–D of a picture. */
+const keepOrder = z.boolean().optional();
 
 const singleChoiceItem = z
   .strictObject({
@@ -110,6 +112,7 @@ const singleChoiceItem = z
     format: z.literal('single-choice'),
     payload: z.strictObject({
       options: z.array(optionSchema.extend({ assetId: assetIdSchema.optional() })).min(3).max(4),
+      keepOrder,
     }),
     solution: z.strictObject({ optionId: localId }),
   })
@@ -128,6 +131,7 @@ const multiChoiceItem = z
     payload: z.strictObject({
       options: z.array(optionSchema).min(4).max(5),
       minSelect: z.number().int().min(1),
+      keepOrder,
     }),
     solution: z.strictObject({ optionIds: z.array(localId).min(2).max(3) }),
   })

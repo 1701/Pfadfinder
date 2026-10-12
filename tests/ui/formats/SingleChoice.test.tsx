@@ -6,10 +6,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { SingleChoice } from '../../../src/ui/formats/SingleChoice';
 import { singleChoice } from '../../fixtures/items';
 
-const order = (attemptIndex: number) => {
+const order = (attemptIndex: number, item = singleChoice) => {
   const { unmount } = render(
     <SingleChoice
-      item={singleChoice}
+      item={item}
       attemptIndex={attemptIndex}
       answer={null}
       onChange={() => {}}
@@ -27,6 +27,13 @@ describe('SingleChoice', () => {
     expect(order(0).sort()).toEqual(['a', 'b', 'c', 'd']);
     const orders = new Set([0, 1, 2, 3, 4].map((i) => order(i).join()));
     expect(orders.size).toBeGreaterThan(1);
+  });
+
+  it('keeps the authored order with keepOrder (labels A–D of a picture)', () => {
+    const labelled = { ...singleChoice, payload: { ...singleChoice.payload, keepOrder: true } };
+    for (const attemptIndex of [0, 1, 2, 3, 4]) {
+      expect(order(attemptIndex, labelled)).toEqual(['a', 'b', 'c', 'd']);
+    }
   });
 
   it('reports the chosen option', async () => {

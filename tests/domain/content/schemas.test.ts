@@ -106,6 +106,17 @@ describe('itemSchema – format bounds from CONTENT_SCHEMA.md §4', () => {
   });
 });
 
+describe('itemSchema – keepOrder (since 1.0.4)', () => {
+  it('is optional and boolean for single- and multi-choice', () => {
+    expect(itemSchema.safeParse(mutate(singleChoice, (d) => (d.payload.keepOrder = true))).success).toBe(true);
+    expect(itemSchema.safeParse(mutate(multiChoice, (d) => (d.payload.keepOrder = false))).success).toBe(true);
+    const wrong = mutate(singleChoice, (d) => Object.assign(d.payload, { keepOrder: 'ja' }));
+    expect(itemSchema.safeParse(wrong).success).toBe(false);
+    const elsewhere = mutate(numberInput, (d) => Object.assign(d.payload, { keepOrder: true }));
+    expect(itemSchema.safeParse(elsewhere).success).toBe(false);
+  });
+});
+
 describe('itemSchema – common fields (§2, §3)', () => {
   it('rejects an unknown format', () => {
     expect(issuePaths(itemSchema, { ...numberInput, format: 'drawing' })).toContain('format');

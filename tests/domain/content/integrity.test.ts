@@ -176,6 +176,16 @@ describe('validateContent – soft checks', () => {
     const { issues } = run(toFiles({ items: [sorted] }));
     expect(issues).toEqual([expect.objectContaining({ severity: 'warning', path: 'payload.items' })]);
   });
+
+  it('suggests keepOrder when the options only name picture labels (A, B, …)', () => {
+    const labels = structuredClone(singleChoice);
+    labels.payload.options = labels.payload.options.map((o, i) => ({ ...o, text: `Figur ${'ABCD'[i]}` }));
+    expect(run(toFiles({ items: [labels] })).issues).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.keepOrder' }),
+    ]);
+    labels.payload.keepOrder = true;
+    expect(run(toFiles({ items: [labels] })).issues).toEqual([]);
+  });
 });
 
 describe('validateContent – probetest rules (§6)', () => {

@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { checkSvgAsset } from '../../../src/domain/content';
+import { checkSvgAsset, svgAssetWarnings } from '../../../src/domain/content';
 
 const ok = (body: string, root = 'viewBox="0 0 10 10"') =>
   `<svg xmlns="http://www.w3.org/2000/svg" ${root} role="img">${body}</svg>`;
@@ -30,6 +30,15 @@ describe('checkSvgAsset', () => {
     expect(checkSvgAsset(ok('<text font-family="Arial">A</text>'))).toHaveLength(1);
     expect(checkSvgAsset(ok('', 'width="10"'))).toEqual(['<svg> braucht eine viewBox']);
     expect(checkSvgAsset('<div/>')).toEqual(['Kein <svg>-Element gefunden']);
+  });
+
+  it('warns about text below 22 viewBox units', () => {
+    expect(svgAssetWarnings(ok('<text font-size="22">A</text><text font-size="24">B</text>'))).toEqual(
+      [],
+    );
+    expect(svgAssetWarnings(ok('<text font-size="18">Figur</text>'))).toEqual([
+      'font-size="18": mindestens 22 im viewBox',
+    ]);
   });
 
   it('holds for every asset in content/', () => {

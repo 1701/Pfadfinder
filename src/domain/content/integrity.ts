@@ -62,6 +62,8 @@ export interface ValidateContentResult {
 }
 
 const WORD_COUNT_TOLERANCE = 10;
+/** An option that only names a label of the picture: "A", "Figur B". */
+const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
 
 export function formatIssuePath(path: readonly PropertyKey[]): string {
   return path
@@ -201,6 +203,12 @@ export function validateContent(
         error(file, `Lesetext "${textRef}" existiert nicht`, item.id, 'stimulus.textRef');
       } else if (!text.itemIds.includes(item.id)) {
         error(file, `Lesetext "${textRef}" listet dieses Item nicht in itemIds`, item.id, 'stimulus.textRef');
+      }
+    }
+
+    if ((item.format === 'single-choice' || item.format === 'multi-choice') && !item.payload.keepOrder) {
+      if (item.payload.options.every((o) => LABEL_OPTION.test(o.text.trim()))) {
+        warn(file, 'Optionen sind Bildbeschriftungen (A, B, …): keepOrder setzen?', item.id, 'payload.keepOrder');
       }
     }
 

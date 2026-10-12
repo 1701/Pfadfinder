@@ -1,5 +1,5 @@
 // Einfachwahl: native radio buttons (keyboard and screen readers for free), options shuffled
-// per presentation. After checking, the solution shows a check mark; a different choice of the
+// per presentation unless the item keeps their order (labels A–D of a picture, schema 1.0.4). After checking, the solution shows a check mark; a different choice of the
 // child stays marked in neutral stone – never red.
 
 import clsx from 'clsx';
@@ -31,7 +31,10 @@ export function SingleChoice({
 }: FormatProps<'single-choice'>) {
   const name = useId();
   const options = useMemo(
-    () => seededShuffle(item.payload.options, presentationSeed(item.id, attemptIndex)),
+    () =>
+      item.payload.keepOrder
+        ? item.payload.options
+        : seededShuffle(item.payload.options, presentationSeed(item.id, attemptIndex)),
     [item, attemptIndex],
   );
   const long = options.some((o) => o.text.length > LONG_OPTION_CHARS);
