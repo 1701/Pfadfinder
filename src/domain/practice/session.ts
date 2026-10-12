@@ -5,26 +5,19 @@ import type { Bereich, Item } from '../content';
 import { evaluate, parseAnswer, type EvaluationResult } from '../evaluation';
 import type { Attempt, ReviewEntry, Session } from '../learner';
 import { updateMastery, type MasteryState, type MasteryTransition } from '../mastery';
+import { completedEtappe, DAILY_GOAL, etappeId } from '../progress';
 import { enqueueReview, onReviewResult } from '../scheduler';
+import { isSameLocalDay } from '../time';
 
-/** Tagesziel: 10 Fundstücke = 10 answered items (PRODUCT.md §6). */
-export const SESSION_GOAL = 10;
+export { isSameLocalDay };
+
+/** A session ends with the Tagesziel: 10 Fundstücke = 10 answered items (PRODUCT.md §6). */
+export const SESSION_GOAL = DAILY_GOAL;
 
 export type PracticeSource = 'review' | 'practice';
 
 export function startPracticeSession(id: string, learnerId: string, startedAt: string): Session {
   return { id, learnerId, mode: 'practice', startedAt, attemptIds: [], goalReached: false };
-}
-
-/** Same calendar day in the device's local time. */
-export function isSameLocalDay(a: string, b: string): boolean {
-  const da = new Date(a);
-  const db = new Date(b);
-  return (
-    da.getFullYear() === db.getFullYear() &&
-    da.getMonth() === db.getMonth() &&
-    da.getDate() === db.getDate()
-  );
 }
 
 export interface SessionStartInput {
@@ -105,6 +98,8 @@ export interface PracticeAnswerResult {
   session: Session;
   /** The session reached its goal with this answer. */
   finished: boolean;
+  /** Entdeckung for an Etappe completed with this answer (Collectibles.unlocked); never removed. */
+  discovered: string | undefined;
 }
 
 /**
@@ -146,6 +141,8 @@ export function recordPracticeAnswer(input: PracticeAnswerInput): PracticeAnswer
   if (source === 'review' && review) nextReview = onReviewResult(review, evaluation.correct, now);
   else if (evaluation.correct !== true) nextReview = enqueueReview(session.learnerId, item.id, now);
 
+  const etappe = completedEtappe(update.transition, mastery.niveau);
+
   const attemptIds = [...session.attemptIds, attempt.id];
   const finished = attemptIds.length >= SESSION_GOAL;
   const nextSession: Session = {
@@ -163,5 +160,6 @@ export function recordPracticeAnswer(input: PracticeAnswerInput): PracticeAnswer
     review: nextReview,
     session: nextSession,
     finished,
+    discovered: etappe === undefined ? undefined : etappeId(item.bereich, etappe),
   };
 }

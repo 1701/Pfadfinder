@@ -81,6 +81,17 @@ describe('recordPracticeAnswer', () => {
     const result = recordPracticeAnswer(input({ mastery }));
     expect(result.transition).toBe('level-up');
     expect(result.mastery).toMatchObject({ niveau: 2, window: [] });
+    expect(result.discovered).toBe('zahlen-operationen:1');
+  });
+
+  it('discovers Etappe 3 when the Gebiet is mastered, nothing on other answers', () => {
+    const top = { ...masteryFor(ZO, 3), window: [1, 1, 1, 1, 1] as (0 | 1)[] };
+    expect(recordPracticeAnswer(input({ mastery: top })).discovered).toBe('zahlen-operationen:3');
+    expect(recordPracticeAnswer(input()).discovered).toBeUndefined();
+    const sinking = { ...masteryFor(ZO, 2), window: [0, 0, 0, 0, 0] as (0 | 1)[] };
+    const down = recordPracticeAnswer(input({ mastery: sinking, answer: { value: 1 } }));
+    expect(down.transition).toBe('level-down');
+    expect(down.discovered).toBeUndefined();
   });
 
   it('puts a wrong practice item into the Fehlerkiste for tomorrow', () => {

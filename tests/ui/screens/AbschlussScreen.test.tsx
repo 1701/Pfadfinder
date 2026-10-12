@@ -33,6 +33,17 @@ describe('AbschlussScreen', () => {
     );
   });
 
+  it('counts like the map, in singular for one Fundstück', () => {
+    render(
+      <MemoryRouter>
+        <AbschlussScreen count={1} bereich="zahlen-operationen" readAloud={false} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
+      'Heute geschafft: 1 Fundstück',
+    );
+  });
+
   it('hides Vorlesen when the learner turned it off', () => {
     vi.stubGlobal('speechSynthesis', { speak: vi.fn(), cancel: vi.fn(), getVoices: () => [] });
     render(

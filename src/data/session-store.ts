@@ -6,8 +6,10 @@ import type { Bereich, Fach } from '../domain/content';
 import type { Correctness, EvaluationDetail } from '../domain/evaluation';
 import type { Learner } from '../domain/learner';
 import type { MasteryTransition } from '../domain/mastery';
+import type { TodayProgress } from '../domain/progress';
 import {
   ensureLearner,
+  loadTodayProgress,
   pickPracticeItem,
   startPractice,
   submitPracticeAnswer,
@@ -40,6 +42,8 @@ export interface SessionState {
   /** The answer as the format renderer reports it; null while nothing valid is entered. */
   answer: unknown;
   feedback: Feedback | null;
+  /** Set when the session is finished: today's Fundstücke, as the map counts them. */
+  today: TodayProgress | null;
 
   init(): Promise<Learner>;
   startPractice(fach: Fach, bereich: Bereich): Promise<void>;
@@ -58,6 +62,7 @@ const idle = {
   current: null,
   answer: null,
   feedback: null,
+  today: null,
 } as const;
 
 export function createSessionStore(deps: PracticeDeps): SessionStore {
@@ -125,8 +130,13 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
       async next() {
         const { status, practice } = get();
         if (status !== 'feedback' || !practice) return;
-        if (practice.session.goalReached) return set({ status: 'finished', current: null });
-        await showNext(practice, run);
+        const token = run;
+        if (practice.session.goalReached) {
+          const today = await loadTodayProgress(deps, practice.learnerId);
+          if (token === run) set({ status: 'finished', current: null, today });
+          return;
+        }
+        await showNext(practice, token);
       },
 
       leave() {

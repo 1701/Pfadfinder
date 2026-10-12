@@ -44,6 +44,7 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   const feedback = useSession((s) => s.feedback);
   const answered = useSession((s) => s.practice?.session.attemptIds.length ?? 0);
   const readAloud = useSession((s) => s.learner?.settings.readAloud ?? true);
+  const today = useSession((s) => s.today);
   const setAnswer = useSession((s) => s.setAnswer);
   const submit = useSession((s) => s.submit);
   const next = useSession((s) => s.next);
@@ -55,7 +56,9 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
 
   if (status === 'empty') return <Hinweis text="Hier gibt es noch nicht genug Aufgaben." />;
   if (status === 'finished')
-    return <AbschlussScreen count={answered} bereich={bereich} readAloud={readAloud} />;
+    return (
+      <AbschlussScreen count={today?.count ?? answered} bereich={bereich} readAloud={readAloud} />
+    );
   if (!current || (status !== 'answering' && status !== 'checking' && status !== 'feedback')) {
     return <main className="screen-fit" aria-busy="true" />;
   }

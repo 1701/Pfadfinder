@@ -6,13 +6,14 @@ import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME } from '../text/bereiche';
 
 export interface AbschlussScreenProps {
+  /** Today's Fundstücke (todayProgress), the same number the map shows. */
   count: number;
   bereich: Bereich;
   readAloud?: boolean;
 }
 
 export function AbschlussScreen({ count, bereich, readAloud = true }: AbschlussScreenProps) {
-  const title = `Heute geschafft: ${count} Fundstücke`;
+  const title = `Heute geschafft: ${count} ${count === 1 ? 'Fundstück' : 'Fundstücke'}`;
   return (
     <main className="screen-fit grid place-content-center justify-items-center gap-lg px-lg text-center">
       <div className="flex items-center gap-lg">

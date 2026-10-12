@@ -17,6 +17,7 @@ import {
   practiceableItems,
   reviewDueCutoff,
 } from '../domain/scheduler';
+import { todayProgress, type TodayProgress } from '../domain/progress';
 import type { Repositories } from './repos';
 
 export interface PracticeDeps {
@@ -132,6 +133,21 @@ export async function pickPracticeItem(
   return { item: picked.item, source: picked.source, attemptIndex };
 }
 
+/** Entdeckungen are only ever added (PRODUCT.md §6: keine Abzüge). */
+async function addDiscovery(repos: Repositories, learnerId: string, id: string): Promise<void> {
+  const collectibles = (await repos.collectibles.get(learnerId)) ?? { learnerId, unlocked: [] };
+  if (collectibles.unlocked.includes(id)) return;
+  await repos.collectibles.put({ ...collectibles, unlocked: [...collectibles.unlocked, id] });
+}
+
+/** Tagesziel of the learner (todayProgress), for the Abschluss screen. */
+export async function loadTodayProgress(
+  deps: Pick<PracticeDeps, 'repos' | 'now'>,
+  learnerId: string,
+): Promise<TodayProgress> {
+  return todayProgress(await deps.repos.attempts.listByLearner(learnerId), deps.now());
+}
+
 export interface SubmitResult {
   ctx: PracticeContext;
   result: PracticeAnswerResult;
@@ -165,6 +181,7 @@ export async function submitPracticeAnswer(
     await repos.mastery.put(result.mastery);
     if (result.review) await repos.reviews.put(result.review);
     await repos.sessions.put(result.session);
+    if (result.discovered) await addDiscovery(repos, ctx.learnerId, result.discovered);
   });
 
   return {

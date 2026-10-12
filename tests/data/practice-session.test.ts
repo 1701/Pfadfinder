@@ -66,6 +66,50 @@ describe('practice session (store + in-memory repositories + real content)', () 
         dueAt: new Date(Date.parse(a.at) + DAY_MS).toISOString(),
       });
     }
+
+    // The level-up completed Etappe I: an Entdeckung that stays.
+    expect(await repos.collectibles.get(learner.id)).toEqual({
+      learnerId: learner.id,
+      unlocked: ['zahlen-operationen:1'],
+    });
+    expect(store.getState().today).toEqual({ count: 10, goal: 10, reached: true });
+  });
+
+  it('never removes an Entdeckung and stores each only once', async () => {
+    const repos = createMemoryRepositories();
+    const store = createSessionStore(testDeps(repos));
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    const learnerId = store.getState().learner!.id;
+    await repos.collectibles.put({ learnerId, unlocked: ['raum-form:2', 'zahlen-operationen:1'] });
+    // Six right answers: level-up 1 → 2 discovers zahlen-operationen:1 again.
+    for (let i = 0; i < 6; i++) {
+      await answer(store, true);
+      await store.getState().next();
+    }
+    expect((await repos.collectibles.get(learnerId))!.unlocked).toEqual([
+      'raum-form:2',
+      'zahlen-operationen:1',
+    ]);
+  });
+
+  it('counts the Abschluss like the map: only answers of today', async () => {
+    const repos = createMemoryRepositories();
+    // 23:59:30 Berlin (UTC+2): the session runs past midnight.
+    const store = createSessionStore({
+      ...testDeps(repos),
+      now: tickingClock('2026-10-11T21:59:30.000Z'),
+    });
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    for (let i = 0; i < 10; i++) {
+      await answer(store, true);
+      await store.getState().next();
+    }
+    expect(store.getState().status).toBe('finished');
+    const attempts = await repos.attempts.listByLearner(store.getState().learner!.id);
+    const afterMidnight = attempts.filter((a) => a.at >= '2026-10-11T22:00:00.000Z').length;
+    expect(afterMidnight).toBeGreaterThan(0);
+    expect(afterMidnight).toBeLessThan(10);
+    expect(store.getState().today).toEqual({ count: afterMidnight, goal: 10, reached: false });
   });
 
   it('continues an unfinished session after "Pause"', async () => {
