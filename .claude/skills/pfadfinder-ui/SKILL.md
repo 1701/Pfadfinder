@@ -36,7 +36,7 @@ Du gestaltest für Kinder von 9 bis 10 Jahren, die sich auf einen Test vorbereit
 ## Eingabe
 - Touch-Ziele ≥ 48 px, Fokus sichtbar, jedes Bild mit `alt`
 - Zahlen über den Ziffernblock, nie über die Systemtastatur; Komma nur bei `allowDecimal`, nie Punkt
-- Optionen und Elemente werden deterministisch gemischt (Seed: itemId + attemptIndex)
+- Optionen und Elemente werden deterministisch gemischt (Seed: itemId + attemptIndex), außer bei `payload.keepOrder: true` (Bildbeschriftungen A–D)
 - `mark-in-text` nutzt zwingend `splitUnits()` aus `src/domain/content/units.ts`
 
 ## Arbeitsweise bei UI-Aufgaben

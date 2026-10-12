@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.4 – 2026-10-12
+- §4.1/§4.2: optionales `payload.keepOrder` (boolean) für `single-choice` und `multi-choice`: Optionen, die Beschriftungen im Bild benennen, werden nicht gemischt. Alle bisherigen Items bleiben gültig, `schemaVersion` bleibt `"1.0"`; die Versionsregel im Kopf nennt solche optionalen Felder jetzt ausdrücklich als Patch.
+- §7 Bilder: `assetAlt` verrät die Lösung nicht; Schrift in SVGs mindestens 22 im viewBox (Warnung im Validator).
+
 ### 1.0.3 – 2026-10-12
 - §7 Bilder: Regeln für `content/assets/svg` (keine Skripte und Verweise, Farben nur `currentColor`, Schrift nur `inherit`), weil die App die SVGs inline einbettet. Der Validator prüft sie. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 

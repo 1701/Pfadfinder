@@ -24,7 +24,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Keine Netzwerkaufrufe zur Laufzeit außer dem Laden der eigenen Assets
 - Keine Platzhalter-Items im Code erfinden; nutze `content/` oder frage nach Testdaten
 - Renderer für mark-in-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
-- Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex).
+- Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex). Ausnahme: `payload.keepOrder: true` (Optionen benennen Bildbeschriftungen A–D), dann bleibt die Reihenfolge wie im Content.
 
 ## Kinder-UX-Checkliste (vor jedem UI-Commit)
 - [ ] Touch-Ziele ≥ 48 px, eine Aufgabe pro Screen, kein Scrollen innerhalb der Aufgabe (iPad quer und hoch)

@@ -1,7 +1,7 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.3 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
-Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln, ohne Felder zu ändern.
+Status: v1.0.4 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
 ---
@@ -98,13 +98,16 @@ type Item = {
 
 ### 4.1 `single-choice`
 ```ts
-payload:  { options: { id: string; text: string; assetId?: string }[] }   // 3–4 Optionen
+payload:  { options: { id: string; text: string; assetId?: string }[]; keepOrder?: boolean }   // 3–4 Optionen
 solution: { optionId: string }
+```
+`keepOrder` (seit 1.0.4): `true`, wenn die Optionen Beschriftungen im Bild benennen („A“ bis „D“); dann bleibt die Reihenfolge wie geschrieben. Sonst werden Optionen gemischt. Der Validator warnt, wenn alle Optionen nur Bildbeschriftungen sind und `keepOrder` fehlt.
+```ts
 ```
 
 ### 4.2 `multi-choice`
 ```ts
-payload:  { options: { id: string; text: string }[]; minSelect: number }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1)
+payload:  { options: { id: string; text: string }[]; minSelect: number; keepOrder?: boolean }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1); keepOrder wie 4.1
 solution: { optionIds: string[] }                                         // exakt diese Menge
 ```
 
@@ -213,8 +216,10 @@ Regeln: Summe `estimatedSeconds` zwischen 35 und 42 Min.; kein `short-answer`-An
 **Bilder (`content/assets/svg`)**
 - Die App bettet jedes SVG direkt in die Seite ein. Deshalb gilt, geprüft von `npm run content:validate`: `<svg>` mit `viewBox`; kein `<script>`, `<foreignObject>`, `<style>`, `<image>`, `<iframe>`; keine Event-Attribute (`onload` …); keine Verweise (`href`, `url()`); kein `style`-Attribut
 - Farben nur `currentColor` oder `none` (Abstufung über `fill-opacity`/`stroke-opacity`), Schrift nur `font-family="inherit"`. So übernimmt das Bild Tinte und Andika und druckt schwarz auf weiß
-- Höhe im Aufgabenblatt: 200 px quer (auf kurzen Bildschirmen bis etwa 144 px), 240 px hoch. Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter. Beschriftungen im Bild darum so groß wählen, dass sie bei dieser Höhe noch mindestens 18 px haben
-- `assetAlt` beschreibt das Bild vollständig, wird vorgelesen und ist der Name des Bildes für Screenreader
+- Höhe im Aufgabenblatt: 200 px quer (auf kurzen Bildschirmen bis etwa 144 px), 240 px hoch. Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter
+- Schrift im Bild: `font-size` mindestens 22 im viewBox, damit sie auch klein gezeigt noch etwa 18 px hat (der Validator warnt darunter)
+- `assetAlt` beschreibt, was zu sehen ist, und verrät die Lösung nicht: keine Zählhilfe („4 Kästchen und 3 weitere“), keine Nennung der gefragten Eigenschaft („ein Dreieck mit zwei gleich langen Seiten“, wenn nach Symmetrie gefragt ist). Es wird vorgelesen und ist der Name des Bildes für Screenreader
+- Optionen, die auf Beschriftungen im Bild zeigen, bekommen `keepOrder: true` (§4.1)
 
 **Batch-Abgabe**
 - 20 Items je Batch, ein Bereich, als valide JSON-Datei
