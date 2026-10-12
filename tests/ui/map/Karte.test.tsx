@@ -66,6 +66,14 @@ describe('Karte', () => {
     ]);
   });
 
+  it('shows each visible name whole at the start of its accessible name (WCAG 2.5.3)', () => {
+    renderMap();
+    for (const link of within(wide()).getAllByRole('link')) {
+      const visible = link.querySelector('text')!.textContent!;
+      expect(link.getAttribute('aria-label')!.startsWith(`${visible},`), visible).toBe(true);
+    }
+  });
+
   it('shows unexplored Gebiete without a link and without a tab stop', () => {
     renderMap();
     const blank = within(wide()).getByRole('img', { name: 'Daten und Zufall, noch unerforscht' });

@@ -213,7 +213,9 @@ function Label({
         >
           {lines.map((line, i) => (
             <tspan key={line} x={x} y={textTop + (i + 1) * labelLineHeight - labelLineHeight / 4}>
-              {line}
+              {/* The space keeps the visible name whole ("Formen und Raum"), so it matches the
+                  link's accessible name (WCAG 2.5.3, voice control). */}
+              {i < lines.length - 1 ? `${line} ` : line}
             </tspan>
           ))}
         </text>
