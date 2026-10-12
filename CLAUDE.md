@@ -46,7 +46,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 react, react-dom, react-router (Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx
 
 ## Dependencies (Dev, genehmigt)
-vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node, fake-indexeddb (dieselbe Repository-Contract-Suite läuft gegen Dexie: Indizes, Sortierung, Transaktionen), rollup-plugin-visualizer (`npm run analyze`: zeigt, welche Module in welchem Chunk landen; nur mit ANALYZE=1 aktiv, nie im normalen Build)
+vite, @vitejs/plugin-react, typescript, tailwindcss, @tailwindcss/vite, vite-plugin-pwa, vitest, @testing-library/react, @testing-library/user-event, jsdom, @playwright/test, eslint, typescript-eslint, eslint-plugin-react-hooks, eslint-plugin-jsx-a11y, prettier, tsx, @types/react, @types/react-dom, @types/node, fake-indexeddb (dieselbe Repository-Contract-Suite läuft gegen Dexie: Indizes, Sortierung, Transaktionen), rollup-plugin-visualizer (`npm run analyze`: zeigt, welche Module in welchem Chunk landen; nur mit ANALYZE=1 aktiv, nie im normalen Build), wrangler (Cloudflare Workers Static Assets: `wrangler dev` prüft die Auslieferung lokal, `npm run deploy:preview` lädt eine Vorschau-Version hoch; Cloudflare baut bei Push auf main selbst, siehe docs/DEPLOY.md)
 
 ## Befehle
 ```
@@ -58,4 +58,5 @@ npm run e2e              Playwright
 npm run build            Produktions-Build inkl. PWA und Bundle-Prüfung
 npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/screenshots
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
+npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
 ```

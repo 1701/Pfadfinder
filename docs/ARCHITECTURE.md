@@ -25,7 +25,7 @@ Versionen: aktuelle stabile Majors, Stand siehe `package.json`.
 | Tests | Vitest + Testing Library; Playwright (3 Smoke-Flows) | Domain 100 % unit, UI pro Format ein Test |
 | Lint | ESLint (typescript-eslint, react-hooks, jsx-a11y), Prettier | |
 | CI | GitHub Actions: lint → content-validate → test → build | Content-Fehler brechen den Build |
-| Hosting | Statisch (Cloudflare Pages oder GitHub Pages) | kostenlos, keine Betriebslast |
+| Hosting | Cloudflare Workers mit Static Assets, gebaut von Workers Builds bei Push (`wrangler.jsonc`, `docs/DEPLOY.md`) | kostenlos, keine Betriebslast, Vorschau-URL je Branch |
 
 Keine weiteren Laufzeit-Dependencies ohne Eintrag in `CLAUDE.md` Abschnitt "Dependencies".
 
