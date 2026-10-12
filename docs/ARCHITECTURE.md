@@ -87,7 +87,7 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 
 **Probetest.** Timer läuft im Domain-Modell (startedAt + 45 Min.), UI zeigt verbleibende Zeit nur dezent (kein rotes Blinken). Navigation vor/zurück erlaubt wie auf Papier. Abgabe manuell oder bei Ablauf. Auswertung pro Bereich und gesamt; Attempts fließen **nicht** in Mastery (Probetest ist Messung, nicht Training).
 
-**Vorlesen.** Jeder Item-Screen hat einen Button; Text = `readAloud ?? stimulus.text + prompt`. Im Probetest deaktiviert, außer bei Mathe (Lesehürde ist dort nicht Testgegenstand – Entscheidung Markus, Default: an).
+**Vorlesen.** Jeder Item-Screen hat einen Button; Text = `readAloud ?? stimulus.text + stimulus.assetAlt + prompt`. Im Probetest deaktiviert, außer bei Mathe (Lesehürde ist dort nicht Testgegenstand – Entscheidung Markus, Default: an).
 
 **Druck.** Route `/probetest/:id/print` rendert alle Items im Papier-Layout (Nummerierung, Antwortfelder, Zeilen für Kurzantwort) plus Lösungsblatt auf separater Seite. `@media print` blendet Chrome aus.
 

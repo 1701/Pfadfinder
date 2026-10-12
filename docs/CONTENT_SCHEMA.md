@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.2 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.3 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln, ohne Felder zu ändern.
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -209,6 +209,12 @@ Regeln: Summe `estimatedSeconds` zwischen 35 und 42 Min.; kein `short-answer`-An
 - `incorrect` erklärt den Weg, verrät nicht nur das Ergebnis
 - `misconception` benennt den wahrscheinlichsten Fehler des gewählten Distraktors (bei MC) oder des Formats
 - Ton: freundlich, sachlich, nie ironisch, nie "leider"
+
+**Bilder (`content/assets/svg`)**
+- Die App bettet jedes SVG direkt in die Seite ein. Deshalb gilt, geprüft von `npm run content:validate`: `<svg>` mit `viewBox`; kein `<script>`, `<foreignObject>`, `<style>`, `<image>`, `<iframe>`; keine Event-Attribute (`onload` …); keine Verweise (`href`, `url()`); kein `style`-Attribut
+- Farben nur `currentColor` oder `none` (Abstufung über `fill-opacity`/`stroke-opacity`), Schrift nur `font-family="inherit"`. So übernimmt das Bild Tinte und Andika und druckt schwarz auf weiß
+- Höhe im Aufgabenblatt: 200 px quer (auf kurzen Bildschirmen bis etwa 144 px), 240 px hoch. Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter. Beschriftungen im Bild darum so groß wählen, dass sie bei dieser Höhe noch mindestens 18 px haben
+- `assetAlt` beschreibt das Bild vollständig, wird vorgelesen und ist der Name des Bildes für Screenreader
 
 **Batch-Abgabe**
 - 20 Items je Batch, ein Bereich, als valide JSON-Datei

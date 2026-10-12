@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.3 – 2026-10-12
+- §7 Bilder: Regeln für `content/assets/svg` (keine Skripte und Verweise, Farben nur `currentColor`, Schrift nur `inherit`), weil die App die SVGs inline einbettet. Der Validator prüft sie. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.2 – 2026-10-12
 - §1 Dateistruktur nennt `content/manifest.json`: erzeugt von `npm run content:validate`, nie von Hand bearbeitet, kein Teil des Item-Vertrags. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 
