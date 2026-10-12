@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 4F: Bundle der Startseite
+- **Messung** (`npm run analyze`, minifiziert/gzip): Das Hauptbundle hatte vorher **542,7 kB / 167,4 kB**, jetzt **262,5 kB / 82,8 kB**. Der neue lazy Chunk `practice-route` hat 226,1 kB / 69,1 kB, die Content-Chunks je Bereich sind unverändert (z. B. 18,5 kB).
+- **Befund:** Der Content lag nicht im Hauptbundle. Hineingezogen wurden aber Zod (Startseite parste alle Items), Dexie (Store in `main.tsx`) und der Daten-Router von React Router.
+- **Gebaut:** `validate-content.ts` schreibt `content/manifest.json` (je Bereich die aktiven Items je Format und Niveau sowie die Text-IDs; in CI ist ein veraltetes Manifest ein Fehler, der pre-commit verlangt das Stagen). Die Startseite liest nur das Manifest. Die Üben-Route mit Store, Dexie, Zod und Renderern ist ein lazy Chunk. React Router läuft deklarativ statt mit `createBrowserRouter` (−55 kB). `check-bundle.ts` prüft ein Budget von 300 kB und dass die Startseite ohne Zod und Dexie auskommt; die Gegenprobe schlägt an.
+- **Offen:** CONTENT_SCHEMA §1 nennt `manifest.json` nicht (das Manifest ist erzeugt, kein Item-Vertrag); soll es dort stehen, wäre das Version 1.0.2.
+- **CI:** kein Remote; lokal `npm run check` und `npm run e2e:chromium` (8/8, inkl. offline) grün.
+
 ## 2026-10-12 – Aufgabe 4E: Vorlesen für Rückmeldung, Start und Abschluss
 - **Gebaut:**
   - Das FeedbackPanel hat denselben VorlesenButton wie das Item; ein zweiter Tipp stoppt. Vorgelesen werden Urteil, Erklärung und misconception (nur bei „noch nicht“).

@@ -1,15 +1,15 @@
 // Start page until the map exists (task 5): a plain list of the Bereiche that can be practised.
 
-import { Link, useLoaderData } from 'react-router';
-import { FAECHER, fachOfBereich, type Bereich } from '../../domain/content';
+import { Link } from 'react-router';
+// From taxonomy directly: the domain barrel would pull Zod schemas into the start page.
+import { FAECHER, fachOfBereich, type Bereich } from '../../domain/content/taxonomy';
 import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 
 const TITLE = "Wohin geht's heute?";
 
-export function StartScreen() {
-  const bereiche = useLoaderData() as Bereich[];
-
+/** bereiche: the practiceable Bereiche (from the content manifest), in taxonomy order. */
+export function StartScreen({ bereiche }: { bereiche: readonly Bereich[] }) {
   return (
     <main className="mx-auto grid max-w-page content-start gap-xl px-lg py-2xl">
       <div className="flex items-center gap-lg">

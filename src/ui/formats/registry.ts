@@ -18,7 +18,7 @@ export const formatRegistry: Registry = {
 };
 
 /** Formats with a renderer; only these items are served in practice. */
-export const SUPPORTED_FORMATS = Object.keys(formatRegistry) as Format[];
+export { SUPPORTED_FORMATS } from './supported';
 
 export interface FormatRendererProps {
   item: Item;

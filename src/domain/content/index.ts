@@ -5,3 +5,4 @@ export * from './types';
 export * from './integrity';
 export type { ContentLoader } from './loader';
 export * from './read-aloud';
+export * from './manifest';

@@ -1,15 +1,17 @@
 // @vitest-environment jsdom
 import '../dom';
 import { render, screen } from '@testing-library/react';
-import { RouterProvider, createMemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
+import type { Bereich } from '../../../src/domain/content';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StartScreen } from '../../../src/ui/screens/StartScreen';
 
-function renderWith(bereiche: string[]) {
-  const router = createMemoryRouter([
-    { path: '/', Component: StartScreen, loader: () => bereiche },
-  ]);
-  render(<RouterProvider router={router} />);
+function renderWith(bereiche: Bereich[]) {
+  render(
+    <MemoryRouter>
+      <StartScreen bereiche={bereiche} />
+    </MemoryRouter>,
+  );
 }
 
 describe('StartScreen', () => {

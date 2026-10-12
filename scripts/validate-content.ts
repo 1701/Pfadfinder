@@ -1,16 +1,25 @@
 // Validates every content/**/*.json against the schemas and cross-file rules.
 // Usage: npm run content:validate  (exit code 1 on any error; warnings do not fail)
+// On success it writes content/manifest.json (generated, not authored; ARCHITECTURE.md §5).
+// In CI an outdated manifest is an error instead, so a stale file can never be deployed.
 
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateContent, type ContentFile, type ContentIssue } from '../src/domain/content';
+import {
+  buildContentManifest,
+  validateContent,
+  type ContentFile,
+  type ContentIssue,
+} from '../src/domain/content';
+
+const MANIFEST_FILE = 'manifest.json';
 
 const contentRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'content');
 
 function listJsonFiles(root: string): string[] {
   return readdirSync(root, { recursive: true, encoding: 'utf8' })
-    .filter((rel) => rel.endsWith('.json'))
+    .filter((rel) => rel.endsWith('.json') && rel !== MANIFEST_FILE)
     .map((rel) => rel.split(path.sep).join('/'))
     .sort();
 }
@@ -53,3 +62,20 @@ if (errorCount > 0) {
   process.exit(1);
 }
 console.log(`Content gültig: ${summary}`);
+
+const manifest = `${JSON.stringify(
+  buildContentManifest([...bundle.items.values()].map((located) => located.value)),
+  null,
+  2,
+)}\n`;
+const manifestPath = path.join(contentRoot, MANIFEST_FILE);
+if (!existsSync(manifestPath) || readFileSync(manifestPath, 'utf8') !== manifest) {
+  if (process.env.CI) {
+    console.error(
+      'FEHLER   content/manifest.json ist veraltet: lokal npm run content:validate ausführen und committen.',
+    );
+    process.exit(1);
+  }
+  writeFileSync(manifestPath, manifest);
+  console.log('content/manifest.json aktualisiert.');
+}

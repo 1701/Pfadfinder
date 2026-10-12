@@ -2,12 +2,17 @@
 import '../dom';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { FormatRenderer, SUPPORTED_FORMATS } from '../../../src/ui/formats/registry';
+import {
+  FormatRenderer,
+  SUPPORTED_FORMATS,
+  formatRegistry,
+} from '../../../src/ui/formats/registry';
 import { numberInput, order, singleChoice } from '../../fixtures/items';
 
 describe('format registry', () => {
   it('knows the formats with a renderer', () => {
     expect(SUPPORTED_FORMATS).toEqual(['single-choice', 'number-input']);
+    expect(Object.keys(formatRegistry)).toEqual([...SUPPORTED_FORMATS]);
   });
 
   it('renders each item with its format component', () => {

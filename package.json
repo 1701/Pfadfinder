@@ -22,7 +22,8 @@
     "e2e:chromium": "playwright test --project=chromium-* --project=layout",
     "check": "npm run lint && npm run content:validate && npm run test && npm run build",
     "prepare": "git config core.hooksPath .githooks",
-    "screenshots": "tsx scripts/screenshots.ts"
+    "screenshots": "tsx scripts/screenshots.ts",
+    "analyze": "ANALYZE=1 vite build && tsx scripts/bundle-report.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -50,6 +51,7 @@
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^30.1.1",
     "prettier": "^3.9.9",
+    "rollup-plugin-visualizer": "^7.1.1",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "~5.9.3",

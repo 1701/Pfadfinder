@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -23,5 +24,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,json,woff2}'],
       },
     }),
+    // npm run analyze: module sizes per chunk → bundle-stats.html (not part of dist).
+    process.env.ANALYZE ? visualizer({ filename: 'bundle-stats.html', gzipSize: true }) : null,
   ],
 });

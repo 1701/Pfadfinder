@@ -16,5 +16,9 @@ if [ -n "$(staged | tr -d '\0')" ]; then
   staged | xargs -0 npx --no-install prettier --check --ignore-unknown --
 fi
 
-# Content errors must never reach a commit.
+# Content errors must never reach a commit; the generated manifest must be committed with it.
 npm run --silent content:validate
+if ! git diff --quiet -- content/manifest.json; then
+  echo "content/manifest.json wurde neu erzeugt: bitte mit 'git add content/manifest.json' stagen."
+  exit 1
+fi
