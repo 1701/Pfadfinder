@@ -86,12 +86,42 @@
     },
     "groessen-messen": {
       "fach": "mathe",
-      "items": 1,
+      "items": 20,
       "byFormat": {
-        "single-choice": {
-          "1": 0,
+        "cloze-select": {
+          "1": 1,
           "2": 1,
           "3": 0
+        },
+        "match": {
+          "1": 1,
+          "2": 0,
+          "3": 0
+        },
+        "multi-choice": {
+          "1": 0,
+          "2": 1,
+          "3": 1
+        },
+        "number-input": {
+          "1": 4,
+          "2": 3,
+          "3": 1
+        },
+        "order": {
+          "1": 1,
+          "2": 0,
+          "3": 0
+        },
+        "short-answer": {
+          "1": 0,
+          "2": 0,
+          "3": 1
+        },
+        "single-choice": {
+          "1": 1,
+          "2": 3,
+          "3": 1
         }
       },
       "textIds": []

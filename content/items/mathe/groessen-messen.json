@@ -1,5 +1,281 @@
 [
   {
+    "id": "m-gm-1-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Wie viele Zentimeter sind 3 m?",
+    "payload": { "maxDigits": 3, "unit": "cm" },
+    "solution": { "value": 300 },
+    "feedback": {
+      "correct": "Richtig! 1 m sind 100 cm, also 3 m = 300 cm.",
+      "incorrect": "Ein Meter hat 100 Zentimeter. Rechne 3 · 100.",
+      "misconception": "Wer 30 sagt, hat mit 10 statt 100 gerechnet. 10 ist der Schritt von cm zu mm."
+    },
+    "tags": ["laengen", "umrechnen", "meter-zentimeter"],
+    "estimatedSeconds": 30,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "gm-uhr-1",
+      "assetAlt": "Eine Uhr mit Zeigern. Der kurze Zeiger steht kurz vor der 8, der lange Zeiger genau auf der 9."
+    },
+    "prompt": "Wie spät ist es?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "7:45 Uhr" },
+        { "id": "b", "text": "8:45 Uhr" },
+        { "id": "c", "text": "9:40 Uhr" },
+        { "id": "d", "text": "7:15 Uhr" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Der lange Zeiger auf der 9 heißt 45 Minuten, der kurze ist noch nicht bei der 8.",
+      "incorrect": "Schau erst auf den kurzen Zeiger: Er ist noch vor der 8, also ist es noch 7 Uhr und etwas. Der lange Zeiger auf der 9 bedeutet 45 Minuten.",
+      "misconception": "Wer 8:45 wählt, hat den kurzen Zeiger auf die 8 gerundet. Er ist aber noch nicht dort."
+    },
+    "tags": ["zeit", "uhr-lesen", "analoguhr"],
+    "estimatedSeconds": 45,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Ein Brot kostet 2,80 €. Du bezahlst mit einem 5-Euro-Schein." },
+    "prompt": "Wie viel Geld bekommst du zurück?",
+    "payload": { "maxDigits": 3, "unit": "€", "allowDecimal": true },
+    "solution": { "value": 2.2 },
+    "feedback": {
+      "correct": "Richtig! Von 2,80 € sind es 20 Cent bis 3 €, dann noch 2 € bis 5 €: zusammen 2,20 €.",
+      "incorrect": "Rechne in zwei Schritten: Erst von 2,80 € bis zum nächsten vollen Euro, dann bis 5 €.",
+      "misconception": "Wer 3,20 € sagt, hat 5 − 2 gerechnet und die 80 Cent falsch herum angehängt."
+    },
+    "tags": ["geld", "rueckgeld", "kommazahlen"],
+    "estimatedSeconds": 45,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Verbinde jede Sache mit der passenden Angabe. Eine Angabe bleibt übrig.",
+    "payload": {
+      "left": [
+        { "id": "l1", "text": "Gewicht eines Apfels" },
+        { "id": "l2", "text": "Länge eines Autos" },
+        { "id": "l3", "text": "Wasser in einer Badewanne" },
+        { "id": "l4", "text": "Dicke eines Buchs" }
+      ],
+      "right": [
+        { "id": "r1", "text": "4 m" },
+        { "id": "r2", "text": "150 g" },
+        { "id": "r3", "text": "3 cm" },
+        { "id": "r4", "text": "4 km" },
+        { "id": "r5", "text": "150 l" }
+      ]
+    },
+    "solution": { "pairs": [["l1", "r2"], ["l2", "r1"], ["l3", "r5"], ["l4", "r3"]] },
+    "feedback": {
+      "correct": "Alles richtig! 4 km wäre ein Auto, so lang wie ein ganzer Spaziergang.",
+      "incorrect": "Überlege bei jeder Sache: Ist das eine Länge, ein Gewicht oder eine Füllmenge? Und ist die Zahl dann realistisch?",
+      "misconception": "m und km werden oft verwechselt. 4 km sind 4 000 m – viel zu lang für ein Auto."
+    },
+    "tags": ["groessenvorstellung", "einheiten", "schaetzen"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-1-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Wie viele Minuten sind 1 Stunde und 30 Minuten?",
+    "payload": { "maxDigits": 3, "unit": "min" },
+    "solution": { "value": 90 },
+    "feedback": {
+      "correct": "Richtig! 60 Minuten plus 30 Minuten.",
+      "incorrect": "Eine Stunde hat 60 Minuten. Zähle die 30 Minuten dazu.",
+      "misconception": "Wer 130 sagt, hat 1 h wie 100 Minuten behandelt. Bei der Zeit ist der Schritt 60, nicht 100."
+    },
+    "tags": ["zeit", "umrechnen", "stunden-minuten"],
+    "estimatedSeconds": 30,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Wie viele Gramm sind 2 kg 500 g?",
+    "payload": { "maxDigits": 4, "unit": "g" },
+    "solution": { "value": 2500 },
+    "feedback": {
+      "correct": "Richtig! 2 kg = 2 000 g, plus 500 g.",
+      "incorrect": "1 kg sind 1 000 g. Rechne erst die Kilogramm in Gramm um, dann die 500 g dazu.",
+      "misconception": "Wer 2 500 g mit 2 050 g verwechselt, hat die Nullen nicht sauber gesetzt."
+    },
+    "tags": ["gewicht", "umrechnen", "kilogramm-gramm"],
+    "estimatedSeconds": 35,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle die richtigen Zahlen.",
+    "payload": {
+      "template": "1 km sind {1} m. 1 m sind {2} cm.",
+      "gaps": [
+        { "key": "1", "options": ["1 000", "100", "10 000"] },
+        { "key": "2", "options": ["100", "1 000", "10"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "1 000", "2": "100" } },
+    "feedback": {
+      "correct": "Richtig! Kilo heißt tausend, und ein Meter hat hundert Zentimeter.",
+      "incorrect": "Merke: km → m ist der Schritt 1 000. m → cm ist der Schritt 100. cm → mm ist der Schritt 10.",
+      "misconception": "Die Schritte zwischen den Längeneinheiten sind nicht alle gleich. Das ist die häufigste Falle."
+    },
+    "tags": ["laengen", "umrechnen", "einheitentabelle"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-1-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Ordne die Längen. Die kürzeste zuerst.",
+    "payload": {
+      "items": [
+        { "id": "a", "text": "3 m" },
+        { "id": "b", "text": "1 km" },
+        { "id": "c", "text": "300 mm" },
+        { "id": "d", "text": "35 cm" }
+      ]
+    },
+    "solution": { "orderedIds": ["c", "d", "a", "b"] },
+    "feedback": {
+      "correct": "Richtig! 300 mm sind nur 30 cm – kürzer als 35 cm.",
+      "incorrect": "Rechne alle Längen in dieselbe Einheit um, zum Beispiel in Zentimeter. Dann kannst du vergleichen.",
+      "misconception": "300 sieht größer aus als 35. Aber 300 mm sind 30 cm, und das ist weniger als 35 cm."
+    },
+    "tags": ["laengen", "vergleichen", "ordnen"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-gm-2-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Die Sportstunde beginnt um 8:15 Uhr und dauert 45 Minuten." },
+    "prompt": "Wann ist die Sportstunde zu Ende?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "9:00 Uhr" },
+        { "id": "b", "text": "8:60 Uhr" },
+        { "id": "c", "text": "9:15 Uhr" },
+        { "id": "d", "text": "8:55 Uhr" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! 15 Minuten plus 45 Minuten sind genau 60 Minuten – eine volle Stunde.",
+      "incorrect": "Rechne in Schritten: Von 8:15 Uhr sind es 45 Minuten bis zur vollen Stunde. Welche Stunde ist das?",
+      "misconception": "8:60 Uhr gibt es nicht. Nach 59 Minuten kommt die nächste volle Stunde."
+    },
+    "tags": ["zeit", "zeitspanne", "uhrzeit-berechnen"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-2-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Mia geht jeden Schultag 750 m zur Schule und denselben Weg zurück. Sie braucht dafür 12 Minuten." },
+    "prompt": "Wie viele Meter geht sie in 5 Schultagen?",
+    "payload": { "maxDigits": 5, "unit": "m" },
+    "solution": { "value": 7500 },
+    "feedback": {
+      "correct": "Richtig! Hin und zurück sind 1 500 m, mal 5 Tage = 7 500 m.",
+      "incorrect": "Zwei Schritte: Erst den Weg an einem Tag (hin und zurück!), dann mal 5. Die Minuten brauchst du nicht.",
+      "misconception": "Wer 3 750 rechnet, hat den Rückweg vergessen."
+    },
+    "tags": ["laengen", "sachaufgabe", "zweischrittig", "ablenkzahl"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-gm-2-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Ein Paket wiegt 1 kg 250 g. Ein zweites Paket wiegt 800 g." },
+    "prompt": "Wie schwer sind beide zusammen?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "2 kg 50 g" },
+        { "id": "b", "text": "1 kg 1 050 g" },
+        { "id": "c", "text": "9 kg 250 g" },
+        { "id": "d", "text": "2 kg 250 g" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! 250 g + 800 g = 1 050 g, das ist 1 kg 50 g. Mit dem anderen Kilo: 2 kg 50 g.",
+      "incorrect": "Rechne alles in Gramm: 1 250 g + 800 g. Dann wieder in kg und g zurück – ab 1 000 g wird ein Kilo daraus.",
+      "misconception": "1 kg 1 050 g ist nicht falsch gerechnet, aber nicht fertig: 1 050 g sind mehr als ein Kilo."
+    },
+    "tags": ["gewicht", "addieren", "einheiten-umwandeln"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
     "id": "m-gm-2-004",
     "schemaVersion": "1.0",
     "fach": "mathe",
@@ -26,5 +302,205 @@
     "tags": ["geld", "sachaufgabe", "zweischrittig"],
     "estimatedSeconds": 90,
     "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-2-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Angaben sind genauso lang wie 1 m 50 cm? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "150 cm" },
+        { "id": "b", "text": "1 500 mm" },
+        { "id": "c", "text": "15 cm" },
+        { "id": "d", "text": "1,50 m" },
+        { "id": "e", "text": "1 m 5 cm" }
+      ],
+      "minSelect": 3
+    },
+    "solution": { "optionIds": ["a", "b", "d"] },
+    "feedback": {
+      "correct": "Alle drei gefunden! Dieselbe Länge, drei Schreibweisen.",
+      "incorrect": "Rechne jede Angabe in Zentimeter um. 1 m 50 cm sind 150 cm – welche Angaben ergeben auch 150 cm?",
+      "misconception": "1 m 5 cm sind 105 cm, nicht 150 cm. Die Null in der Mitte fehlt oft."
+    },
+    "tags": ["laengen", "schreibweisen", "kommaschreibweise"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "original-2024" }
+  },
+  {
+    "id": "m-gm-2-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Ein Film beginnt um 16:40 Uhr und endet um 18:05 Uhr." },
+    "prompt": "Wie viele Minuten dauert der Film?",
+    "payload": { "maxDigits": 3, "unit": "min" },
+    "solution": { "value": 85 },
+    "feedback": {
+      "correct": "Richtig! 20 Minuten bis 17:00 Uhr, 60 Minuten bis 18:00 Uhr, 5 Minuten bis 18:05 Uhr: 85.",
+      "incorrect": "Gehe in Etappen: Erst bis zur nächsten vollen Stunde, dann volle Stunden, dann der Rest. Zähle die Minuten zusammen.",
+      "misconception": "Wer 125 rechnet, hat 18:05 − 16:40 wie normale Zahlen abgezogen. Bei der Uhr ist eine Stunde 60, nicht 100."
+    },
+    "tags": ["zeit", "zeitspanne", "minuten"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-2-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Jonas hat 12,50 € gespart. Er kauft ein Buch für 7,95 €." },
+    "prompt": "Wie viel Geld bleibt ihm?",
+    "payload": { "maxDigits": 4, "unit": "€", "allowDecimal": true },
+    "solution": { "value": 4.55 },
+    "feedback": {
+      "correct": "Richtig! Von 7,95 € sind es 5 Cent bis 8 €, dann 4,50 € bis 12,50 €: zusammen 4,55 €.",
+      "incorrect": "Rechne in Cent oder in Schritten: Erst von 7,95 € bis 8 €, dann bis 12,50 €.",
+      "misconception": "Wer 5,55 € sagt, hat 12 − 7 = 5 gerechnet und die Cent getrennt behandelt."
+    },
+    "tags": ["geld", "subtrahieren", "kommazahlen"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-2-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Ergänze die Sätze.",
+    "payload": {
+      "template": "Eine Flasche fasst 750 ml. 3 Liter sind {1} ml. Dafür braucht man {2} Flaschen.",
+      "gaps": [
+        { "key": "1", "options": ["3 000", "300", "3 750"] },
+        { "key": "2", "options": ["4", "3", "5"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "3 000", "2": "4" } },
+    "feedback": {
+      "correct": "Richtig! 1 l sind 1 000 ml. 4 · 750 ml = 3 000 ml.",
+      "incorrect": "Erst Liter in Milliliter umrechnen (1 l = 1 000 ml). Dann: Wie oft passen 750 ml in 3 000 ml?",
+      "misconception": "Wer 3 Flaschen wählt, hat 3 Liter mit 3 Flaschen gleichgesetzt. Eine Flasche ist aber weniger als ein Liter."
+    },
+    "tags": ["rauminhalt", "liter-milliliter", "umrechnen"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+  },
+  {
+    "id": "m-gm-3-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Ben rechnet: 2,30 € + 1,5 € = 3,35 €. Das Ergebnis ist falsch." },
+    "prompt": "Was hat Ben falsch gemacht?",
+    "readAloud": "Ben rechnet: 2 Euro 30 plus 1 Euro 5 gleich 3 Euro 35. Das Ergebnis ist falsch. Was hat Ben falsch gemacht?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Er hat 1,5 € als 1 € und 5 Cent gelesen. Es sind aber 1 € und 50 Cent." },
+        { "id": "b", "text": "Er hat den Übertrag vergessen." },
+        { "id": "c", "text": "Er hat Euro und Cent vertauscht." },
+        { "id": "d", "text": "Er hat die beiden Beträge vertauscht." }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig erkannt! 1,5 € heißt 1,50 €. Richtig wären 3,80 €.",
+      "incorrect": "Schreibe beide Beträge mit zwei Stellen hinter dem Komma: 2,30 € und 1,50 €. Was ergibt das? Vergleiche mit Bens Ergebnis.",
+      "misconception": "Bei Geld bedeutet eine Ziffer hinter dem Komma Zehner-Cent: 1,5 € = 1,50 €, nicht 1,05 €."
+    },
+    "tags": ["geld", "fehler-finden", "kommaschreibweise"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-3-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": { "text": "Ein Zug fährt um 9:50 Uhr ab und ist 2 Stunden und 25 Minuten unterwegs. Lena sagt: „Er kommt um 11:75 Uhr an.“" },
+    "prompt": "Erkläre, was an Lenas Antwort falsch ist, und schreibe die richtige Ankunftszeit auf.",
+    "payload": { "maxChars": 160, "hint": "Wie viele Minuten hat eine Stunde höchstens?" },
+    "solution": {
+      "model": "Eine Stunde hat nur 60 Minuten, 75 Minuten gibt es nicht. 75 Minuten sind 1 Stunde und 15 Minuten. Der Zug kommt um 12:15 Uhr an.",
+      "keyPoints": ["Es gibt keine 75 Minuten, eine Stunde hat 60", "Richtige Ankunft: 12:15 Uhr"]
+    },
+    "feedback": {
+      "correct": "Stark! Du hast den Fehler erklärt und richtig umgerechnet.",
+      "incorrect": "Lena hat 50 + 25 = 75 gerechnet. Aber bei 60 Minuten ist eine Stunde voll. Wie viel bleibt dann übrig?",
+      "misconception": "Zeit rechnet man nicht wie Geld. Nach 59 Minuten springt die Stunde um."
+    },
+    "tags": ["zeit", "begruenden", "fehler-erklaeren"],
+    "estimatedSeconds": 120,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-3-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 3,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Aussagen stimmen? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "1 000 g sind genauso schwer wie 1 kg." },
+        { "id": "b", "text": "Ein halber Liter sind 50 ml." },
+        { "id": "c", "text": "Eine Viertelstunde hat 15 Minuten." },
+        { "id": "d", "text": "100 cm und 1 000 mm sind gleich lang." },
+        { "id": "e", "text": "1 t sind 100 kg." }
+      ],
+      "minSelect": 3
+    },
+    "solution": { "optionIds": ["a", "c", "d"] },
+    "feedback": {
+      "correct": "Alle drei! Ein halber Liter sind 500 ml, und eine Tonne sind 1 000 kg.",
+      "incorrect": "Prüfe jede Aussage mit der Umrechnung: kg → g ist 1 000, l → ml ist 1 000, t → kg ist 1 000, cm → mm ist 10.",
+      "misconception": "Bei Liter und Tonne fehlt oft eine Null: Der Schritt ist 1 000, nicht 100."
+    },
+    "tags": ["einheiten", "aussagen-pruefen", "umrechnen"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-3-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 3,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": { "text": "Amiras Zimmer ist 4 m lang und 3 m breit. Sie klebt eine Borte einmal am Rand entlang. Nur vor der Tür bleibt 1 m frei." },
+    "prompt": "Wie viele Meter Borte braucht Amira?",
+    "payload": { "maxDigits": 2, "unit": "m" },
+    "solution": { "value": 13 },
+    "feedback": {
+      "correct": "Richtig! Einmal herum sind 4 + 3 + 4 + 3 = 14 m, minus 1 m für die Tür: 13 m.",
+      "incorrect": "Erst den ganzen Rand ausrechnen – das ist der Umfang des Zimmers. Dann die Tür abziehen.",
+      "misconception": "Wer 12 rechnet, hat 4 · 3 genommen. Das ist die Fläche, nicht der Rand."
+    },
+    "tags": ["laengen", "umfang", "sachaufgabe", "mehrschrittig"],
+    "estimatedSeconds": 100,
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
   }
 ]
