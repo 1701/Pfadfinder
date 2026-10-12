@@ -1,7 +1,7 @@
 // One practice step as a pure function (ARCHITECTURE.md §5 "Üben"): answer → Attempt →
 // mastery → Fehlerkiste → session. The data layer only loads, calls this and saves the result.
 
-import type { Item } from '../content';
+import type { Bereich, Item } from '../content';
 import { evaluate, parseAnswer, type EvaluationResult } from '../evaluation';
 import type { Attempt, ReviewEntry, Session } from '../learner';
 import { updateMastery, type MasteryState, type MasteryTransition } from '../mastery';
@@ -14,6 +14,56 @@ export type PracticeSource = 'review' | 'practice';
 
 export function startPracticeSession(id: string, learnerId: string, startedAt: string): Session {
   return { id, learnerId, mode: 'practice', startedAt, attemptIds: [], goalReached: false };
+}
+
+/** Same calendar day in the device's local time. */
+export function isSameLocalDay(a: string, b: string): boolean {
+  const da = new Date(a);
+  const db = new Date(b);
+  return (
+    da.getFullYear() === db.getFullYear() &&
+    da.getMonth() === db.getMonth() &&
+    da.getDate() === db.getDate()
+  );
+}
+
+export interface SessionStartInput {
+  /** All sessions of the learner, any order. */
+  sessions: readonly Session[];
+  /** Bereich of each stored attempt of the open sessions. */
+  attemptBereich: ReadonlyMap<string, Bereich>;
+  bereich: Bereich;
+  now: string;
+}
+
+export interface SessionStartPlan {
+  /** The session to continue, or null for a new one. */
+  resume: Session | null;
+  /** Open sessions from an earlier day, already closed (endedAt = now, goal not reached). */
+  close: Session[];
+}
+
+/**
+ * "Pause" keeps today's progress, but a new day starts fresh: open practice sessions that began
+ * on an earlier local day are closed; the newest open session of today whose answers all belong
+ * to this Bereich is continued. Sessions without answers are never stored, so they never count.
+ */
+export function planSessionStart(input: SessionStartInput): SessionStartPlan {
+  const { attemptBereich, bereich, now } = input;
+  const open = input.sessions.filter((s) => s.mode === 'practice' && s.endedAt === undefined);
+  const close = open
+    .filter((s) => !isSameLocalDay(s.startedAt, now))
+    .map((s) => ({ ...s, endedAt: now, goalReached: false }));
+  const resume =
+    open
+      .filter(
+        (s) =>
+          isSameLocalDay(s.startedAt, now) &&
+          s.attemptIds.length > 0 &&
+          s.attemptIds.every((id) => attemptBereich.get(id) === bereich),
+      )
+      .sort((a, b) => b.startedAt.localeCompare(a.startedAt))[0] ?? null;
+  return { resume, close };
 }
 
 export interface PracticeAnswerInput {

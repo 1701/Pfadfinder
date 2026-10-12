@@ -5,6 +5,7 @@ import type { Bereich, ContentLoader, Fach, Format, Item } from '../domain/conte
 import type { Learner, ReviewEntry, Session } from '../domain/learner';
 import { initialMastery, type MasteryState } from '../domain/mastery';
 import {
+  planSessionStart,
   recordPracticeAnswer,
   startPracticeSession,
   type PracticeAnswerResult,
@@ -64,9 +65,9 @@ export async function ensureLearner(deps: PracticeDeps): Promise<Learner> {
 }
 
 /**
- * Continues the newest unfinished practice session whose answers all belong to this Bereich
- * ("Pause" keeps the progress); otherwise starts a new one. A new session is only stored with
- * its first answer, so leaving before answering leaves nothing behind.
+ * Continues today's unfinished session of this Bereich ("Pause" keeps the progress) and closes
+ * open sessions of earlier days (planSessionStart). A new session is only stored with its first
+ * answer, so leaving before answering leaves nothing behind.
  * Returns null when the Bereich has fewer than MIN_ITEMS_FOR_PRACTICE practiceable items.
  */
 export async function startPractice(
@@ -84,13 +85,21 @@ export async function startPractice(
     (await repos.mastery.get(learnerId, bereich)) ?? initialMastery(learnerId, bereich, now);
 
   const sessions = await repos.sessions.listByLearner(learnerId);
-  for (const session of sessions.reverse()) {
-    if (session.mode !== 'practice' || session.endedAt || session.attemptIds.length === 0) continue;
-    const attempts = await Promise.all(session.attemptIds.map((id) => repos.attempts.get(id)));
-    if (attempts.every((a) => a?.bereich === bereich)) {
-      const reviewsInSession = attempts.filter((a) => a?.mode === 'review').length;
-      return { learnerId, fach, bereich, pool, session, mastery, reviewsInSession };
-    }
+  const openAttemptIds = sessions.filter((s) => !s.endedAt).flatMap((s) => s.attemptIds);
+  const attempts = await Promise.all(openAttemptIds.map((id) => repos.attempts.get(id)));
+  const attemptBereich = new Map(attempts.flatMap((a) => (a ? [[a.id, a.bereich] as const] : [])));
+  const plan = planSessionStart({ sessions, attemptBereich, bereich, now });
+
+  if (plan.close.length > 0) {
+    await repos.transaction(async () => {
+      for (const session of plan.close) await repos.sessions.put(session);
+    });
+  }
+  if (plan.resume) {
+    const reviewsInSession = plan.resume.attemptIds.filter(
+      (id) => attempts.find((a) => a?.id === id)?.mode === 'review',
+    ).length;
+    return { learnerId, fach, bereich, pool, session: plan.resume, mastery, reviewsInSession };
   }
 
   const session = startPracticeSession(deps.newId(), learnerId, now);

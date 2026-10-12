@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 4D: Tagesgrenze der Übungssession
+- **Gebaut:** `planSessionStart` (rein, `domain/practice`): Eine offene Übungssession wird nur am selben Kalendertag (lokale Zeit, gemessen an `startedAt`) fortgesetzt. Offene Sessions früherer Tage schließt `startPractice` beim Start mit `endedAt` = jetzt und `goalReached` = false. Tests: Domain-Fälle und ein Store-Durchlauf mit Uhr über Mitternacht (23:55 → 00:01 Berlin).
+- **Entscheidungen:** Geschlossen werden alle offenen Sessions früherer Tage, egal welcher Bereich. Offene Sessions von heute in anderen Bereichen bleiben offen.
+- **CI:** kein Remote; lokal `npm run check` grün.
+
 ## 2026-10-11 – Aufgabe 4C: Üben-Flow (Einfachwahl, Zahleneingabe)
 - **Gebaut:** Komponenten Button, ZiffernBlock, VorlesenButton, FeedbackPanel, Fortschritt. Format-Registry mit SingleChoice und NumberInput. Screens: Start (Liste der übbaren Bereiche), `/ueben/:fach/:bereich` (ItemScreen + Abschluss „Heute geschafft: 10 Fundstücke“). Dev-Seite `/dev/item/:id`. Der Store kommt über Context, die Repos sind Dexie. Tests: 13 Testing-Library-Dateien; Playwright `ueben.spec` (Flow, Neuladen, offline) und `layout.spec` (alle Items × 3 Zustände × 4 Viewports).
 - **Entscheidungen:** „Prüfen“ wird an derselben Stelle zu „Weiter“. Der Antwortbereich ist oben ausgerichtet, damit beim Prüfen nichts springt. Für 1024×660 wurden Abstände gekürzt; Optionen und Tasten sind 48 px hoch, die Schrift blieb gleich, „misconception auf Tipp“ war nicht nötig (knappster Fall: 46 px Luft). Zahlengruppen („10 000“) werden auf dem Bildschirm nie umbrochen. Neue Tokens: `spacing-action`, `spacing-key`. Manifest-Farben = Tokens. ARCHITECTURE §6: `attemptIndex` + `onChange(… | null)`.

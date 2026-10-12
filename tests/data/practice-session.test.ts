@@ -169,4 +169,39 @@ describe('practice session (store + in-memory repositories + real content)', () 
     const day2Attempts = (await repos.attempts.listByLearner(learnerId)).slice(10);
     expect(day2Attempts.slice(0, 3).every((a) => a.mode === 'review')).toBe(true);
   });
+
+  it('starts fresh after midnight and closes the session of the day before', async () => {
+    const repos = createMemoryRepositories();
+    // 23:55 in Berlin (UTC+2): four answers before midnight.
+    const evening = createSessionStore({
+      ...testDeps(repos),
+      now: tickingClock('2026-10-11T21:55:00.000Z'),
+    });
+    await evening.getState().startPractice('mathe', 'zahlen-operationen');
+    for (let i = 0; i < 4; i++) {
+      await answer(evening, true);
+      await evening.getState().next();
+    }
+    const yesterdayId = evening.getState().practice!.session.id;
+    evening.getState().leave();
+
+    // 00:01 the next day.
+    const morning = createSessionStore({
+      ...testDeps(repos),
+      now: tickingClock('2026-10-11T22:01:00.000Z'),
+    });
+    await morning.getState().startPractice('mathe', 'zahlen-operationen');
+    const practice = morning.getState().practice!;
+    expect(practice.session.id).not.toBe(yesterdayId);
+    expect(practice.session.attemptIds).toEqual([]);
+
+    const learnerId = morning.getState().learner!.id;
+    expect(await repos.sessions.get(yesterdayId)).toMatchObject({
+      endedAt: '2026-10-11T22:01:00.000Z',
+      goalReached: false,
+    });
+    expect((await repos.sessions.get(yesterdayId))!.attemptIds).toHaveLength(4);
+    await answer(morning, true);
+    expect(await repos.sessions.listByLearner(learnerId)).toHaveLength(2);
+  });
 });

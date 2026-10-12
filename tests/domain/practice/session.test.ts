@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { ReviewEntry, Session } from '../../../src/domain/learner';
 import { attemptSchema } from '../../../src/domain/learner';
+import type { Bereich } from '../../../src/domain/content';
 import {
   SESSION_GOAL,
+  isSameLocalDay,
+  planSessionStart,
   recordPracticeAnswer,
   startPracticeSession,
   type PracticeAnswerInput,
@@ -142,5 +145,76 @@ describe('recordPracticeAnswer', () => {
     expect(() => recordPracticeAnswer(input({ answer: { optionId: 'a' } }))).toThrow(
       /number-input/,
     );
+  });
+});
+
+describe('planSessionStart (day boundary, Europe/Berlin in tests)', () => {
+  const ZO_ = 'zahlen-operationen' as const;
+  const open = (id: string, startedAt: string, attemptIds: string[]): Session => ({
+    ...startPracticeSession(id, 'learner-1', startedAt),
+    attemptIds,
+  });
+  const bereiche = new Map<string, Bereich>([
+    ['a1', ZO_],
+    ['a2', ZO_],
+    ['b1', 'raum-form'],
+  ]);
+
+  it('compares calendar days in local time', () => {
+    // 23:59 and 00:01 Berlin time (UTC+2) are different days although 2 minutes apart.
+    expect(isSameLocalDay('2026-10-11T21:59:00.000Z', '2026-10-11T22:01:00.000Z')).toBe(false);
+    expect(isSameLocalDay('2026-10-11T22:01:00.000Z', '2026-10-12T21:59:00.000Z')).toBe(true);
+  });
+
+  it("continues today's open session of the same Bereich", () => {
+    const today = open('s1', '2026-10-12T06:00:00.000Z', ['a1', 'a2']);
+    const plan = planSessionStart({
+      sessions: [today],
+      attemptBereich: bereiche,
+      bereich: ZO_,
+      now: '2026-10-12T15:00:00.000Z',
+    });
+    expect(plan).toEqual({ resume: today, close: [] });
+  });
+
+  it('closes open sessions of earlier days and starts fresh after midnight', () => {
+    const yesterday = open('s1', '2026-10-11T21:55:00.000Z', ['a1']);
+    const now = '2026-10-11T22:01:00.000Z';
+    const plan = planSessionStart({
+      sessions: [yesterday],
+      attemptBereich: bereiche,
+      bereich: ZO_,
+      now,
+    });
+    expect(plan.resume).toBeNull();
+    expect(plan.close).toEqual([{ ...yesterday, endedAt: now, goalReached: false }]);
+  });
+
+  it("keeps today's sessions of other Bereiche open and ignores finished ones", () => {
+    const otherBereich = open('s1', '2026-10-12T06:00:00.000Z', ['b1']);
+    const finished = {
+      ...open('s2', '2026-10-10T06:00:00.000Z', ['a1']),
+      endedAt: '2026-10-10T06:10:00.000Z',
+    };
+    const mixed = open('s3', '2026-10-12T07:00:00.000Z', ['a1', 'b1']);
+    const plan = planSessionStart({
+      sessions: [otherBereich, finished, mixed],
+      attemptBereich: bereiche,
+      bereich: ZO_,
+      now: '2026-10-12T08:00:00.000Z',
+    });
+    expect(plan).toEqual({ resume: null, close: [] });
+  });
+
+  it('picks the newest of several open sessions of today', () => {
+    const older = open('s1', '2026-10-12T06:00:00.000Z', ['a1']);
+    const newer = open('s2', '2026-10-12T07:00:00.000Z', ['a2']);
+    const plan = planSessionStart({
+      sessions: [newer, older],
+      attemptBereich: bereiche,
+      bereich: ZO_,
+      now: '2026-10-12T08:00:00.000Z',
+    });
+    expect(plan.resume?.id).toBe('s2');
   });
 });
