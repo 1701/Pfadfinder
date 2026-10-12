@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Aufgabe 4E: Vorlesen für Rückmeldung, Start und Abschluss
+- **Gebaut:**
+  - Das FeedbackPanel hat denselben VorlesenButton wie das Item; ein zweiter Tipp stoppt. Vorgelesen werden Urteil, Erklärung und misconception (nur bei „noch nicht“).
+  - Start- und Abschluss-Screen lesen ihre Überschrift vor.
+  - Neue reine Funktion `speakable()`: „4 735“ → „4735“, „6 · 40“ → „6 mal 40“, „84 : 4“ → „84 geteilt durch 4“, „−“, „+“, „=“ als Wörter. Sie gilt fürs Feedback und für Items ohne `readAloud`.
+- **Entscheidungen:** Operatoren werden nur mit Leerzeichen auf beiden Seiten ersetzt, sodass „8:30 Uhr“ und „20-Euro-Schein“ bleiben, wie sie sind. Ein `readAloud` aus dem Content wird nie verändert. Der Layout-Test prüft wieder alle Items in 4 Viewports, auch mit dem Button im Feedback.
+- **CI:** kein Remote; lokal `npm run check` und `npm run e2e:chromium` (8/8) grün.
+
 ## 2026-10-12 – Aufgabe 4D: Tagesgrenze der Übungssession
 - **Gebaut:** `planSessionStart` (rein, `domain/practice`): Eine offene Übungssession wird nur am selben Kalendertag (lokale Zeit, gemessen an `startedAt`) fortgesetzt. Offene Sessions früherer Tage schließt `startPractice` beim Start mit `endedAt` = jetzt und `goalReached` = false. Tests: Domain-Fälle und ein Store-Durchlauf mit Uhr über Mitternacht (23:55 → 00:01 Berlin).
 - **Entscheidungen:** Geschlossen werden alle offenen Sessions früherer Tage, egal welcher Bereich. Offene Sessions von heute in anderen Bereichen bleiben offen.

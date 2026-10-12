@@ -2,12 +2,23 @@
 
 import { Link } from 'react-router';
 import type { Bereich } from '../../domain/content';
+import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME } from '../text/bereiche';
 
-export function AbschlussScreen({ count, bereich }: { count: number; bereich: Bereich }) {
+export interface AbschlussScreenProps {
+  count: number;
+  bereich: Bereich;
+  readAloud?: boolean;
+}
+
+export function AbschlussScreen({ count, bereich, readAloud = true }: AbschlussScreenProps) {
+  const title = `Heute geschafft: ${count} Fundstücke`;
   return (
     <main className="screen-fit grid place-content-center justify-items-center gap-lg px-lg text-center">
-      <h1 className="text-heading font-bold">Heute geschafft: {count} Fundstücke</h1>
+      <div className="flex items-center gap-lg">
+        {readAloud && <VorlesenButton text={title} />}
+        <h1 className="text-heading font-bold">{title}</h1>
+      </div>
       <p className="text-option">Du warst heute im Gebiet {BEREICH_NAME[bereich]} unterwegs.</p>
       <Link
         to="/"

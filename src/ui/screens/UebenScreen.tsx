@@ -54,7 +54,8 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   }, [fach, bereich, startPractice, leave]);
 
   if (status === 'empty') return <Hinweis text="Hier gibt es noch nicht genug Aufgaben." />;
-  if (status === 'finished') return <AbschlussScreen count={answered} bereich={bereich} />;
+  if (status === 'finished')
+    return <AbschlussScreen count={answered} bereich={bereich} readAloud={readAloud} />;
   if (!current || (status !== 'answering' && status !== 'checking' && status !== 'feedback')) {
     return <main className="screen-fit" aria-busy="true" />;
   }

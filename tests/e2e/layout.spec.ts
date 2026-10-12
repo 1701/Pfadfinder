@@ -31,13 +31,13 @@ for (const viewport of VIEWPORTS) {
     for (const item of ITEMS) {
       for (const state of STATES) {
         await page.goto(`/dev/item/${item.id}?state=${state}`);
-        await page.locator('[data-region="band"] button').waitFor();
+        await page.locator('[data-region="band"] > button').waitFor();
         await page.evaluate(() => document.fonts.ready);
         await expectFitsScreen(page, `${item.id} ${state} ${viewport.name}`);
       }
     }
     await page.goto(`/dev/item/${worst.id}?state=noch-nicht`);
-    await page.locator('[data-region="band"] button').waitFor();
+    await page.locator('[data-region="band"] > button').waitFor();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
     await page.screenshot({ path: `${SCREENSHOTS}/layout-laengstes-item-${viewport.name}.png` });

@@ -39,6 +39,11 @@ const PAIRS: [string, string, number][] = [
   ['correct', 'surface', 4.5],
   ['notyet', 'notyet-surface', 4.5],
   ['notyet', 'surface', 4.5],
+  // Vorlesen label and button outline inside the feedback panel.
+  ['ink-muted', 'correct-surface', 4.5],
+  ['ink-muted', 'notyet-surface', 4.5],
+  ['line-strong', 'correct-surface', 3],
+  ['line-strong', 'notyet-surface', 3],
   ['line-strong', 'paper', 3],
   ['line-strong', 'surface', 3],
   ['signal-edge', 'paper', 3],

@@ -71,6 +71,7 @@ export function ItemScreen(props: ItemScreenProps) {
           correct={revealed.correct}
           feedback={item.feedback}
           onNext={props.onNext}
+          readAloud={props.readAloud}
         />
       ) : (
         <div data-region="band" className="flex items-end justify-end">

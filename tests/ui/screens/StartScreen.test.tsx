@@ -2,7 +2,7 @@
 import '../dom';
 import { render, screen } from '@testing-library/react';
 import { RouterProvider, createMemoryRouter } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StartScreen } from '../../../src/ui/screens/StartScreen';
 
 function renderWith(bereiche: string[]) {
@@ -31,4 +31,20 @@ describe('StartScreen', () => {
     await screen.findByRole('link', { name: 'Zahlen und Rechnen' });
     expect(screen.queryByRole('heading', { name: 'Deutsch' })).toBeNull();
   });
+
+  it('reads the heading aloud', async () => {
+    const speak = vi.fn();
+    vi.stubGlobal('speechSynthesis', { speak, cancel: vi.fn(), getVoices: () => [] });
+    vi.stubGlobal(
+      'SpeechSynthesisUtterance',
+      class {
+        constructor(public text: string) {}
+      },
+    );
+    renderWith(['zahlen-operationen']);
+    (await screen.findByRole('button', { name: 'Vorlesen' })).click();
+    expect((speak.mock.calls[0]![0] as { text: string }).text).toBe("Wohin geht's heute?");
+  });
+
+  afterEach(() => vi.unstubAllGlobals());
 });

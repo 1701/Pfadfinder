@@ -2,14 +2,20 @@
 
 import { Link, useLoaderData } from 'react-router';
 import { FAECHER, fachOfBereich, type Bereich } from '../../domain/content';
+import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
+
+const TITLE = "Wohin geht's heute?";
 
 export function StartScreen() {
   const bereiche = useLoaderData() as Bereich[];
 
   return (
     <main className="mx-auto grid max-w-page content-start gap-xl px-lg py-2xl">
-      <h1 className="text-display font-bold">Wohin geht's heute?</h1>
+      <div className="flex items-center gap-lg">
+        <VorlesenButton text={TITLE} />
+        <h1 className="text-display font-bold">{TITLE}</h1>
+      </div>
       {bereiche.length === 0 && <p className="text-option">Hier gibt es bald Aufgaben.</p>}
       {FAECHER.map((fach) => {
         const ofFach = bereiche.filter((b) => fachOfBereich(b) === fach);
