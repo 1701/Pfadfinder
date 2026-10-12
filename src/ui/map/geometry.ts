@@ -27,16 +27,18 @@ export interface MapLayout {
 /** Drawing measures in viewBox units, the same for both layouts. */
 export const MAP_STYLE = {
   /** The two contour lines: distance from the coast (Hang, Gipfel). */
-  contours: [14, 28],
+  contours: [24, 44],
   labelSize: 24,
   labelLineHeight: 28,
   islandNameSize: 28,
   /** Etappen marks below the name, like the Wegstriche of the item screen. */
-  mark: { width: 18, height: 9, gap: 6, offset: 14 },
+  /** ring: gap of the outline around the mark of the current niveau. */
+  mark: { width: 18, height: 9, gap: 8, offset: 16, ring: 3 },
   /** Halo around the name in the plateau's color, where a long name meets a contour line. */
   labelHalo: 6,
   outlineWidth: 2,
-  contourWidth: 1.5,
+  /** Screen pixels (non-scaling stroke). */
+  contourWidth: 1,
   unexploredDash: '8 6',
 } as const;
 
@@ -141,7 +143,7 @@ export function toPath(points: readonly Point[]): string {
 
 /**
  * A Gebiet's name in two lines, broken at the space or hyphen that keeps the longer line
- * shortest: "Laute und / Buchstaben", "Rechtschreib- / Tricks". One word stays one line.
+ * shortest: "Laute und / Buchstaben", "Zahlen und / Rechnen". One word stays one line.
  */
 export function labelLines(name: string): string[] {
   let best: string[] = [name];

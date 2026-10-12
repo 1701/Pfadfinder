@@ -19,7 +19,7 @@ describe('ListenScreen', () => {
     renderWith(['zahlen-operationen', 'rs-strategien']);
     const link = await screen.findByRole('link', { name: 'Zahlen und Rechnen' });
     expect(link.getAttribute('href')).toBe('/ueben/mathe/zahlen-operationen');
-    expect(screen.getByRole('link', { name: 'Rechtschreib-Tricks' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('link', { name: 'Schreibtricks' }).getAttribute('href')).toBe(
       '/ueben/deutsch/rs-strategien',
     );
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([

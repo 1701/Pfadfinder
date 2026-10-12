@@ -17,5 +17,5 @@ export const BEREICH_NAME: Record<Bereich, string> = {
   'lesen-sachtext': 'Sachtexte lesen',
   'lesen-literarisch': 'Geschichten lesen',
   'rs-laut-buchstabe': 'Laute und Buchstaben',
-  'rs-strategien': 'Rechtschreib-Tricks',
+  'rs-strategien': 'Schreibtricks',
 };

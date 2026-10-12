@@ -144,7 +144,13 @@ function GebietLink({
       {stufen.map((points, i) => (
         <polygon key={i} points={toPath(points)} className={fill(i)} />
       ))}
-      <g className="fill-none stroke-line" strokeWidth={MAP_STYLE.contourWidth}>
+      {/* Thin, round contour lines: the Höhenstufen speak through their areas, not lines. */}
+      <g
+        className="fill-none stroke-line"
+        strokeWidth={MAP_STYLE.contourWidth}
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
+      >
         <polygon points={toPath(hang)} />
         <polygon points={toPath(gipfel)} />
       </g>
@@ -200,25 +206,33 @@ function Label({
       </text>
       {state &&
         ETAPPEN.map((etappe, i) => {
+          // Two separate signs: the fill says "reached", the ring says "you are here".
           const reached = state.erschlossen[i];
-          const current = !reached && state.kind !== 'gemeistert' && state.niveau === etappe;
+          const x = marksLeft + i * (mark.width + mark.gap);
           return (
-            <rect
-              key={etappe}
-              x={marksLeft + i * (mark.width + mark.gap)}
-              y={marksTop}
-              width={mark.width}
-              height={mark.height}
-              rx={mark.height / 2}
-              strokeWidth={MAP_STYLE.outlineWidth}
-              className={
-                reached
-                  ? 'fill-ink stroke-ink'
-                  : current
-                    ? 'fill-surface stroke-ink'
-                    : 'fill-line stroke-line'
-              }
-            />
+            <g key={etappe} data-etappe={etappe}>
+              <rect
+                x={x}
+                y={marksTop}
+                width={mark.width}
+                height={mark.height}
+                rx={mark.height / 2}
+                strokeWidth={MAP_STYLE.outlineWidth}
+                className={reached ? 'fill-ink stroke-ink' : 'fill-line stroke-line'}
+              />
+              {state.niveau === etappe && (
+                <rect
+                  data-current=""
+                  x={x - mark.ring}
+                  y={marksTop - mark.ring}
+                  width={mark.width + 2 * mark.ring}
+                  height={mark.height + 2 * mark.ring}
+                  rx={mark.height / 2 + mark.ring}
+                  strokeWidth={MAP_STYLE.outlineWidth}
+                  className="fill-none stroke-ink"
+                />
+              )}
+            </g>
           );
         })}
     </g>

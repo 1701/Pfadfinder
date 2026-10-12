@@ -81,7 +81,7 @@ test('Tastatur: Gebiete in Leserichtung, Fokusring auf der Umrisslinie', async (
     'Größen und Messen, Niveau 1',
     'Daten und Zufall, Niveau 1',
     'Sachtexte lesen, Niveau 3',
-    'Rechtschreib-Tricks, Niveau 1',
+    'Schreibtricks, Niveau 1',
   ]);
   // Back to the last Gebiet: its outline carries the focus ring.
   await page.keyboard.press('Shift+Tab');
@@ -95,7 +95,7 @@ test('Tastatur: Gebiete in Leserichtung, Fokusring auf der Umrisslinie', async (
     };
   });
   expect(ring).toEqual({
-    label: 'Rechtschreib-Tricks, Niveau 1',
+    label: 'Schreibtricks, Niveau 1',
     width: '6px',
     focusVisible: true,
   });

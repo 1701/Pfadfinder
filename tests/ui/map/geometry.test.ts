@@ -80,11 +80,14 @@ describe('insetPolygon', () => {
 });
 
 describe('labelLines', () => {
-  it('breaks every Gebiet name into two balanced lines', () => {
+  it('breaks Gebiet names into at most two balanced lines', () => {
     expect(labelLines('Zahlen und Rechnen')).toEqual(['Zahlen und', 'Rechnen']);
-    expect(labelLines('Rechtschreib-Tricks')).toEqual(['Rechtschreib-', 'Tricks']);
     expect(labelLines('Sachtexte lesen')).toEqual(['Sachtexte', 'lesen']);
-    expect(labelLines('Karte')).toEqual(['Karte']);
-    for (const bereich of BEREICHE) expect(labelLines(BEREICH_NAME[bereich])).toHaveLength(2);
+    expect(labelLines('Schreibtricks')).toEqual(['Schreibtricks']);
+    // A hyphen is a break point too, and keeps its place on the first line.
+    expect(labelLines('Wort-Werkstatt')).toEqual(['Wort-', 'Werkstatt']);
+    for (const bereich of BEREICHE) {
+      expect(labelLines(BEREICH_NAME[bereich]).length).toBeLessThanOrEqual(2);
+    }
   });
 });

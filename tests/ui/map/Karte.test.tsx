@@ -21,6 +21,15 @@ const STATES: Record<Bereich, RegionState> = {
 };
 const TODAY = { count: 4, goal: 10, reached: false };
 
+/** Etappen marks of a Gebiet: "reached" (ink) or "open", plus a ring on the current niveau. */
+const marks = (gebiet: Element) =>
+  [...gebiet.querySelectorAll('[data-etappe]')].map(
+    (mark) =>
+      (mark.querySelector('rect')!.getAttribute('class') === 'fill-ink stroke-ink'
+        ? 'reached'
+        : 'open') + (mark.querySelector('[data-current]') ? '+here' : ''),
+  );
+
 function Where() {
   return <p data-testid="where">{useLocation().pathname}</p>;
 }
@@ -47,7 +56,7 @@ describe('Karte', () => {
       'Zahlen und Rechnen, Niveau 2',
       'Formen und Raum, Niveau 3, gemeistert',
       'Größen und Messen, Niveau 1',
-      'Rechtschreib-Tricks, Niveau 1',
+      'Schreibtricks, Niveau 1',
     ]);
     expect(links.map((l) => l.getAttribute('href'))).toEqual([
       '/ueben/mathe/zahlen-operationen',
@@ -74,25 +83,21 @@ describe('Karte', () => {
       'fill-land-soft',
       'fill-surface',
     ]);
-    const marks = [...zo.querySelectorAll('rect')].map((r) => r.getAttribute('class'));
-    expect(marks).toEqual([
-      'fill-ink stroke-ink',
-      'fill-surface stroke-ink',
-      'fill-line stroke-line',
-    ]);
+    expect(marks(zo)).toEqual(['reached', 'open+here', 'open']);
 
     // A new Gebiet: nothing filled, the first Etappe outlined.
     const neu = within(wide()).getByRole('link', { name: 'Größen und Messen, Niveau 1' });
     expect(
       [...neu.querySelectorAll(':scope > polygon')].slice(0, 3).map((p) => p.getAttribute('class')),
     ).toEqual(['fill-surface', 'fill-surface', 'fill-surface']);
-    // Sank back to niveau 1: reached Etappen stay filled.
-    const rs = within(wide()).getByRole('link', { name: 'Rechtschreib-Tricks, Niveau 1' });
-    expect([...rs.querySelectorAll('rect')].map((r) => r.getAttribute('class'))).toEqual([
-      'fill-ink stroke-ink',
-      'fill-ink stroke-ink',
-      'fill-line stroke-line',
-    ]);
+    expect(marks(neu)).toEqual(['open+here', 'open', 'open']);
+    // Sank back to niveau 1: reached Etappen stay filled, and the ring still shows where the
+    // child is – filled and outlined at once.
+    const rs = within(wide()).getByRole('link', { name: 'Schreibtricks, Niveau 1' });
+    expect(marks(rs)).toEqual(['reached+here', 'reached', 'open']);
+    // Mastered: all reached, the ring stays on the current niveau.
+    const rf = within(wide()).getByRole('link', { name: 'Formen und Raum, Niveau 3, gemeistert' });
+    expect(marks(rf)).toEqual(['reached', 'reached', 'reached+here']);
   });
 
   it('tabs through the Gebiete island by island in reading order', async () => {
