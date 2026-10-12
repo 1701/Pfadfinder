@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 170" role="img">
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round">
+    <polygon points="30,110 60,40 110,60 95,120"/>
+    <polygon points="150,110 170,40 240,40 220,110"/>
+    <polygon points="300,115 345,35 390,115"/>
+    <polygon points="420,110 415,60 440,35 465,55 470,100 445,120"/>
+  </g>
+  <g font-family="inherit" font-size="24" font-weight="700" fill="currentColor" text-anchor="middle">
+    <text x="70" y="155">A</text>
+    <text x="195" y="155">B</text>
+    <text x="345" y="155">C</text>
+    <text x="442" y="155">D</text>
+  </g>
+</svg>

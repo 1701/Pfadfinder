@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 200" role="img">
+  <text x="130" y="30" font-family="inherit" font-size="20" fill="currentColor" text-anchor="middle">Bauplan</text>
+  <g fill="none" stroke="currentColor" stroke-width="2.5">
+    <rect x="40" y="50" width="60" height="60"/><rect x="100" y="50" width="60" height="60"/><rect x="160" y="50" width="60" height="60"/>
+    <rect x="40" y="110" width="60" height="60"/><rect x="100" y="110" width="60" height="60"/><rect x="160" y="110" width="60" height="60"/>
+  </g>
+  <g font-family="inherit" font-size="28" font-weight="700" fill="currentColor" text-anchor="middle">
+    <text x="70" y="90">1</text><text x="130" y="90">2</text><text x="190" y="90">3</text>
+    <text x="70" y="150">1</text><text x="130" y="150">1</text><text x="190" y="150">2</text>
+  </g>
+</svg>

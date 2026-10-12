@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img">
+  <g fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2.5">
+    <!-- A: 2x3 Block -->
+    <rect x="30" y="30" width="30" height="30"/><rect x="60" y="30" width="30" height="30"/>
+    <rect x="30" y="60" width="30" height="30"/><rect x="60" y="60" width="30" height="30"/>
+    <rect x="30" y="90" width="30" height="30"/><rect x="60" y="90" width="30" height="30"/>
+    <!-- B: Kreuz 1-4-1 -->
+    <rect x="260" y="20" width="30" height="30"/>
+    <rect x="230" y="50" width="30" height="30"/><rect x="260" y="50" width="30" height="30"/><rect x="290" y="50" width="30" height="30"/><rect x="320" y="50" width="30" height="30"/>
+    <rect x="260" y="80" width="30" height="30"/>
+    <!-- C: 6 in einer Reihe -->
+    <rect x="20" y="190" width="30" height="30"/><rect x="50" y="190" width="30" height="30"/><rect x="80" y="190" width="30" height="30"/>
+    <rect x="110" y="190" width="30" height="30"/><rect x="140" y="190" width="30" height="30"/><rect x="170" y="190" width="30" height="30"/>
+    <!-- D: 5 in einer Reihe + 1 -->
+    <rect x="240" y="160" width="30" height="30"/><rect x="270" y="160" width="30" height="30"/><rect x="300" y="160" width="30" height="30"/>
+    <rect x="330" y="160" width="30" height="30"/><rect x="360" y="160" width="30" height="30"/>
+    <rect x="300" y="190" width="30" height="30"/>
+  </g>
+  <g font-family="inherit" font-size="24" font-weight="700" fill="currentColor" text-anchor="middle">
+    <text x="60" y="150">A</text>
+    <text x="290" y="150">B</text>
+    <text x="110" y="260">C</text>
+    <text x="315" y="260">D</text>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 170" role="img">
+  <polygon points="30,40 110,100 30,100" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+  <line x1="130" y1="20" x2="130" y2="120" stroke="currentColor" stroke-width="3" stroke-dasharray="10 8"/>
+  <text x="70" y="140" font-family="inherit" font-size="18" fill="currentColor" text-anchor="middle">Figur</text>
+  <text x="130" y="160" font-family="inherit" font-size="18" fill="currentColor" text-anchor="middle">Spiegelachse</text>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round">
+    <polygon points="190,40 270,100 190,100"/>
+    <polygon points="290,100 370,40 370,100"/>
+    <polygon points="390,40 470,40 470,100"/>
+    <polygon points="490,40 570,40 490,100"/>
+  </g>
+  <g font-family="inherit" font-size="22" font-weight="700" fill="currentColor" text-anchor="middle">
+    <text x="230" y="130">A</text>
+    <text x="330" y="130">B</text>
+    <text x="430" y="130">C</text>
+    <text x="530" y="130">D</text>
+  </g>
+</svg>
