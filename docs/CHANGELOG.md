@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.2 – 2026-10-12
+- §1 Dateistruktur nennt `content/manifest.json`: erzeugt von `npm run content:validate`, nie von Hand bearbeitet, kein Teil des Item-Vertrags. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.1 – 2026-10-11
 - `multi-choice.minSelect` muss exakt der Anzahl richtiger Optionen entsprechen (vorher: höchstens so viele). Der Validator erzwingt die Gleichheit.
 - Versionierung präzisiert: `schemaVersion` im Item und `content/schema-version.json` tragen nur `Major.Minor` und bleiben `"1.0"`; Patch-Versionen ändern keine Felder.

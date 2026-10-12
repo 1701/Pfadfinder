@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.1 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.2 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln, ohne Felder zu ändern.
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -32,7 +32,10 @@ content/
     deutsch-01.json
   assets/
     svg/                       nur SVG, Dateiname = asset-id
+  manifest.json                ERZEUGT von `npm run content:validate`, nie von Hand bearbeiten
 ```
+
+`manifest.json` ist kein Teil des Item-Vertrags: Es fasst je Bereich die aktiven Items (ohne `retired`) je Format und Niveau sowie die Text-IDs zusammen, damit die Startseite keine Items laden muss. Autorinnen und Autoren committen es nach jeder Content-Änderung mit (der pre-commit-Hook verlangt das, in CI ist ein veraltetes Manifest ein Fehler).
 
 ## 2. Identifikatoren
 
