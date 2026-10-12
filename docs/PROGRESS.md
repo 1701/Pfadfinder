@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-12 – Zwischenschritt: Batch 2 raum-form und Bilder
+- **Gebaut:** 21 Items und 7 SVGs eingespielt; 15 Items haben einen Renderer, „Formen und Raum“ ist damit übbar. `ContentAsset` bettet SVGs inline ein (`?raw`); `assetAlt` wird zum Namen des Bildes und vor dem Prompt vorgelesen. `content:validate` lehnt SVGs mit Skripten, Event-Attributen, Verweisen, festen Farben oder fremden Schriften ab (Gegenprobe schlägt an). CONTENT_SCHEMA 1.0.3: §7 „Bilder“. Der Layout-Test prüft jetzt alle übbaren Items aus allen Dateien (36 × 3 Zustände × 4 Viewports) und macht einen Screenshot `layout-bild-*`.
+- **Entscheidungen:** Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter, sonst passen Zahleneingabe und Bild nicht auf 1024×660 (bis zu 107 px zu viel). Höhe: quer 200 px, auf kurzen Bildschirmen `100dvh − 516px` (144 px bei 660 px Höhe), hoch 240 px.
+- **Offen:** Optionen „A–D“, die auf Bildbeschriftungen zeigen, werden gemischt (z. B. C, B, D, A). Bei 144 px Bildhöhe sind „Figur“ und „Spiegelachse“ in `rf-spiegel-1` etwa 15 px groß, „Bauplan“ etwa 14 px. Die Bildbeschreibungen von `m-rf-1-005` und `m-rf-1-002` verraten beim Vorlesen fast die Lösung.
+- **CI:** [CI #38216479314](https://github.com/1701/Pfadfinder/actions/runs/38216479314) grün (73ab7b4…f3761a4); 426 Tests, e2e 14 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (10/10).
+
 ## 2026-10-12 – Aufgabe 5, Teil 0: Nacharbeiten
 - **Gebaut:** Die Tagesgrenze gilt jetzt ab der letzten Antwort statt ab `startedAt` (`lastActivity`): Beginn 23:55 und Antwort 00:03 heißt, dass die Session um 00:10 fortgesetzt wird. Die misconception steht in `ink-muted`. Nach dem Prüfen ist der Ziffernblock gedimmt (`line` + `ink-muted`). Fokus, den die App nach einem Tipp selbst setzt, zeigt keinen Ring (`focusQuietly`); nach einer Taste ist er wieder sichtbar. In Stimulus und Prompt bleibt eine Zahl mit dem folgenden Wort zusammen (`keepNumbersWithWords`, auch „5 €“). CONTENT_SCHEMA 1.0.2: §1 nennt `manifest.json` als erzeugte Datei.
 - **Entschieden (offene Punkte aus 4C/4F):** Der Name „Rechtschreib-Tricks“ bleibt. Die Wegstriche im Fortschritt bleiben. Feedback hat bis zu 3 Sätze Erklärung plus 1 Satz misconception. WebKit läuft nur extern in CI, nicht lokal.
