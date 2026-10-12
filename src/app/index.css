@@ -57,6 +57,22 @@
     }
   }
 
+  /* Map (src/ui/map): a Gebiet's focus ring and press follow its outline, not its box. */
+  .map-region {
+    outline: none;
+    cursor: pointer;
+  }
+  .map-region .map-outline {
+    transition: stroke var(--duration-press) var(--ease-standard);
+  }
+  .map-region:active .map-outline {
+    stroke: var(--color-ink);
+  }
+  .map-region:focus-visible .map-outline {
+    stroke: var(--color-ink);
+    stroke-width: var(--map-focus-width);
+  }
+
   /* The checking moment: the message rises from the bottom band. */
   .feedback-in {
     animation: feedback-in var(--duration-feedback) var(--ease-standard);

@@ -54,11 +54,12 @@ test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
   await expect.poll(outline).toBe('solid');
 });
 
-test('Üben: 10 Items, Fortsetzen nach Neuladen, Abschluss', async ({ page }) => {
+test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 10', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: "Wohin geht's heute?" })).toBeVisible();
+  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
   await shot(page, 'start');
-  await page.getByRole('link', { name: 'Zahlen und Rechnen' }).click();
+  await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
 
   const taken = new Set<string>();
   for (let n = 1; n <= 10; n++) {
@@ -95,7 +96,9 @@ test('Üben: 10 Items, Fortsetzen nach Neuladen, Abschluss', async ({ page }) =>
   await expect(page.getByRole('heading', { name: 'Heute geschafft: 10 Fundstücke' })).toBeVisible();
   await shot(page, 'abschluss');
   await page.getByRole('link', { name: 'Zur Übersicht' }).click();
-  await expect(page.getByRole('link', { name: 'Zahlen und Rechnen' })).toBeVisible();
+  await expect(page.getByText('Heute: 10 von 10 Fundstücken. Geschafft.')).toBeVisible();
+  await expect(page.getByRole('link', { name: /^Zahlen und Rechnen, Niveau \d/ })).toBeVisible();
+  await shot(page, 'start-geschafft');
 });
 
 test('offline nach dem ersten Laden', async ({ page, context, browserName }) => {

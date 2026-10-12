@@ -4,17 +4,17 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import type { Bereich } from '../../../src/domain/content';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { StartScreen } from '../../../src/ui/screens/StartScreen';
+import { ListenScreen } from '../../../src/ui/screens/ListenScreen';
 
 function renderWith(bereiche: Bereich[]) {
   render(
     <MemoryRouter>
-      <StartScreen bereiche={bereiche} />
+      <ListenScreen bereiche={bereiche} />
     </MemoryRouter>,
   );
 }
 
-describe('StartScreen', () => {
+describe('ListenScreen', () => {
   it('lists the practiceable Bereiche by Fach with child-friendly names', async () => {
     renderWith(['zahlen-operationen', 'rs-strategien']);
     const link = await screen.findByRole('link', { name: 'Zahlen und Rechnen' });

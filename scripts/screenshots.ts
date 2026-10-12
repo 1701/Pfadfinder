@@ -5,7 +5,10 @@ import { mkdirSync } from 'node:fs';
 import { chromium, devices } from '@playwright/test';
 import { createServer } from 'vite';
 
-const PAGES = [{ name: 'tokens', path: '/dev/tokens' }];
+const PAGES = [
+  { name: 'tokens', path: '/dev/tokens' },
+  { name: 'karte', path: '/dev/karte' },
+];
 // iPad touch/scale profile, but exactly the viewports named in the skill.
 const VIEWPORTS = [
   {

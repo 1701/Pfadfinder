@@ -2,18 +2,28 @@
 // (createBrowserRouter + loaders) added 55 kB to the start page; nothing here needs it.
 
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router';
 import manifest from '../../content/manifest.json';
 import type { ContentManifest } from '../domain/content/manifest';
 import { practiceableBereicheFromManifest } from '../domain/scheduler/practiceable';
 import { SUPPORTED_FORMATS } from '../ui/formats/supported';
-import { StartScreen } from '../ui/screens/StartScreen';
+import { KartenScreen } from '../ui/map/KartenScreen';
+import { ListenScreen } from '../ui/screens/ListenScreen';
 
-// The start page reads only the manifest; items load when a Bereich is opened.
-const START_BEREICHE = practiceableBereicheFromManifest(
-  manifest as ContentManifest,
-  SUPPORTED_FORMATS,
-);
+// The start page reads the manifest; items load when a Bereich is opened. Progress (IndexedDB)
+// comes from a lazy chunk, so Dexie stays out of the start bundle.
+const MANIFEST = manifest as ContentManifest;
+const START_BEREICHE = practiceableBereicheFromManifest(MANIFEST, SUPPORTED_FORMATS);
+const loadMapProgress = () => import('./map-progress').then((m) => m.loadAppMapProgress());
+
+/** The map; /?liste shows the plain list instead (fallback for tests). */
+function StartRoute() {
+  const [search] = useSearchParams();
+  if (search.has('liste')) return <ListenScreen bereiche={START_BEREICHE} />;
+  return (
+    <KartenScreen manifest={MANIFEST} formats={SUPPORTED_FORMATS} loadProgress={loadMapProgress} />
+  );
+}
 
 // Store, IndexedDB, Zod and the renderers live in this chunk.
 const PracticeRoute = lazy(() =>
@@ -25,6 +35,9 @@ const PracticeRoute = lazy(() =>
 const TokensPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/TokensPage').then((m) => ({ default: m.TokensPage })))
   : null;
+const KartePage = import.meta.env.DEV
+  ? lazy(() => import('../ui/dev/KartePage').then((m) => ({ default: m.KartePage })))
+  : null;
 const ItemPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/ItemPage').then((m) => ({ default: m.ItemPage })))
   : null;
@@ -35,10 +48,11 @@ export function AppRouter() {
       {/* Pending chunks show nothing: the screen stays calm instead of flashing a spinner. */}
       <Suspense fallback={null}>
         <Routes>
-          <Route path="/" element={<StartScreen bereiche={START_BEREICHE} />} />
+          <Route path="/" element={<StartRoute />} />
           <Route path="/ueben/:fach/:bereich" element={<PracticeRoute />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
+          {KartePage && <Route path="/dev/karte" element={<KartePage />} />}
         </Routes>
       </Suspense>
     </BrowserRouter>

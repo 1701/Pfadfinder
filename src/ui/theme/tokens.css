@@ -19,6 +19,10 @@
   --color-correct-surface: #e0eef3;
   --color-notyet: #5b5449; /* "noch nicht ganz": stone grey, never red */
   --color-notyet-surface: #ece8e1;
+  /* Map only (src/ui/map): never in the item screen, where blue means "richtig". */
+  --color-land: #d5e4da; /* reached Etappe: the ink's green, light */
+  --color-land-soft: #e7efe9; /* the Etappe the child is on now */
+  --color-water: #dde9ee; /* sea between the islands; greyer than correct-surface */
 
   /* Andika for everything readable; no second family. */
   --font-*: initial;
@@ -79,6 +83,8 @@
   /* Motion only in response to the child's action, max. 300ms. */
   --duration-press: 120ms;
   --duration-feedback: 250ms;
+  /* Map: width of a Gebiet's focus outline, in map units (unitless SVG stroke). */
+  --map-focus-width: 6;
 }
 
 @media (prefers-reduced-motion: reduce) {

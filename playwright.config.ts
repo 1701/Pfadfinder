@@ -46,7 +46,7 @@ export default defineConfig({
     },
     {
       name: 'layout',
-      testMatch: 'layout.spec.ts',
+      testMatch: /(layout|karte)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: DEV },
     },
   ],

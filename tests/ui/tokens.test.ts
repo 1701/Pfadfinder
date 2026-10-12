@@ -1,7 +1,8 @@
 // The palette must stay WCAG AA (pfadfinder-ui skill). Values are read from tokens.css itself,
 // so changing a color there re-runs these checks.
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const css = readFileSync('src/ui/theme/tokens.css', 'utf8');
@@ -49,6 +50,13 @@ const PAIRS: [string, string, number][] = [
   ['signal-edge', 'paper', 3],
   ['signal-edge', 'surface', 3],
   ['signal-edge', 'signal-soft', 3],
+  // Map: names on every Höhenstufe, island names on the sea, outlines of open Gebiete
+  // (ink-muted) against land and sea, the dashed outline of a blank spot (line-strong).
+  ['ink', 'land', 4.5],
+  ['ink', 'land-soft', 4.5],
+  ['ink-muted', 'water', 4.5],
+  ['ink-muted', 'land', 3],
+  ['line-strong', 'water', 3],
 ];
 
 describe('design tokens', () => {
@@ -66,6 +74,23 @@ describe('design tokens', () => {
   it('remove Tailwind defaults for colors, radii and shadows', () => {
     for (const ns of ['--color-*', '--radius-*', '--shadow-*', '--font-*', '--text-*']) {
       expect(css).toContain(`${ns}: initial;`);
+    }
+  });
+
+  it('keep map colors and feedback colors apart (water and correct-surface look alike)', () => {
+    const uiFiles = readdirSync('src/ui', { recursive: true, encoding: 'utf8' })
+      .filter((f) => /\.tsx?$/.test(f))
+      .map((f) => `src/ui/${f.split(path.sep).join('/')}`);
+    for (const file of uiFiles) {
+      const text = readFileSync(file, 'utf8');
+      if (file.startsWith('src/ui/map/')) {
+        expect(
+          text.match(/\b(?:fill|stroke|bg|text|border)-(?:correct|notyet)\S*/g),
+          file,
+        ).toBeNull();
+      } else {
+        expect(text.match(/\b(?:fill|stroke|bg|text|border)-(?:land|water)\S*/g), file).toBeNull();
+      }
     }
   });
 
