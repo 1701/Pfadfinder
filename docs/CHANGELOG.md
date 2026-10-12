@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.6 – 2026-10-12
+- §7 Bilder: Mindestschrift relativ zur viewBox statt fest: `font-size` ≥ viewBox-Höhe / 8 (vorher ≥ 22). Begründung: 144 px kleinste Bildhöhe × font / viewBox-Höhe ≥ 18 px. Eine 260 hohe Uhr braucht jetzt 32,5 statt 22. Keine Feldänderung.
+
 ### 1.0.5 – 2026-10-12
 - §7 Bilder: Schrift unter 22 im viewBox ist jetzt ein Fehler statt einer Warnung. Keine Feldänderung.
 

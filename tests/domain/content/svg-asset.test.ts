@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { checkSvgAsset } from '../../../src/domain/content';
+import { checkSvgAsset, minSvgFontSize } from '../../../src/domain/content';
 
 const ok = (body: string, root = 'viewBox="0 0 10 10"') =>
   `<svg xmlns="http://www.w3.org/2000/svg" ${root} role="img">${body}</svg>`;
@@ -32,11 +32,17 @@ describe('checkSvgAsset', () => {
     expect(checkSvgAsset('<div/>')).toEqual(['Kein <svg>-Element gefunden']);
   });
 
-  it('rejects text below 22 viewBox units', () => {
-    expect(checkSvgAsset(ok('<text font-size="22">A</text><text font-size="24">B</text>'))).toEqual([]);
-    expect(checkSvgAsset(ok('<text font-size="18">Figur</text>'))).toEqual([
-      'font-size="18": mindestens 22 im viewBox',
-    ]);
+  it('needs text of at least an eighth of the viewBox height (18 px at 144 px picture height)', () => {
+    const clock = (font: number) =>
+      checkSvgAsset(ok(`<text font-size="${font}">12</text>`, 'viewBox="0 0 260 260"'));
+    expect(clock(33)).toEqual([]);
+    expect(clock(32.5)).toEqual([]);
+    expect(clock(22)).toEqual(['font-size="22": mindestens 32,5 (viewBox-Höhe 260 / 8)']);
+    const twelve = '<text font-size="22">1</text>'.repeat(12);
+    expect(checkSvgAsset(ok(twelve, 'viewBox="0 0 260 260"'))).toHaveLength(1);
+    // A flat picture may use smaller numbers: 170 / 8 = 21.25.
+    expect(checkSvgAsset(ok('<text font-size="22">A</text>', 'viewBox="0 0 480 170"'))).toEqual([]);
+    expect(minSvgFontSize(185) * (144 / 185)).toBe(18);
   });
 
   it('holds for every asset in content/', () => {

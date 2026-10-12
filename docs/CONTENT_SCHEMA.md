@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.5 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.6 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -217,7 +217,7 @@ Regeln: Summe `estimatedSeconds` zwischen 35 und 42 Min.; kein `short-answer`-An
 - Die App bettet jedes SVG direkt in die Seite ein. Deshalb gilt, geprüft von `npm run content:validate`: `<svg>` mit `viewBox`; kein `<script>`, `<foreignObject>`, `<style>`, `<image>`, `<iframe>`; keine Event-Attribute (`onload` …); keine Verweise (`href`, `url()`); kein `style`-Attribut
 - Farben nur `currentColor` oder `none` (Abstufung über `fill-opacity`/`stroke-opacity`), Schrift nur `font-family="inherit"`. So übernimmt das Bild Tinte und Andika und druckt schwarz auf weiß
 - Höhe im Aufgabenblatt: 200 px quer (auf kurzen Bildschirmen bis etwa 144 px), 240 px hoch. Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter
-- Schrift im Bild: `font-size` mindestens 22 im viewBox, damit sie auch klein gezeigt noch etwa 18 px hat (darunter ist es ein Fehler im Validator, seit 1.0.5)
+- Schrift im Bild: `font-size` mindestens viewBox-Höhe / 8 (seit 1.0.6; Beispiel: Höhe 260 → mindestens 32,5). Ein Bild ist mindestens 144 px hoch, und 144 px × Schriftgröße / viewBox-Höhe ≥ 18 px, die kleinste Schrift der App. Darunter ist es ein Fehler im Validator
 - `assetAlt` beschreibt, was zu sehen ist, und verrät die Lösung nicht: keine Zählhilfe („4 Kästchen und 3 weitere“), keine Nennung der gefragten Eigenschaft („ein Dreieck mit zwei gleich langen Seiten“, wenn nach Symmetrie gefragt ist). Es wird vorgelesen und ist der Name des Bildes für Screenreader
 - Optionen, die auf Beschriftungen im Bild zeigen, bekommen `keepOrder: true` (§4.1)
 
