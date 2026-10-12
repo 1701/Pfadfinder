@@ -30,14 +30,14 @@ Warum `npm run check` als Build-Befehl: Cloudflare wartet nicht auf die GitHub-C
 
 ## 3. Wo die URL steht
 
-- **Produktion:** `https://pfadfinder.<konto-subdomain>.workers.dev`. Die Subdomain gehört zum Cloudflare-Konto. Sie steht im Dashboard unter Workers & Pages → pfadfinder → Einstellungen → Domains & Routen, und in der Ausgabe von `wrangler deploy` im Build-Log.
+- **Produktion:** https://pfadfinder.accounts-ea5.workers.dev/ (Konto-Subdomain `accounts-ea5`, Account-ID in `wrangler.jsonc`). Sie steht auch im Dashboard unter Workers & Pages → pfadfinder → Einstellungen → Domains & Routen und in der Ausgabe von `wrangler deploy` im Build-Log.
 - Eine eigene Domain lässt sich später dort ergänzen; im Code ändert sich nichts, weil alle Pfade relativ zu `/` sind.
 
 ## 4. Vorschau eines Branches finden
 
 - **GitHub:** Am Commit bzw. Pull Request erscheint der Check von Workers Builds; sein Link führt zum Build-Log mit der Vorschau-URL.
-- **Dashboard:** Workers & Pages → pfadfinder → Bereitstellungen bzw. Versionen. Jede hochgeladene Version hat eine eigene Vorschau-URL der Form `https://<versions-präfix>-pfadfinder.<konto-subdomain>.workers.dev`.
-- **Feste Branch-URL:** Cloudflare kann je Branch einen festen Alias vergeben (Form etwa `<branch>-pfadfinder.<konto-subdomain>.workers.dev`). Nach dem ersten Branch-Build prüfen und hier eintragen.
+- **Dashboard:** Workers & Pages → pfadfinder → Bereitstellungen bzw. Versionen. Jede hochgeladene Version hat eine eigene Vorschau-URL der Form `https://<versions-präfix>-pfadfinder.accounts-ea5.workers.dev`.
+- **Feste Branch-URL:** Cloudflare kann je Branch einen festen Alias vergeben (Form etwa `<branch>-pfadfinder.accounts-ea5.workers.dev`). Nach dem ersten Branch-Build prüfen und hier eintragen.
 
 Vorschau-Versionen teilen sich nichts mit der Produktion außer dem Namen. Fortschritt liegt ohnehin nur im Browser (IndexedDB je Herkunft), also auch getrennt je URL.
 
@@ -50,7 +50,18 @@ Lokal lässt sich dieselbe Auslieferung mit `npm run build && npx wrangler dev` 
 - Alle Antworten tragen `Cache-Control: public, max-age=0, must-revalidate`. Der Browser fragt also jedes Mal nach, und ein neuer Service Worker wird sofort gefunden.
 - Der Service Worker registriert sich mit Scope `/` und steuert die Seite nach dem Neuladen. Der Precache hat 20 Einträge. Offline lädt eine direkt aufgerufene Unterseite (`/ueben/…`).
 
-Gegen die Live-URL: dieselben Punkte im Browser (DevTools → Anwendung → Manifest und Service Worker), danach Lighthouse.
+Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem lokalen Build) dieselben Punkte: Antworten und Header wie oben. Der Service Worker hat Scope `/`, steuert die Seite und hat 20 Einträge im Precache. Offline laden `/ueben/mathe/raum-form` und die Karte.
+
+**Lighthouse 13.5** (Chromium von Playwright, `npx lighthouse <url>` bzw. mit `--preset=desktop`):
+
+| | Performance | Barrierefreiheit | Best Practices | SEO |
+|---|---|---|---|---|
+| Mobil (simuliertes langsames 4G, 4× CPU) | 73 | 100 | 100 | 91 |
+| Desktop | 100 | 100 | 100 | 91 |
+
+- Eine PWA-Kategorie gibt es seit Lighthouse 12 nicht mehr; Installierbarkeit muss anders geprüft werden.
+- Mobil-Performance: Der erste Inhalt kommt nach 4,3 s, weil die Seite erst nach dem JavaScript rendert (88 kB gzip) und die beiden Andika-Schnitte (zusammen 582 kB) Bandbreite teilen.
+- SEO 91 lag an der fehlenden `robots.txt` (der SPA-Fallback lieferte HTML). Seitdem gibt es `public/robots.txt`.
 
 ## 6. Bekanntes Verhalten
 
