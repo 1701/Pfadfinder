@@ -2,24 +2,24 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
-## 2026-10-11 – Aufgabe 5C: Üben-Flow (Einfachwahl, Zahleneingabe)
+## 2026-10-11 – Aufgabe 4C: Üben-Flow (Einfachwahl, Zahleneingabe)
 - **Gebaut:** Komponenten Button, ZiffernBlock, VorlesenButton, FeedbackPanel, Fortschritt. Format-Registry mit SingleChoice und NumberInput. Screens: Start (Liste der übbaren Bereiche), `/ueben/:fach/:bereich` (ItemScreen + Abschluss „Heute geschafft: 10 Fundstücke“). Dev-Seite `/dev/item/:id`. Der Store kommt über Context, die Repos sind Dexie. Tests: 13 Testing-Library-Dateien; Playwright `ueben.spec` (Flow, Neuladen, offline) und `layout.spec` (alle Items × 3 Zustände × 4 Viewports).
 - **Entscheidungen:** „Prüfen“ wird an derselben Stelle zu „Weiter“. Der Antwortbereich ist oben ausgerichtet, damit beim Prüfen nichts springt. Für 1024×660 wurden Abstände gekürzt; Optionen und Tasten sind 48 px hoch, die Schrift blieb gleich, „misconception auf Tipp“ war nicht nötig (knappster Fall: 46 px Luft). Zahlengruppen („10 000“) werden auf dem Bildschirm nie umbrochen. Neue Tokens: `spacing-action`, `spacing-key`. Manifest-Farben = Tokens. ARCHITECTURE §6: `attemptIndex` + `onChange(… | null)`.
 - **Offen:** WebKit läuft auf diesem Arch-Rechner nicht (fehlende Bibliotheken: flite, libbacktrace, ICU 74, libxml2.so.2; Docker ohne Rechte). Das Haupt-Bundle hat 541 kB (Vite-Warnung). Die Wegstriche im Fortschritt zur Entscheidung (siehe Bericht). Bereichsname „Rechtschreib-Tricks“ prüfen.
 - **CI:** kein Remote. Lokal sind `npm run check` (387 Tests) und `npm run e2e:chromium` (8/8) grün; WebKit-Projekte scheitern hier beim Start. Der e2e-Job in `ci.yml` installiert WebKit auf Ubuntu.
 
-## 2026-10-11 – Aufgabe 5A: Persistenz und Session-Store
+## 2026-10-11 – Aufgabe 4A: Persistenz und Session-Store
 - **Gebaut:** Dexie-DB `pfadfinder` v1 mit 7 Tabellen (Indizes `learnerId`, `[learnerId+bereich]`, `[learnerId+dueAt]`). Dazu 7 Repository-Interfaces mit einer Dexie- und einer In-Memory-Implementierung; dieselbe Contract-Suite läuft gegen beide (Dexie über fake-indexeddb). Neu: `domain/practice` (`recordPracticeAnswer`), `practice.ts` (laden → Domain → speichern), `backup.ts` (Export/Import ersetzt alles in einer Transaktion), Zustand-Store `session` und Content-Loader per `import.meta.glob`. Getestet: eine 10er-Session mit echtem Content, Fortsetzen nach Pause, Fehlerkiste am Folgetag.
 - **Entscheidungen:** Übbar sind nur Items mit Renderer, ein Bereich ab `MIN_ITEMS_FOR_PRACTICE = 10`. Eine Session wird erst mit der ersten Antwort gespeichert. Eine offene Session wird fortgesetzt, wenn alle ihre Attempts im gewählten Bereich liegen; der Bereich wird aus den Attempts abgeleitet, das Schema bleibt gleich. Eine falsche Übungsantwort setzt einen vorhandenen Fehlerkiste-Eintrag auf Stufe 1 zurück. Begriffe: Fundstück = bearbeitetes Item, Entdeckung = Sammelobjekt (PRODUCT §6).
 - **Offen:** Eine offene Session von gestern wird heute fortgesetzt und zählt dann ins „Heute geschafft“.
 - **CI:** kein Remote; lokal `npm run check` grün (333 Tests).
 
-## 2026-10-11 – Aufgabe 5.0: pre-commit
+## 2026-10-11 – Aufgabe 4 (Teil 0): pre-commit
 - **Gebaut:** `.githooks/pre-commit` prüft gestagete Dateien mit ESLint (`*.ts`, `*.tsx`, `*.js`) und `prettier --check`, danach wie bisher `content:validate`. Von Hand getestet: ein Lint-Fehler und ein Format-Fehler brechen den Commit ab.
 - **Entscheidungen:** Geprüft wird die Datei im Arbeitsverzeichnis, nicht der gestagete Stand (steht im Hook). Ab jetzt nennt jeder Eintrag den CI-Status (CLAUDE.md DoD 3).
 - **CI:** Es gibt kein Git-Remote, deshalb lief GitHub Actions nicht. Lokal ist `npm run check` grün.
 
-## 2026-10-11 – Aufgabe 4: Design-Tokens
+## 2026-10-11 – Aufgabe 4B: Design-Tokens
 - **Gebaut:** `tokens.css` nach Token-Plan v1 (`@theme static`; Tailwind-Standardfarben, -radien und -schatten entfernt). Andika 7.000 Regular und Bold mit OFL.txt unter `public/fonts/andika/`. Router mit `/dev/tokens` nur im Dev-Build. Tests: Kontraste aus `tokens.css` (AA), keine Hex- und Pixelwerte in `src/ui` und `src/app`. `check-bundle.ts` nach dem Build prüft Dev-Seiten und Schrift-Precache. `npm run screenshots`.
 - **Entscheidungen:** Eine gewählte Option bekommt `signal-soft` + `signal-edge`, volles Gelb gibt es nur für Prüfen/Weiter. Die Schrift ist einmalig heruntergeladen und committet; der Build geht nie ins Netz (Archiv SHA-256 `88ba6ea4…c070`). Keine Schatten. Keine zweite Schriftfamilie. `.claude/` ist von Prettier ausgenommen (seit dem Skill-Commit war `check` unbemerkt rot).
 - **Palette:** Wegmarke-Gelb und Seeblau, von Markus über die Farbprobe bestätigt (Alternativen waren Ocker/Sonnengelb und Fjordblau/Petrol).
