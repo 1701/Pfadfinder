@@ -2,6 +2,18 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-13 – Batch 4 daten-zufall: eingespielt, nicht committet
+- **Stand:** v2 (`batch-daten-zufall-v2.zip`) ersetzt v1 (neu: `dz-tabelle-2` 480 × 210, Feedback der 8 roten Items gestrafft, m-dz-3-002 kürzer). `content:validate`: 98 Items, 0 Fehler, 0 Warnungen. Manifest: 20 Items, Niveau 8/8/4; Einfachwahl 9, Zahleneingabe 7, Mehrfachwahl 2, Zuordnen 1, Kurzantwort 1; 16 mit Renderer. Die Karte zeigt „Daten und Zufall“ offen, eine Üben-Session mit Strichliste und Glücksrad lief durch (v1).
+- **Layout (mit 5d, alle 64 übbaren Items × 3 Zustände × 4 Viewports):** Rot ist nur **m-dz-3-002**: Safari quer −50 px („Richtig“) und −52 px („Noch nicht ganz“), iPad quer −0,4 px („Noch nicht ganz“). Das Band verdeckt die vierte Option. Vor 5d waren es 28 rote Messungen in 8 Items.
+- **SVG-Schrift bei 144 px Bildhöhe:** 18,0 px (Glücksräder) bis 20,8 px (Strichliste).
+- **Offen:** Der Content liegt im Stash `dz` und wird erst committet, wenn die Chat-Spur m-dz-3-002 kürzt; sonst wird der e2e-Job in CI rot (er prüft Safari quer).
+
+## 2026-10-13 – Aufgabe 5d: Item-Screen nach „Prüfen“
+- **Gebaut:** Nach „Prüfen“ wird der Ziffernblock entfernt, nicht gedimmt. Die Zahl bleibt mit Einheit in derselben Größe stehen, beim nächsten Item ist der Block wieder da. Die misconception steht hinter „Warum?“ (48 px wie die Optionen) und klappt im Band auf; Vorlesen liest sie weiter mit. Tests: Block nach Prüfen nicht im DOM, Zahl sichtbar, Block beim nächsten Item zurück; „Warum?“ nur bei „noch nicht“ (auch 0,5) und nur mit misconception; Vorlesen enthält sie zugeklappt.
+- **Entscheidungen:** „Warum?“ steht über „Weiter“ in der rechten Spalte, nicht unter der Erklärung. Dort ist neben dem Text ohnehin Platz, das Band wird zugeklappt also nicht höher; eine zweizeilige misconception wäre kaum höher gewesen als der Knopf. Nach dem Aufklappen geht der Fokus leise auf „Weiter“, weil der Knopf verschwindet. Die Layout-Helfer wählen „Prüfen“/„Weiter“ jetzt als letzten direkten Knopf des Bands. Aufgeklappt darf das Band überlappen, die Seite scrollt nicht (gemessen).
+- **Offen:** PRODUCT §5.6 sagt „häufiger Denkfehler benannt“; er ist jetzt einen Tipp entfernt. Soll das dort stehen?
+- **CI:** [CI #38449173350](https://github.com/1701/Pfadfinder/actions/runs/38449173350) grün (6e56d67), Workers Builds grün; 498 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (17/17, Layout in allen vier Viewports).
+
 ## 2026-10-12 – Schema 1.0.6: SVG-Schrift relativ zur viewBox, Layout-Test in CI
 - **Gebaut:** SVG-Schrift muss mindestens viewBox-Höhe / 8 groß sein, statt fest 22 (144 px × font / Höhe ≥ 18 px). CONTENT_SCHEMA §7, CHANGELOG 1.0.6, Validator; jede zu kleine Größe wird je Datei einmal gemeldet. `svg-schrift-patch.zip` ist eingespielt (gm-uhr-1 Ziffern 33 mit kürzeren Zeigern, die „9“ ist frei; rf-spiegel-1 24; rf-wuerfelnetz-1 38). Alle SVGs halten die neue Regel ein; die Gegenprobe mit der alten Uhr schlägt an. Der Layout-Test läuft in CI nur in 1024×660 und 768×900, lokal in allen vier (ARCHITECTURE §8).
 - **Befund:** Lokal liefen zwei Layout-Tests in die Zeitgrenze. Der Vite-Entwicklungsserver lieferte unter paralleler Last einmal „Failed to fetch dynamically imported module“ (`daten-zufall.json`), und die Testseite wartete dann ewig. Ein erneuter Lauf war grün. Jetzt lädt der Test eine Seite, die nach 20 s nicht steht, einmal neu, und die Zeitgrenze wächst mit der Zahl der Items.
