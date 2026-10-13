@@ -42,7 +42,7 @@ const pictureItem = ITEMS.filter((i) => i.stimulus?.assetId).sort(
  * forever, so it gets one reload instead of hanging until the test times out.
  */
 async function openItem(page: Page, url: string) {
-  const band = page.locator('[data-region="band"] > button');
+  const band = page.locator('[data-region="band"] > button:last-of-type');
   await page.goto(url);
   try {
     await band.waitFor({ timeout: 20_000 });

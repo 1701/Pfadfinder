@@ -17,15 +17,39 @@ describe('FeedbackPanel', () => {
     expect(screen.queryByText(feedback.misconception!)).toBeNull();
   });
 
-  it('says "Noch nicht ganz", explains and names the misconception – never "Falsch"', () => {
+  it('confirms a correct answer without "Warum?"', () => {
+    render(<FeedbackPanel correct feedback={feedback} onNext={() => {}} />);
+    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+  });
+
+  it('says "Noch nicht ganz" and explains; the misconception waits behind "Warum?"', async () => {
+    fireEvent.pointerDown(document.body);
     const { container } = render(
       <FeedbackPanel correct={false} feedback={feedback} onNext={() => {}} />,
     );
     expect(screen.getByRole('heading').textContent).toBe('Noch nicht ganz.');
     expect(container.textContent).toContain(feedback.incorrect);
-    expect(container.textContent).toContain(feedback.misconception);
+    expect(container.textContent).not.toContain(feedback.misconception);
     expect(container.textContent).not.toMatch(/falsch/i);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Warum?' }));
     expect(screen.getByText(feedback.misconception!).className).toContain('text-ink-muted');
+    expect(screen.getByRole('status').textContent).toContain(feedback.misconception);
+    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+    // The button is gone, so the focus moves on to "Weiter" instead of falling to the page.
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Weiter' }));
+  });
+
+  it('has no "Warum?" when the item names no misconception', () => {
+    const { misconception: _, ...withoutMisconception } = feedback;
+    render(<FeedbackPanel correct={false} feedback={withoutMisconception} onNext={() => {}} />);
+    expect(screen.getByRole('heading').textContent).toBe('Noch nicht ganz.');
+    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+  });
+
+  it('shows "Warum?" for a half-right answer, too ("noch nicht ganz")', () => {
+    render(<FeedbackPanel correct={0.5} feedback={feedback} onNext={() => {}} />);
+    expect(screen.getByRole('button', { name: 'Warum?' })).toBeTruthy();
   });
 
   it('moves focus to "Weiter" without a ring after a tap, with one after a key press', () => {
@@ -72,7 +96,7 @@ describe('FeedbackPanel', () => {
       return synth;
     }
 
-    it('reads verdict, explanation and misconception; a second tap stops', async () => {
+    it('reads verdict, explanation and the closed misconception; a second tap stops', async () => {
       const synth = installSpeech();
       render(<FeedbackPanel correct={false} feedback={feedback} onNext={() => {}} />);
       await userEvent.click(screen.getByRole('button', { name: 'Vorlesen' }));

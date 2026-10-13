@@ -56,7 +56,7 @@ describe('NumberInput', () => {
     expect(onChange).toHaveBeenLastCalledWith({ value: 2.5 });
   });
 
-  it('shows the solution after a wrong answer and locks the pad', () => {
+  it('shows the solution after a wrong answer; the pad is gone, the typed number stays', () => {
     render(
       <NumberInput
         item={numberInput}
@@ -73,7 +73,29 @@ describe('NumberInput', () => {
         (_, el) => el?.tagName === 'P' && el.textContent === 'Richtig ist: 7\u00a0603',
       ),
     ).toBeTruthy();
-    expect((screen.getByRole('button', { name: '1' }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.queryByRole('group', { name: 'Ziffernblock' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '1' })).toBeNull();
+  });
+
+  it('keeps the number with its unit after a right answer, without the pad', () => {
+    const item: ItemOf<'number-input'> = {
+      ...numberInput,
+      payload: { maxDigits: 4, unit: 'm' },
+      solution: { value: 25 },
+    };
+    render(
+      <NumberInput
+        item={item}
+        attemptIndex={0}
+        answer={{ value: 25 }}
+        onChange={() => {}}
+        disabled
+        revealed={{ correct: true, solution: item.solution }}
+      />,
+    );
+    expect(screen.getByLabelText('Deine Zahl').textContent).toBe('25');
+    expect(screen.getByText('m')).toBeTruthy();
+    expect(screen.queryByRole('group', { name: 'Ziffernblock' })).toBeNull();
   });
 });
 

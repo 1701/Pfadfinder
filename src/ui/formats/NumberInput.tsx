@@ -1,6 +1,7 @@
 // Zahleneingabe: digit pad only. The typed text stays local; the answer is reported once it is
 // a complete German number (parseGermanNumber), otherwise null so Prüfen stays disabled.
-// Landscape: field left, pad right (saves height); portrait: stacked.
+// Landscape: field left, pad right (saves height); portrait: stacked. After checking the pad
+// goes away (not dimmed): the typed number stays, and the feedback gets the room.
 
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -49,13 +50,15 @@ export function NumberInput({
           </p>
         )}
       </div>
-      <ZiffernBlock
-        value={draft}
-        onChange={update}
-        allowDecimal={allowDecimal}
-        maxDigits={maxDigits}
-        disabled={disabled}
-      />
+      {!revealed && (
+        <ZiffernBlock
+          value={draft}
+          onChange={update}
+          allowDecimal={allowDecimal}
+          maxDigits={maxDigits}
+          disabled={disabled}
+        />
+      )}
     </div>
   );
 }

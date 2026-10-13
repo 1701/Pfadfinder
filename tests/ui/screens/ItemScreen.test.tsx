@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 import '../dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import type { Correctness } from '../../../src/domain/evaluation';
 import { ItemScreen } from '../../../src/ui/screens/ItemScreen';
-import { singleChoice } from '../../fixtures/items';
+import { numberInput, singleChoice } from '../../fixtures/items';
 
 function Harness({ onSubmit }: { onSubmit(): void }) {
   const [answer, setAnswer] = useState<unknown>(null);
@@ -57,7 +57,34 @@ describe('ItemScreen', () => {
     expect(screen.queryByRole('button', { name: 'Prüfen' })).toBeNull();
     const band = container.querySelector('[data-region="band"]')!;
     expect(band.textContent).toContain('Noch nicht ganz.');
-    expect(band.querySelector('button')!.textContent).toBe('Weiter');
+    expect(within(band as HTMLElement).getByRole('button', { name: 'Weiter' })).toBeTruthy();
     expect(container.textContent).not.toMatch(/falsch/i);
+  });
+
+  it('hides the digit pad after Prüfen and brings it back with the next item', () => {
+    const screenFor = (item: typeof numberInput, correct: Correctness | null) => (
+      <MemoryRouter>
+        <ItemScreen
+          item={item}
+          attemptIndex={0}
+          answer={correct === null ? null : { value: 7503 }}
+          onAnswer={() => {}}
+          phase={correct === null ? 'answering' : 'feedback'}
+          correct={correct}
+          progress={{ current: 3, done: 3, total: 10 }}
+          readAloud
+          onSubmit={() => {}}
+          onNext={() => {}}
+          pauseTo="/"
+        />
+      </MemoryRouter>
+    );
+    const { rerender } = render(screenFor(numberInput, false));
+    expect(screen.queryByRole('group', { name: 'Ziffernblock' })).toBeNull();
+    expect(screen.getByLabelText('Deine Zahl').textContent).toBe('7\u00a0503');
+
+    rerender(screenFor({ ...numberInput, id: `${numberInput.id}-next` }, null));
+    expect(screen.getByRole('group', { name: 'Ziffernblock' })).toBeTruthy();
+    expect(screen.getByLabelText('Deine Zahl').textContent).toBe('');
   });
 });

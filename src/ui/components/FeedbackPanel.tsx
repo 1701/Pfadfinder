@@ -1,9 +1,11 @@
 // The checking moment (pfadfinder-ui: the one memorable element of the item screen).
 // Same band as the Prüfen button: "Weiter" appears exactly where "Prüfen" was, the message
 // rises next to it. Never red, never an X, never "Falsch". The message can be read aloud.
+// The misconception waits behind "Warum?" (above Weiter, where the band has room anyway), so
+// the band stays low; once the child opens it, the band may grow over the answer.
 
 import clsx from 'clsx';
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { speakable } from '../../domain/content/read-aloud';
 import type { Feedback } from '../../domain/content';
 import type { Correctness } from '../../domain/evaluation';
@@ -36,6 +38,7 @@ export function FeedbackPanel({
   const misconception = right ? undefined : feedback.misconception;
   const messageId = useId();
   const next = useRef<HTMLButtonElement>(null);
+  const [why, setWhy] = useState(false);
 
   useEffect(() => focusQuietly(next.current), []);
 
@@ -44,11 +47,15 @@ export function FeedbackPanel({
     .map(speakable)
     .join(' ');
 
+  const asking = Boolean(misconception) && !why;
+
+  // Weiter stays a direct child of the band, in the same place as Prüfen; "Warum?" sits above it.
   return (
-    <div {...rest} className="flex items-end gap-lg">
+    <div {...rest} className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-lg gap-y-xs">
       <section
         className={clsx(
-          'feedback-in flex min-w-0 flex-1 items-start gap-md rounded-sheet px-lg py-sm',
+          'feedback-in flex items-start gap-md rounded-sheet px-lg py-sm',
+          asking && 'row-span-2',
           right ? 'bg-correct-surface' : 'bg-notyet-surface',
         )}
       >
@@ -64,10 +71,28 @@ export function FeedbackPanel({
             {verdict}
           </h2>
           <p>{nb(explanation)}</p>
-          {misconception && <p className="text-ink-muted">{nb(misconception)}</p>}
+          {misconception && why && <p className="text-ink-muted">{nb(misconception)}</p>}
         </div>
       </section>
-      <Button ref={next} variant="primary" onClick={onNext} aria-describedby={messageId}>
+      {asking && (
+        <Button
+          className="col-start-2"
+          onClick={() => {
+            setWhy(true);
+            // The button goes away; focus must not fall back to the page.
+            focusQuietly(next.current);
+          }}
+        >
+          Warum?
+        </Button>
+      )}
+      <Button
+        ref={next}
+        variant="primary"
+        className="col-start-2"
+        onClick={onNext}
+        aria-describedby={messageId}
+      >
         Weiter
       </Button>
     </div>

@@ -27,7 +27,7 @@ export async function expectFitsScreen(page: Page, label: string) {
   const m = await page.evaluate(() => {
     const answer = document.querySelector('[data-region="answer"]')?.firstElementChild;
     const band = document.querySelector('[data-region="band"]');
-    const button = band?.querySelector(':scope > button');
+    const button = band?.querySelector(':scope > button:last-of-type');
     if (!answer || !band || !button) return null;
     return {
       overflow: document.documentElement.scrollHeight - window.innerHeight,
