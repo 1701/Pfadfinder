@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.7 – 2026-10-13
+- §7 Bilder: Bei `single-choice` mit Bild hat jede Option höchstens 24 Zeichen (zweispaltige Darstellung). Befund Batch 4: In Safari quer verdeckte die Rückmeldung einspaltige Optionen. Nur dokumentiert, der Validator prüft es nicht (Roadmap, PRODUCT §11).
+- §7 Niveau: neuer Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“ mit der Zuordnung I/II/III nach dem Stoff bis Ende Klasse 3. Präzisierung, keine Feldänderung.
+
 ### 1.0.6 – 2026-10-12
 - §7 Bilder: Mindestschrift relativ zur viewBox statt fest: `font-size` ≥ viewBox-Höhe / 8 (vorher ≥ 22). Begründung: 144 px kleinste Bildhöhe × font / viewBox-Höhe ≥ 18 px. Eine 260 hohe Uhr braucht jetzt 32,5 statt 22. Keine Feldänderung.
 

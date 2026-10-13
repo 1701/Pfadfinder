@@ -186,7 +186,7 @@ Nicht drin: alles aus Abschnitt 4 und Abschnitt 11.
 
 ## 11. Roadmap (Big Picture)
 
-- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch"
+- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch", Validator prüft die 24-Zeichen-Regel für Optionen bei Bild-Items (CONTENT_SCHEMA §7, seit 1.0.7 nur dokumentiert)
 - **v2:** Optionale Accounts (Eltern), Multi-Kind, Sync über Geräte, Eltern-Dashboard, Content-Editor mit Review-Workflow, Item-Statistiken (Basis für IRT-Kalibrierung)
 - **v3:** Lehrkräfte-Modus (Klasse anlegen, Übungspläne), weitere Bundesländer/Übergangsformate (Bayern Übertritt, NRW), Monetarisierungsoptionen prüfen (Schullizenz, Eltern-Premium, Non-Profit/Spenden)
 

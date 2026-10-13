@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-13 – Schema 1.0.7: Optionslänge bei Bildern, Kalibrierung Mathe
+- **Dokumentiert:** CONTENT_SCHEMA §7 Bilder: `single-choice` mit Bild hat Optionen mit höchstens 24 Zeichen (zweispaltig, Befund Batch 4). §7 Niveau: Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“. CHANGELOG 1.0.7, PRODUCT §11 nennt die Validator-Prüfung als Roadmap. Kein Code, der Validator bleibt unverändert.
+- **Entscheidungen:** Die alte Zeile „II: … Information aus Tabelle/Text/Bild zu holen“ bleibt stehen; der neue Absatz sagt, dass ein einzelner abgelesener Wert in Mathe I ist.
+- **Offen:** Zwei aktive Items halten die 24-Zeichen-Regel nicht ein, sind aber im Layout-Test grün: m-dz-2-006 (Optionen mit 37, 37, 39 Zeichen) und m-dz-3-001 (25). Kürzen oder als Ausnahme lassen, entscheidet die Chat-Spur.
+- **CI:** nicht abgewartet (Auftrag). Lokal grün: `npm run check`.
+
 ## 2026-10-13 – Tipp im Band heißt „Falle“
 - **Geändert:** Der Knopf vor der misconception heißt „Falle“ statt „Warum?“; der zugängliche Name ist „Falle zeigen“ und beginnt mit dem sichtbaren Wort (Label in Name). Die Texte stehen in `src/ui/text/feedback.ts`. Verhalten unverändert: nur bei „noch nicht“ mit misconception, klappt im Band auf, Vorlesen liest sie mit. PRODUCT §5.6 nachgezogen. Tests angepasst, dazu ein Test für Label in Name; E2E-Selektoren nutzten „Warum?“ nicht.
 - **Offen:** Der pfadfinder-ui-Skill verlangt, dass Buttons sagen, was passiert. „Falle“ ist ein Nomen; für prüfungsängstliche Kinder im Pilot beobachten, ob das Wort verstanden wird und nicht beunruhigt.
