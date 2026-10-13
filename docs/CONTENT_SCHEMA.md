@@ -204,12 +204,12 @@ Regeln: Summe `estimatedSeconds` zwischen 35 und 42 Min.; kein `short-answer`-An
 
 **Niveau**
 - I: ein Schritt, bekanntes Verfahren
-- II: zwei Schritte oder Information aus Tabelle/Text/Bild zu holen
+- II: zwei Schritte, oder zwei Informationen aus Tabelle/Text/Bild verknüpfen
 - III: begründen, Fehler in fremder Lösung finden, Regel übertragen
 - Zielverteilung je Bereich im Pool: 12 / 12 / 6 (bei 30 Items)
 
 **Kalibrierung Mathe (Pilot Oktober 2026)**
-- Kompass 4 kommt nach etwa 10 Schulwochen Klasse 4. Diese Zuordnung präzisiert die Niveau-Liste oben für Mathe; ein einzelner Wert aus Tabelle oder Diagramm ist I, nicht II
+- Kompass 4 kommt nach etwa 10 Schulwochen Klasse 4
 - I: sicher bis Ende Klasse 3 unterrichtet: Zahlenraum 1 000, schriftlich dreistellig, Einmaleins, Daten ablesen, sicher/möglich/unmöglich
 - II: vierstellig, Überschlag, zwei Werte verknüpfen
 - III: Zehntausender und größer, Begründen, Fehler in fremder Darstellung finden

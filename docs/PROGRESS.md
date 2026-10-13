@@ -2,10 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-13 – daten-zufall v5, Niveau-Zeile II
+- **Content:** `daten-zufall.json` v5: Nur die Optionen von m-dz-2-006 und m-dz-3-001 sind gekürzt, Lösungen und IDs bleiben. Damit halten alle 10 `single-choice`-Items mit Bild die 24-Zeichen-Regel ein. `content:validate`: 98 Items, 0 Fehler, 0 Warnungen; das Manifest bleibt gleich.
+- **Schema (bleibt 1.0.7):** §7 Niveau, Zeile II: „zwei Schritte, oder zwei Informationen aus Tabelle/Text/Bild verknüpfen“. Der abgrenzende Satz im Kalibrierungsabsatz ist gestrichen. CHANGELOG 1.0.7 ergänzt.
+- **Offen:** m-dz-2-006 fragt nach Wahrscheinlichkeit („Also ist die 2 wahrscheinlicher“), die Optionen sagen jetzt „kommt öfter“. Das ist dieselbe Wortwahl, die m-dz-3-002 als Denkfehler behandelt (Häufigkeit ≠ Wahrscheinlichkeit). Im Pilot beobachten.
 ## 2026-10-13 – Schema 1.0.7: Optionslänge bei Bildern, Kalibrierung Mathe
 - **Dokumentiert:** CONTENT_SCHEMA §7 Bilder: `single-choice` mit Bild hat Optionen mit höchstens 24 Zeichen (zweispaltig, Befund Batch 4). §7 Niveau: Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“. CHANGELOG 1.0.7, PRODUCT §11 nennt die Validator-Prüfung als Roadmap. Kein Code, der Validator bleibt unverändert.
-- **Entscheidungen:** Die alte Zeile „II: … Information aus Tabelle/Text/Bild zu holen“ bleibt stehen; der neue Absatz sagt, dass ein einzelner abgelesener Wert in Mathe I ist.
-- **Offen:** Zwei aktive Items halten die 24-Zeichen-Regel nicht ein, sind aber im Layout-Test grün: m-dz-2-006 (Optionen mit 37, 37, 39 Zeichen) und m-dz-3-001 (25). Kürzen oder als Ausnahme lassen, entscheidet die Chat-Spur.
+- **Entscheidungen:** Die alte Zeile „II: … Information aus Tabelle/Text/Bild zu holen“ blieb zunächst stehen, ein Satz im neuen Absatz grenzte ab. Ersetzt durch den Eintrag darüber.
+- **Offen:** Zwei aktive Items hielten die 24-Zeichen-Regel nicht ein: m-dz-2-006 und m-dz-3-001. Erledigt durch den Eintrag darüber.
 - **CI:** nicht abgewartet (Auftrag). Lokal grün: `npm run check`.
 
 ## 2026-10-13 – Tipp im Band heißt „Falle“

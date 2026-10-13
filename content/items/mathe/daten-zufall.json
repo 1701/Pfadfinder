@@ -581,19 +581,19 @@
       "options": [
         {
           "id": "a",
-          "text": "Die 2 ist wahrscheinlicher als die 1."
+          "text": "2 kommt öfter als 1."
         },
         {
           "id": "b",
-          "text": "Die 1 ist wahrscheinlicher als die 2."
+          "text": "1 kommt öfter als 2."
         },
         {
           "id": "c",
-          "text": "Die 3 ist unmöglich."
+          "text": "3 ist unmöglich."
         },
         {
           "id": "d",
-          "text": "Alle Zahlen sind gleich wahrscheinlich."
+          "text": "Alle gleich häufig."
         }
       ]
     },
@@ -783,7 +783,7 @@
         },
         {
           "id": "d",
-          "text": "Alle Säulen sind richtig."
+          "text": "Alle sind richtig."
         }
       ],
       "keepOrder": true
