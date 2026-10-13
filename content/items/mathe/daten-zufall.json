@@ -572,7 +572,7 @@
     "format": "single-choice",
     "status": "draft",
     "stimulus": {
-      "text": "Amira dreht das Glücksrad.",
+      "text": "Amira dreht das Glücksrad sehr oft.",
       "assetId": "dz-gluecksrad-2",
       "assetAlt": "Ein Glücksrad mit acht gleich großen Feldern. In jedem Feld steht eine Zahl."
     },
@@ -601,7 +601,7 @@
       "optionId": "a"
     },
     "feedback": {
-      "correct": "Genau! Die 2 steht auf 4 Feldern, die 1 auf 3 Feldern. Also ist die 2 wahrscheinlicher.",
+      "correct": "Genau! Die 2 hat 4 Felder, die 1 nur 3. Bei vielen Drehungen kommt die 2 öfter, sie ist wahrscheinlicher.",
       "incorrect": "Zähle für jede Zahl die Felder. Mehr Felder heißt wahrscheinlicher. Prüfe dann jede Aussage.",
       "misconception": "Die 3 hat nur ein Feld, aber ein Feld reicht: Sie ist möglich, nicht unmöglich."
     },
@@ -848,7 +848,7 @@
     "feedback": {
       "correct": "Genau! Alle sechs Zahlen sind gleich wahrscheinlich. Dass die 4 öfter kam, ist Zufall.",
       "incorrect": "Schau auf den Würfel, nicht auf die Tabelle. Hat eine Seite mehr Chancen als die anderen?",
-      "misconception": "Die Tabelle zeigt nur, was diesmal passiert ist. Beim nächsten Mal kann die 2 vorne liegen."
+      "misconception": "20 Würfe sind wenige. Die Tabelle zeigt nur, was diesmal passiert ist. Beim nächsten Mal kann die 2 vorne liegen."
     },
     "tags": [
       "zufall",

@@ -2,10 +2,10 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
-## 2026-10-13 – daten-zufall v5, Niveau-Zeile II
+## 2026-10-13 – daten-zufall v5 und v6, Niveau-Zeile II
 - **Content:** `daten-zufall.json` v5: Nur die Optionen von m-dz-2-006 und m-dz-3-001 sind gekürzt, Lösungen und IDs bleiben. Damit halten alle 10 `single-choice`-Items mit Bild die 24-Zeichen-Regel ein. `content:validate`: 98 Items, 0 Fehler, 0 Warnungen; das Manifest bleibt gleich.
 - **Schema (bleibt 1.0.7):** §7 Niveau, Zeile II: „zwei Schritte, oder zwei Informationen aus Tabelle/Text/Bild verknüpfen“. Der abgrenzende Satz im Kalibrierungsabsatz ist gestrichen. CHANGELOG 1.0.7 ergänzt.
-- **Offen:** m-dz-2-006 fragt nach Wahrscheinlichkeit („Also ist die 2 wahrscheinlicher“), die Optionen sagen jetzt „kommt öfter“. Das ist dieselbe Wortwahl, die m-dz-3-002 als Denkfehler behandelt (Häufigkeit ≠ Wahrscheinlichkeit). Im Pilot beobachten.
+- **v6 (nur Texte):** m-dz-2-006 sagt jetzt „sehr oft“ gedreht, und die Rückmeldung verbindet „öfter“ bei vielen Drehungen mit „wahrscheinlicher“. m-dz-3-002 nennt in der misconception zusätzlich, dass 20 Würfe wenige sind. Optionen und Lösungen unverändert, Layout-Test in allen vier Viewports grün. Damit ist der Widerspruch zwischen „kommt öfter“ (m-dz-2-006) und dem Denkfehler aus m-dz-3-002 aufgelöst.
 - **CI:** [CI #38462576304](https://github.com/1701/Pfadfinder/actions/runs/38462576304) grün (d0ec7a2), Workers Builds grün; 500 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout-Test in allen vier Viewports.
 ## 2026-10-13 – Schema 1.0.7: Optionslänge bei Bildern, Kalibrierung Mathe
 - **Dokumentiert:** CONTENT_SCHEMA §7 Bilder: `single-choice` mit Bild hat Optionen mit höchstens 24 Zeichen (zweispaltig, Befund Batch 4). §7 Niveau: Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“. CHANGELOG 1.0.7, PRODUCT §11 nennt die Validator-Prüfung als Roadmap. Kein Code, der Validator bleibt unverändert.
