@@ -8,6 +8,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **SVG-Schrift bei 144 px Bildhöhe:** 18,0 px (Glücksräder) bis 20,8 px (Strichliste).
 - **Entschieden:** PRODUCT §5.6 nennt jetzt „Warum?“: Der Denkfehler steht hinter dem Tipp und wird beim Vorlesen immer mitgelesen.
 - **Offen:** Pilotfragen aus dem Batch-README (Strichbündel als 5, Säule zwischen Gitterlinien, „wahrscheinlich“ oder „am wahrscheinlichsten“).
+- **CI:** [CI #38456825589](https://github.com/1701/Pfadfinder/actions/runs/38456825589) grün (431dca5), Workers Builds grün; 498 Tests, e2e 21 bestanden. Lokal grün: `npm run check`, Layout-Test in allen vier Viewports.
 
 ## 2026-10-13 – Aufgabe 5d: Item-Screen nach „Prüfen“
 - **Gebaut:** Nach „Prüfen“ wird der Ziffernblock entfernt, nicht gedimmt. Die Zahl bleibt mit Einheit in derselben Größe stehen, beim nächsten Item ist der Block wieder da. Die misconception steht hinter „Warum?“ (48 px wie die Optionen) und klappt im Band auf; Vorlesen liest sie weiter mit. Tests: Block nach Prüfen nicht im DOM, Zahl sichtbar, Block beim nächsten Item zurück; „Warum?“ nur bei „noch nicht“ (auch 0,5) und nur mit misconception; Vorlesen enthält sie zugeklappt.
