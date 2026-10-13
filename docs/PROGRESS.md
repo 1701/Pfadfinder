@@ -8,6 +8,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **v6 (nur Texte):** m-dz-2-006 sagt jetzt „sehr oft“ gedreht, und die Rückmeldung verbindet „öfter“ bei vielen Drehungen mit „wahrscheinlicher“. m-dz-3-002 nennt in der misconception zusätzlich, dass 20 Würfe wenige sind. Optionen und Lösungen unverändert, Layout-Test in allen vier Viewports grün. Damit ist der Widerspruch zwischen „kommt öfter“ (m-dz-2-006) und dem Denkfehler aus m-dz-3-002 aufgelöst.
 - **CI:** [CI #38462576304](https://github.com/1701/Pfadfinder/actions/runs/38462576304) grün (d0ec7a2), Workers Builds grün; 500 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout-Test in allen vier Viewports.
 - **CI v6:** [CI #38465819671](https://github.com/1701/Pfadfinder/actions/runs/38465819671) grün (dace227), Workers Builds grün; 500 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline).
+
 ## 2026-10-13 – Schema 1.0.7: Optionslänge bei Bildern, Kalibrierung Mathe
 - **Dokumentiert:** CONTENT_SCHEMA §7 Bilder: `single-choice` mit Bild hat Optionen mit höchstens 24 Zeichen (zweispaltig, Befund Batch 4). §7 Niveau: Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“. CHANGELOG 1.0.7, PRODUCT §11 nennt die Validator-Prüfung als Roadmap. Kein Code, der Validator bleibt unverändert.
 - **Entscheidungen:** Die alte Zeile „II: … Information aus Tabelle/Text/Bild zu holen“ blieb zunächst stehen, ein Satz im neuen Absatz grenzte ab. Ersetzt durch den Eintrag darüber.
