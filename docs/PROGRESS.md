@@ -2,6 +2,10 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-13 – Tipp im Band heißt „Falle“
+- **Geändert:** Der Knopf vor der misconception heißt „Falle“ statt „Warum?“; der zugängliche Name ist „Falle zeigen“ und beginnt mit dem sichtbaren Wort (Label in Name). Die Texte stehen in `src/ui/text/feedback.ts`. Verhalten unverändert: nur bei „noch nicht“ mit misconception, klappt im Band auf, Vorlesen liest sie mit. PRODUCT §5.6 nachgezogen. Tests angepasst, dazu ein Test für Label in Name; E2E-Selektoren nutzten „Warum?“ nicht.
+- **Offen:** Der pfadfinder-ui-Skill verlangt, dass Buttons sagen, was passiert. „Falle“ ist ein Nomen; für prüfungsängstliche Kinder im Pilot beobachten, ob das Wort verstanden wird und nicht beunruhigt.
+
 ## 2026-10-13 – Batch 4 daten-zufall
 - **Eingespielt:** `daten-zufall.json` v4 und 10 SVGs `dz-*`. v2 brachte `dz-tabelle-2` mit 480 × 210 und gestrafftes Feedback der 8 Items, die vor 5d rot waren. v3 und v4 änderten nur m-dz-3-002. `content:validate`: 98 Items, 0 Fehler, 0 Warnungen. Manifest: 20 Items, Niveau 8/8/4; Einfachwahl 9, Zahleneingabe 7, Mehrfachwahl 2, Zuordnen 1, Kurzantwort 1; 16 mit Renderer. „Daten und Zufall“ ist auf der Karte offen, eine Üben-Session mit Strichliste und Glücksrad lief durch.
 - **Layout:** Lokal grün in allen vier Viewports. m-dz-3-002 hat in Safari quer mindestens +59,6 px Luft (vorher −52 px), weil alle Optionen ≤ 24 Zeichen haben und zweispaltig stehen. Mit v3 brachte kürzerer Text nichts, weil sich die Zahl der Zeilen nicht änderte.

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FeedbackPanel } from '../../../src/ui/components/FeedbackPanel';
 import { QUIET_FOCUS } from '../../../src/ui/focus';
+import { FALLE_LABEL } from '../../../src/ui/text/feedback';
 import { singleChoice } from '../../fixtures/items';
 
 const { feedback } = singleChoice;
@@ -17,12 +18,12 @@ describe('FeedbackPanel', () => {
     expect(screen.queryByText(feedback.misconception!)).toBeNull();
   });
 
-  it('confirms a correct answer without "Warum?"', () => {
+  it('confirms a correct answer without "Falle"', () => {
     render(<FeedbackPanel correct feedback={feedback} onNext={() => {}} />);
-    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+    expect(screen.queryByRole('button', { name: FALLE_LABEL })).toBeNull();
   });
 
-  it('says "Noch nicht ganz" and explains; the misconception waits behind "Warum?"', async () => {
+  it('says "Noch nicht ganz" and explains; the misconception waits behind "Falle"', async () => {
     fireEvent.pointerDown(document.body);
     const { container } = render(
       <FeedbackPanel correct={false} feedback={feedback} onNext={() => {}} />,
@@ -32,24 +33,25 @@ describe('FeedbackPanel', () => {
     expect(container.textContent).not.toContain(feedback.misconception);
     expect(container.textContent).not.toMatch(/falsch/i);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Warum?' }));
+    expect(screen.getByRole('button', { name: FALLE_LABEL }).textContent).toBe('Falle');
+    await userEvent.click(screen.getByRole('button', { name: FALLE_LABEL }));
     expect(screen.getByText(feedback.misconception!).className).toContain('text-ink-muted');
     expect(screen.getByRole('status').textContent).toContain(feedback.misconception);
-    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+    expect(screen.queryByRole('button', { name: FALLE_LABEL })).toBeNull();
     // The button is gone, so the focus moves on to "Weiter" instead of falling to the page.
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Weiter' }));
   });
 
-  it('has no "Warum?" when the item names no misconception', () => {
+  it('has no "Falle" when the item names no misconception', () => {
     const { misconception: _, ...withoutMisconception } = feedback;
     render(<FeedbackPanel correct={false} feedback={withoutMisconception} onNext={() => {}} />);
     expect(screen.getByRole('heading').textContent).toBe('Noch nicht ganz.');
-    expect(screen.queryByRole('button', { name: 'Warum?' })).toBeNull();
+    expect(screen.queryByRole('button', { name: FALLE_LABEL })).toBeNull();
   });
 
-  it('shows "Warum?" for a half-right answer, too ("noch nicht ganz")', () => {
+  it('shows "Falle" for a half-right answer, too ("noch nicht ganz")', () => {
     render(<FeedbackPanel correct={0.5} feedback={feedback} onNext={() => {}} />);
-    expect(screen.getByRole('button', { name: 'Warum?' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: FALLE_LABEL })).toBeTruthy();
   });
 
   it('moves focus to "Weiter" without a ring after a tap, with one after a key press', () => {

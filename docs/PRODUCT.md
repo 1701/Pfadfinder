@@ -117,7 +117,7 @@ Die Schwellen sind absichtlich identisch mit den Kompass-Niveaugrenzen. Kein IRT
 ### 5.6 Feedback-Design
 
 - Richtig: kurze Bestätigung, bei Niveau II/III zusätzlich "so geht's auch" (alternativer Lösungsweg)
-- Falsch: nie rotes X, nie "Falsch!". Stattdessen "Noch nicht ganz" + Erklärung in Kindersprache (max. 3 Sätze) + häufiger Denkfehler benannt ("Viele vergessen hier den Übertrag"). Der Denkfehler steht hinter dem Tipp „Warum?" im Band und wird beim Vorlesen immer mitgelesen.
+- Falsch: nie rotes X, nie "Falsch!". Stattdessen "Noch nicht ganz" + Erklärung in Kindersprache (max. 3 Sätze) + häufiger Denkfehler benannt ("Viele vergessen hier den Übertrag"). Der Denkfehler steht hinter dem Tipp „Falle" im Band und wird beim Vorlesen immer mitgelesen.
 - Jede Erklärung ist Teil des Items (siehe `CONTENT_SCHEMA.md`), nicht generisch
 
 ## 6. Gamification-Prinzipien

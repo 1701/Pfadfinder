@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { BEREICHE, FAECHER } from '../../src/domain/content';
 import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/number-format';
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
+import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
 const NB = '\u00a0';
@@ -13,6 +14,13 @@ describe('child-facing names', () => {
       expect(BEREICH_NAME[bereich]).toBeTruthy();
       expect(BEREICH_NAME[bereich].length).toBeLessThanOrEqual(24);
     }
+  });
+});
+
+describe('the tip in the feedback band', () => {
+  it('has an accessible name that starts with the visible word', () => {
+    expect(FALLE_TEXT).toBe('Falle');
+    expect(FALLE_LABEL.startsWith(FALLE_TEXT)).toBe(true);
   });
 });
 

@@ -1,7 +1,7 @@
 // The checking moment (pfadfinder-ui: the one memorable element of the item screen).
 // Same band as the Prüfen button: "Weiter" appears exactly where "Prüfen" was, the message
 // rises next to it. Never red, never an X, never "Falsch". The message can be read aloud.
-// The misconception waits behind "Warum?" (above Weiter, where the band has room anyway), so
+// The misconception waits behind "Falle" (above Weiter, where the band has room anyway), so
 // the band stays low; once the child opens it, the band may grow over the answer.
 
 import clsx from 'clsx';
@@ -10,6 +10,7 @@ import { speakable } from '../../domain/content/read-aloud';
 import type { Feedback } from '../../domain/content';
 import type { Correctness } from '../../domain/evaluation';
 import { focusQuietly } from '../focus';
+import { FALLE_LABEL, FALLE_TEXT } from '../text/feedback';
 import { keepNumbersTogether as nb } from '../text/numbers';
 import { Button } from './Button';
 import { VorlesenButton } from './VorlesenButton';
@@ -49,7 +50,7 @@ export function FeedbackPanel({
 
   const asking = Boolean(misconception) && !why;
 
-  // Weiter stays a direct child of the band, in the same place as Prüfen; "Warum?" sits above it.
+  // Weiter stays a direct child of the band, in the same place as Prüfen; "Falle" sits above it.
   return (
     <div {...rest} className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-lg gap-y-xs">
       <section
@@ -77,13 +78,14 @@ export function FeedbackPanel({
       {asking && (
         <Button
           className="col-start-2"
+          aria-label={FALLE_LABEL}
           onClick={() => {
             setWhy(true);
             // The button goes away; focus must not fall back to the page.
             focusQuietly(next.current);
           }}
         >
-          Warum?
+          {FALLE_TEXT}
         </Button>
       )}
       <Button
