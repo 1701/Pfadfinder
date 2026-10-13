@@ -2,17 +2,18 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
-## 2026-10-13 – Batch 4 daten-zufall: eingespielt, nicht committet
-- **Stand:** v2 (`batch-daten-zufall-v2.zip`) ersetzt v1 (neu: `dz-tabelle-2` 480 × 210, Feedback der 8 roten Items gestrafft, m-dz-3-002 kürzer). `content:validate`: 98 Items, 0 Fehler, 0 Warnungen. Manifest: 20 Items, Niveau 8/8/4; Einfachwahl 9, Zahleneingabe 7, Mehrfachwahl 2, Zuordnen 1, Kurzantwort 1; 16 mit Renderer. Die Karte zeigt „Daten und Zufall“ offen, eine Üben-Session mit Strichliste und Glücksrad lief durch (v1).
-- **Layout (mit 5d, alle 64 übbaren Items × 3 Zustände × 4 Viewports):** Rot ist nur **m-dz-3-002**: Safari quer −50 px („Richtig“) und −52 px („Noch nicht ganz“), iPad quer −0,4 px („Noch nicht ganz“). Das Band verdeckt die vierte Option. Vor 5d waren es 28 rote Messungen in 8 Items.
+## 2026-10-13 – Batch 4 daten-zufall
+- **Eingespielt:** `daten-zufall.json` v4 und 10 SVGs `dz-*`. v2 brachte `dz-tabelle-2` mit 480 × 210 und gestrafftes Feedback der 8 Items, die vor 5d rot waren. v3 und v4 änderten nur m-dz-3-002. `content:validate`: 98 Items, 0 Fehler, 0 Warnungen. Manifest: 20 Items, Niveau 8/8/4; Einfachwahl 9, Zahleneingabe 7, Mehrfachwahl 2, Zuordnen 1, Kurzantwort 1; 16 mit Renderer. „Daten und Zufall“ ist auf der Karte offen, eine Üben-Session mit Strichliste und Glücksrad lief durch.
+- **Layout:** Lokal grün in allen vier Viewports. m-dz-3-002 hat in Safari quer mindestens +59,6 px Luft (vorher −52 px), weil alle Optionen ≤ 24 Zeichen haben und zweispaltig stehen. Mit v3 brachte kürzerer Text nichts, weil sich die Zahl der Zeilen nicht änderte.
 - **SVG-Schrift bei 144 px Bildhöhe:** 18,0 px (Glücksräder) bis 20,8 px (Strichliste).
-- **Offen:** Der Content liegt im Stash `dz` und wird erst committet, wenn die Chat-Spur m-dz-3-002 kürzt; sonst wird der e2e-Job in CI rot (er prüft Safari quer).
+- **Entschieden:** PRODUCT §5.6 nennt jetzt „Warum?“: Der Denkfehler steht hinter dem Tipp und wird beim Vorlesen immer mitgelesen.
+- **Offen:** Pilotfragen aus dem Batch-README (Strichbündel als 5, Säule zwischen Gitterlinien, „wahrscheinlich“ oder „am wahrscheinlichsten“).
 
 ## 2026-10-13 – Aufgabe 5d: Item-Screen nach „Prüfen“
 - **Gebaut:** Nach „Prüfen“ wird der Ziffernblock entfernt, nicht gedimmt. Die Zahl bleibt mit Einheit in derselben Größe stehen, beim nächsten Item ist der Block wieder da. Die misconception steht hinter „Warum?“ (48 px wie die Optionen) und klappt im Band auf; Vorlesen liest sie weiter mit. Tests: Block nach Prüfen nicht im DOM, Zahl sichtbar, Block beim nächsten Item zurück; „Warum?“ nur bei „noch nicht“ (auch 0,5) und nur mit misconception; Vorlesen enthält sie zugeklappt.
 - **Entscheidungen:** „Warum?“ steht über „Weiter“ in der rechten Spalte, nicht unter der Erklärung. Dort ist neben dem Text ohnehin Platz, das Band wird zugeklappt also nicht höher; eine zweizeilige misconception wäre kaum höher gewesen als der Knopf. Nach dem Aufklappen geht der Fokus leise auf „Weiter“, weil der Knopf verschwindet. Die Layout-Helfer wählen „Prüfen“/„Weiter“ jetzt als letzten direkten Knopf des Bands. Aufgeklappt darf das Band überlappen, die Seite scrollt nicht (gemessen).
 - **Offen:** PRODUCT §5.6 sagt „häufiger Denkfehler benannt“; er ist jetzt einen Tipp entfernt. Soll das dort stehen?
-- **CI:** [CI #38449173350](https://github.com/1701/Pfadfinder/actions/runs/38449173350) grün (6e56d67), Workers Builds grün; 498 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (17/17, Layout in allen vier Viewports).
+- **CI:** [CI #38449173350](https://github.com/1701/Pfadfinder/actions/runs/38449173350) grün (6e56d67), Workers Builds grün; 498 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout-Test in allen vier Viewports. Der lokale Lauf von `e2e:chromium` (17/17) prüfte Üben-Flow und PWA gegen einen alten `vite preview` aus einem abgebrochenen Lauf (`reuseExistingServer`); diese Teile hat nur CI frisch geprüft.
 
 ## 2026-10-12 – Schema 1.0.6: SVG-Schrift relativ zur viewBox, Layout-Test in CI
 - **Gebaut:** SVG-Schrift muss mindestens viewBox-Höhe / 8 groß sein, statt fest 22 (144 px × font / Höhe ≥ 18 px). CONTENT_SCHEMA §7, CHANGELOG 1.0.6, Validator; jede zu kleine Größe wird je Datei einmal gemeldet. `svg-schrift-patch.zip` ist eingespielt (gm-uhr-1 Ziffern 33 mit kürzeren Zeigern, die „9“ ist frei; rf-spiegel-1 24; rf-wuerfelnetz-1 38). Alle SVGs halten die neue Regel ein; die Gegenprobe mit der alten Uhr schlägt an. Der Layout-Test läuft in CI nur in 1024×660 und 768×900, lokal in allen vier (ARCHITECTURE §8).

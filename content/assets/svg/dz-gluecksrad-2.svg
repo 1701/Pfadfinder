@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" role="img">
+<circle cx="110" cy="135" r="90" fill="none" stroke="currentColor" stroke-width="3"/>
+<line x1="110" y1="135" x2="110.0" y2="45.0" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="173.6" y2="71.4" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="200.0" y2="135.0" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="173.6" y2="198.6" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="110.0" y2="225.0" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="46.4" y2="198.6" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="20.0" y2="135.0" stroke="currentColor" stroke-width="2"/>
+<line x1="110" y1="135" x2="46.4" y2="71.4" stroke="currentColor" stroke-width="2"/>
+<text x="132.2" y="81.4" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">1</text>
+<text x="163.6" y="112.8" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">1</text>
+<text x="163.6" y="157.2" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">1</text>
+<text x="132.2" y="188.6" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">2</text>
+<text x="87.8" y="188.6" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">2</text>
+<text x="56.4" y="157.2" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">2</text>
+<text x="56.4" y="112.8" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">2</text>
+<text x="87.8" y="81.4" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="30" fill="currentColor">3</text>
+<polygon points="110,51 98,21 122,21" fill="currentColor"/>
+<circle cx="110" cy="135" r="6" fill="currentColor"/>
+</svg>

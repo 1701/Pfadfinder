@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" role="img">
+<rect x="1" y="1" width="478" height="198" fill="none" stroke="currentColor" stroke-width="2"/>
+<line x1="0" y1="100.0" x2="480" y2="100.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="120" y1="0" x2="120" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="180.0" y1="0" x2="180.0" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<line x1="240.0" y1="0" x2="240.0" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<line x1="300.0" y1="0" x2="300.0" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<line x1="360.0" y1="0" x2="360.0" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<line x1="420.0" y1="0" x2="420.0" y2="200" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="60.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" font-weight="bold" fill="currentColor">Zahl</text>
+<text x="60.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" font-weight="bold" fill="currentColor">Anzahl</text>
+<text x="150.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">1</text>
+<text x="150.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">3</text>
+<text x="210.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">2</text>
+<text x="210.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">4</text>
+<text x="270.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">3</text>
+<text x="270.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">2</text>
+<text x="330.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">4</text>
+<text x="330.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">5</text>
+<text x="390.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">5</text>
+<text x="390.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">3</text>
+<text x="450.0" y="50.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">6</text>
+<text x="450.0" y="150.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">3</text>
+</svg>

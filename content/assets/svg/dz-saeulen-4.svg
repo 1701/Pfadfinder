@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220" role="img">
+<line x1="80" y1="170.0" x2="430" y2="170.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="170.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">0</text>
+<line x1="80" y1="140.0" x2="430" y2="140.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="140.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">2</text>
+<line x1="80" y1="110.0" x2="430" y2="110.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="110.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">4</text>
+<line x1="80" y1="80.0" x2="430" y2="80.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="80.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">6</text>
+<line x1="80" y1="50.0" x2="430" y2="50.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="50.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">8</text>
+<line x1="80" y1="20.0" x2="430" y2="20.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="20.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">10</text>
+<line x1="80" y1="20" x2="80" y2="170" stroke="currentColor" stroke-width="3"/>
+<line x1="80" y1="170" x2="430" y2="170" stroke="currentColor" stroke-width="3"/>
+<rect x="106.2" y="80.0" width="64.2" height="90.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="138.3" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Amsel</text>
+<rect x="222.9" y="65.0" width="64.2" height="105.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="255.0" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Spatz</text>
+<rect x="339.6" y="110.0" width="64.2" height="60.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="371.7" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Meise</text>
+</svg>

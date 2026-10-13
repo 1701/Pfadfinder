@@ -1,1 +1,967 @@
-[]
+[
+  {
+    "id": "m-dz-1-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Klasse 4a hat gefragt: Welches Tier magst du am liebsten?",
+      "assetId": "dz-strichliste-1",
+      "assetAlt": "Eine Strichliste mit den Tieren Hund, Katze und Hamster."
+    },
+    "prompt": "Wie viele Kinder mögen Hunde am liebsten?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
+    "feedback": {
+      "correct": "Richtig! Ein Bündel sind 5 Striche, dazu kommen 2 einzelne: 5 + 2 = 7.",
+      "incorrect": "Ein Bündel mit Querstrich sind 5 Striche. Dazu zählst du die einzelnen Striche.",
+      "misconception": "Der Querstrich ist der fünfte Strich, nicht nur ein Haken."
+    },
+    "tags": [
+      "strichliste",
+      "daten-ablesen"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie viele Kinder im Hort waren.",
+      "assetId": "dz-tabelle-1",
+      "assetAlt": "Eine Tabelle mit vier Wochentagen und der Anzahl der Kinder."
+    },
+    "prompt": "Wie viele Kinder waren am Mittwoch im Hort?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 15
+    },
+    "feedback": {
+      "correct": "Genau! In der Zeile Mittwoch steht die 15.",
+      "incorrect": "Suche links den Mittwoch. Lies in derselben Zeile rechts die Zahl ab.",
+      "misconception": "Wer 9 oder 11 schreibt, ist in der Zeile verrutscht."
+    },
+    "tags": [
+      "tabelle",
+      "daten-ablesen"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Das Diagramm zeigt die Tiere im Streichelzoo.",
+      "assetId": "dz-saeulen-1",
+      "assetAlt": "Ein Säulendiagramm mit den Tieren Ziegen, Hasen und Schafe."
+    },
+    "prompt": "Wie viele Ziegen gibt es im Streichelzoo?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 6
+    },
+    "feedback": {
+      "correct": "Richtig! Die Säule der Ziegen reicht bis zur Linie mit der 6.",
+      "incorrect": "Schau, bis zu welcher Linie die Säule der Ziegen geht. Lies links an der Achse die Zahl ab.",
+      "misconception": "Wer 3 schreibt, hat die Linien gezählt statt die Zahlen gelesen. Jede Linie zählt hier 2."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "daten-ablesen"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben würfelt einmal mit einem normalen Würfel."
+    },
+    "prompt": "Welches Ereignis ist sicher?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die Zahl ist kleiner als 7."
+        },
+        {
+          "id": "b",
+          "text": "Die Zahl ist eine 6."
+        },
+        {
+          "id": "c",
+          "text": "Die Zahl ist gerade."
+        },
+        {
+          "id": "d",
+          "text": "Die Zahl ist größer als 3."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Ein Würfel zeigt nur 1 bis 6. Jede davon ist kleiner als 7.",
+      "incorrect": "Sicher heißt: Es passiert auf jeden Fall, bei jedem Wurf. Prüfe jede Aussage mit allen Zahlen von 1 bis 6.",
+      "misconception": "Eine 6 ist möglich, aber nicht sicher. Sie kommt nur manchmal."
+    },
+    "tags": [
+      "zufall",
+      "sicher-moeglich-unmoeglich"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia dreht das Glücksrad.",
+      "assetId": "dz-gluecksrad-1",
+      "assetAlt": "Ein Glücksrad mit sechs gleich großen Feldern. In jedem Feld steht eine Zahl."
+    },
+    "prompt": "Bei welcher Zahl bleibt der Zeiger am wahrscheinlichsten stehen?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "1"
+        },
+        {
+          "id": "b",
+          "text": "2"
+        },
+        {
+          "id": "c",
+          "text": "3"
+        },
+        {
+          "id": "d",
+          "text": "Bei allen gleich oft."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! Die 1 hat 3 Felder, die 2 hat 2 Felder, die 3 nur eins.",
+      "incorrect": "Zähle, wie viele Felder jede Zahl hat. Die Zahl mit den meisten Feldern kommt am häufigsten.",
+      "misconception": "Die Felder sind gleich groß, aber nicht gleich oft da. Deshalb sind die Zahlen nicht gleich wahrscheinlich."
+    },
+    "tags": [
+      "zufall",
+      "gluecksrad",
+      "wahrscheinlichkeit-vergleichen"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Klasse 4b hat ihre Lieblingstiere gewählt.",
+      "assetId": "dz-saeulen-2",
+      "assetAlt": "Ein Säulendiagramm mit den Tieren Hund, Katze, Pferd und Hase."
+    },
+    "prompt": "Welches Tier haben die meisten Kinder gewählt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Katze"
+        },
+        {
+          "id": "b",
+          "text": "Hund"
+        },
+        {
+          "id": "c",
+          "text": "Pferd"
+        },
+        {
+          "id": "d",
+          "text": "Hase"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Die Säule der Katze ist die höchste.",
+      "incorrect": "Die höchste Säule zeigt das Tier, das am öftesten gewählt wurde. Vergleiche die vier Säulen.",
+      "misconception": "Wer Hund wählt, schaut vielleicht auf die erste Säule. Entscheidend ist die Höhe, nicht die Reihenfolge."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "vergleichen"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "In einem Beutel sind 5 rote Kugeln und 1 blaue Kugel. Leyla zieht eine Kugel, ohne hinzusehen."
+    },
+    "prompt": "Welche Farbe zieht sie wahrscheinlich?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Rot"
+        },
+        {
+          "id": "b",
+          "text": "Blau"
+        },
+        {
+          "id": "c",
+          "text": "Beide Farben sind gleich wahrscheinlich."
+        },
+        {
+          "id": "d",
+          "text": "Das kann man nicht wissen."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! 5 von 6 Kugeln sind rot. Rot ist viel wahrscheinlicher als Blau.",
+      "incorrect": "Vergleiche die Anzahl: 5 rote Kugeln, 1 blaue Kugel. Von welcher Farbe gibt es mehr?",
+      "misconception": "Man weiß nicht sicher, welche Kugel kommt. Aber man kann sagen, was wahrscheinlicher ist."
+    },
+    "tags": [
+      "zufall",
+      "wahrscheinlichkeit-vergleichen"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-1-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas wirft eine Münze. Er sagt: „Es kommt Kopf.“"
+    },
+    "prompt": "Was stimmt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Das ist möglich, aber nicht sicher."
+        },
+        {
+          "id": "b",
+          "text": "Das ist sicher."
+        },
+        {
+          "id": "c",
+          "text": "Das ist unmöglich."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Kopf kann kommen, Zahl aber auch. Deshalb ist es möglich, aber nicht sicher.",
+      "incorrect": "Eine Münze hat zwei Seiten: Kopf und Zahl. Kann Kopf kommen? Muss Kopf kommen?",
+      "misconception": "Wer „sicher“ wählt, verwechselt „kann passieren“ mit „passiert auf jeden Fall“."
+    },
+    "tags": [
+      "zufall",
+      "sicher-moeglich-unmoeglich"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-2-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Klasse 4b hat ihre Lieblingstiere gewählt.",
+      "assetId": "dz-saeulen-2",
+      "assetAlt": "Ein Säulendiagramm mit den Tieren Hund, Katze, Pferd und Hase."
+    },
+    "prompt": "Wie viele Kinder mehr haben Katze gewählt als Pferd?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 6
+    },
+    "feedback": {
+      "correct": "Richtig! Katze 10, Pferd 4, und 10 − 4 = 6.",
+      "incorrect": "Lies beide Säulen ab: Katze und Pferd. Dann rechne den Unterschied.",
+      "misconception": "Wer 10 schreibt, hat nur die Katze abgelesen."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "daten-ablesen",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-2-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie die Kinder der 4c zur Schule kommen.",
+      "assetId": "dz-tabelle-2",
+      "assetAlt": "Eine Tabelle mit vier Arten des Schulwegs und der Anzahl der Kinder."
+    },
+    "prompt": "Wie viele Kinder kommen nicht zu Fuß zur Schule?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 19
+    },
+    "feedback": {
+      "correct": "Genau! Fahrrad 6 + Bus 8 + Auto 5 = 19.",
+      "incorrect": "Zähle die drei Zeilen zusammen, die nicht „zu Fuß“ heißen.",
+      "misconception": "Wer 11 schreibt, hat die Zeile „zu Fuß“ genommen."
+    },
+    "tags": [
+      "tabelle",
+      "daten-ablesen",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-2-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Klasse 4a hat gefragt: Welches Tier magst du am liebsten?",
+      "assetId": "dz-strichliste-1",
+      "assetAlt": "Eine Strichliste mit den Tieren Hund, Katze und Hamster."
+    },
+    "prompt": "Wie viele Kinder wurden insgesamt gefragt?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 15
+    },
+    "feedback": {
+      "correct": "Richtig! Hund 7 + Katze 5 + Hamster 3 = 15.",
+      "incorrect": "Jedes Kind hat einen Strich gemacht. Zähle alle Striche zusammen.",
+      "misconception": "Viele zählen nur ein Tier. Gefragt sind alle Striche."
+    },
+    "tags": [
+      "strichliste",
+      "daten-ablesen",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-2-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Beim Fußballturnier hat jede Klasse Tore geschossen.",
+      "assetId": "dz-saeulen-3",
+      "assetAlt": "Ein Säulendiagramm mit den Klassen 4a, 4b, 4c und 4d."
+    },
+    "prompt": "Wie viele Tore hat die Klasse 4b geschossen?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
+    "feedback": {
+      "correct": "Genau! Die Säule endet zwischen 6 und 8, also bei 7.",
+      "incorrect": "Die Säule der 4b endet zwischen zwei Linien. Welche Zahl liegt dazwischen?",
+      "misconception": "Wer 6 oder 8 schreibt, hat die nächste Linie genommen."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "daten-ablesen",
+      "skala"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-2-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Beutel A: 2 rote und 4 blaue Kugeln. Beutel B: 3 rote und 3 blaue Kugeln. Ben möchte eine rote Kugel ziehen."
+    },
+    "prompt": "Aus welchem Beutel sollte er ziehen?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Aus Beutel B, dort sind mehr rote Kugeln."
+        },
+        {
+          "id": "b",
+          "text": "Aus Beutel A, dort sind mehr Kugeln blau."
+        },
+        {
+          "id": "c",
+          "text": "Das ist egal, in beiden Beuteln sind 6 Kugeln."
+        },
+        {
+          "id": "d",
+          "text": "Aus Beutel A, dort sind weniger rote Kugeln."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! In beiden Beuteln sind 6 Kugeln. In B sind 3 rot, in A nur 2. Also ist Rot in B wahrscheinlicher.",
+      "incorrect": "Beide Beutel haben gleich viele Kugeln. Vergleiche nur die roten: Wo sind es mehr?",
+      "misconception": "Dass beide Beutel 6 Kugeln haben, macht die Farben nicht gleich wahrscheinlich. Es zählt, wie viele davon rot sind."
+    },
+    "tags": [
+      "zufall",
+      "wahrscheinlichkeit-vergleichen",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-2-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira dreht das Glücksrad.",
+      "assetId": "dz-gluecksrad-2",
+      "assetAlt": "Ein Glücksrad mit acht gleich großen Feldern. In jedem Feld steht eine Zahl."
+    },
+    "prompt": "Welche Aussage stimmt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die 2 ist wahrscheinlicher als die 1."
+        },
+        {
+          "id": "b",
+          "text": "Die 1 ist wahrscheinlicher als die 2."
+        },
+        {
+          "id": "c",
+          "text": "Die 3 ist unmöglich."
+        },
+        {
+          "id": "d",
+          "text": "Alle Zahlen sind gleich wahrscheinlich."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! Die 2 steht auf 4 Feldern, die 1 auf 3 Feldern. Also ist die 2 wahrscheinlicher.",
+      "incorrect": "Zähle für jede Zahl die Felder. Mehr Felder heißt wahrscheinlicher. Prüfe dann jede Aussage.",
+      "misconception": "Die 3 hat nur ein Feld, aber ein Feld reicht: Sie ist möglich, nicht unmöglich."
+    },
+    "tags": [
+      "zufall",
+      "gluecksrad",
+      "aussagen-pruefen"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-2-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie die Kinder der 4c zur Schule kommen.",
+      "assetId": "dz-tabelle-2",
+      "assetAlt": "Eine Tabelle mit vier Arten des Schulwegs und der Anzahl der Kinder."
+    },
+    "prompt": "Welche Aussagen passen zur Tabelle? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die meisten Kinder gehen zu Fuß."
+        },
+        {
+          "id": "b",
+          "text": "Mehr Kinder fahren mit dem Bus als mit dem Fahrrad."
+        },
+        {
+          "id": "c",
+          "text": "Mit dem Auto kommen mehr Kinder als mit dem Fahrrad."
+        },
+        {
+          "id": "d",
+          "text": "Insgesamt wurden 20 Kinder gefragt."
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b"
+      ]
+    },
+    "feedback": {
+      "correct": "Beide gefunden! Zu Fuß hat mit 11 die größte Zahl. Bus 8 ist mehr als Fahrrad 6.",
+      "incorrect": "Prüfe jede Aussage mit den Zahlen aus der Tabelle. Auto 5 ist weniger als Fahrrad 6. Und 11 + 6 + 8 + 5 ist mehr als 20.",
+      "misconception": "Wer die Summe nicht nachrechnet, hält 20 für passend. Es sind 30 Kinder."
+    },
+    "tags": [
+      "tabelle",
+      "aussagen-pruefen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-2-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias würfelt einmal mit einem normalen Würfel."
+    },
+    "prompt": "Ordne jedem Ereignis das passende Wort zu.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Eine 7 würfeln"
+        },
+        {
+          "id": "l2",
+          "text": "Eine Zahl kleiner als 7 würfeln"
+        },
+        {
+          "id": "l3",
+          "text": "Eine 2 würfeln"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "unmöglich"
+        },
+        {
+          "id": "r2",
+          "text": "sicher"
+        },
+        {
+          "id": "r3",
+          "text": "möglich, aber nicht sicher"
+        },
+        {
+          "id": "r4",
+          "text": "immer"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Alles richtig! Ein Würfel hat keine 7. Jede Zahl ist kleiner als 7. Die 2 kommt manchmal.",
+      "incorrect": "Frag dich bei jedem Ereignis: Kann das nie passieren? Passiert es immer? Oder nur manchmal?",
+      "misconception": "„Immer“ klingt wie „sicher“, ist aber kein Fachwort. Die drei Wörter heißen: unmöglich, möglich, sicher."
+    },
+    "tags": [
+      "zufall",
+      "sicher-moeglich-unmoeglich",
+      "zuordnen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-dz-3-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias hat Vögel gezählt: 6 Amseln, 9 Spatzen und 4 Meisen. Dann hat er ein Diagramm gezeichnet.",
+      "assetId": "dz-saeulen-4",
+      "assetAlt": "Ein Säulendiagramm mit den Vögeln Amsel, Spatz und Meise."
+    },
+    "prompt": "Welche Säule hat Elias falsch gezeichnet?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Spatz"
+        },
+        {
+          "id": "b",
+          "text": "Amsel"
+        },
+        {
+          "id": "c",
+          "text": "Meise"
+        },
+        {
+          "id": "d",
+          "text": "Alle Säulen sind richtig."
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Elias hat 9 Spatzen gezählt, die Säule zeigt aber nur 7.",
+      "incorrect": "Vergleiche jede Zahl aus dem Text mit der Säule. Wo stimmt es nicht?",
+      "misconception": "Amsel 6 und Meise 4 passen. Nur der Spatz nicht."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "fehler-finden",
+      "darstellung-pruefen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-3-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira hat 20-mal gewürfelt. Sie sagt: „Die 4 kam am häufigsten, also ist sie am wahrscheinlichsten.“",
+      "assetId": "dz-tabelle-3",
+      "assetAlt": "Eine Tabelle mit den Würfelzahlen 1 bis 6 und wie oft jede gewürfelt wurde."
+    },
+    "prompt": "Stimmt das?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nein, das ist Zufall."
+        },
+        {
+          "id": "b",
+          "text": "Ja, siehe Tabelle."
+        },
+        {
+          "id": "c",
+          "text": "Nein, die 1 kommt öfter."
+        },
+        {
+          "id": "d",
+          "text": "Ja, oft würfeln hilft."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! Alle sechs Zahlen sind gleich wahrscheinlich. Dass die 4 öfter kam, ist Zufall.",
+      "incorrect": "Schau auf den Würfel, nicht auf die Tabelle. Hat eine Seite mehr Chancen als die anderen?",
+      "misconception": "Die Tabelle zeigt nur, was diesmal passiert ist. Beim nächsten Mal kann die 2 vorne liegen."
+    },
+    "tags": [
+      "zufall",
+      "begruenden",
+      "haeufigkeit-vs-wahrscheinlichkeit"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-3-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Du sollst ein Glücksrad mit 6 gleich großen Feldern bauen. Blau soll wahrscheinlicher sein als Rot. Rot soll aber möglich bleiben."
+    },
+    "prompt": "Wie viele Felder machst du blau und wie viele rot? Schreibe beide Zahlen auf.",
+    "payload": {
+      "maxChars": 80,
+      "hint": "Rot muss wenigstens ein Feld haben, Blau muss mehr Felder haben als Rot."
+    },
+    "solution": {
+      "model": "Zum Beispiel 4 blaue und 2 rote Felder, oder 5 blaue und 1 rotes Feld. Blau hat mehr Felder als Rot, und Rot hat mindestens ein Feld.",
+      "keyPoints": [
+        "Blau hat mehr Felder als Rot (4 und 2, oder 5 und 1)",
+        "Rot hat mindestens ein Feld, sonst wäre Rot unmöglich",
+        "Zusammen sind es 6 Felder"
+      ]
+    },
+    "feedback": {
+      "correct": "Stark! Du hast beide Bedingungen beachtet: Blau ist wahrscheinlicher, Rot bleibt möglich.",
+      "incorrect": "Wahrscheinlicher heißt mehr Felder. Möglich heißt mindestens ein Feld. Verteile die 6 Felder so, dass beides stimmt.",
+      "misconception": "3 blaue und 3 rote Felder sind gleich wahrscheinlich, nicht „Blau wahrscheinlicher“. Und 6 blaue Felder machen Rot unmöglich."
+    },
+    "tags": [
+      "zufall",
+      "gluecksrad",
+      "konstruieren",
+      "begruenden"
+    ],
+    "estimatedSeconds": 110,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-3-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 3,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "In einem Beutel sind 3 rote und 3 blaue Kugeln. Leyla zieht 5-mal eine Kugel und legt sie jedes Mal zurück. Alle 5 Kugeln waren rot."
+    },
+    "prompt": "Welche Aussagen stimmen? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Das kann passieren, auch wenn beide Farben gleich wahrscheinlich sind."
+        },
+        {
+          "id": "b",
+          "text": "Beim nächsten Zug ist Blau jetzt wahrscheinlicher."
+        },
+        {
+          "id": "c",
+          "text": "Beim nächsten Zug sind Rot und Blau gleich wahrscheinlich."
+        },
+        {
+          "id": "d",
+          "text": "Im Beutel müssen mehr rote als blaue Kugeln sein."
+        },
+        {
+          "id": "e",
+          "text": "Beim nächsten Zug kommt sicher Rot."
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Beide richtig! Fünfmal Rot ist Zufall. Der Beutel hat sich nicht verändert, also bleibt es 3 zu 3.",
+      "incorrect": "Leyla legt die Kugel jedes Mal zurück. Im Beutel sind also bei jedem Zug 3 rote und 3 blaue Kugeln. Was heißt das für den nächsten Zug?",
+      "misconception": "Viele denken, nach fünfmal Rot sei Blau „dran“. Der Beutel merkt sich nichts: Jeder Zug beginnt wieder bei 3 zu 3."
+    },
+    "tags": [
+      "zufall",
+      "begruenden",
+      "haeufigkeit-vs-wahrscheinlichkeit"
+    ],
+    "estimatedSeconds": 110,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-12",
+      "calibration": "iqb"
+    }
+  }
+]

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220" role="img">
+<line x1="80" y1="170.0" x2="430" y2="170.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="170.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">0</text>
+<line x1="80" y1="140.0" x2="430" y2="140.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="140.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">2</text>
+<line x1="80" y1="110.0" x2="430" y2="110.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="110.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">4</text>
+<line x1="80" y1="80.0" x2="430" y2="80.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="80.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">6</text>
+<line x1="80" y1="50.0" x2="430" y2="50.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="50.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">8</text>
+<line x1="80" y1="20.0" x2="430" y2="20.0" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+<text x="66" y="20.0" text-anchor="end" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">10</text>
+<line x1="80" y1="20" x2="80" y2="170" stroke="currentColor" stroke-width="3"/>
+<line x1="80" y1="170" x2="430" y2="170" stroke="currentColor" stroke-width="3"/>
+<rect x="99.7" y="80.0" width="48.1" height="90.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="123.8" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Hund</text>
+<rect x="187.2" y="20.0" width="48.1" height="150.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="211.2" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Katze</text>
+<rect x="274.7" y="110.0" width="48.1" height="60.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="298.8" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Pferd</text>
+<rect x="362.2" y="50.0" width="48.1" height="120.0" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="2"/>
+<text x="386.2" y="200" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Hase</text>
+</svg>

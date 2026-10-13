@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 210" role="img">
+<rect x="1" y="1" width="478" height="208" fill="none" stroke="currentColor" stroke-width="2"/>
+<line x1="0" y1="42" x2="480" y2="42" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="0" y1="84" x2="480" y2="84" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="0" y1="126" x2="480" y2="126" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="0" y1="168" x2="480" y2="168" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<line x1="240.0" y1="0" x2="240.0" y2="210" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+<text x="120.0" y="21.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" font-weight="bold" fill="currentColor">Schulweg</text>
+<text x="360.0" y="21.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" font-weight="bold" fill="currentColor">Kinder</text>
+<text x="120.0" y="63.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">zu Fuß</text>
+<text x="360.0" y="63.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">11</text>
+<text x="120.0" y="105.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Fahrrad</text>
+<text x="360.0" y="105.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">6</text>
+<text x="120.0" y="147.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Bus</text>
+<text x="360.0" y="147.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">8</text>
+<text x="120.0" y="189.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">Auto</text>
+<text x="360.0" y="189.0" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="28" fill="currentColor">5</text>
+</svg>

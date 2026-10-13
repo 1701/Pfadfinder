@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180" role="img">
+<text x="10" y="35" text-anchor="start" dominant-baseline="middle" font-family="inherit" font-size="26" fill="currentColor">Hund</text>
+<line x1="150" y1="20" x2="150" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="162" y1="20" x2="162" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="174" y1="20" x2="174" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="186" y1="20" x2="186" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="144" y1="49" x2="192" y2="21" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="214" y1="20" x2="214" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="226" y1="20" x2="226" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<text x="10" y="95" text-anchor="start" dominant-baseline="middle" font-family="inherit" font-size="26" fill="currentColor">Katze</text>
+<line x1="150" y1="80" x2="150" y2="110" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="162" y1="80" x2="162" y2="110" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="174" y1="80" x2="174" y2="110" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="186" y1="80" x2="186" y2="110" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="144" y1="109" x2="192" y2="81" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<text x="10" y="155" text-anchor="start" dominant-baseline="middle" font-family="inherit" font-size="26" fill="currentColor">Hamster</text>
+<line x1="150" y1="140" x2="150" y2="170" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="162" y1="140" x2="162" y2="170" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<line x1="174" y1="140" x2="174" y2="170" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+</svg>
