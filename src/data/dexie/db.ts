@@ -11,6 +11,7 @@ import type {
   Session,
 } from '../../domain/learner';
 import type { MasteryState } from '../../domain/mastery';
+import type { PostponedOffer } from '../../domain/progress';
 
 export const DB_NAME = 'pfadfinder';
 
@@ -22,6 +23,7 @@ export type PfadfinderDb = Dexie & {
   sessions: EntityTable<Session, 'id'>;
   probetestRuns: EntityTable<ProbetestRun, 'id'>;
   collectibles: EntityTable<Collectibles, 'learnerId'>;
+  postponedOffers: EntityTable<PostponedOffer, 'fach'>;
 };
 
 export function openDb(name = DB_NAME): PfadfinderDb {
@@ -35,5 +37,8 @@ export function openDb(name = DB_NAME): PfadfinderDb {
     probetestRuns: 'id, learnerId',
     collectibles: 'learnerId',
   });
+  // v2: "Später" on the Einstieg offer lasts until the end of the day (PRODUCT.md §5.4).
+  // A new table only, no upgrade function needed.
+  db.version(2).stores({ postponedOffers: 'fach' });
   return db;
 }

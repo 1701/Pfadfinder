@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkOfferFach, isCheckOffered } from '../../../src/domain/progress';
+import { checkOfferFach, isCheckOffered, postponedFaecher } from '../../../src/domain/progress';
 
 describe('Einstiegscheck offer', () => {
   it('is offered for a Fach without mastery and with at least 2 practiceable Bereiche', () => {
@@ -27,5 +27,25 @@ describe('Einstiegscheck offer', () => {
     expect(
       checkOfferFach(['lesen-sachtext', 'rs-strategien', 'zahlen-operationen', 'raum-form'], []),
     ).toBe('mathe');
+  });
+});
+
+describe('"Später" on the offer', () => {
+  // Berlin is UTC+2 in October: 21:59Z is 23:59 local, 22:01Z is 00:01 the next day.
+  const offer = { fach: 'mathe', at: '2026-10-14T06:00:00.000Z' } as const;
+
+  it('holds for the rest of the local day', () => {
+    expect(postponedFaecher([offer], '2026-10-14T06:00:00.000Z')).toEqual(['mathe']);
+    expect(postponedFaecher([offer], '2026-10-14T21:59:00.000Z')).toEqual(['mathe']);
+  });
+
+  it('is over from midnight on, local time', () => {
+    expect(postponedFaecher([offer], '2026-10-14T22:01:00.000Z')).toEqual([]);
+    expect(postponedFaecher([offer], '2026-10-16T06:00:00.000Z')).toEqual([]);
+  });
+
+  it('keeps each Fach on its own', () => {
+    const deutsch = { fach: 'deutsch', at: '2026-10-13T06:00:00.000Z' } as const;
+    expect(postponedFaecher([offer, deutsch], '2026-10-14T08:00:00.000Z')).toEqual(['mathe']);
   });
 });

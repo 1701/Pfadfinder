@@ -18,6 +18,7 @@ function renderScreen(loadProgress: () => Promise<MapProgressSource>) {
         manifest={manifest as ContentManifest}
         formats={SUPPORTED_FORMATS}
         loadProgress={loadProgress}
+        postponeOffer={() => Promise.resolve()}
       />
     </MemoryRouter>,
   );
@@ -33,6 +34,7 @@ describe('KartenScreen', () => {
       mastery: [masteryFor('zahlen-operationen', 2)],
       unlocked: ['zahlen-operationen:1'],
       today: { count: 3, goal: 10, reached: false },
+      postponed: [],
     });
     const map = (await screen.findAllByRole('group', { name: 'Karte' }))[0]!;
     // Real content: every open Gebiet is a link, the stored mastery shows on Zahlen und Rechnen.

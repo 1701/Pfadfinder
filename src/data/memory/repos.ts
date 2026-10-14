@@ -10,6 +10,7 @@ import type {
   Session,
 } from '../../domain/learner';
 import type { MasteryState } from '../../domain/mastery';
+import type { PostponedOffer } from '../../domain/progress';
 import type { Repositories } from '../repos';
 
 type Tables = {
@@ -20,6 +21,7 @@ type Tables = {
   sessions: Map<string, unknown>;
   probetestRuns: Map<string, unknown>;
   collectibles: Map<string, unknown>;
+  postponedOffers: Map<string, unknown>;
 };
 
 const key = (...parts: string[]) => JSON.stringify(parts);
@@ -42,6 +44,7 @@ export function createMemoryRepositories(): Repositories {
   const sessions = table<Session>('sessions');
   const probetestRuns = table<ProbetestRun>('probetestRuns');
   const collectibles = table<Collectibles>('collectibles');
+  const postponedOffers = table<PostponedOffer>('postponedOffers');
 
   const byAt = <T extends { at: string }>(a: T, b: T) => a.at.localeCompare(b.at);
   const byStartedAt = <T extends { startedAt: string }>(a: T, b: T) =>
@@ -96,6 +99,10 @@ export function createMemoryRepositories(): Repositories {
       get: (learnerId) => collectibles.get(learnerId),
       put: (value) => collectibles.put(value.learnerId, value),
     },
+    postponedOffers: {
+      list: () => postponedOffers.all(),
+      put: (offer) => postponedOffers.put(offer.fach, offer),
+    },
     async transaction(fn) {
       const snapshot = cloneTables(tables);
       try {
@@ -120,6 +127,7 @@ function emptyTables(): Tables {
     sessions: new Map(),
     probetestRuns: new Map(),
     collectibles: new Map(),
+    postponedOffers: new Map(),
   };
 }
 

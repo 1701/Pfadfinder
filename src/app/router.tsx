@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router';
 import manifest from '../../content/manifest.json';
 import type { ContentManifest } from '../domain/content/manifest';
+import type { Fach } from '../domain/content/taxonomy';
 import { practiceableBereicheFromManifest } from '../domain/scheduler/practiceable';
 import { SUPPORTED_FORMATS } from '../ui/formats/supported';
 import { KartenScreen } from '../ui/map/KartenScreen';
@@ -15,13 +16,20 @@ import { ListenScreen } from '../ui/screens/ListenScreen';
 const MANIFEST = manifest as ContentManifest;
 const START_BEREICHE = practiceableBereicheFromManifest(MANIFEST, SUPPORTED_FORMATS);
 const loadMapProgress = () => import('./map-progress').then((m) => m.loadAppMapProgress());
+const postponeOffer = (fach: Fach) =>
+  import('./map-progress').then((m) => m.postponeAppOffer(fach));
 
 /** The map; /?liste shows the plain list instead (fallback for tests). */
 function StartRoute() {
   const [search] = useSearchParams();
   if (search.has('liste')) return <ListenScreen bereiche={START_BEREICHE} />;
   return (
-    <KartenScreen manifest={MANIFEST} formats={SUPPORTED_FORMATS} loadProgress={loadMapProgress} />
+    <KartenScreen
+      manifest={MANIFEST}
+      formats={SUPPORTED_FORMATS}
+      loadProgress={loadMapProgress}
+      postponeOffer={postponeOffer}
+    />
   );
 }
 

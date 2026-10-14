@@ -156,14 +156,27 @@ export function repositoryContract(
       expect(await repos.attempts.get('a1')).toBeUndefined();
     });
 
+    it('keeps one postponed offer per Fach', async () => {
+      await repos.postponedOffers.put({ fach: 'mathe', at: '2026-10-13T08:00:00.000Z' });
+      await repos.postponedOffers.put({ fach: 'deutsch', at: '2026-10-13T09:00:00.000Z' });
+      await repos.postponedOffers.put({ fach: 'mathe', at: '2026-10-14T08:00:00.000Z' });
+      const offers = await repos.postponedOffers.list();
+      expect(offers.sort((a, b) => a.fach.localeCompare(b.fach))).toEqual([
+        { fach: 'deutsch', at: '2026-10-13T09:00:00.000Z' },
+        { fach: 'mathe', at: '2026-10-14T08:00:00.000Z' },
+      ]);
+    });
+
     it('clears everything', async () => {
       await repos.learners.put(data.learner);
       await repos.attempts.put(attempt('a1', '2026-10-11T08:01:00.000Z'));
       await repos.collectibles.put(data.collectibles);
+      await repos.postponedOffers.put({ fach: 'mathe', at: '2026-10-14T08:00:00.000Z' });
       await repos.clear();
       expect(await repos.learners.list()).toEqual([]);
       expect(await repos.attempts.listByLearner(learnerId)).toEqual([]);
       expect(await repos.collectibles.get(learnerId)).toBeUndefined();
+      expect(await repos.postponedOffers.list()).toEqual([]);
     });
   });
 }

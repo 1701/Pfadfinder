@@ -18,6 +18,7 @@ export function createDexieRepositories(db: PfadfinderDb = openDb()): Repositori
     db.sessions,
     db.probetestRuns,
     db.collectibles,
+    db.postponedOffers,
   ];
 
   return {
@@ -67,6 +68,10 @@ export function createDexieRepositories(db: PfadfinderDb = openDb()): Repositori
     collectibles: {
       get: (learnerId) => db.collectibles.get(learnerId),
       put: async (collectibles) => void (await db.collectibles.put(collectibles)),
+    },
+    postponedOffers: {
+      list: () => db.postponedOffers.toArray(),
+      put: async (offer) => void (await db.postponedOffers.put(offer)),
     },
     transaction: (fn) => db.transaction('rw', tables, fn),
     clear: () =>

@@ -12,6 +12,7 @@ import type {
   Session,
 } from '../domain/learner';
 import type { MasteryState } from '../domain/mastery';
+import type { PostponedOffer } from '../domain/progress';
 
 export interface LearnerRepo {
   get(id: string): Promise<Learner | undefined>;
@@ -62,6 +63,13 @@ export interface CollectiblesRepo {
   put(collectibles: Collectibles): Promise<void>;
 }
 
+/** "Später" on the Einstieg offer, one entry per Fach; device-wide, not part of the export. */
+export interface PostponedOfferRepo {
+  list(): Promise<PostponedOffer[]>;
+  /** Replaces the entry of the same Fach. */
+  put(offer: PostponedOffer): Promise<void>;
+}
+
 export interface Repositories {
   learners: LearnerRepo;
   attempts: AttemptRepo;
@@ -70,6 +78,7 @@ export interface Repositories {
   sessions: SessionRepo;
   probetestRuns: ProbetestRepo;
   collectibles: CollectiblesRepo;
+  postponedOffers: PostponedOfferRepo;
   /** Runs fn atomically: if it throws, no write inside it is kept. */
   transaction<T>(fn: () => Promise<T>): Promise<T>;
   /** Deletes everything on this device. */

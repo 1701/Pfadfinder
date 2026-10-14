@@ -119,7 +119,9 @@ test('Pause fragt nach: Weitermachen bleibt dabei, Zur Karte fängt von vorn an'
   await expect(page.getByText(`1 von ${TOTAL}`)).toBeVisible();
 });
 
-test('Später: das Angebot ruht bis zum nächsten Öffnen', async ({ page }) => {
+test('Später: das Angebot ruht bis zum Ende des Tages, auch nach Neuladen', async ({ page }) => {
+  // Fixed clock (local time of the browser): "Später" is stored with the day it was tapped.
+  await page.clock.setFixedTime(new Date('2026-10-14T10:00:00'));
   await page.goto('/');
   await page.getByRole('button', { name: 'Später' }).click();
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
@@ -128,7 +130,13 @@ test('Später: das Angebot ruht bis zum nächsten Öffnen', async ({ page }) => 
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   await page.getByRole('link', { name: 'Pause' }).click();
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
-  // A new start of the app offers it again.
+  // A new start of the app the same evening: still resting.
+  await page.clock.setFixedTime(new Date('2026-10-14T21:30:00'));
+  await page.reload();
+  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  await expect(page.getByRole('heading', { name: OFFER })).toHaveCount(0);
+  // The next morning the offer is back.
+  await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));
   await page.reload();
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
 });
