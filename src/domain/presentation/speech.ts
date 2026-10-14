@@ -1,0 +1,105 @@
+// What the Vorlesen button reads (ARCHITECTURE.md §5): the task (readAloudText), then the
+// answers in the order on screen ("Antworten: …"). number-input adds nothing. Spelling items get
+// no special care: capital letters or a silent h cannot be heard anyway (decision 2026-10-14).
+
+import { readAloudText, speakable, splitUnits, type Item, type ItemOf } from '../content';
+import {
+  clozeParts,
+  presentedGapOptions,
+  presentedMatch,
+  presentedOptions,
+  presentedOrder,
+} from './order';
+import { PRESENTATION_TEXTS as T } from './texts';
+
+/** Ends a spoken piece with a period so the voice pauses between options. */
+function sentence(text: string): string {
+  const trimmed = text.trim();
+  return /[.!?:]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function list(texts: string[]): string {
+  return texts.map((t) => sentence(speakable(t))).join(' ');
+}
+
+/**
+ * Text units (words of mark-in-text and find-error) joined with commas, without speakable():
+ * "100 200" in a number row must stay two numbers, not become "100200".
+ */
+function units(texts: string[]): string {
+  return `${texts.map((t) => t.replace(/[.,;:!?]+$/, '')).join(', ')}.`;
+}
+
+type Speaker<F extends Item['format']> = (
+  item: ItemOf<F>,
+  attemptIndex: number,
+  answer: unknown,
+) => string;
+
+const speakers: { [F in Item['format']]: Speaker<F> } = {
+  'single-choice': (item, i) =>
+    `${T.answers} ${list(presentedOptions(item, i).map((o) => o.text))}`,
+  'multi-choice': (item, i) => `${T.answers} ${list(presentedOptions(item, i).map((o) => o.text))}`,
+  'number-input': () => '',
+  match: (item, i) => {
+    const { left, right } = presentedMatch(item, i);
+    return `${list(left.map((o) => o.text))} ${T.answers} ${list(right.map((o) => o.text))}`;
+  },
+  order: (item, i, answer) => {
+    // The order on screen: the child's current order once it moved something.
+    const byId = new Map(item.payload.items.map((e) => [e.id, e.text]));
+    const ids = (answer as { orderedIds?: string[] } | null)?.orderedIds;
+    const texts = ids
+      ? ids.map((id) => byId.get(id) ?? '')
+      : presentedOrder(item, i).map((e) => e.text);
+    return `${T.answers} ${list(texts)}`;
+  },
+  'cloze-select': (item, i) => {
+    const options = presentedGapOptions(item, i);
+    const parts = clozeParts(item.payload.template);
+    const text = parts.map((p) => (p.kind === 'text' ? p.text : ` ${T.gap} ${p.number} `)).join('');
+    const answers = parts
+      .filter((p) => p.kind === 'gap')
+      .map((p) => `${T.answersForGap} ${p.number}: ${(options[p.key] ?? []).join(', ')}.`);
+    const spoken = text.replace(/\s+/g, ' ').replace(/ ([.,;:!?])/g, '$1');
+    return speakable(`${sentence(spoken)} ${answers.join(' ')}`);
+  },
+  'mark-in-text': (item) =>
+    item.payload.unit === 'word'
+      ? `${T.answers} ${units(splitUnits(item.payload.text, 'word'))}`
+      : `${T.answers} ${splitUnits(item.payload.text, 'sentence').join(' ')}`,
+  'find-error': (item) => `${T.answers} ${units(item.payload.words.map((w) => w.text))}`,
+  'short-answer': (item) => (item.payload.hint ? `${T.hint} ${sentence(item.payload.hint)}` : ''),
+};
+
+/** The answers part on its own ("Antworten: …"); empty for number-input. */
+export function answersSpeech(item: Item, attemptIndex: number, answer: unknown = null): string {
+  const speak = speakers[item.format] as Speaker<Item['format']>;
+  return speak(item, attemptIndex, answer);
+}
+
+/** Everything the Vorlesen button on the task sheet reads. */
+export function itemSpeech(item: Item, attemptIndex: number, answer: unknown = null): string {
+  return [readAloudText(item), answersSpeech(item, attemptIndex, answer)]
+    .filter((part) => part.length > 0)
+    .join(' ');
+}
+
+/** short-answer while comparing: the question in the band, the model answer and key points. */
+export function comparisonSpeech(item: ItemOf<'short-answer'>): string {
+  return [
+    T.compareQuestion,
+    T.modelHeading,
+    sentence(item.solution.model),
+    T.keyPointsHeading,
+    list(item.solution.keyPoints),
+  ].join(' ');
+}
+
+/** find-error: the correct spelling of every error, in sentence order ("Samstag, Fahrrad"). */
+export function corrections(item: ItemOf<'find-error'>): string {
+  return item.payload.words
+    .filter((w) => item.solution.errorIds.includes(w.id))
+    .map((w) => item.solution.corrections[w.id] ?? w.text)
+    .join(', ');
+}
