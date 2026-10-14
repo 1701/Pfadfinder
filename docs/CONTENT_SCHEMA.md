@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.7 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.8 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -154,6 +154,7 @@ payload:  { maxChars: number; hint?: string }
 solution: { model: string; keyPoints: string[] }                           // Musterlösung + 1–3 Kernpunkte
 // kein Auto-Check: Kind vergleicht und wählt "getroffen / teils / nein"; Selbsteinschätzung zählt 1 / 0.5 / 0
 ```
+`model` hat höchstens `maxChars` Zeichen (seit 1.0.8): Das Kind vergleicht mit einer Antwort, die es selbst hätte schreiben können. Der Validator prüft das.
 
 ## 5. ReadingText
 
@@ -226,7 +227,7 @@ Regeln: Summe `estimatedSeconds` zwischen 35 und 42 Min.; kein `short-answer`-An
 - Schrift im Bild: `font-size` mindestens viewBox-Höhe / 8 (seit 1.0.6; Beispiel: Höhe 260 → mindestens 32,5). Ein Bild ist mindestens 144 px hoch, und 144 px × Schriftgröße / viewBox-Höhe ≥ 18 px, die kleinste Schrift der App. Darunter ist es ein Fehler im Validator
 - `assetAlt` beschreibt, was zu sehen ist, und verrät die Lösung nicht: keine Zählhilfe („4 Kästchen und 3 weitere“), keine Nennung der gefragten Eigenschaft („ein Dreieck mit zwei gleich langen Seiten“, wenn nach Symmetrie gefragt ist). Es wird vorgelesen und ist der Name des Bildes für Screenreader
 - Optionen, die auf Beschriftungen im Bild zeigen, bekommen `keepOrder: true` (§4.1)
-- `single-choice` mit Bild: jede Option höchstens 24 Zeichen, damit die Optionen zweispaltig stehen (`LONG_OPTION_CHARS` im Renderer). Längere Optionen nur bei Items ohne Bild. Grund: In Safari quer (1024 × 660) passen Bild, einspaltige Optionen und Rückmeldung nicht zusammen (Befund Batch 4, seit 1.0.7). Der Validator prüft das nicht
+- `single-choice` und `multi-choice` mit Bild: jede Option höchstens 24 Zeichen, damit die Optionen zweispaltig stehen (`LONG_OPTION_CHARS` im Renderer). Längere Optionen nur bei Items ohne Bild. Grund: In Safari quer (1024 × 660) passen Bild, einspaltige Optionen und Rückmeldung nicht zusammen (Befund Batch 4, seit 1.0.7; `multi-choice` seit 1.0.8, gemessen an m-dz-2-007: einspaltig −23 px, zweispaltig +89 px). Der Validator prüft das nicht
 
 **Batch-Abgabe**
 - 20 Items je Batch, ein Bereich, als valide JSON-Datei

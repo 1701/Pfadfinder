@@ -84,6 +84,7 @@ describe('itemSchema – format bounds from CONTENT_SCHEMA.md §4', () => {
     ['find-error has 1–2 errors', mutate(findError, (d) => (d.payload.errorCount = 3)), 'payload.errorCount'],
     ['find-error needs a correction per error', mutate(findError, (d) => (d.solution.corrections = {})), 'solution.corrections'],
     ['short-answer has at most 3 key points', mutate(shortAnswer, (d) => (d.solution.keyPoints = ['a', 'b', 'c', 'd'])), 'solution.keyPoints'],
+    ['short-answer: model longer than maxChars (1.0.8)', mutate(shortAnswer, (d) => (d.payload.maxChars = d.solution.model.length - 1)), 'solution.model'],
   ])('%s', (_name, item, expectedPath) => {
     expect(issuePaths(itemSchema, item)).toContain(expectedPath);
   });

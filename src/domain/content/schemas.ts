@@ -323,18 +323,26 @@ const findErrorItem = z
     }
   });
 
-const shortAnswerItem = z.strictObject({
-  ...itemBase,
-  format: z.literal('short-answer'),
-  payload: z.strictObject({
-    maxChars: z.number().int().min(1),
-    hint: text.optional(),
-  }),
-  solution: z.strictObject({
-    model: text,
-    keyPoints: z.array(text).min(1).max(3),
-  }),
-});
+const shortAnswerItem = z
+  .strictObject({
+    ...itemBase,
+    format: z.literal('short-answer'),
+    payload: z.strictObject({
+      maxChars: z.number().int().min(1),
+      hint: text.optional(),
+    }),
+    solution: z.strictObject({
+      model: text,
+      keyPoints: z.array(text).min(1).max(3),
+    }),
+  })
+  .superRefine((item, ctx) => {
+    // Since schema 1.0.8: the child compares with a model it could have written itself.
+    const { model } = item.solution;
+    if (model.length > item.payload.maxChars) {
+      fail(ctx, ['solution', 'model'], `Musterlösung hat ${model.length} Zeichen, maxChars ist ${item.payload.maxChars}`);
+    }
+  });
 
 export const FORMATS = [
   'single-choice',
