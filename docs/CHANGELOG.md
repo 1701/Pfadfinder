@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.8 – 2026-10-14
+- §7 Bilder: Die 24-Zeichen-Regel für Optionen bei Items mit Bild gilt für `single-choice` und `multi-choice`. Messung Aufgabe 7 an m-dz-2-007 (Tabelle unter dem Text, Safari quer, nach Prüfen): einspaltig mit 32–52 Zeichen −23 px, zweispaltig mit höchstens 24 Zeichen +89 px. Nur dokumentiert, der Validator prüft es nicht.
+- §4.9: `solution.model` hat höchstens `payload.maxChars` Zeichen. Neu im Validator (Fehler). Befund Aufgabe 7: m-dz-3-003 hatte 133 Zeichen bei maxChars 80, mit daten-zufall v7 behoben. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.7 – 2026-10-13
 - §7 Bilder: Bei `single-choice` mit Bild hat jede Option höchstens 24 Zeichen (zweispaltige Darstellung). Befund Batch 4: In Safari quer verdeckte die Rückmeldung einspaltige Optionen. Nur dokumentiert, der Validator prüft es nicht (Roadmap, PRODUCT §11).
 - §7 Niveau: neuer Absatz „Kalibrierung Mathe (Pilot Oktober 2026)“ mit der Zuordnung I/II/III nach dem Stoff bis Ende Klasse 3. Präzisierung, keine Feldänderung.
@@ -34,6 +38,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 - Umgesetzt als Zod-Schemas in `src/domain/content/schemas.ts`, geprüft durch `npm run content:validate`.
 
 ## App
+
+### 0.6.0 – 2026-10-14
+- Renderer für alle neun Formate: Mehrfachwahl, Zuordnen (Tippen und Ziehen), Reihenfolge (Ziehen und Pfeile), Lückentext, Im Text markieren, Fehler finden, Kurzantwort mit Vergleichen und Selbsteinschätzung. dnd-kit nur in den Chunks von Zuordnen und Reihenfolge.
+- Vorlesen liest die Antworten in der Reihenfolge auf dem Bildschirm.
 
 ### 0.5.0 – 2026-10-12
 - Startseite ist die Expeditionskarte: 9 Gebiete auf zwei Inseln, Höhenstufen als Etappen, unerforschte Gebiete gestrichelt; zwei Layouts für quer und hoch. Tagesziel mit Wegstrichen. Liste unter `/?liste`.

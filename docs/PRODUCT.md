@@ -92,7 +92,7 @@ Nur Formate, die im Papiertest tatsächlich vorkommen oder deren Denkweise train
 | Lückentext (Auswahl) | Tap | ja |
 | Im Text markieren (Wort/Satz) | Tap | ja |
 | Fehler finden (Rechtschreibung) | Tap aufs falsche Wort | ja |
-| Kurzantwort / Begründung | Freitext | **nein** – Musterlösung + "Hab ich's getroffen? ja/teils/nein" |
+| Kurzantwort / Begründung | Freitext | **nein** – "Vergleichen" zeigt Musterlösung und Kernpunkte, dann "Hast du es getroffen?" Getroffen / Teils / Noch nicht |
 
 Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
 
@@ -123,6 +123,8 @@ Die Schwellen sind absichtlich identisch mit den Kompass-Niveaugrenzen. Kein IRT
 
 - Richtig: kurze Bestätigung, bei Niveau II/III zusätzlich "so geht's auch" (alternativer Lösungsweg)
 - Falsch: nie rotes X, nie "Falsch!". Stattdessen "Noch nicht ganz" + Erklärung in Kindersprache (max. 3 Sätze) + häufiger Denkfehler benannt ("Viele vergessen hier den Übertrag"). Der Denkfehler steht hinter dem Tipp „Falle" im Band und wird beim Vorlesen immer mitgelesen.
+- Kurzantwort (seit 2026-10-14): Die App urteilt nicht. Nach der Selbsteinschätzung zeigt das Band keine Überschrift, bei "Getroffen" die Bestätigung des Items, bei "Teils" und "Noch nicht" die Erklärung und "Falle".
+- Fehler finden: Das Band nennt die richtige Schreibung ("So schreibt man es: Samstag"), auch wenn das Kind den Fehler gefunden hat.
 - Jede Erklärung ist Teil des Items (siehe `CONTENT_SCHEMA.md`), nicht generisch
 
 ## 6. Gamification-Prinzipien

@@ -48,6 +48,7 @@ pfadfinder/
       practice/                ein Übungsschritt: Antwort → Attempt, Mastery, Fehlerkiste, Session
       check/                   Einstiegscheck: Antwort → Attempt (mode "check"), Abschluss → Startniveaus, Entdeckungen, Session
       progress/                Karte und Tagesziel: mapRegionState, todayProgress (Zod-frei, Startseite)
+      presentation/            Reihenfolge auf dem Bildschirm je Format (gemischt) und Vorlesetext
       parents/                 Rechenfrage vor dem Eltern-Bereich
     data/                      Dexie-DB, Repositories (Dexie + In-Memory), Anwendungsdienste, Zustand-Stores
     content-runtime/           lazy Loader für content/*.json (per Bereich)
@@ -93,7 +94,7 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 
 **Probetest.** Timer läuft im Domain-Modell (startedAt + 45 Min.), UI zeigt verbleibende Zeit nur dezent (kein rotes Blinken). Navigation vor/zurück erlaubt wie auf Papier. Abgabe manuell oder bei Ablauf. Auswertung pro Bereich und gesamt; Attempts fließen **nicht** in Mastery (Probetest ist Messung, nicht Training).
 
-**Vorlesen.** Jeder Item-Screen hat einen Button; Text = `readAloud ?? stimulus.text + stimulus.assetAlt + prompt`. Im Probetest deaktiviert, außer bei Mathe (Lesehürde ist dort nicht Testgegenstand – Entscheidung Markus, Default: an).
+**Vorlesen.** Jeder Item-Screen hat einen Button; Text = `presentation.itemSpeech`: `readAloud ?? stimulus.text + stimulus.assetAlt + prompt`, danach „Antworten: …“ in der Reihenfolge auf dem Bildschirm (seit 2026-10-14, für alle Formate einschließlich single-choice; number-input hängt nichts an). match liest erst die Zeilen, dann die Karten als Antworten; order die aktuelle Reihenfolge; cloze-select den Satz mit „Lücke 1“ und je Lücke ihre Optionen; mark-in-text und find-error die Einheiten mit Komma, ohne `speakable()` (sonst würde „100 200“ zu „100200“); short-answer den Tipp. Beim Vergleichen liest das Band Frage, Musterlösung und Kernpunkte (`comparisonSpeech`). Rechtschreib-Items bekommen keine Absicherung, Groß-/Kleinschreibung hört man nicht. Mischen und Vorlesen nutzen dieselben Funktionen (`domain/presentation`: `presentedOptions`, `presentedMatch`, `presentedOrder`, `presentedGapOptions`). Im Probetest deaktiviert, außer bei Mathe (Lesehürde ist dort nicht Testgegenstand – Entscheidung Markus, Default: an).
 
 **Druck.** Route `/probetest/:id/print` rendert alle Items im Papier-Layout (Nummerierung, Antwortfelder, Zeilen für Kurzantwort) plus Lösungsblatt auf separater Seite. `@media print` blendet Chrome aus.
 
@@ -105,13 +106,15 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 type FormatProps<F extends Format> = {
   item: ItemOf<F>;
   attemptIndex: number;           // Seed fürs Mischen: presentationSeed(item.id, attemptIndex)
-  answer: AnswerOf<F> | null;
-  onChange(answer: AnswerOf<F> | null): void;  // null = noch keine gültige Eingabe ("3,"), Prüfen bleibt aus
-  disabled: boolean;              // nach Abgabe
+  answer: DraftOf<F> | null;      // = AnswerOf<F>, bei short-answer nur { text } (die Wertung kommt aus dem Band)
+  onChange(answer: DraftOf<F> | null): void;  // null = noch keine gültige Eingabe ("3,"), Prüfen bleibt aus
+  disabled: boolean;              // nach Abgabe und beim Vergleichen
   revealed?: { correct: Correctness; solution: SolutionOf<F> };  // Feedback-Darstellung
+  showSolution?: boolean;         // short-answer: Musterlösung zeigen (Vergleichen und danach)
 };
+type FormatEntry<F> = { component; selfRated?: true; submitLabel?: string; bandNote?(item): { label; text } };
 ```
-Seit 2026-10-11: `attemptIndex` und `onChange(… | null)` ergänzt, weil das Mischen formatspezifisch ist und unfertige Eingaben gemeldet werden müssen. Übbar sind nur Items, deren Format hier registriert ist (`SUPPORTED_FORMATS`).
+Seit 2026-10-11: `attemptIndex` und `onChange(… | null)` ergänzt, weil das Mischen formatspezifisch ist und unfertige Eingaben gemeldet werden müssen. Seit 2026-10-14 (Aufgabe 7) sind alle neun Formate registriert (`SUPPORTED_FORMATS`), `MIN_ITEMS_FOR_PRACTICE` zählt damit alle aktiven Items. Ein Registry-Eintrag kann mehr als die Komponente: `selfRated` (short-answer: der Knopf heißt `submitLabel` „Vergleichen“, der ItemScreen zeigt danach Musterlösung und Selbsteinschätzung „Getroffen / Teils / Noch nicht“ im Band, erst diese Wahl ruft `onSubmit(answer)` mit `rating`; das Band zeigt danach keine Überschrift), `bandNote` (find-error: „So schreibt man es: …“ im Band, bei richtig und noch nicht). match und order bringen dnd-kit mit und liegen in eigenen Chunks: `preloadFormats()` lädt sie, sobald die Üben- oder Einstieg-Route ihren Store anlegt; das Promise trägt Reacts Statusfelder, `use()` liest ein geladenes Modul also synchron. `scripts/check-bundle.ts` prüft, dass dnd-kit (Marker `DndDescribedBy`) in keiner Datei steckt, die Startseite oder eine Route statisch laden. Ziehen ist nie der einzige Weg: match geht mit Tippen (Zeile, dann Karte), order mit den Knöpfen ↑/↓.
 
 Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/evaluation`. Kein Format-Switch im Screen-Code.
 
@@ -131,7 +134,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - E2E: (1) Einstiegscheck → Karte zeigt Niveaus, (2) Üben 10 Items → Abschluss-Screen, (3) Probetest starten → abgeben → Auswertung (seit 2026-10-14: (1) ist `einstieg.spec`, Layout und Screenshots der Einstieg-Screens in `einstieg-layout.spec`, vier Viewports)
 - `scripts/validate-content.ts` läuft in CI und als pre-commit
 - PWA (seit 2026-10-12, Lighthouse hat keine PWA-Kategorie mehr): installierbar auf dem iPad (manuell bestätigt), Offline-E2E grün
-- Layout-Test (jedes übbare Item × 3 Zustände): lokal in allen vier Viewports, in CI nur in 1024 × 660 und 768 × 900. Das sind die engsten (iPad mit Safari-Leisten); was dort ohne Scrollen passt, passt auch auf 1024 × 768 und 768 × 1024. Er wächst mit jedem Batch, vier Viewports hätten die CI-Laufzeit mit jedem Batch weiter verlängert. Die Karte (`karte.spec`) läuft weiter in allen vier
+- Layout-Test (jedes aktive Item × 3 Zustände, short-answer zusätzlich „vergleichen“): lokal in allen vier Viewports, in CI nur in 1024 × 660 und 768 × 900. Ein Viewport misst alle Items und scheitert dann einmal mit der vollständigen Befundliste (seit Aufgabe 7). `formate.spec` spielt je neuem Format ein echtes Item auf `/dev/item/:id?state=spielen` (antworten, Prüfen, Band, Weiter; Ziehen bei match und order) mit Screenshots vor und nach Prüfen in vier Viewports. Der Preview-Server für die Smoke-Flows wird nie wiederverwendet (`reuseExistingServer: false`, Befund 5d). Das sind die engsten (iPad mit Safari-Leisten); was dort ohne Scrollen passt, passt auch auf 1024 × 768 und 768 × 1024. Er wächst mit jedem Batch, vier Viewports hätten die CI-Laufzeit mit jedem Batch weiter verlängert. Die Karte (`karte.spec`) läuft weiter in allen vier
 - Lighthouse gegen die Live-URL, mobil: Performance ≥ 90, Barrierefreiheit 100, Best Practices 100 (SEO zählt nicht, solange `noindex` gilt)
 
 ## 9. Erweiterungspunkte (nicht bauen, aber nicht verbauen)
