@@ -56,8 +56,14 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
     await answer(page, item, item.id.startsWith('m-zo-'));
     await expect(page.getByRole('button', { name: 'Prüfen' })).toHaveCount(0);
     await page.getByRole('button', { name: 'Weiter' }).click();
-    // No judgement, ever: straight on to the next question.
-    await expect(page.getByText(/Richtig|Noch nicht|falsch/i)).toHaveCount(0);
+    // No judgement, ever: straight on to the next question. Only the feedback is checked, not the
+    // page: tasks themselves say "richtig" or "falsch" ("Was hat Ben falsch gemacht?").
+    await expect(page.getByRole('heading', { name: /^(Richtig|Noch nicht ganz)\.$/ })).toHaveCount(
+      0,
+    );
+    await expect(page.locator('[data-region="band"]')).not.toContainText(
+      /Richtig|Noch nicht|falsch/i,
+    );
   }
 
   await expect(page.getByRole('heading', { name: 'Deine Reise beginnt hier' })).toBeVisible();
