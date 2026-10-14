@@ -1,5 +1,6 @@
-// The question in front of the Eltern page (PRODUCT.md §7): no password, just a sum of two
-// two-digit numbers that keeps a child from landing there by chance. Not a lock.
+// The question in front of the Eltern page (PRODUCT.md §7): a sign "for parents", not a lock.
+// Any child in year 4 can add two two-digit numbers; the protection is that no link in the app
+// leads to /eltern (ARCHITECTURE.md §7).
 
 export interface GateQuestion {
   a: number;

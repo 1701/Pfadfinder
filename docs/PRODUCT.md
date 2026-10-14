@@ -151,7 +151,7 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 - Schrift: gut lesbare Grundschulschrift (z. B. Andika), Mindestgröße 18 px, hoher Kontrast
 - Maximal 2 Sätze Anweisung pro Aufgabe; Anweisungen stets mit Beispiel beim ersten Auftreten eines Formats
 - Kein Text, den ein Neunjähriger nicht versteht – auch nicht in Buttons ("Weiter", "Nochmal", "Zeig mir")
-- Eltern-Bereich hinter einer Kindersicherung (Summe zweier zweistelliger Zahlen, Eingabe über den Ziffernblock), nicht hinter Login; erreichbar nur über die Adresse `/eltern`, kein Link in der App
+- Eltern-Bereich nicht hinter Login, erreichbar nur über die Adresse `/eltern`, kein Link in der App; das ist der eigentliche Schutz. Davor steht eine Rechenfrage (Summe zweier zweistelliger Zahlen, Ziffernblock) als Schild „für Eltern“, keine Kindersicherung (ARCHITECTURE §7)
 
 ## 8. Eltern-Sicht (MVP, minimal)
 

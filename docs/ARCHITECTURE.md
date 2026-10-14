@@ -122,7 +122,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - Eine Aufgabe = ein Screen, keine vertikale Scrollnotwendigkeit auf 1024 × 768 (iPad quer) und 768 × 1024 (hoch)
 - Animationen ≤ 300 ms, `prefers-reduced-motion` respektieren
 - Kein Toast, kein Modal im Üben-Flow; Feedback inline unter der Aufgabe
-- Eltern-Bereich `/eltern` hinter einer Rechenfrage (Summe zweier zweistelliger Zahlen, `domain/parents.gateQuestion`, Eingabe über den Ziffernblock), kein Passwort, kein Link in der App (seit 2026-10-14, vorher 6 × 7 … 9 × 9)
+- Eltern-Bereich `/eltern` hinter einer Rechenfrage (Summe zweier zweistelliger Zahlen, `domain/parents.gateQuestion`, Eingabe über den Ziffernblock), kein Passwort (seit 2026-10-14, vorher 6 × 7 … 9 × 9). Die Rechenfrage ist **kein Schutz**, sondern ein Schild „für Eltern“: Weder Einmaleins noch zweistellige Addition ist für ein Kind der 4. Klasse eine Hürde. Der Schutz ist allein, dass kein Link in der App zu `/eltern` führt (geprüft in `eltern.spec`). Wer hier mehr Schutz braucht, muss etwas anderes bauen, nicht die Rechenfrage schwerer machen
 
 ## 8. Qualität
 
