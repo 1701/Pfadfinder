@@ -1,5 +1,46 @@
 [
   {
+    "id": "d-rss-1-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Dieser Satz ist ganz klein geschrieben."
+    },
+    "prompt": "Tippe alle Wörter an, die man großschreibt.",
+    "payload": {
+      "text": "am morgen frühstückt leyla mit ihrer schwester",
+      "unit": "word",
+      "maxSelect": 3
+    },
+    "solution": {
+      "indices": [
+        1,
+        3,
+        6
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Morgen, Leyla und Schwester sind Nomen. Nomen schreibt man groß.",
+      "incorrect": "Nomen erkennst du so: Du kannst der, die oder das davorsetzen. Namen schreibt man auch groß.",
+      "misconception": "Das erste Wort ist hier absichtlich klein. Es geht nur um Nomen, nicht um den Satzanfang."
+    },
+    "tags": [
+      "grossschreibung",
+      "nomen",
+      "artikelprobe"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-14",
+      "calibration": "vera3"
+    }
+  },
+  {
     "id": "d-rss-1-002",
     "schemaVersion": "1.0",
     "fach": "deutsch",

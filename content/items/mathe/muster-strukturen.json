@@ -1,1 +1,82 @@
-[]
+[
+  {
+    "id": "m-ms-2-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas hat eine Zahlenreihe geschrieben."
+    },
+    "prompt": "Eine Zahl passt nicht in die Reihe. Tippe sie an.",
+    "payload": {
+      "text": "3 6 9 12 14 18 21",
+      "unit": "word",
+      "maxSelect": 2
+    },
+    "solution": {
+      "indices": [
+        4
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Die Reihe geht immer plus 3. Nach 12 kommt 15, nicht 14.",
+      "incorrect": "Finde die Regel: Wie viel kommt von Zahl zu Zahl dazu? Prüfe dann jede Zahl.",
+      "misconception": "Viele prüfen nur den Anfang der Reihe. Die Regel muss bis zum Ende gelten."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "fehler-finden"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-14",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-3-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia zählt in Hunderterschritten. Zwei Zahlen hat sie falsch geschrieben."
+    },
+    "prompt": "Zwei Zahlen passen nicht in die Reihe. Tippe beide an.",
+    "payload": {
+      "text": "100 200 300 350 400 500 650 700",
+      "unit": "word",
+      "maxSelect": 2
+    },
+    "solution": {
+      "indices": [
+        3,
+        6
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! Die Reihe geht immer plus 100. 350 und 650 gehören nicht dazu.",
+      "incorrect": "Die Reihe geht in gleichen Schritten. Welche zwei Zahlen fallen aus dem Takt?",
+      "misconception": "Wer nur eine Zahl findet, hört zu früh auf. Prüfe die Reihe bis zum Ende."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "fehler-finden",
+      "hunderter"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-14",
+      "calibration": "iqb"
+    }
+  }
+]
