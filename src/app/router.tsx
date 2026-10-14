@@ -41,6 +41,9 @@ const PracticeRoute = lazy(() =>
 // The Einstieg (PRODUCT.md §5.4) in its own chunk, like practice.
 const CheckRoute = lazy(() => import('./check-route').then((m) => ({ default: m.CheckRoute })));
 
+// The Eltern page (only by URL, no link in the app) in its own chunk.
+const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
+
 // Developer pages exist only in the dev build; the condition is replaced at build time,
 // so the imports and their chunks are dropped from the production bundle.
 const TokensPage = import.meta.env.DEV
@@ -65,6 +68,7 @@ export function AppRouter() {
           <Route path="/" element={<StartRoute />} />
           <Route path="/ueben/:fach/:bereich" element={<PracticeRoute />} />
           <Route path="/einstieg/:fach" element={<CheckRoute />} />
+          <Route path="/eltern" element={<ElternRoute />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
           {KartePage && <Route path="/dev/karte" element={<KartePage />} />}

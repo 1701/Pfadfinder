@@ -3,6 +3,7 @@ import { BEREICHE, FAECHER } from '../../src/domain/content';
 import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/number-format';
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
 import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
+import { ELTERN_TEXTS } from '../../src/ui/text/eltern';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
 import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
@@ -29,6 +30,13 @@ describe('the Einstieg', () => {
 
 describe('the choice before practice goes on', () => {
   it.each(UEBEN_TEXTS)('"%s" is at most 2 sentences, no exclamation', (text) => {
+    expect(text).not.toContain('!');
+    expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
+  });
+});
+
+describe('the Eltern page', () => {
+  it.each(ELTERN_TEXTS)('"%s" is at most 2 sentences, no exclamation', (text) => {
     expect(text).not.toContain('!');
     expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
   });

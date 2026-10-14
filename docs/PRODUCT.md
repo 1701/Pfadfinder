@@ -151,13 +151,14 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 - Schrift: gut lesbare Grundschulschrift (z. B. Andika), Mindestgröße 18 px, hoher Kontrast
 - Maximal 2 Sätze Anweisung pro Aufgabe; Anweisungen stets mit Beispiel beim ersten Auftreten eines Formats
 - Kein Text, den ein Neunjähriger nicht versteht – auch nicht in Buttons ("Weiter", "Nochmal", "Zeig mir")
-- Eltern-Bereich hinter einer Kindersicherung (z. B. "Rechne 7 × 8"), nicht hinter Login
+- Eltern-Bereich hinter einer Kindersicherung (Summe zweier zweistelliger Zahlen, Eingabe über den Ziffernblock), nicht hinter Login; erreichbar nur über die Adresse `/eltern`, kein Link in der App
 
 ## 8. Eltern-Sicht (MVP, minimal)
 
 - Übersicht: Karte mit Niveau je Bereich, Anzahl geübter Items, letzte Probetest-Auswertung
 - Probetest-Auswertung: Prozent je Bereich, Hinweis welche Bereiche unter 50 % liegen – ohne Schulartprognose
 - Einstellungen: Daten löschen, Export/Import des Fortschritts als Datei (Gerätewechsel)
+- Stand 2026-10-14: gebaut ist nur "Alles löschen" mit Rückfrage ("Wirklich alles löschen? Das kann nicht rückgängig gemacht werden."); danach zeigt die Karte wieder das Einstieg-Angebot. Übersicht und Export/Import folgen.
 - Klartext-Hinweis: "Diese App ersetzt keine Beratung durch die Lehrkraft und sagt kein Testergebnis voraus."
 
 ## 9. Content-Ziele

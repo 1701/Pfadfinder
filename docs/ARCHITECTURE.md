@@ -48,6 +48,7 @@ pfadfinder/
       practice/                ein Übungsschritt: Antwort → Attempt, Mastery, Fehlerkiste, Session
       check/                   Einstiegscheck: Antwort → Attempt (mode "check"), Abschluss → Startniveaus, Entdeckungen, Session
       progress/                Karte und Tagesziel: mapRegionState, todayProgress (Zod-frei, Startseite)
+      parents/                 Rechenfrage vor dem Eltern-Bereich
     data/                      Dexie-DB, Repositories (Dexie + In-Memory), Anwendungsdienste, Zustand-Stores
     content-runtime/           lazy Loader für content/*.json (per Bereich)
     ui/
@@ -86,6 +87,8 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 
 **Einstiegscheck.** Pro Fach einmal, nur übbare Bereiche (`practiceableBereiche`), je 2–3 Items, höchstens `CHECK_ITEM_COUNT` (12). `scheduler.buildCheck(fach, pool, { bereiche, seed })` liefert einen Plan (Bereiche in Rundenreihenfolge, `total`, gemischte Kandidaten; Seed = Session-ID). `nextCheckItem(plan, answers)` wählt das Item der aktuellen Leiterstufe (`checkLadderNiveau`: richtig hoch, falsch bleibt) und nach Runde 2 die Bereiche mit drittem Item (zuerst gemischt beantwortete). Das Startniveau ist `checkStartNiveau` = höchstes Niveau mit richtiger Antwort, mindestens 1. `check.completeCheck` erzeugt daraus je geprüftem Bereich einen `MasteryState` (Fenster leer), Entdeckungen für die Etappen darunter und eine Session mit mode "check". `data/check.finishCheck` speichert Attempts, Session, Mastery und Entdeckungen in **einer** Transaktion, erst nach der letzten Antwort und nur, wenn das Fach noch keinen `MasteryState` hat; vorher steht alles nur im Store (`data/check-store`). Ein Abbruch hinterlässt deshalb nichts. Check-Attempts ändern weder Mastery noch Fehlerkiste noch Tagesziel. Die Karte bietet den Check an, solange `progress.isCheckOffered` gilt (kein `MasteryState` im Fach, mindestens `CHECK_MIN_BEREICHE` = 2 übbare Bereiche) und der Speicher lesbar ist; "Später" speichert `data/map-progress.postponeOffer` als `PostponedOffer` in Dexie; `progress.postponedFaecher` blendet das Angebot bis zum Ende des lokalen Kalendertags aus (Grenze wie beim Fortsetzen), auch nach Neuladen. UI: Route `/einstieg/:fach` im lazy Chunk `check-route` (eigener Store, `CheckStoreContext`), Screens in `ui/screens/Einstieg*`. Der Item-Screen ist derselbe wie beim Üben, mit `submitLabel` "Weiter" und `pause.onPause` statt Link. Das Ergebnis zeigt `Karte` mit `fach` (zugeschnitten über `islandViewBox`) und `interactive={false}`. Status `unavailable` unterscheidet `started` (Hinweis "Deine Reise hat schon begonnen.", auch wenn `finishCheck` nichts schreibt) und `empty`. Vorschau unter `/dev/einstieg?zustand=…` (nur Dev).
 
+**Eltern-Bereich** (seit 2026-10-14, Teilumfang). Route `/eltern` im lazy Chunk `eltern-route`, nur per URL erreichbar. Nach der Rechenfrage gibt es einen Knopf „Alles löschen“ mit Rückfrage; er leert alle Dexie-Tabellen (`Repositories.clear`, auch `postponedOffers`) und lädt danach die Startseite neu (`location.replace('/')`), weil die Stores dieses Laufs den gelöschten Learner noch kennen. Die Karte bietet dann wieder den Einstieg an. Übersicht und Export/Import folgen.
+
 **Fehlerkiste.** `ReviewEntry` fällig → erscheint vor neuen Items im Üben-Modus (max. 3 pro Session). Richtig: stage 1→2 (+3 Tage) → done. Falsch: stage bleibt, +1 Tag. Fällig ist ein Eintrag ab Beginn seines Fälligkeitstags (lokale Zeit des Geräts).
 
 **Probetest.** Timer läuft im Domain-Modell (startedAt + 45 Min.), UI zeigt verbleibende Zeit nur dezent (kein rotes Blinken). Navigation vor/zurück erlaubt wie auf Papier. Abgabe manuell oder bei Ablauf. Auswertung pro Bereich und gesamt; Attempts fließen **nicht** in Mastery (Probetest ist Messung, nicht Training).
@@ -119,7 +122,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - Eine Aufgabe = ein Screen, keine vertikale Scrollnotwendigkeit auf 1024 × 768 (iPad quer) und 768 × 1024 (hoch)
 - Animationen ≤ 300 ms, `prefers-reduced-motion` respektieren
 - Kein Toast, kein Modal im Üben-Flow; Feedback inline unter der Aufgabe
-- Eltern-Bereich hinter Rechenfrage (zufällig aus 6 × 7 … 9 × 9), kein Passwort
+- Eltern-Bereich `/eltern` hinter einer Rechenfrage (Summe zweier zweistelliger Zahlen, `domain/parents.gateQuestion`, Eingabe über den Ziffernblock), kein Passwort, kein Link in der App (seit 2026-10-14, vorher 6 × 7 … 9 × 9)
 
 ## 8. Qualität
 

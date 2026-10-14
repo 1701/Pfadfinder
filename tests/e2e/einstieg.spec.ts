@@ -1,6 +1,7 @@
 // Smoke flow of the Einstieg (ARCHITECTURE.md §8, E2E 1): Karte → "Los" → questions without
 // feedback → result → the map shows the starting niveaus and offers nothing more. Plus pause,
-// "Später" and the hint on a second visit. Runs on the production build (Chromium and WebKit).
+// "Später", the hint on a second visit and offline use. Runs on the production build (Chromium and
+// WebKit).
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
@@ -139,4 +140,32 @@ test('Später: das Angebot ruht bis zum Ende des Tages, auch nach Neuladen', asy
   await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));
   await page.reload();
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+});
+
+test('offline: Intro → eine Aufgabe → Pause → Weitermachen', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName === 'webkit', 'Playwright WebKit has no service worker support');
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload(); // now controlled by the service worker
+  await context.setOffline(true);
+  await page.reload();
+  // The check-route chunk and the content come from the precache.
+  await startEinstieg(page);
+  await answer(page, await currentItem(page), true);
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await expect(page.getByText(`2 von ${TOTAL}`)).toBeVisible();
+  const second = await page.getByRole('heading', { level: 1 }).textContent();
+
+  await page.getByRole('button', { name: 'Pause' }).click();
+  await page.getByRole('button', { name: 'Weitermachen' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(second!);
+  await answer(page, await currentItem(page), true);
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await expect(page.getByText(`3 von ${TOTAL}`)).toBeVisible();
 });
