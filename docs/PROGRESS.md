@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-14 – Aufgabe 7: Renderer für die sieben restlichen Formate
+- **Gebaut:** multi-choice, match (Tippen und Ziehen), order (Ziehen und ↑/↓), cloze-select, mark-in-text (splitUnits), find-error, short-answer („Vergleichen“, dann Getroffen/Teils/Noch nicht, Band ohne Überschrift). `domain/presentation` mischt und liefert den Vorlesetext („Antworten: …“, auch bei single-choice). Alle neun Formate sind übbar; kein neuer Bereich wird dadurch übbar (ms und rss je 2 Items). match/order in eigenen Chunks, `check-bundle` hält dnd-kit aus Startseite und Routen (Gegenprobe rot). Startseite 278,3 kB.
+- **Content:** drei mark-in-text-Items (rs-strategien zusammengeführt, m-ms-3-001 „falsch geschrieben“), daten-zufall v7. Schema 1.0.8: 24-Zeichen-Regel auch für multi-choice mit Bild, `model` ≤ `maxChars` im Validator.
+- **Messung:** m-dz-2-007 in Safari quer nach Prüfen −23 px vor, +89 px nach v7 (zweispaltig). Knappster Fall jetzt short-answer m-dz-3-003 mit +16 px.
+- **Entscheidungen:** Freigaben aus Teil A (Artefakt), dazu: Prüfen bei order erst nach der ersten Bewegung, Korrektur bei find-error in beiden Zuständen, Knopf „Vergleichen“. match nutzt ein Raster für vorher und nachher (3 : 2), damit nichts springt.
+- **Testwerkzeug:** Layout-Test über alle Items meldet je Viewport die ganze Liste (im Lauf gesehen: ein Befund −1 px bei match, behoben). `formate.spec` je Format mit Screenshots vor/nach Prüfen in vier Viewports. Preview-Server nie wiederverwendet. Gefunden: `currentItem` verwechselte Items mit gleichem Prompt.
+- **Offen:** iPad-Tastatur bei short-answer nur am Gerät prüfbar (Markus’ Liste). Nach Prüfen rücken order-Karten um die Griffbreite nach links.
+- **CI:** [CI #38604063472](https://github.com/1701/Pfadfinder/actions/runs/38604063472) grün (1e0f758…e48ecfb), Workers Builds grün; 691 Tests, e2e 60 bestanden, 4 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (46/46, Layout in vier Viewports).
+
 ## 2026-10-14 – Entscheidungen zu Aufgabe 6b, Rechenfrage ist ein Schild
 - **Entschieden (Markus):** Der Auswahl-Screen „Fortsetzen“/„Neu anfangen“ bleibt; ein Tipp mehr beim Fortsetzen verhindert ein versehentliches Neu anfangen. „Später“ gilt je Gerät (im MVP ein Lernender pro Gerät, alles andere ist PRODUCT §11). Beim Löschen ist kein Knopf gelb, weil Löschen kein nächster Schritt auf dem Weg ist.
 - **Geändert:** ARCHITECTURE §7 und PRODUCT §7: Die Rechenfrage ist kein Schutz, sondern ein Schild „für Eltern“. Der Schutz ist allein, dass kein Link zu `/eltern` führt. PRODUCT §7 sagt nicht mehr „Kindersicherung“, der Kommentar in `domain/parents/gate.ts` sagt dasselbe.
