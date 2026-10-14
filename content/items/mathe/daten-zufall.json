@@ -635,19 +635,19 @@
       "options": [
         {
           "id": "a",
-          "text": "Die meisten Kinder gehen zu Fuß."
+          "text": "Zu Fuß: am meisten."
         },
         {
           "id": "b",
-          "text": "Mehr Kinder fahren mit dem Bus als mit dem Fahrrad."
+          "text": "Bus: mehr als Fahrrad."
         },
         {
           "id": "c",
-          "text": "Mit dem Auto kommen mehr Kinder als mit dem Fahrrad."
+          "text": "Auto: mehr als Fahrrad."
         },
         {
           "id": "d",
-          "text": "Insgesamt wurden 20 Kinder gefragt."
+          "text": "Insgesamt 20 Kinder."
         }
       ],
       "minSelect": 2
@@ -879,7 +879,7 @@
       "hint": "Rot muss wenigstens ein Feld haben, Blau muss mehr Felder haben als Rot."
     },
     "solution": {
-      "model": "Zum Beispiel 4 blaue und 2 rote Felder, oder 5 blaue und 1 rotes Feld. Blau hat mehr Felder als Rot, und Rot hat mindestens ein Feld.",
+      "model": "4 blaue und 2 rote Felder. Blau hat mehr, Rot hat mindestens eins.",
       "keyPoints": [
         "Blau hat mehr Felder als Rot (4 und 2, oder 5 und 1)",
         "Rot hat mindestens ein Feld, sonst wäre Rot unmöglich",
