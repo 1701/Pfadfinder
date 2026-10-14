@@ -4,7 +4,7 @@
 // Driven through the real app on the dev server; screenshots for review.
 
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, answer, currentItem } from './helpers';
+import { SCREENSHOTS, answer, check, currentItem } from './helpers';
 
 const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
@@ -53,8 +53,9 @@ for (const viewport of VIEWPORTS) {
     await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
     for (let n = 1; n <= 3; n++) {
       await expect(page.getByText(`${n} von 10`)).toBeVisible();
-      await answer(page, await currentItem(page), true);
-      await page.getByRole('button', { name: 'Prüfen' }).click();
+      const item = await currentItem(page);
+      await answer(page, item, true);
+      await check(page, item, true);
       await page.getByRole('button', { name: 'Weiter' }).click();
     }
     await page.getByRole('link', { name: 'Pause' }).click();

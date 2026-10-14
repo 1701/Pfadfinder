@@ -2,7 +2,7 @@
 // Reload (IndexedDB) and offline use. Screenshots in both iPad formats (Chromium projects).
 
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, answer, currentItem, expectFitsScreen } from './helpers';
+import { SCREENSHOTS, answer, check, currentItem, expectFitsScreen, verdictOf } from './helpers';
 
 const viewportName = (page: Page) =>
   page.viewportSize()!.width > page.viewportSize()!.height ? 'ipad-landscape' : 'ipad-portrait';
@@ -21,8 +21,9 @@ test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Zahlen und Rechnen' }).click();
   await expect(page.getByText('1 von 10')).toBeVisible();
-  await answer(page, await currentItem(page), true);
-  await page.getByRole('button', { name: 'Prüfen' }).click();
+  const first = await currentItem(page);
+  await answer(page, first, true);
+  await check(page, first, true);
   // Tapped: "Weiter" has the focus, but no ring.
   await expect.poll(outline).toBe('none');
   // Keyboard: back and forth with Tab, the ring is there.
@@ -52,11 +53,13 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
       await shot(page, `item-${item.format}`);
     }
 
-    await page.getByRole('button', { name: 'Prüfen' }).click();
-    await expect(
-      page.getByRole('heading', { name: correct ? 'Richtig.' : 'Noch nicht ganz.' }),
-    ).toBeVisible();
-    await expect(page.getByText(/falsch/i)).toHaveCount(0);
+    await check(page, item, correct);
+    const band = page.locator('[data-region="band"]');
+    const verdict = verdictOf(item, correct);
+    if (verdict) await expect(band.getByRole('heading', { name: verdict })).toBeVisible();
+    else await expect(band.getByRole('button', { name: 'Weiter' })).toBeVisible();
+    // Only the band is checked: tasks themselves may say "falsch" ("Was ist an Lenas Antwort falsch?").
+    await expect(band.getByText(/falsch/i)).toHaveCount(0);
     await expectFitsScreen(page, `${item.id} Rückmeldung`);
     const state = correct ? 'feedback-richtig' : 'feedback-noch-nicht';
     if (!taken.has(state)) {
@@ -88,8 +91,9 @@ test('Neu anfangen: neue Runde ab 1, das Tagesziel bleibt', async ({ page }) => 
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   for (let n = 1; n <= 3; n++) {
     await expect(page.getByText(`${n} von 10`)).toBeVisible();
-    await answer(page, await currentItem(page), true);
-    await page.getByRole('button', { name: 'Prüfen' }).click();
+    const item = await currentItem(page);
+    await answer(page, item, true);
+    await check(page, item, true);
     await page.getByRole('button', { name: 'Weiter' }).click();
   }
   await page.getByRole('link', { name: 'Pause' }).click();

@@ -20,8 +20,9 @@ const manifest = JSON.parse(readFileSync('content/manifest.json', 'utf8')) as {
 const MATHE_OPEN = Object.entries(manifest.bereiche)
   .filter(([, b]) => b.fach === 'mathe')
   .filter(([, b]) => {
-    const count = ['single-choice', 'number-input']
-      .flatMap((f) => Object.values(b.byFormat[f] ?? {}))
+    // Every format has a renderer since task 7: all active items count.
+    const count = Object.values(b.byFormat)
+      .flatMap((byNiveau) => Object.values(byNiveau ?? {}))
       .reduce((sum, n) => sum + n, 0);
     return count >= 10;
   })

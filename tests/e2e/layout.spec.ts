@@ -1,22 +1,20 @@
-// Every practiceable item in every state on four viewports: the two iPad sizes from the skill
+// Every active item in every state on four viewports: the two iPad sizes from the skill
 // and the same iPad in Safari with its bars (1024×660 landscape, 768×900 portrait).
 // In CI only the two Safari sizes run (ARCHITECTURE.md §8): they are the tightest, and an item
 // that fits there also fits on the full iPad screens. Locally all four run.
-// Runs against /dev/item (dev build only).
+// A viewport does not stop at the first red item: it measures all of them and fails once, with
+// the complete list. Runs against /dev/item (dev build only).
 
-import { test, type Page } from '@playwright/test';
-import { ITEMS, SCREENSHOTS, expectFitsScreen } from './helpers';
+import { expect, test, type Page } from '@playwright/test';
+import { ITEMS, SCREENSHOTS, VIEWPORTS as ALL_VIEWPORTS, fitProblems } from './helpers';
 
-const ALL_VIEWPORTS = [
-  { name: 'ipad-landscape', width: 1024, height: 768 },
-  { name: 'ipad-portrait', width: 768, height: 1024 },
-  { name: 'safari-landscape', width: 1024, height: 660 },
-  { name: 'safari-portrait', width: 768, height: 900 },
-];
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
   : ALL_VIEWPORTS;
 const STATES = ['answering', 'richtig', 'noch-nicht'] as const;
+/** short-answer has one screen more: the model answer and the rating band. */
+const statesOf = (item: (typeof ITEMS)[number]): string[] =>
+  item.format === 'short-answer' ? [...STATES, 'vergleichen'] : [...STATES];
 
 /** Longest text on screen: stimulus + prompt + the "noch nicht" explanation. */
 const worst = [...ITEMS].sort((a, b) => {
@@ -58,12 +56,13 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     // About 0.8 s per item and state locally; grows with every batch.
-    test.setTimeout(Math.max(300_000, ITEMS.length * STATES.length * 3_000));
+    test.setTimeout(Math.max(300_000, ITEMS.length * (STATES.length + 1) * 3_000));
     await page.setViewportSize(viewport);
+    const red: string[] = [];
     for (const item of ITEMS) {
-      for (const state of STATES) {
+      for (const state of statesOf(item)) {
         await openItem(page, `/dev/item/${item.id}?state=${state}`);
-        await expectFitsScreen(page, `${item.id} ${state} ${viewport.name}`);
+        for (const problem of await fitProblems(page)) red.push(`${item.id} ${state}: ${problem}`);
       }
     }
     await openItem(page, `/dev/item/${worst.id}?state=noch-nicht`);
@@ -74,5 +73,6 @@ for (const viewport of VIEWPORTS) {
       await page.waitForTimeout(300);
       await page.screenshot({ path: `${SCREENSHOTS}/layout-bild-${viewport.name}.png` });
     }
+    expect(red, `${red.length} Befunde auf ${viewport.name}:\n${red.join('\n')}`).toEqual([]);
   });
 }

@@ -13,7 +13,8 @@ export default defineConfig({
     {
       command: 'npm run build && npm run preview',
       url: PREVIEW,
-      reuseExistingServer: !process.env.CI,
+      // Always a fresh build: a leftover `vite preview` would test an old bundle (finding 5d).
+      reuseExistingServer: false,
     },
     {
       // Dev build for /dev/item previews (layout checks of every item).
@@ -46,7 +47,7 @@ export default defineConfig({
     },
     {
       name: 'layout',
-      testMatch: /(layout|karte)\.spec\.ts/,
+      testMatch: /(layout|karte|formate)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: DEV },
     },
   ],

@@ -2,7 +2,7 @@
 // back, then the map of a new device that offers the Einstieg again. Production build.
 
 import { expect, test } from '@playwright/test';
-import { answer, currentItem } from './helpers';
+import { answer, check, currentItem } from './helpers';
 
 const OFFER = 'Wo geht deine Reise los?';
 
@@ -14,8 +14,9 @@ test('Üben → /eltern → alles löschen → Karte mit Angebot', async ({ page
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   for (let n = 1; n <= 2; n++) {
     await expect(page.getByText(`${n} von 10`)).toBeVisible();
-    await answer(page, await currentItem(page), true);
-    await page.getByRole('button', { name: 'Prüfen' }).click();
+    const item = await currentItem(page);
+    await answer(page, item, true);
+    await check(page, item, true);
     await page.getByRole('button', { name: 'Weiter' }).click();
   }
   await page.getByRole('link', { name: 'Pause' }).click();
