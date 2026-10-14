@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-14 – Aufgabe 6, Teil A: Einstiegscheck (Domain, Store, Speicherung)
+- **Gebaut:** `buildCheck(fach, pool, { bereiche, seed })` prüft nur übbare Bereiche, je 2–3 Items, höchstens 12 (Mathe heute: 4 Bereiche, 12 Items). Neu: `checkStartNiveau`, `domain/check` (`recordCheckAnswer`, `completeCheck`, `startDiscoveries`), `progress/check-offer` (zodfrei), `data/check` und `data/check-store` (Status `intro`/`answering`/`paused`/`saving`/`finished`/`unavailable`).
+- **Entscheidungen (Markus):** Das Startniveau ist das höchste Niveau mit einer richtigen Antwort (R W W → 1, R R → 2, R R R → 3); `checkLadderNiveau` wählt nur noch das nächste Item. Runde 3 geht zuerst an gemischt beantwortete Bereiche. MasteryState gibt es nur für geprüfte Bereiche. Alles wird erst nach der letzten Antwort in einer Transaktion gespeichert, mit erneuter Prüfung „kein MasteryState im Fach“. Der Check füllt weder Fehlerkiste noch Tagesziel. Seed = Session-ID. PRODUCT §5.4/§11 und ARCHITECTURE §3/§5 sind angepasst.
+- **Tests:** Verteilung bei 3/4/5 Bereichen, Runde 3, Leiter, Entdeckungen, Angebot; Store mit echtem Content: Durchlauf, Pause/Weiter, Abbruch ohne Spuren, Doppelstart, Rollback, keine Fehlerkiste, Export/Import.
+- **Offen:** Teil B (Wireframes) wartet auf Freigabe. Das Angebot passt nicht als eigene Zeile über die Karte (Namen in Safari 16,6 px), der Vorschlag steht deshalb in der Kopfzeile.
+- **CI:** [CI #38532108002](https://github.com/1701/Pfadfinder/actions/runs/38532108002) grün (591a156), Workers Builds grün; 543 Tests, e2e 21 bestanden, 2 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-13 – daten-zufall v5 und v6, Niveau-Zeile II
 - **Content:** `daten-zufall.json` v5: Nur die Optionen von m-dz-2-006 und m-dz-3-001 sind gekürzt, Lösungen und IDs bleiben. Damit halten alle 10 `single-choice`-Items mit Bild die 24-Zeichen-Regel ein. `content:validate`: 98 Items, 0 Fehler, 0 Warnungen; das Manifest bleibt gleich.
 - **Schema (bleibt 1.0.7):** §7 Niveau, Zeile II: „zwei Schritte, oder zwei Informationen aus Tabelle/Text/Bild verknüpfen“. Der abgrenzende Satz im Kalibrierungsabsatz ist gestrichen. CHANGELOG 1.0.7 ergänzt.
