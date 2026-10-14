@@ -21,7 +21,7 @@ export const MASTERY_MIN_ENTRIES = 6;
 /** Identical to the Kompass levels: E ≥ 75 %, M ≥ 50 %. */
 export const MASTERY_LEVEL_UP = 0.75;
 export const MASTERY_LEVEL_DOWN = 0.5;
-/** The Einstiegscheck serves 2–3 items per Bereich (ARCHITECTURE.md §5); enforced by the composer. */
+/** The Einstiegscheck serves 2–3 items per practiceable Bereich (ARCHITECTURE.md §5); see buildCheck. */
 export const CHECK_ITEMS_PER_BEREICH = { min: 2, max: 3 } as const;
 
 /**
@@ -107,13 +107,15 @@ export function updateMastery(state: MasteryState, result: MasteryResult): Maste
 export interface CheckResult {
   fach: Fach;
   bereich: Bereich;
+  /** Niveau of the item actually shown (it may deviate from the ladder rung). */
+  niveau: Niveau;
   correct: Correctness;
 }
 
 /**
- * Niveau ladder for one Bereich: start at 1, correct → +1 (max 3), otherwise stay.
- * Only a fully correct answer climbs; a self-rated 0.5 stays.
- * Also gives the niveau of the next check item when called with the results so far.
+ * Ladder rung of the next check item in one Bereich: start at 1, correct → +1 (max 3),
+ * otherwise stay. Only a fully correct answer climbs; a self-rated 0.5 stays.
+ * Chooses items only; the starting niveau is checkStartNiveau.
  */
 export function checkLadderNiveau(results: readonly Pick<CheckResult, 'correct'>[]): Niveau {
   let niveau: Niveau = 1;
@@ -124,8 +126,22 @@ export function checkLadderNiveau(results: readonly Pick<CheckResult, 'correct'>
 }
 
 /**
- * Starting mastery after the Einstiegscheck: one state per Bereich of every Fach present in
- * the results (Bereiche without results start at niveau 1). Results must be in answer order.
+ * Starting niveau of one Bereich (decision 2026-10-14): the highest niveau of a fully correct
+ * answer, at least 1. A start that is too low corrects itself within a practice round; one
+ * that is too high writes Entdeckungen that are never taken back.
+ */
+export function checkStartNiveau(
+  results: readonly Pick<CheckResult, 'niveau' | 'correct'>[],
+): Niveau {
+  return results.reduce<Niveau>(
+    (best, r) => (r.correct === true && r.niveau > best ? r.niveau : best),
+    1,
+  );
+}
+
+/**
+ * Starting mastery after the Einstiegscheck: one state per Bereich with results, in taxonomy
+ * order. Bereiche without results get initialMastery (niveau 1) when first practised.
  */
 export function initialMasteryFromCheck(
   results: readonly CheckResult[],
@@ -133,15 +149,21 @@ export function initialMasteryFromCheck(
 ): MasteryState[] {
   const faecher = [...new Set(results.map((r) => r.fach))];
   return faecher.flatMap((fach) =>
-    BEREICHE_BY_FACH[fach].map((bereich) => ({
-      learnerId: context.learnerId,
-      fach,
-      bereich,
-      niveau: checkLadderNiveau(results.filter((r) => r.fach === fach && r.bereich === bereich)),
-      window: [],
-      mastered: false,
-      updatedAt: context.at,
-    })),
+    BEREICHE_BY_FACH[fach].flatMap((bereich) => {
+      const own = results.filter((r) => r.fach === fach && r.bereich === bereich);
+      if (own.length === 0) return [];
+      return [
+        {
+          learnerId: context.learnerId,
+          fach,
+          bereich,
+          niveau: checkStartNiveau(own),
+          window: [],
+          mastered: false,
+          updatedAt: context.at,
+        },
+      ];
+    }),
   );
 }
 

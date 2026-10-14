@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { exportLearnerData, importLearnerData } from '../../src/data/backup';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
+import { createCheckStore } from '../../src/data/check-store';
 import { createSessionStore } from '../../src/data/session-store';
 import { sampleLearnerData } from '../fixtures/learner';
 import { answerFor, testDeps } from './helpers';
@@ -30,6 +31,25 @@ describe('export/import over the repositories', () => {
     const target = createMemoryRepositories();
     const result = await importLearnerData(target, JSON.stringify(file));
     expect(result.ok).toBe(true);
+    expect(await exportLearnerData(target, learnerId, EXPORTED_AT)).toEqual(file);
+  });
+
+  it('round-trips a finished Einstiegscheck (check session, starting mastery, Entdeckungen)', async () => {
+    const deps = testDeps();
+    const store = createCheckStore(deps);
+    await store.getState().start('mathe');
+    store.getState().begin();
+    while (store.getState().status === 'answering') {
+      store.getState().setAnswer(answerFor(store.getState().current!.item, true));
+      await store.getState().next();
+    }
+    const learnerId = store.getState().learner!.id;
+    const file = await exportLearnerData(deps.repos, learnerId, EXPORTED_AT);
+    expect(file.sessions.map((s) => s.mode)).toEqual(['check']);
+    expect(file.collectibles.unlocked.length).toBeGreaterThan(0);
+
+    const target = createMemoryRepositories();
+    expect((await importLearnerData(target, JSON.stringify(file))).ok).toBe(true);
     expect(await exportLearnerData(target, learnerId, EXPORTED_AT)).toEqual(file);
   });
 

@@ -1,8 +1,10 @@
-// Einstiegscheck (PRODUCT.md §5.4, ARCHITECTURE.md §5): 12 items per Fach, 2–3 per Bereich,
-// auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a plan
-// (question order + candidates) and nextCheckItem picks the item for the current rung.
+// Einstiegscheck (PRODUCT.md §5.4, ARCHITECTURE.md §5): 2–3 items per practiceable Bereich,
+// at most 12, auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a
+// plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
+// rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
+// first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
 
-import { BEREICHE_BY_FACH, type Bereich, type Fach, type Item, type Niveau } from '../content';
+import type { Bereich, Fach, Item, Niveau } from '../content';
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
 import { seededShuffle } from './shuffle';
 
@@ -10,8 +12,10 @@ export const CHECK_ITEM_COUNT = 12;
 
 export interface CheckPlan {
   fach: Fach;
-  /** Bereich of each question, in order. Round-robin, so the first questions are all niveau 1. */
-  slots: Bereich[];
+  /** Bereiche in the order of every round. */
+  bereiche: Bereich[];
+  /** Number of questions; fixed before the first answer, so the progress never jumps. */
+  total: number;
   /** Shuffled auto-check items per Bereich. */
   candidates: Partial<Record<Bereich, Item[]>>;
 }
@@ -32,39 +36,67 @@ export function isCheckEligible(item: Item): boolean {
   return item.status !== 'retired' && item.format !== 'short-answer';
 }
 
-/**
- * Distributes 12 slots: every Bereich gets up to 2, then single extra slots (max 3) go to
- * Bereiche in seeded order. Bereiche with too few items get fewer slots; the check may then
- * be shorter than 12.
- */
-export function buildCheck(fach: Fach, pool: readonly Item[], seed = `check-${fach}`): CheckPlan {
-  const bereiche: readonly Bereich[] = BEREICHE_BY_FACH[fach];
-  const candidates: Partial<Record<Bereich, Item[]>> = {};
-  const slotCount = new Map<Bereich, number>();
+export interface BuildCheckOptions {
+  /** The Bereiche to check, in round order: the practiceable ones of the Fach. */
+  bereiche: readonly Bereich[];
+  /** Shuffles the candidates; a new check may serve other items. */
+  seed: string;
+}
 
-  for (const bereich of bereiche) {
+/** Places a Bereich can fill: up to 3, fewer when it has fewer eligible items. */
+function capacity(plan: Pick<CheckPlan, 'candidates'>, bereich: Bereich): number {
+  return Math.min(CHECK_ITEMS_PER_BEREICH.max, plan.candidates[bereich]?.length ?? 0);
+}
+
+/** Bereich of every question in rounds 1 and 2, in order. */
+function firstRounds(plan: Pick<CheckPlan, 'bereiche' | 'candidates'>): Bereich[] {
+  const rounds = Array.from({ length: CHECK_ITEMS_PER_BEREICH.min }, (_, round) =>
+    plan.bereiche.filter((b) => capacity(plan, b) > round),
+  );
+  return rounds.flat();
+}
+
+export function buildCheck(
+  fach: Fach,
+  pool: readonly Item[],
+  options: BuildCheckOptions,
+): CheckPlan {
+  const candidates: Partial<Record<Bereich, Item[]>> = {};
+  for (const bereich of options.bereiche) {
     const items = pool.filter(
       (i) => i.fach === fach && i.bereich === bereich && isCheckEligible(i),
     );
-    candidates[bereich] = seededShuffle(items, `${seed}/${bereich}`);
-    slotCount.set(bereich, Math.min(CHECK_ITEMS_PER_BEREICH.min, items.length));
+    candidates[bereich] = seededShuffle(items, `${options.seed}/${bereich}`);
   }
+  const plan = { fach, bereiche: [...options.bereiche], candidates };
+  const first = firstRounds(plan).length;
+  const third = plan.bereiche.filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
+  return { ...plan, total: Math.min(CHECK_ITEM_COUNT, first + third.length) };
+}
 
-  let remaining = CHECK_ITEM_COUNT - [...slotCount.values()].reduce((a, b) => a + b, 0);
-  for (const bereich of seededShuffle(bereiche, seed)) {
-    if (remaining <= 0) break;
-    const current = slotCount.get(bereich) ?? 0;
-    if (current < CHECK_ITEMS_PER_BEREICH.max && (candidates[bereich]?.length ?? 0) > current) {
-      slotCount.set(bereich, current + 1);
-      remaining--;
-    }
-  }
+/**
+ * Round 3: Bereiche with a third item, decided after rounds 1 and 2. A Bereich whose two
+ * answers differ comes first; the cut lands on those answered the same way twice.
+ */
+function thirdRound(plan: CheckPlan, firstAnswers: readonly CheckAnswer[], places: number) {
+  const passed = (bereich: Bereich) =>
+    firstAnswers.filter((a) => a.bereich === bereich).map((a) => a.correct === true);
+  const open = plan.bereiche.filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
+  const mixed = open.filter((b) => new Set(passed(b)).size > 1);
+  const same = open.filter((b) => !mixed.includes(b));
+  return [...mixed, ...same].slice(0, places);
+}
 
-  const slots: Bereich[] = [];
-  for (let round = 0; round < CHECK_ITEMS_PER_BEREICH.max; round++) {
-    for (const bereich of bereiche) if ((slotCount.get(bereich) ?? 0) > round) slots.push(bereich);
-  }
-  return { fach, slots, candidates };
+function slotBereich(
+  plan: CheckPlan,
+  answers: readonly CheckAnswer[],
+  slotIndex: number,
+): Bereich | undefined {
+  if (slotIndex >= plan.total) return undefined;
+  const first = firstRounds(plan);
+  if (slotIndex < first.length) return first[slotIndex];
+  const third = thirdRound(plan, answers.slice(0, first.length), plan.total - first.length);
+  return third[slotIndex - first.length];
 }
 
 /**
@@ -77,7 +109,7 @@ export function nextCheckItem(
   answers: readonly CheckAnswer[],
 ): NextCheckItem | null {
   const slotIndex = answers.length;
-  const bereich = plan.slots[slotIndex];
+  const bereich = slotBereich(plan, answers, slotIndex);
   if (bereich === undefined) return null;
 
   const niveau = checkLadderNiveau(answers.filter((a) => a.bereich === bereich));
@@ -87,5 +119,5 @@ export function nextCheckItem(
     (a, b) => Math.abs(a.niveau - niveau) - Math.abs(b.niveau - niveau) || a.niveau - b.niveau,
   );
   if (!item) return null;
-  return { item, niveau, slotIndex, total: plan.slots.length };
+  return { item, niveau, slotIndex, total: plan.total };
 }

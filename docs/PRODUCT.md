@@ -98,7 +98,12 @@ Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
 
 ### 5.4 Modi
 
-1. **Einstiegscheck** (einmalig, pro Fach ~12 Items, ~10 Min.): bestimmt das Startniveau je Bereich; nur Formate mit Auto-Check, keine Kurzantwort. Rahmung: "Wir schauen, wo deine Reise losgeht" – nie "Test".
+1. **Einstiegscheck** (einmalig und freiwillig je Fach, ~10 Min.): bestimmt das Startniveau je Bereich; nur Formate mit Auto-Check, keine Kurzantwort. Rahmung: "Wir schauen, wo deine Reise losgeht" – nie "Test". Festlegungen (2026-10-14):
+   - *Angebot:* auf der Karte, solange das Fach keinen Mastery-Stand hat und mindestens 2 übbare Bereiche besitzt (Deutsch vorerst ohne Check). Ruhige Zeile "Wo geht deine Reise los?" mit "Los" und "Später"; "Später" gilt bis zum nächsten Öffnen der App.
+   - *Umfang:* nur übbare Bereiche, je 2–3 Items, höchstens 12. Runde 1 und 2 gehen reihum über alle Bereiche; ein dritter Platz geht zuerst an Bereiche mit einer richtigen und einer falschen Antwort, gekürzt wird bei zweimal gleich beantworteten.
+   - *Ablauf:* Item-Niveau 1 → 2 → 3 (richtig: hoch, falsch: bleibt). Kein Richtig/Falsch, nach jeder Antwort nur "Weiter". "Pause" fragt nach; wer dann geht, beginnt beim nächsten Mal von vorn, nichts wird gespeichert.
+   - *Ergebnis:* Startniveau = höchstes Niveau mit einer richtigen Antwort, mindestens 1 (ein zu niedriger Start korrigiert sich beim Üben, ein zu hoher schreibt Entdeckungen, die bleiben). Jede Etappe unter dem Startniveau wird Entdeckung. Der Check füllt weder Fehlerkiste noch Tagesziel. Ergebnis-Screen: die Insel des Fachs, "Deine Reise beginnt hier", keine Zahlen, keine Prozent.
+   - Bereiche, die erst später Content bekommen, starten auf Niveau 1.
 2. **Üben** (Kern): Kind wählt Bereich (oder "Überrasch mich"), bekommt Items auf aktuellem Niveau, sofortiges Feedback, Erklärung. Session-Ziel: 8–10 Items, dann Pause-Vorschlag.
 3. **Fehlerkiste**: falsch beantwortete Items kommen nach 1 Tag und nach 3 Tagen wieder (einfaches Intervall, kein SRS-Algorithmus im MVP).
 4. **Probetest**: 45 Min., Timer, gemischte Bereiche, Niveau-Verteilung wie Original, am Ende Auswertung pro Bereich. Zusätzlich **als PDF druckbar** (Aufgaben + separates Lösungsblatt), weil der echte Test auf Papier stattfindet. Empfehlung in der App: höchstens 2 Probetests pro Woche.
@@ -186,7 +191,7 @@ Nicht drin: alles aus Abschnitt 4 und Abschnitt 11.
 
 ## 11. Roadmap (Big Picture)
 
-- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch", Validator prüft die 24-Zeichen-Regel für Optionen bei Bild-Items (CONTENT_SCHEMA §7, seit 1.0.7 nur dokumentiert)
+- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch", Validator prüft die 24-Zeichen-Regel für Optionen bei Bild-Items (CONTENT_SCHEMA §7, seit 1.0.7 nur dokumentiert), Nach-Check für Bereiche, die nach dem Einstiegscheck erst Content bekommen (im MVP starten sie auf Niveau 1)
 - **v2:** Optionale Accounts (Eltern), Multi-Kind, Sync über Geräte, Eltern-Dashboard, Content-Editor mit Review-Workflow, Item-Statistiken (Basis für IRT-Kalibrierung)
 - **v3:** Lehrkräfte-Modus (Klasse anlegen, Übungspläne), weitere Bundesländer/Übergangsformate (Bayern Übertritt, NRW), Monetarisierungsoptionen prüfen (Schullizenz, Eltern-Premium, Non-Profit/Spenden)
 

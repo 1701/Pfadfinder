@@ -134,7 +134,11 @@ export async function pickPracticeItem(
 }
 
 /** Entdeckungen are only ever added (PRODUCT.md §6: keine Abzüge). */
-async function addDiscovery(repos: Repositories, learnerId: string, id: string): Promise<void> {
+export async function addDiscovery(
+  repos: Repositories,
+  learnerId: string,
+  id: string,
+): Promise<void> {
   const collectibles = (await repos.collectibles.get(learnerId)) ?? { learnerId, unlocked: [] };
   if (collectibles.unlocked.includes(id)) return;
   await repos.collectibles.put({ ...collectibles, unlocked: [...collectibles.unlocked, id] });

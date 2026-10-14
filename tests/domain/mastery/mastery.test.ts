@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import type { Bereich } from '../../../src/domain/content';
 import type { Correctness } from '../../../src/domain/evaluation';
 import {
   checkLadderNiveau,
+  checkStartNiveau,
   initialMasteryFromCheck,
   masteryScore,
   masteryStateSchema,
@@ -217,28 +219,122 @@ describe('Einstiegscheck', () => {
     [[true, true, true], 3],
     [[true, false, true], 3],
     [[0.5, true], 2],
-  ])('ladder %j ends at niveau %i', (answers, expected) => {
+  ])('ladder %j puts the next item on niveau %i', (answers, expected) => {
     expect(checkLadderNiveau(answers.map((correct) => ({ correct })))).toBe(expected);
   });
 
-  it('creates one state per Bereich of the Fach, empty window, not mastered', () => {
+  // The niveaus are those the ladder serves: I first, +1 after a correct answer.
+  it.each<[string, [1 | 2 | 3, Correctness][], 1 | 2 | 3]>([
+    [
+      'R R',
+      [
+        [1, true],
+        [2, true],
+      ],
+      2,
+    ],
+    [
+      'R R R',
+      [
+        [1, true],
+        [2, true],
+        [3, true],
+      ],
+      3,
+    ],
+    [
+      'R R W',
+      [
+        [1, true],
+        [2, true],
+        [3, false],
+      ],
+      2,
+    ],
+    [
+      'W R R',
+      [
+        [1, false],
+        [1, true],
+        [2, true],
+      ],
+      2,
+    ],
+    [
+      'R W W',
+      [
+        [1, true],
+        [2, false],
+        [2, false],
+      ],
+      1,
+    ],
+    [
+      'R W R',
+      [
+        [1, true],
+        [2, false],
+        [2, true],
+      ],
+      2,
+    ],
+    [
+      'W W',
+      [
+        [1, false],
+        [1, false],
+      ],
+      1,
+    ],
+    ['no answers', [], 1],
+    [
+      '0.5 never passes',
+      [
+        [1, true],
+        [2, 0.5],
+      ],
+      1,
+    ],
+  ])('start niveau = highest passed niveau: %s', (_, answers, expected) => {
+    expect(checkStartNiveau(answers.map(([niveau, correct]) => ({ niveau, correct })))).toBe(
+      expected,
+    );
+  });
+
+  it('counts the niveau of the item shown, also when the ladder had to deviate', () => {
+    // Rung 2 was missing, a second niveau-1 item came instead.
+    expect(
+      checkStartNiveau([
+        { niveau: 1, correct: true },
+        { niveau: 1, correct: true },
+      ]),
+    ).toBe(1);
+  });
+
+  it('creates one state per checked Bereich, empty window, not mastered', () => {
+    const r = (bereich: Bereich, niveau: 1 | 2 | 3, correct: boolean) => ({
+      fach: 'mathe' as const,
+      bereich,
+      niveau,
+      correct,
+    });
     const states = initialMasteryFromCheck(
       [
-        { fach: 'mathe', bereich: 'zahlen-operationen', correct: true },
-        { fach: 'mathe', bereich: 'raum-form', correct: false },
-        { fach: 'mathe', bereich: 'zahlen-operationen', correct: true },
-        { fach: 'mathe', bereich: 'raum-form', correct: true },
-        { fach: 'mathe', bereich: 'groessen-messen', correct: false },
-        { fach: 'mathe', bereich: 'groessen-messen', correct: false },
+        r('zahlen-operationen', 1, true),
+        r('raum-form', 1, false),
+        r('zahlen-operationen', 2, true),
+        r('raum-form', 1, true),
+        r('groessen-messen', 1, false),
+        r('groessen-messen', 1, false),
+        r('zahlen-operationen', 3, true),
+        r('raum-form', 2, false),
       ],
       { learnerId: 'learner-1', at: T0 },
     );
     expect(states.map((s) => [s.bereich, s.niveau])).toEqual([
       ['zahlen-operationen', 3],
-      ['raum-form', 2],
+      ['raum-form', 1],
       ['groessen-messen', 1],
-      ['daten-zufall', 1],
-      ['muster-strukturen', 1],
     ]);
     for (const s of states) {
       expect(s).toMatchObject({
@@ -255,13 +351,15 @@ describe('Einstiegscheck', () => {
   it('handles both Fächer and returns nothing for no results', () => {
     const states = initialMasteryFromCheck(
       [
-        { fach: 'deutsch', bereich: 'rs-strategien', correct: true },
-        { fach: 'mathe', bereich: 'daten-zufall', correct: true },
+        { fach: 'deutsch', bereich: 'rs-strategien', niveau: 2, correct: true },
+        { fach: 'mathe', bereich: 'daten-zufall', niveau: 1, correct: true },
       ],
       { learnerId: 'learner-1', at: T0 },
     );
-    expect(states).toHaveLength(9);
-    expect(states.find((s) => s.bereich === 'rs-strategien')?.niveau).toBe(2);
+    expect(states.map((s) => [s.bereich, s.niveau])).toEqual([
+      ['rs-strategien', 2],
+      ['daten-zufall', 1],
+    ]);
     expect(initialMasteryFromCheck([], { learnerId: 'learner-1', at: T0 })).toEqual([]);
   });
 });

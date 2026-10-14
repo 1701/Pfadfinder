@@ -1,15 +1,22 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { itemSchema, type Bereich, type Item } from '../../../src/domain/content';
+import { BEREICHE_BY_FACH, itemSchema, type Bereich, type Item } from '../../../src/domain/content';
 import { initialMasteryFromCheck } from '../../../src/domain/mastery';
 import {
   CHECK_ITEM_COUNT,
   buildCheck,
   nextCheckItem,
+  practiceableBereiche,
+  practiceableItems,
   type CheckAnswer,
   type CheckPlan,
 } from '../../../src/domain/scheduler';
+import { OPEN_BEREICHE } from '../../fixtures/content-state';
 import { item, makePool } from '../../fixtures/pool';
+
+const MATHE: readonly Bereich[] = BEREICHE_BY_FACH.mathe;
+const DEUTSCH: readonly Bereich[] = BEREICHE_BY_FACH.deutsch;
+const opts = (bereiche: readonly Bereich[], seed = 's') => ({ bereiche, seed });
 
 function countBy<T>(values: T[]): Map<T, number> {
   const m = new Map<T, number>();
@@ -17,45 +24,69 @@ function countBy<T>(values: T[]): Map<T, number> {
   return m;
 }
 
-/** Runs the whole check, answering with `answer(item)`. */
-function runCheck(plan: CheckPlan, answer: (item: Item) => boolean): CheckAnswer[] {
+/** Runs the whole check; `answer` gets the item and how many items of its Bereich came before. */
+function runCheck(
+  plan: CheckPlan,
+  answer: (item: Item, indexInBereich: number) => boolean,
+): CheckAnswer[] {
   const answers: CheckAnswer[] = [];
   for (let next = nextCheckItem(plan, answers); next; next = nextCheckItem(plan, answers)) {
+    const { item } = next;
+    const index = answers.filter((a) => a.bereich === item.bereich).length;
     answers.push({
-      itemId: next.item.id,
-      fach: next.item.fach,
-      bereich: next.item.bereich,
-      correct: answer(next.item),
+      itemId: item.id,
+      fach: item.fach,
+      bereich: item.bereich,
+      niveau: item.niveau,
+      correct: answer(item, index),
     });
   }
   return answers;
 }
 
-describe('buildCheck', () => {
-  it('Mathe: 12 slots, 2–3 per Bereich, exactly two Bereiche with 3', () => {
-    const plan = buildCheck('mathe', makePool('mathe'));
-    expect(plan.slots).toHaveLength(CHECK_ITEM_COUNT);
-    const counts = [...countBy(plan.slots).values()];
-    expect(counts).toHaveLength(5);
-    expect(counts.filter((c) => c === 3)).toHaveLength(2);
+const perBereich = (answers: CheckAnswer[]) => countBy(answers.map((a) => a.bereich));
+
+describe('buildCheck – number of questions', () => {
+  it.each([
+    [3, 9],
+    [4, 12],
+    [5, 12],
+  ])('%i Bereiche → %i questions, 2–3 per Bereich', (n, total) => {
+    const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE.slice(0, n)));
+    expect(plan.total).toBe(total);
+    const answers = runCheck(plan, () => true);
+    expect(answers).toHaveLength(total);
+    const counts = [...perBereich(answers).values()];
+    expect(counts).toHaveLength(n);
     expect(counts.every((c) => c === 2 || c === 3)).toBe(true);
   });
 
-  it('Deutsch: 12 slots, 3 per Bereich', () => {
-    const plan = buildCheck('deutsch', makePool('deutsch'));
-    expect([...countBy(plan.slots).values()]).toEqual([3, 3, 3, 3]);
+  it('Deutsch with 4 Bereiche: 3 each', () => {
+    const plan = buildCheck('deutsch', makePool('deutsch'), opts(DEUTSCH));
+    expect([...perBereich(runCheck(plan, () => false)).values()]).toEqual([3, 3, 3, 3]);
   });
 
-  it('orders slots round-robin so the check starts with one item per Bereich', () => {
-    const plan = buildCheck('mathe', makePool('mathe'));
-    expect(new Set(plan.slots.slice(0, 5)).size).toBe(5);
+  it('checks only the given Bereiche, even when the pool has more', () => {
+    const plan = buildCheck('mathe', makePool('mathe'), opts(['raum-form', 'daten-zufall']));
+    expect(plan.total).toBe(6);
+    expect([...perBereich(runCheck(plan, () => true)).keys()]).toEqual([
+      'raum-form',
+      'daten-zufall',
+    ]);
+  });
+
+  it('serves every Bereich once before any Bereich comes twice', () => {
+    const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE));
+    const answers = runCheck(plan, () => true);
+    expect(answers.slice(0, 5).map((a) => a.bereich)).toEqual(MATHE);
+    expect(answers.slice(5, 10).map((a) => a.bereich)).toEqual(MATHE);
   });
 
   it('uses auto-check formats only (no short-answer) and no retired items', () => {
     const pool = makePool('mathe', 5).map((i, n) =>
       n % 7 === 0 ? ({ ...i, status: 'retired' } as Item) : i,
     );
-    const plan = buildCheck('mathe', pool);
+    const plan = buildCheck('mathe', pool, opts(MATHE));
     const all = Object.values(plan.candidates).flat();
     expect(all.length).toBeGreaterThan(0);
     expect(all.some((i) => i.format === 'short-answer')).toBe(false);
@@ -63,35 +94,74 @@ describe('buildCheck', () => {
     expect(pool.some((i) => i.format === 'short-answer')).toBe(true);
   });
 
-  it('gives Bereiche with too few items fewer slots and stays below 12', () => {
+  it('gives a Bereich with too few items fewer questions', () => {
     const pool = [
       ...makePool('mathe', 2, ['zahlen-operationen', 'raum-form']),
       item('daten-zufall', 1, 1),
     ];
-    const plan = buildCheck('mathe', pool);
-    const counts = countBy(plan.slots);
-    expect(counts.get('zahlen-operationen')).toBe(3);
-    expect(counts.get('raum-form')).toBe(3);
-    expect(counts.get('daten-zufall')).toBe(1);
-    expect(counts.has('groessen-messen')).toBe(false);
-    expect(plan.slots).toHaveLength(7);
+    const plan = buildCheck(
+      'mathe',
+      pool,
+      opts(['zahlen-operationen', 'raum-form', 'daten-zufall']),
+    );
+    expect(plan.total).toBe(7);
+    const counts = perBereich(runCheck(plan, () => true));
+    expect(Object.fromEntries(counts)).toEqual({
+      'zahlen-operationen': 3,
+      'raum-form': 3,
+      'daten-zufall': 1,
+    });
   });
 
   it('returns an empty plan for an empty pool', () => {
-    const plan = buildCheck('mathe', []);
-    expect(plan.slots).toEqual([]);
+    const plan = buildCheck('mathe', [], opts(MATHE));
+    expect(plan.total).toBe(0);
     expect(nextCheckItem(plan, [])).toBeNull();
   });
 
-  it('is reproducible for the same seed', () => {
-    expect(buildCheck('mathe', makePool('mathe'), 's')).toEqual(
-      buildCheck('mathe', makePool('mathe'), 's'),
+  it('is reproducible for the same seed and differs for another one', () => {
+    const pool = makePool('mathe');
+    expect(buildCheck('mathe', pool, opts(MATHE, 'a'))).toEqual(
+      buildCheck('mathe', pool, opts(MATHE, 'a')),
     );
+    const ids = (seed: string) =>
+      runCheck(buildCheck('mathe', pool, opts(MATHE, seed)), () => true).map((a) => a.itemId);
+    expect(ids('a')).not.toEqual(ids('b'));
+  });
+});
+
+describe('buildCheck – round 3 with 5 Bereiche (2 extra places)', () => {
+  const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE));
+  const thirdRound = (mixed: readonly Bereich[]) =>
+    runCheck(plan, (i, index) => (mixed.includes(i.bereich) ? index === 0 : true))
+      .slice(10)
+      .map((a) => a.bereich);
+
+  it('goes to the Bereiche whose two answers differ', () => {
+    expect(thirdRound(['groessen-messen', 'muster-strukturen'])).toEqual([
+      'groessen-messen',
+      'muster-strukturen',
+    ]);
+  });
+
+  it('then to the first Bereiche answered the same way twice', () => {
+    expect(thirdRound(['daten-zufall'])).toEqual(['daten-zufall', 'zahlen-operationen']);
+    expect(thirdRound([])).toEqual(['zahlen-operationen', 'raum-form']);
+  });
+
+  it('keeps the total fixed whatever the answers', () => {
+    for (const mixed of [[], ['raum-form'], MATHE] as Bereich[][]) {
+      expect(runCheck(plan, (i, n) => (mixed.includes(i.bereich) ? n === 0 : true))).toHaveLength(
+        CHECK_ITEM_COUNT,
+      );
+    }
   });
 });
 
 describe('nextCheckItem – ladder', () => {
-  const plan = buildCheck('mathe', makePool('mathe'));
+  const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE.slice(0, 4)));
+  const levels = (answers: CheckAnswer[], bereich: Bereich) =>
+    answers.filter((a) => a.bereich === bereich).map((a) => a.niveau);
 
   it('starts every Bereich on niveau 1', () => {
     const first = nextCheckItem(plan, []);
@@ -100,23 +170,27 @@ describe('nextCheckItem – ladder', () => {
   });
 
   it('climbs after a correct answer and stays after a wrong one', () => {
-    const allCorrect = runCheck(plan, () => true);
-    const allWrong = runCheck(plan, () => false);
-    const levels = (answers: CheckAnswer[], bereich: Bereich) =>
-      answers
-        .filter((a) => a.bereich === bereich)
-        .map(
-          (a) =>
-            Object.values(plan.candidates)
-              .flat()
-              .find((i) => i.id === a.itemId)!.niveau,
-        );
-    const threeSlots = [...countBy(plan.slots)].find(([, c]) => c === 3)![0];
-    expect(levels(allCorrect, threeSlots)).toEqual([1, 2, 3]);
-    expect(levels(allWrong, threeSlots)).toEqual([1, 1, 1]);
+    expect(
+      levels(
+        runCheck(plan, () => true),
+        'raum-form',
+      ),
+    ).toEqual([1, 2, 3]);
+    expect(
+      levels(
+        runCheck(plan, () => false),
+        'raum-form',
+      ),
+    ).toEqual([1, 1, 1]);
+    expect(
+      levels(
+        runCheck(plan, (_, n) => n !== 1),
+        'raum-form',
+      ),
+    ).toEqual([1, 2, 2]);
   });
 
-  it('never repeats an item and ends after all slots', () => {
+  it('never repeats an item and ends after all questions', () => {
     const answers = runCheck(plan, (i) => i.niveau === 1);
     expect(answers).toHaveLength(12);
     expect(new Set(answers.map((a) => a.itemId)).size).toBe(12);
@@ -129,38 +203,60 @@ describe('nextCheckItem – ladder', () => {
       item('zahlen-operationen', 1, 2),
       item('zahlen-operationen', 3, 1),
     ];
-    const sparse = buildCheck('mathe', pool);
+    const sparse = buildCheck('mathe', pool, opts(['zahlen-operationen']));
     // Rung 2 does not exist: after one correct answer, niveau 1 and 3 are equally near → 1.
     const first = nextCheckItem(sparse, [])!;
     const second = nextCheckItem(sparse, [
-      { itemId: first.item.id, fach: 'mathe', bereich: 'zahlen-operationen', correct: true },
+      {
+        itemId: first.item.id,
+        fach: 'mathe',
+        bereich: 'zahlen-operationen',
+        niveau: 1,
+        correct: true,
+      },
     ]);
     expect(second?.niveau).toBe(2);
     expect(second?.item.niveau).toBe(1);
   });
 
-  it('feeds initialMasteryFromCheck: all correct → niveau 3 everywhere', () => {
+  it.each<[string, (n: number) => boolean, 1 | 2 | 3]>([
+    ['R R R → 3', () => true, 3],
+    ['R R W → 2', (n) => n < 2, 2],
+    ['W R R → 2', (n) => n > 0, 2],
+    ['R W W → 1', (n) => n === 0, 1],
+    ['R W R → 2', (n) => n !== 1, 2],
+    ['W W W → 1', () => false, 1],
+  ])('feeds initialMasteryFromCheck: %s', (_, answer, niveau) => {
     const states = initialMasteryFromCheck(
-      runCheck(plan, () => true),
+      runCheck(plan, (_i, n) => answer(n)),
       { learnerId: 'l', at: '2026-10-11T08:00:00.000Z' },
     );
-    expect(states.map((s) => s.niveau)).toEqual([3, 3, 3, 3, 3]);
+    expect(states.map((s) => s.niveau)).toEqual([niveau, niveau, niveau, niveau]);
   });
 });
 
 describe('buildCheck with the real content', () => {
-  it('builds a valid plan from content/items/mathe', () => {
-    const files = ['zahlen-operationen', 'groessen-messen'];
-    const pool = files.flatMap((f) =>
-      (JSON.parse(readFileSync(`content/items/mathe/${f}.json`, 'utf8')) as unknown[]).map((raw) =>
-        itemSchema.parse(raw),
-      ),
+  it('Mathe: every practiceable Bereich gets 2–3 items, at most 12', () => {
+    const formats = ['single-choice', 'number-input'] as const;
+    const pool = practiceableItems(
+      MATHE.flatMap((b) => {
+        let raw: unknown[];
+        try {
+          raw = JSON.parse(readFileSync(`content/items/mathe/${b}.json`, 'utf8')) as unknown[];
+        } catch {
+          return [];
+        }
+        return raw.map((r) => itemSchema.parse(r));
+      }),
+      formats,
     );
-    const plan = buildCheck('mathe', pool);
-    const counts = countBy(plan.slots);
-    expect([...counts.values()].every((c) => c <= 3)).toBe(true);
-    expect(counts.get('zahlen-operationen')).toBe(3);
+    const bereiche = practiceableBereiche(pool, formats);
+    expect(bereiche).toEqual(OPEN_BEREICHE.filter((b) => MATHE.includes(b)));
+    const plan = buildCheck('mathe', pool, opts(bereiche));
+    expect(plan.total).toBe(Math.min(CHECK_ITEM_COUNT, 3 * bereiche.length));
     const answers = runCheck(plan, () => true);
-    expect(answers).toHaveLength(plan.slots.length);
+    expect(answers).toHaveLength(plan.total);
+    expect([...perBereich(answers).keys()]).toEqual(bereiche);
+    expect([...perBereich(answers).values()].every((c) => c === 2 || c === 3)).toBe(true);
   });
 });
