@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-14 – Aufgabe 6, Teil B und C: Einstieg-Oberfläche
+- **Teil B:** Fünf Wireframes, je quer und hoch, als private Artifact-Seite, von Markus mit fünf Änderungen freigegeben.
+- **Gebaut:** Karte mit Angebot: Die Frage ist die Überschrift, daneben „Los“/„Später“, das Tagesziel tritt zurück. Kein Angebot, wenn der Speicher nicht lesbar ist. `/einstieg/:fach` im lazy Chunk `check-route` (8 kB) mit Intro (leere Wegstriche), Item-Screen mit „Weiter“ ohne Rückmeldung, Pause mit Rückfrage („Zur Karte“ links, „Weitermachen“ rechts) und Ergebnis (nur die Insel des Fachs, nicht antippbar). Hinweis „Deine Reise hat schon begonnen.“ bei vorhandenem Stand und wenn `finishCheck` nichts schreibt; bei Deutsch der Hinweis „Hier gibt es noch nicht genug Aufgaben.“.
+- **Entscheidungen:** Gelb (primär) haben auch „Los“, „Starten“, „Weitermachen“ und „Zur Karte“ auf dem Ergebnis (Wireframe-Freigabe; der Kommentar in `Button.tsx` ist angepasst). `buttonClass(variant, size)` trennt Farbe und Größe. Kein Wort „Check“ in der UI (Test).
+- **Messung:** Das Angebot ändert die Karte nicht: Kleinster Name auf `/` mit Angebot ≥ 18 px in allen vier Viewports. Im Hochformat wird die Karte größer, weil die Tagesziel-Zeile fehlt. Startseite 277,1 kB (Budget 300 kB).
+- **Offen:** Sobald Deutsch übbar ist, kann das Tagesziel bei offenem Mathe-Angebot mehr als 0 zählen und ist dann trotzdem ausgeblendet.
+- **CI:** [CI #38544063300](https://github.com/1701/Pfadfinder/actions/runs/38544063300) grün (4677421), Workers Builds grün; 576 Tests, e2e 37 bestanden, 2 übersprungen (WebKit offline), der Einstiegsflow auch in WebKit. Lokal grün: `npm run check`, `npm run e2e:chromium` (27/27, Layout in vier Viewports).
+
 ## 2026-10-14 – Aufgabe 6, Teil A: Einstiegscheck (Domain, Store, Speicherung)
 - **Gebaut:** `buildCheck(fach, pool, { bereiche, seed })` prüft nur übbare Bereiche, je 2–3 Items, höchstens 12 (Mathe heute: 4 Bereiche, 12 Items). Neu: `checkStartNiveau`, `domain/check` (`recordCheckAnswer`, `completeCheck`, `startDiscoveries`), `progress/check-offer` (zodfrei), `data/check` und `data/check-store` (Status `intro`/`answering`/`paused`/`saving`/`finished`/`unavailable`).
 - **Entscheidungen (Markus):** Das Startniveau ist das höchste Niveau mit einer richtigen Antwort (R W W → 1, R R → 2, R R R → 3); `checkLadderNiveau` wählt nur noch das nächste Item. Runde 3 geht zuerst an gemischt beantwortete Bereiche. MasteryState gibt es nur für geprüfte Bereiche. Alles wird erst nach der letzten Antwort in einer Transaktion gespeichert, mit erneuter Prüfung „kein MasteryState im Fach“. Der Check füllt weder Fehlerkiste noch Tagesziel. Seed = Session-ID. PRODUCT §5.4/§11 und ARCHITECTURE §3/§5 sind angepasst.
