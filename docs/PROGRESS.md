@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-14 – Aufgabe 6b: Neu anfangen, Später bis Tagesende, Eltern-Seite
+- **A:** Mit einer offenen Runde von heute fragt das Gebiet zuerst: „Fortsetzen“ (gelb, rechts) oder „Neu anfangen“. Neu anfangen schließt die Runde mit `closeSession` ohne Abschluss und startet 10 neue Items über `pickNext`. Attempts, Mastery, Fehlerkiste und Entdeckungen bleiben, das Tagesziel springt nicht zurück (Store-, UI- und E2E-Test). Ohne offene Runde geht es wie bisher direkt los.
+- **B:** „Später“ steht in Dexie (Tabelle `postponedOffers`, Schema v2, geräteweit, nicht im Export) und gilt bis zum Ende des lokalen Kalendertags (`postponedFaecher`). Tests: Remount und Neuladen am selben Tag ohne Angebot, am nächsten Tag mit Angebot, Upgrade einer v1-Datenbank.
+- **C:** `/eltern` nur per URL (lazy Chunk `eltern-route`): Summe zweier zweistelliger Zahlen auf dem Ziffernblock, dann „Alles löschen“ mit Rückfrage. Danach werden alle Tabellen geleert und die Startseite neu geladen; die Karte zeigt wieder das Angebot. Kein Vorlesen dort.
+- **Entscheidungen:** Einen „Fortsetzen“-Knopf gab es vorher nicht, der Wahl-Screen ist neu. Nach dem Löschen wird die Seite ganz neu geladen, weil die Stores sonst den gelöschten Learner behalten. ARCHITECTURE §7 nennt jetzt die Addition statt 6 × 7 … 9 × 9. `EinstiegBlatt` heißt jetzt `Blatt`.
+- **Befund Wegstriche:** Beim Üben ist jeder bearbeitete Strich gleich gefüllt, richtig und „noch nicht“ sehen gleich aus.
+- **Gefixt:** Der Einstieg-E2E suchte „richtig/falsch“ auf der ganzen Seite und traf Aufgabentexte. Er war je nach Session-ID rot, auch in [CI #38545341348](https://github.com/1701/Pfadfinder/actions/runs/38545341348) und [#38552493973](https://github.com/1701/Pfadfinder/actions/runs/38552493973).
+- **Neu:** Offline-E2E für den Einstieg, `blatt-layout.spec` (Wahl und Eltern in vier Viewports mit Screenshots).
+- **CI:** [CI #38554075122](https://github.com/1701/Pfadfinder/actions/runs/38554075122) grün (0eeb6aa…7cd4ffc), Workers Builds grün; 618 Tests, e2e 51 bestanden, 4 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (37/37).
+
 ## 2026-10-14 – Aufgabe 6, Teil B und C: Einstieg-Oberfläche
 - **Teil B:** Fünf Wireframes, je quer und hoch, als private Artifact-Seite, von Markus mit fünf Änderungen freigegeben.
 - **Gebaut:** Karte mit Angebot: Die Frage ist die Überschrift, daneben „Los“/„Später“, das Tagesziel tritt zurück. Kein Angebot, wenn der Speicher nicht lesbar ist. `/einstieg/:fach` im lazy Chunk `check-route` (8 kB) mit Intro (leere Wegstriche), Item-Screen mit „Weiter“ ohne Rückmeldung, Pause mit Rückfrage („Zur Karte“ links, „Weitermachen“ rechts) und Ergebnis (nur die Insel des Fachs, nicht antippbar). Hinweis „Deine Reise hat schon begonnen.“ bei vorhandenem Stand und wenn `finishCheck` nichts schreibt; bei Deutsch der Hinweis „Hier gibt es noch nicht genug Aufgaben.“.
