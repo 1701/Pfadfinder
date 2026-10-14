@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-14 – Entscheidungen zu Aufgabe 6b, Rechenfrage ist ein Schild
+- **Entschieden (Markus):** Der Auswahl-Screen „Fortsetzen“/„Neu anfangen“ bleibt; ein Tipp mehr beim Fortsetzen verhindert ein versehentliches Neu anfangen. „Später“ gilt je Gerät (im MVP ein Lernender pro Gerät, alles andere ist PRODUCT §11). Beim Löschen ist kein Knopf gelb, weil Löschen kein nächster Schritt auf dem Weg ist.
+- **Geändert:** ARCHITECTURE §7 und PRODUCT §7: Die Rechenfrage ist kein Schutz, sondern ein Schild „für Eltern“. Der Schutz ist allein, dass kein Link zu `/eltern` führt. PRODUCT §7 sagt nicht mehr „Kindersicherung“, der Kommentar in `domain/parents/gate.ts` sagt dasselbe.
+- **Offen (Pilot):** Der Weg vom Fehler zum Neustart ist Pause → Karte → Gebiet → „Neu anfangen“, vier Tipps. Wenn Tochter nach einem Fehler sichtbar den Neustart sucht, kommt „Neu anfangen“ zusätzlich in die Üben-Pause. Erst dann, nicht vorsorglich.
+- **CI:** [CI #38581940617](https://github.com/1701/Pfadfinder/actions/runs/38581940617) grün (7330608), Workers Builds grün; 618 Tests, e2e 51 bestanden, 4 übersprungen (WebKit offline).
+
 ## 2026-10-14 – Aufgabe 6b: Neu anfangen, Später bis Tagesende, Eltern-Seite
 - **A:** Mit einer offenen Runde von heute fragt das Gebiet zuerst: „Fortsetzen“ (gelb, rechts) oder „Neu anfangen“. Neu anfangen schließt die Runde mit `closeSession` ohne Abschluss und startet 10 neue Items über `pickNext`. Attempts, Mastery, Fehlerkiste und Entdeckungen bleiben, das Tagesziel springt nicht zurück (Store-, UI- und E2E-Test). Ohne offene Runde geht es wie bisher direkt los.
 - **B:** „Später“ steht in Dexie (Tabelle `postponedOffers`, Schema v2, geräteweit, nicht im Export) und gilt bis zum Ende des lokalen Kalendertags (`postponedFaecher`). Tests: Remount und Neuladen am selben Tag ohne Angebot, am nächsten Tag mit Angebot, Upgrade einer v1-Datenbank.
