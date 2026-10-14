@@ -13,13 +13,14 @@ import {
   type CheckDeps,
   type CheckOutcome,
   type CheckQuestion,
+  type CheckUnavailable,
 } from './check';
 import { ensureLearner } from './practice';
 
 export type CheckStatus =
   | 'idle'
   | 'loading'
-  /** Already done for this Fach, or not enough practiceable Bereiche. */
+  /** No check: see `unavailable` for the reason. */
   | 'unavailable'
   | 'intro'
   | 'answering'
@@ -37,6 +38,8 @@ export interface CheckState {
   answer: unknown;
   /** Set when the check is stored. */
   result: CheckOutcome | null;
+  /** Set with status "unavailable". */
+  unavailable: CheckUnavailable | null;
 
   start(fach: Fach): Promise<void>;
   /** From the intro to the first question. */
@@ -52,7 +55,17 @@ export interface CheckState {
 
 export type CheckStore = StoreApi<CheckState>;
 
-const idle = { status: 'idle', check: null, current: null, answer: null, result: null } as const;
+const idle = {
+  status: 'idle',
+  check: null,
+  current: null,
+  answer: null,
+  result: null,
+  unavailable: null,
+} as const;
+
+/** The journey in this Fach has begun (a mastery state exists): no check, ever. */
+const started = { ...idle, status: 'unavailable', unavailable: 'started' } as const;
 
 export function createCheckStore(deps: CheckDeps): CheckStore {
   // Incremented by every start/leave: a slow start or save that was overtaken must not write state.
@@ -84,13 +97,16 @@ export function createCheckStore(deps: CheckDeps): CheckStore {
         set({
           ...idle,
           learner,
-          ...(check ? { status: 'intro', check } : { status: 'unavailable' }),
+          ...(typeof check === 'string'
+            ? { status: 'unavailable', unavailable: check }
+            : { status: 'intro', check }),
         });
       },
 
       begin() {
         const { status, check } = get();
-        if (status === 'intro' && check && !show(check)) set({ ...idle, status: 'unavailable' });
+        if (status === 'intro' && check && !show(check))
+          set({ ...idle, status: 'unavailable', unavailable: 'empty' });
       },
 
       setAnswer(answer) {
@@ -107,7 +123,7 @@ export function createCheckStore(deps: CheckDeps): CheckStore {
         set({ status: 'saving', check: answered, current: null, answer: null });
         const result = await finishCheck(deps, answered);
         if (token !== run) return;
-        set(result ? { status: 'finished', result } : { ...idle, status: 'unavailable' });
+        set(result ? { status: 'finished', result } : started);
       },
 
       pause() {

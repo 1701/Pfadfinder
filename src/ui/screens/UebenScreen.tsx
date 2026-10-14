@@ -80,7 +80,7 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
       readAloud={readAloud}
       onSubmit={() => void submit()}
       onNext={() => void next()}
-      pauseTo="/"
+      pause={{ to: '/' }}
     />
   );
 }

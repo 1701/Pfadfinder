@@ -24,6 +24,8 @@ for (const file of files) {
     'ItemPage',
     '/dev/karte',
     'KartePage',
+    '/dev/einstieg',
+    'EinstiegPage',
   ]) {
     if (text.includes(marker)) errors.push(`${file}: enthält Entwicklerseite ("${marker}")`);
   }

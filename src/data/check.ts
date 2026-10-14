@@ -7,7 +7,7 @@ import { BEREICHE_BY_FACH, type Fach, type Item } from '../domain/content';
 import { completeCheck, recordCheckAnswer } from '../domain/check';
 import type { Attempt } from '../domain/learner';
 import type { MasteryState } from '../domain/mastery';
-import { isCheckOffered } from '../domain/progress';
+import { CHECK_MIN_BEREICHE } from '../domain/progress';
 import {
   buildCheck,
   nextCheckItem,
@@ -48,15 +48,18 @@ export interface CheckOutcome {
   unlocked: string[];
 }
 
+/** Why there is no check: the journey in this Fach has begun, or it has too few Bereiche. */
+export type CheckUnavailable = 'started' | 'empty';
+
 /**
- * Prepares a check of the practiceable Bereiche of the Fach. Null when the check is not
- * available: the Fach already has a mastery state, or fewer than two practiceable Bereiche.
+ * Prepares a check of the practiceable Bereiche of the Fach. Not available when the Fach
+ * already has a mastery state, or fewer than CHECK_MIN_BEREICHE practiceable Bereiche.
  */
 export async function startCheck(
   deps: CheckDeps,
   learnerId: string,
   fach: Fach,
-): Promise<CheckContext | null> {
+): Promise<CheckContext | CheckUnavailable> {
   const { repos } = deps;
   const files = await Promise.all(
     BEREICHE_BY_FACH[fach].map((bereich) => deps.content.loadItems(fach, bereich)),
@@ -64,7 +67,8 @@ export async function startCheck(
   const pool = practiceableItems(files.flat(), deps.formats);
   const bereiche = practiceableBereiche(pool, deps.formats);
   const mastery = await repos.mastery.listByLearner(learnerId);
-  if (!isCheckOffered(fach, bereiche, mastery)) return null;
+  if (mastery.some((m) => m.fach === fach)) return 'started';
+  if (bereiche.length < CHECK_MIN_BEREICHE) return 'empty';
 
   const seen: Record<string, number> = {};
   for (const a of await repos.attempts.listByLearner(learnerId)) {

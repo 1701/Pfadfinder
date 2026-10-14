@@ -155,7 +155,7 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     expect(store.getState().status).toBe('finished');
 
     await store.getState().start('mathe');
-    expect(store.getState().status).toBe('unavailable');
+    expect(store.getState()).toMatchObject({ status: 'unavailable', unavailable: 'started' });
 
     // Practice alone (without a check) also closes the offer.
     const other = testDeps();
@@ -163,7 +163,7 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     await other.repos.mastery.put(initialMastery(learner.id, 'raum-form', other.now()));
     const fresh = createCheckStore(other);
     await fresh.getState().start('mathe');
-    expect(fresh.getState().status).toBe('unavailable');
+    expect(fresh.getState()).toMatchObject({ status: 'unavailable', unavailable: 'started' });
   });
 
   it('writes nothing when the Fach got a mastery state during the check', async () => {
@@ -177,7 +177,7 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     await deps.repos.mastery.put(practised);
 
     await play(store, () => true);
-    expect(store.getState().status).toBe('unavailable');
+    expect(store.getState()).toMatchObject({ status: 'unavailable', unavailable: 'started' });
     expect(await stored(deps.repos, learnerId)).toEqual({
       attempts: [],
       mastery: [practised],
@@ -203,6 +203,6 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
   it('is not available for Deutsch (fewer than two practiceable Bereiche)', async () => {
     const store = createCheckStore(testDeps());
     await store.getState().start('deutsch');
-    expect(store.getState().status).toBe('unavailable');
+    expect(store.getState()).toMatchObject({ status: 'unavailable', unavailable: 'empty' });
   });
 });

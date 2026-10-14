@@ -5,7 +5,7 @@
 // Shared corners keep the Gebiete gap-free: N lies on the edge F–G, so it is part of the
 // polygons on both sides.
 
-import type { Bereich, Fach } from '../../domain/content/taxonomy';
+import { BEREICHE_BY_FACH, type Bereich, type Fach } from '../../domain/content/taxonomy';
 
 export type Point = readonly [x: number, y: number];
 
@@ -106,6 +106,20 @@ export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
     },
   },
 };
+
+/**
+ * viewBox around one island and its name, for showing a single Fach (the Einstieg result).
+ * The margin keeps the outline and the focus-free edge clear of the frame.
+ */
+export function islandViewBox(layout: MapLayout, fach: Fach, margin = 16): string {
+  const points = BEREICHE_BY_FACH[fach].flatMap((b) => layout.regions[b].points);
+  const [nameX, nameY] = layout.islands[fach];
+  const xs = [nameX, ...points.map(([x]) => x)];
+  const ys = [nameY - MAP_STYLE.islandNameSize, ...points.map(([, y]) => y)];
+  const [left, top] = [Math.min(...xs) - margin, Math.min(...ys) - margin];
+  const [right, bottom] = [Math.max(...xs) + margin, Math.max(...ys) + margin];
+  return `${left} ${top} ${right - left} ${bottom - top}`;
+}
 
 /** Element of a closed ring: index -1 is the last one. */
 function around<T>(list: readonly T[], index: number): T {

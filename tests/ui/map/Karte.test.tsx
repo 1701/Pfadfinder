@@ -6,6 +6,7 @@ import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { BEREICHE, type Bereich } from '../../../src/domain/content';
 import type { RegionState } from '../../../src/domain/progress';
+import { Karte } from '../../../src/ui/map/Karte';
 import { KartenView } from '../../../src/ui/map/KartenView';
 
 const STATES: Record<Bereich, RegionState> = {
@@ -157,6 +158,32 @@ describe('Karte', () => {
       open[b] = { kind: 'neu', niveau: 1, erschlossen: [false, false, false] };
     renderMap(open);
     expect(screen.queryByText('Gestrichelte Gebiete sind noch unerforscht.')).toBeNull();
+  });
+});
+
+describe('one island as a picture (Einstieg result)', () => {
+  it('draws only the Fach, cut to its size, with Gebiete as pictures instead of links', () => {
+    render(
+      <MemoryRouter>
+        <Karte states={STATES} fach="mathe" interactive={false} />
+      </MemoryRouter>,
+    );
+    const map = wide();
+    expect(map.getAttribute('viewBox')).not.toBe('0 0 1000 600');
+    expect(within(map).queryAllByRole('link')).toEqual([]);
+    expect(
+      within(map)
+        .getAllByRole('img')
+        .map((g) => g.getAttribute('aria-label')),
+    ).toEqual([
+      'Zahlen und Rechnen, Niveau 2',
+      'Formen und Raum, Niveau 3, gemeistert',
+      'Größen und Messen, Niveau 1',
+      'Daten und Zufall, noch unerforscht',
+      'Muster und Zahlenfolgen, noch unerforscht',
+    ]);
+    expect(map.textContent).toContain('Mathe');
+    expect(map.textContent).not.toContain('Deutsch');
   });
 });
 

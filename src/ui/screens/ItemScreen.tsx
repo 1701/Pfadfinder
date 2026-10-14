@@ -1,6 +1,6 @@
 // The item screen, fixed layout (pfadfinder-ui): progress, task sheet with Vorlesen, answer area,
 // and a bottom band where "Prüfen" turns into "Weiter" in the same place. Pure layout: the
-// practice screen and the dev preview feed it.
+// practice screen, the Einstieg (button "Weiter", no feedback) and the dev preview feed it.
 
 import { Link } from 'react-router';
 import { readAloudText, type Item } from '../../domain/content';
@@ -25,9 +25,15 @@ export interface ItemScreenProps {
   readAloud: boolean;
   onSubmit(): void;
   onNext(): void;
-  /** Where "Pause" leads; the session is continued next time. */
-  pauseTo: string;
+  /** Label of the submit button; the Einstieg says "Weiter" and shows no feedback. */
+  submitLabel?: string;
+  /** "Pause" either leads somewhere (practice: continued next time) or asks first (Einstieg). */
+  pause: { to: string } | { onPause(): void };
 }
+
+/** Quiet text action at the top left ("Pause", "Zur Karte"). */
+export const QUIET_ACTION_CLASS =
+  'flex min-h-touch items-center rounded-control px-sm text-ink-muted underline-offset-4 hover:underline';
 
 export function ItemScreen(props: ItemScreenProps) {
   const { item, phase, correct } = props;
@@ -39,12 +45,15 @@ export function ItemScreen(props: ItemScreenProps) {
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_1fr_auto] gap-sm px-lg py-sm">
       <header className="flex items-center justify-between gap-md">
-        <Link
-          to={props.pauseTo}
-          className="flex min-h-touch items-center rounded-control px-sm text-ink-muted underline-offset-4 hover:underline"
-        >
-          Pause
-        </Link>
+        {'to' in props.pause ? (
+          <Link to={props.pause.to} className={QUIET_ACTION_CLASS}>
+            Pause
+          </Link>
+        ) : (
+          <button type="button" onClick={props.pause.onPause} className={QUIET_ACTION_CLASS}>
+            Pause
+          </button>
+        )}
         <Fortschritt {...props.progress} />
       </header>
 
@@ -89,7 +98,7 @@ export function ItemScreen(props: ItemScreenProps) {
             disabled={props.answer === null || phase !== 'answering'}
             onClick={props.onSubmit}
           >
-            Prüfen
+            {props.submitLabel ?? 'Prüfen'}
           </Button>
         </div>
       )}

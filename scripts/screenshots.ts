@@ -8,6 +8,10 @@ import { createServer } from 'vite';
 const PAGES = [
   { name: 'tokens', path: '/dev/tokens' },
   { name: 'karte', path: '/dev/karte' },
+  ...['intro', 'aufgabe', 'pause', 'ergebnis', 'hinweis'].map((zustand) => ({
+    name: `einstieg-${zustand}`,
+    path: `/dev/einstieg?zustand=${zustand}`,
+  })),
 ];
 // iPad touch/scale profile, but exactly the viewports named in the skill.
 const VIEWPORTS = [

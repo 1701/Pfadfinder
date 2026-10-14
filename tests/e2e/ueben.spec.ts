@@ -2,7 +2,7 @@
 // Reload (IndexedDB) and offline use. Screenshots in both iPad formats (Chromium projects).
 
 import { expect, test, type Page } from '@playwright/test';
-import { ITEMS, SCREENSHOTS, expectFitsScreen, type ContentItem } from './helpers';
+import { SCREENSHOTS, answer, currentItem, expectFitsScreen } from './helpers';
 
 const viewportName = (page: Page) =>
   page.viewportSize()!.width > page.viewportSize()!.height ? 'ipad-landscape' : 'ipad-portrait';
@@ -11,29 +11,6 @@ async function shot(page: Page, name: string) {
   if (test.info().project.name.startsWith('webkit')) return;
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: `${SCREENSHOTS}/${name}-${viewportName(page)}.png` });
-}
-
-async function currentItem(page: Page): Promise<ContentItem> {
-  const plain = (text: string | null) => (text ?? '').replace(/\u00a0/g, ' ');
-  const prompt = plain(await page.getByRole('heading', { level: 1 }).textContent());
-  const sheet = plain(await page.locator('main section').first().textContent());
-  const item = ITEMS.find((i) => i.prompt === prompt && sheet.includes(i.stimulus?.text ?? ''));
-  expect(item, `item for "${prompt}"`).toBeDefined();
-  return item!;
-}
-
-async function answer(page: Page, item: ContentItem, correct: boolean) {
-  if (item.format === 'single-choice') {
-    const id = correct
-      ? item.solution.optionId!
-      : item.payload.options!.find((o) => o.id !== item.solution.optionId)!.id;
-    await page.locator('label', { has: page.locator(`input[value="${id}"]`) }).click();
-  } else {
-    const value = correct ? item.solution.value! : item.solution.value! + 1;
-    for (const key of String(value).replace('.', ',')) {
-      await page.getByRole('button', { name: key === ',' ? 'Komma' : key, exact: true }).click();
-    }
-  }
 }
 
 test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
@@ -57,6 +34,8 @@ test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
 test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 10', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: "Wohin geht's heute?" })).toBeVisible();
+  // A new learner is offered the Einstieg first; "Später" brings back the Tagesziel.
+  await page.getByRole('button', { name: 'Später' }).click();
   await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
   await shot(page, 'start');
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();

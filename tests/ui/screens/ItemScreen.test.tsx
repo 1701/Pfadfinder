@@ -28,7 +28,7 @@ function Harness({ onSubmit }: { onSubmit(): void }) {
           setCorrect(false);
         }}
         onNext={() => {}}
-        pauseTo="/"
+        pause={{ to: '/' }}
       />
     </MemoryRouter>
   );
@@ -75,7 +75,7 @@ describe('ItemScreen', () => {
           readAloud
           onSubmit={() => {}}
           onNext={() => {}}
-          pauseTo="/"
+          pause={{ to: '/' }}
         />
       </MemoryRouter>
     );
@@ -86,5 +86,34 @@ describe('ItemScreen', () => {
     rerender(screenFor({ ...numberInput, id: `${numberInput.id}-next` }, null));
     expect(screen.getByRole('group', { name: 'Ziffernblock' })).toBeTruthy();
     expect(screen.getByLabelText('Deine Zahl').textContent).toBe('');
+  });
+
+  it('asks without judging in the Einstieg: "Weiter", and "Pause" as a button', async () => {
+    const onPause = vi.fn();
+    const onSubmit = vi.fn();
+    render(
+      <MemoryRouter>
+        <ItemScreen
+          item={singleChoice}
+          attemptIndex={0}
+          answer={{ optionId: 'a' }}
+          onAnswer={() => {}}
+          phase="answering"
+          correct={null}
+          progress={{ current: 1, done: 0, total: 12 }}
+          readAloud
+          submitLabel="Weiter"
+          onSubmit={onSubmit}
+          onNext={() => {}}
+          pause={{ onPause }}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByRole('button', { name: 'Prüfen' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Pause' })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'Pause' }));
+    expect(onPause).toHaveBeenCalledOnce();
+    await userEvent.click(screen.getByRole('button', { name: 'Weiter' }));
+    expect(onSubmit).toHaveBeenCalledOnce();
   });
 });

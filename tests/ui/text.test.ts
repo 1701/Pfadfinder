@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { BEREICHE, FAECHER } from '../../src/domain/content';
 import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/number-format';
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
+import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
@@ -14,6 +15,14 @@ describe('child-facing names', () => {
       expect(BEREICH_NAME[bereich]).toBeTruthy();
       expect(BEREICH_NAME[bereich].length).toBeLessThanOrEqual(24);
     }
+  });
+});
+
+describe('the Einstieg', () => {
+  it.each(EINSTIEG_TEXTS)('"%s" is never a test, at most 2 sentences, no exclamation', (text) => {
+    expect(text).not.toMatch(/\b(check|test|prüfung)\b/i);
+    expect(text).not.toContain('!');
+    expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
   });
 });
 

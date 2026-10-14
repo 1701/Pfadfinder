@@ -42,3 +42,28 @@ export async function expectFitsScreen(page: Page, label: string) {
   expect(m!.buttonBottom, `${label}: button leaves the screen`).toBeGreaterThanOrEqual(0);
   expect(m!.buttonHeight, `${label}: button lower than 56 px`).toBeGreaterThanOrEqual(56);
 }
+
+/** The content item on screen, found by its prompt and stimulus. */
+export async function currentItem(page: Page): Promise<ContentItem> {
+  const plain = (text: string | null) => (text ?? '').replace(/\u00a0/g, ' ');
+  const prompt = plain(await page.getByRole('heading', { level: 1 }).textContent());
+  const sheet = plain(await page.locator('main section').first().textContent());
+  const item = ITEMS.find((i) => i.prompt === prompt && sheet.includes(i.stimulus?.text ?? ''));
+  expect(item, `item for "${prompt}"`).toBeDefined();
+  return item!;
+}
+
+/** Answers the item on screen correctly or wrongly (single choice or digit pad). */
+export async function answer(page: Page, item: ContentItem, correct: boolean) {
+  if (item.format === 'single-choice') {
+    const id = correct
+      ? item.solution.optionId!
+      : item.payload.options!.find((o) => o.id !== item.solution.optionId)!.id;
+    await page.locator('label', { has: page.locator(`input[value="${id}"]`) }).click();
+  } else {
+    const value = correct ? item.solution.value! : item.solution.value! + 1;
+    for (const key of String(value).replace('.', ',')) {
+      await page.getByRole('button', { name: key === ',' ? 'Komma' : key, exact: true }).click();
+    }
+  }
+}

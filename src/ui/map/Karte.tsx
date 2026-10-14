@@ -4,18 +4,26 @@
 // fills its Stufe with land, the Stufe the child is on now is lighter: progress grows as area
 // from the coast inwards, the way explorers go. A Gebiet without enough tasks is a blank spot: dashed,
 // no contour lines, not selectable. Both layouts are in the DOM; CSS shows one by orientation,
-// and the hidden one is display:none, so it has no tab stops.
+// and the hidden one is display:none, so it has no tab stops. With `fach` only that island is
+// drawn (Einstieg result); `interactive={false}` draws the Gebiete as pictures, not links.
 
 import clsx from 'clsx';
 import { Fragment, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { useHref, useLinkClickHandler } from 'react-router';
-import { BEREICHE, fachOfBereich, type Bereich, type Fach } from '../../domain/content/taxonomy';
+import {
+  BEREICHE,
+  BEREICHE_BY_FACH,
+  fachOfBereich,
+  type Bereich,
+  type Fach,
+} from '../../domain/content/taxonomy';
 import type { Niveau } from '../../domain/content/types';
 import type { RegionState } from '../../domain/progress';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 import {
   MAP_LAYOUTS,
   MAP_STYLE,
+  islandViewBox,
   labelLines,
   insetPolygon,
   toPath,
@@ -27,6 +35,10 @@ const ETAPPEN: readonly Niveau[] = [1, 2, 3];
 
 export interface KarteProps {
   states: Record<Bereich, RegionState>;
+  /** Only this island, cut to its size. */
+  fach?: Fach;
+  /** False: the Gebiete are pictures with their name and niveau, not links. */
+  interactive?: boolean;
 }
 
 /** Name for screen readers: "Zahlen und Rechnen, Niveau 2". */
@@ -36,11 +48,11 @@ export function regionLabel(bereich: Bereich, state: RegionState): string {
   return `${name}, Niveau ${state.niveau}${state.kind === 'gemeistert' ? ', gemeistert' : ''}`;
 }
 
-export function Karte({ states }: KarteProps) {
+export function Karte(props: KarteProps) {
   return (
     <>
-      <KartenLayout layout={MAP_LAYOUTS.wide} states={states} className="portrait:hidden" />
-      <KartenLayout layout={MAP_LAYOUTS.tall} states={states} className="landscape:hidden" />
+      <KartenLayout {...props} layout={MAP_LAYOUTS.wide} className="portrait:hidden" />
+      <KartenLayout {...props} layout={MAP_LAYOUTS.tall} className="landscape:hidden" />
     </>
   );
 }
@@ -48,35 +60,40 @@ export function Karte({ states }: KarteProps) {
 function KartenLayout({
   layout,
   states,
+  fach: only,
+  interactive = true,
   className,
 }: KarteProps & { layout: MapLayout; className: string }) {
+  const islands = (Object.entries(layout.islands) as [Fach, readonly [number, number]][]).filter(
+    ([fach]) => only === undefined || fach === only,
+  );
+  const bereiche: readonly Bereich[] = only ? BEREICHE_BY_FACH[only] : BEREICHE;
   return (
     <svg
-      viewBox={`0 0 ${layout.width} ${layout.height}`}
+      viewBox={only ? islandViewBox(layout, only) : `0 0 ${layout.width} ${layout.height}`}
       className={clsx('size-full bg-water', className)}
       role="group"
       aria-label="Karte"
     >
-      {(Object.entries(layout.islands) as [Fach, readonly [number, number]][]).map(
-        ([fach, [x, y]]) => (
-          <text
-            key={fach}
-            x={x}
-            y={y}
-            fontSize={MAP_STYLE.islandNameSize}
-            className="fill-ink-muted font-bold"
-            aria-hidden="true"
-          >
-            {FACH_NAME[fach]}
-          </text>
-        ),
-      )}
-      {BEREICHE.map((bereich) => (
+      {islands.map(([fach, [x, y]]) => (
+        <text
+          key={fach}
+          x={x}
+          y={y}
+          fontSize={MAP_STYLE.islandNameSize}
+          className="fill-ink-muted font-bold"
+          aria-hidden="true"
+        >
+          {FACH_NAME[fach]}
+        </text>
+      ))}
+      {bereiche.map((bereich) => (
         <Gebiet
           key={bereich}
           bereich={bereich}
           shape={layout.regions[bereich]}
           state={states[bereich]}
+          interactive={interactive}
         />
       ))}
     </svg>
@@ -89,7 +106,8 @@ interface GebietProps {
   state: RegionState;
 }
 
-function Gebiet({ bereich, shape, state }: GebietProps) {
+function Gebiet({ interactive, ...props }: GebietProps & { interactive: boolean }) {
+  const { bereich, shape, state } = props;
   if (state.kind === 'unerforscht') {
     return (
       <g role="img" aria-label={regionLabel(bereich, state)}>
@@ -104,18 +122,37 @@ function Gebiet({ bereich, shape, state }: GebietProps) {
       </g>
     );
   }
+  if (!interactive) {
+    return (
+      <g role="img" aria-label={regionLabel(bereich, state)}>
+        <GebietZeichnung bereich={bereich} shape={shape} state={state} />
+      </g>
+    );
+  }
   return <GebietLink bereich={bereich} shape={shape} state={state} />;
 }
 
-function GebietLink({
-  bereich,
-  shape,
-  state,
-}: GebietProps & { state: Exclude<RegionState, { kind: 'unerforscht' }> }) {
+type OpenGebietProps = GebietProps & { state: Exclude<RegionState, { kind: 'unerforscht' }> };
+
+function GebietLink({ bereich, shape, state }: OpenGebietProps) {
   const to = `/ueben/${fachOfBereich(bereich)}/${bereich}`;
   const href = useHref(to);
   // React types an <a> inside SVG like the HTML element; only the event is used here.
   const onClick = useLinkClickHandler<HTMLAnchorElement>(to);
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      aria-label={regionLabel(bereich, state)}
+      className="map-region"
+    >
+      <GebietZeichnung bereich={bereich} shape={shape} state={state} />
+    </a>
+  );
+}
+
+/** The hill with its three Höhenstufen, contour lines, outline and name sign. */
+function GebietZeichnung({ bereich, shape, state }: OpenGebietProps) {
   const [hangDistance, gipfelDistance] = MAP_STYLE.contours;
   const hang = insetPolygon(shape.points, hangDistance);
   const gipfel = insetPolygon(shape.points, gipfelDistance);
@@ -129,12 +166,7 @@ function GebietLink({
         : 'fill-surface';
 
   return (
-    <a
-      href={href}
-      onClick={onClick}
-      aria-label={regionLabel(bereich, state)}
-      className="map-region"
-    >
+    <>
       {stufen.map((points, i) => (
         <polygon key={i} points={toPath(points)} className={fill(i)} />
       ))}
@@ -155,7 +187,7 @@ function GebietLink({
         strokeLinejoin="round"
       />
       <Label bereich={bereich} shape={shape} state={state} plate={fill(2)} />
-    </a>
+    </>
   );
 }
 

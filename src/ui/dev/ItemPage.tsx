@@ -55,7 +55,7 @@ export function ItemPage() {
       readAloud
       onSubmit={() => undefined}
       onNext={() => undefined}
-      pauseTo="/"
+      pause={{ to: '/' }}
     />
   );
 }

@@ -30,6 +30,9 @@ const PracticeRoute = lazy(() =>
   import('./practice-route').then((m) => ({ default: m.PracticeRoute })),
 );
 
+// The Einstieg (PRODUCT.md §5.4) in its own chunk, like practice.
+const CheckRoute = lazy(() => import('./check-route').then((m) => ({ default: m.CheckRoute })));
+
 // Developer pages exist only in the dev build; the condition is replaced at build time,
 // so the imports and their chunks are dropped from the production bundle.
 const TokensPage = import.meta.env.DEV
@@ -37,6 +40,9 @@ const TokensPage = import.meta.env.DEV
   : null;
 const KartePage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/KartePage').then((m) => ({ default: m.KartePage })))
+  : null;
+const EinstiegPage = import.meta.env.DEV
+  ? lazy(() => import('../ui/dev/EinstiegPage').then((m) => ({ default: m.EinstiegPage })))
   : null;
 const ItemPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/ItemPage').then((m) => ({ default: m.ItemPage })))
@@ -50,9 +56,11 @@ export function AppRouter() {
         <Routes>
           <Route path="/" element={<StartRoute />} />
           <Route path="/ueben/:fach/:bereich" element={<PracticeRoute />} />
+          <Route path="/einstieg/:fach" element={<CheckRoute />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
           {KartePage && <Route path="/dev/karte" element={<KartePage />} />}
+          {EinstiegPage && <Route path="/dev/einstieg" element={<EinstiegPage />} />}
         </Routes>
       </Suspense>
     </BrowserRouter>
