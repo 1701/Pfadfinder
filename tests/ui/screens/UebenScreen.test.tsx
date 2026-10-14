@@ -3,7 +3,7 @@ import '../dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RouterProvider, createMemoryRouter } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { createMemoryRepositories } from '../../../src/data/memory/repos';
 import type { Repositories } from '../../../src/data/repos';
 import { createSessionStore } from '../../../src/data/session-store';
@@ -11,6 +11,8 @@ import { SessionStoreContext } from '../../../src/ui/session-context';
 import { UebenScreen } from '../../../src/ui/screens/UebenScreen';
 import { thinMatheBereich } from '../../fixtures/content-state';
 import { answerFor, testDeps } from '../../data/helpers';
+import { answerOnScreen } from '../answer-on-screen';
+import { preloadFormats } from '../../../src/ui/formats/registry';
 
 function renderAt(path: string, repos?: Repositories) {
   const store = createSessionStore(testDeps(repos));
@@ -30,15 +32,16 @@ function renderAt(path: string, repos?: Repositories) {
 }
 
 describe('UebenScreen', () => {
-  it('plays 10 items and ends with the Fundstücke', async () => {
+  // match and order are their own chunks; in jsdom they must be there before the first render.
+  beforeAll(() => preloadFormats());
+
+  // All nine formats can come up; a match item alone takes eight taps.
+  it('plays 10 items and ends with the Fundstücke', { timeout: 20_000 }, async () => {
     const user = userEvent.setup();
     renderAt('/ueben/mathe/zahlen-operationen');
     for (let i = 1; i <= 10; i++) {
       await screen.findByText(new RegExp(`${i} von 10`));
-      const radios = screen.queryAllByRole('radio');
-      if (radios.length > 0) await user.click(radios[0]!);
-      else await user.click(screen.getByRole('button', { name: '1' }));
-      await user.click(screen.getByRole('button', { name: 'Prüfen' }));
+      await answerOnScreen(user);
       await user.click(await screen.findByRole('button', { name: 'Weiter' }));
     }
     expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe(

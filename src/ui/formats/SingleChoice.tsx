@@ -1,25 +1,18 @@
 // Einfachwahl: native radio buttons (keyboard and screen readers for free), options shuffled
-// per presentation unless the item keeps their order (labels A–D of a picture, schema 1.0.4). After checking, the solution shows a check mark; a different choice of the
-// child stays marked in neutral stone – never red.
+// per presentation unless the item keeps their order (labels A–D of a picture, schema 1.0.4).
+// After checking, the solution shows a check mark; a different choice of the child stays marked
+// in neutral stone – never red.
 
 import clsx from 'clsx';
 import { useId, useMemo } from 'react';
-import { presentationSeed, seededShuffle } from '../../domain/scheduler';
+import { presentedOptions } from '../../domain/presentation';
 import { CheckGlyph } from '../components/glyphs';
 import { keepNumbersTogether } from '../text/numbers';
+import { StateWords, tileClass, tileState } from './choice';
 import type { FormatProps } from './types';
 
-/** Longer options get a full row each so they do not wrap into three lines. */
-const LONG_OPTION_CHARS = 24;
-
-type OptionState = 'plain' | 'selected' | 'solution' | 'chosen';
-
-const stateClass: Record<OptionState, string> = {
-  plain: 'border-line-strong bg-surface',
-  selected: 'border-signal-edge bg-signal-soft',
-  solution: 'border-correct bg-correct-surface',
-  chosen: 'border-notyet bg-notyet-surface',
-};
+/** Longer options get a full row each so they do not wrap into three lines (CONTENT_SCHEMA §7). */
+export const LONG_OPTION_CHARS = 24;
 
 export function SingleChoice({
   item,
@@ -30,13 +23,7 @@ export function SingleChoice({
   revealed,
 }: FormatProps<'single-choice'>) {
   const name = useId();
-  const options = useMemo(
-    () =>
-      item.payload.keepOrder
-        ? item.payload.options
-        : seededShuffle(item.payload.options, presentationSeed(item.id, attemptIndex)),
-    [item, attemptIndex],
-  );
+  const options = useMemo(() => presentedOptions(item, attemptIndex), [item, attemptIndex]);
   const long = options.some((o) => o.text.length > LONG_OPTION_CHARS);
 
   return (
@@ -45,24 +32,13 @@ export function SingleChoice({
       <div className={clsx('grid gap-xs', long ? 'grid-cols-1' : 'grid-cols-2')}>
         {options.map((option) => {
           const chosen = answer?.optionId === option.id;
-          const state: OptionState = revealed
-            ? revealed.solution.optionId === option.id
-              ? 'solution'
-              : chosen
-                ? 'chosen'
-                : 'plain'
-            : chosen
-              ? 'selected'
-              : 'plain';
+          const state = tileState(
+            revealed !== undefined,
+            revealed?.solution.optionId === option.id,
+            chosen,
+          );
           return (
-            <label
-              key={option.id}
-              className={clsx(
-                'choice flex min-h-touch items-center gap-sm rounded-control border-2 px-lg py-2xs text-option',
-                !disabled && 'cursor-pointer',
-                stateClass[state],
-              )}
-            >
+            <label key={option.id} className={tileClass(state, !disabled, 'choice px-lg')}>
               <input
                 type="radio"
                 name={name}
@@ -96,9 +72,7 @@ export function SingleChoice({
               </span>
               <span>
                 {keepNumbersTogether(option.text)}
-                {state !== 'plain' && state !== 'selected' && ' '}
-                {state === 'solution' && <span className="sr-only">(richtige Antwort)</span>}
-                {state === 'chosen' && <span className="sr-only">(deine Wahl)</span>}
+                <StateWords state={state} />
               </span>
             </label>
           );

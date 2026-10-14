@@ -1,12 +1,15 @@
 // Shared setup for data-layer tests: in-memory repos, the real content and a ticking clock.
 
 import type { Format, Item } from '../../src/domain/content';
+import { previewAnswer } from '../../src/ui/dev/preview-answers';
+import { SUPPORTED_FORMATS } from '../../src/ui/formats/supported';
 import { createContentLoader } from '../../src/content-runtime/loader';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
 import type { PracticeDeps } from '../../src/data/practice';
 import type { Repositories } from '../../src/data/repos';
 
-export const FORMATS: readonly Format[] = ['single-choice', 'number-input'];
+/** The formats the app serves: all nine since task 7. */
+export const FORMATS: readonly Format[] = SUPPORTED_FORMATS;
 
 /** Every call to now() is one second later than the previous one. */
 export function tickingClock(start = '2026-10-11T08:00:00.000Z') {
@@ -31,14 +34,11 @@ export function testDeps(repos: Repositories = createMemoryRepositories()): Prac
   };
 }
 
-/** A correct or a wrong answer for the two formats with a renderer. */
+/**
+ * A correct or a wrong answer for every format (the dev preview's answers). A wrong short answer
+ * is rated "noch nicht" (0), so it counts as wrong like in every other format.
+ */
 export function answerFor(item: Item, correct: boolean): unknown {
-  if (item.format === 'single-choice') {
-    const wrong = item.payload.options.find((o) => o.id !== item.solution.optionId)!;
-    return { optionId: correct ? item.solution.optionId : wrong.id };
-  }
-  if (item.format === 'number-input') {
-    return { value: correct ? item.solution.value : item.solution.value + 1 };
-  }
-  throw new Error(`No test answer for format ${item.format}`);
+  if (item.format === 'short-answer') return { text: 'x', rating: correct ? 1 : 0 };
+  return previewAnswer(item, correct);
 }

@@ -4,7 +4,7 @@ import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { loadTodayProgress } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
 import { thinMatheBereich } from '../fixtures/content-state';
-import { answerFor, testDeps, tickingClock } from './helpers';
+import { FORMATS, answerFor, testDeps, tickingClock } from './helpers';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -49,7 +49,7 @@ describe('practice session (store + in-memory repositories + real content)', () 
     expect(new Set(attempts.map((a) => a.itemId)).size).toBe(SESSION_GOAL);
     expect(attempts.map((a) => a.niveau)).toEqual([1, 1, 1, 1, 1, 1, 2, 2, 2, 2]);
     expect(attempts.map((a) => a.correct)).toEqual(plan);
-    expect(attempts.every((a) => a.mode === 'practice' && a.format !== 'order')).toBe(true);
+    expect(attempts.every((a) => a.mode === 'practice' && FORMATS.includes(a.format))).toBe(true);
 
     expect(await repos.mastery.get(learner.id, 'zahlen-operationen')).toMatchObject({
       niveau: 2,

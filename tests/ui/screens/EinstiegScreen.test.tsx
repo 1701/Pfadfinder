@@ -3,13 +3,14 @@ import '../dom';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { createCheckStore, type CheckStore } from '../../../src/data/check-store';
 import { ensureLearner } from '../../../src/data/practice';
 import { initialMastery } from '../../../src/domain/mastery';
 import { CheckStoreContext } from '../../../src/ui/check-context';
 import { EinstiegScreen } from '../../../src/ui/screens/EinstiegScreen';
 import { answerFor, testDeps } from '../../data/helpers';
+import { preloadFormats } from '../../../src/ui/formats/registry';
 
 function renderEinstieg(store: CheckStore, fach = 'mathe') {
   return render(
@@ -37,6 +38,9 @@ async function begin(store: CheckStore) {
 }
 
 describe('EinstiegScreen', () => {
+  // match and order are their own chunks; in jsdom they must be there before the first render.
+  beforeAll(() => preloadFormats());
+
   it('opens with the intro: two sentences, the empty way ahead, Starten', async () => {
     const store = createCheckStore(testDeps());
     const { container } = renderEinstieg(store);

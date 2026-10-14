@@ -1,0 +1,296 @@
+// Zuordnen: fixed rows on the left, each with a slot; the cards wait in a pool (beside the rows in
+// landscape, below them in portrait). Tap a row and then a card (or the other way round) to place
+// it, or drag the card with dnd-kit. Tapping a filled slot puts its card back. The distractor
+// simply stays in the pool. After checking the pool goes away; a wrong row shows the right card.
+// Loaded as its own chunk (registry), so dnd-kit never reaches the route chunks.
+
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type Announcements,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import clsx from 'clsx';
+import { useMemo, useState, type CSSProperties, type ReactNode } from 'react';
+import { presentedMatch, PRESENTATION_TEXTS as T } from '../../domain/presentation';
+import { keepNumbersTogether as nb } from '../text/numbers';
+import { SolutionMark, StateWords, tileClass, tileState, type TileState } from './choice';
+import type { FormatProps } from './types';
+
+type Selection = { side: 'left' | 'right'; id: string } | null;
+
+const MATCH_INSTRUCTIONS = 'Wähle erst eine Zeile, dann eine Antwort.';
+
+const POOL = 'pool';
+
+/**
+ * One grid before and after checking, so nothing moves: label | slot | third column. In landscape
+ * the third column holds the pool (spanning all rows), after checking the "Richtig ist" lines.
+ * In portrait the pool goes below the rows and a "Richtig ist" line below its slot.
+ */
+const GRID_CLASS =
+  'grid w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-x-sm gap-y-xs landscape:grid-cols-[auto_minmax(0,3fr)_minmax(0,2fr)]';
+const LABEL_CLASS =
+  'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option';
+const rowId = (leftId: string) => `row:${leftId}`;
+
+function Card({
+  id,
+  state,
+  onTap,
+  disabled,
+  label,
+  children,
+}: {
+  id: string;
+  state: TileState;
+  onTap(): void;
+  disabled: boolean;
+  /** Accessible name when it says more than the text (it starts with the visible text). */
+  label?: string;
+  children: ReactNode;
+}) {
+  const { setNodeRef, listeners, isDragging } = useDraggable({ id, disabled });
+  return (
+    <button
+      ref={setNodeRef}
+      type="button"
+      {...listeners}
+      aria-label={label}
+      aria-pressed={state === 'selected'}
+      onClick={onTap}
+      className={tileClass(
+        state,
+        true,
+        clsx('w-full touch-none px-md text-left', isDragging && 'opacity-50'),
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Slot({
+  leftId,
+  active,
+  children,
+}: {
+  leftId: string;
+  active: boolean;
+  children: ReactNode;
+}) {
+  const { setNodeRef, isOver } = useDroppable({ id: rowId(leftId) });
+  return (
+    <div
+      ref={setNodeRef}
+      className={clsx('rounded-control', (isOver || active) && 'bg-signal-soft')}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Pool({ rows, children }: { rows: number; children: ReactNode }) {
+  const { setNodeRef, isOver } = useDroppable({ id: POOL });
+  return (
+    <div
+      ref={setNodeRef}
+      role="group"
+      aria-label={T.answers.replace(':', '')}
+      style={{ '--rows': rows } as CSSProperties}
+      className={clsx(
+        'col-span-2 flex min-h-touch flex-wrap content-start gap-xs self-start rounded-control portrait:mt-sm',
+        'landscape:col-span-1 landscape:col-start-3 landscape:flex-col landscape:[grid-row:1/span_var(--rows)]',
+        isOver && 'bg-signal-soft',
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function Match({
+  item,
+  attemptIndex,
+  answer,
+  onChange,
+  disabled,
+  revealed,
+}: FormatProps<'match'>) {
+  const { left, right } = useMemo(() => presentedMatch(item, attemptIndex), [item, attemptIndex]);
+  const [pairs, setPairs] = useState<Record<string, string>>(() =>
+    Object.fromEntries(answer?.pairs ?? []),
+  );
+  const [selected, setSelected] = useState<Selection>(null);
+  const [dragging, setDragging] = useState<string | null>(null);
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
+
+  const cardText = new Map(right.map((r) => [r.id, r.text]));
+  const leftText = new Map(left.map((l) => [l.id, l.text]));
+  const placed = new Set(Object.values(pairs));
+
+  const commit = (next: Record<string, string>) => {
+    setPairs(next);
+    setSelected(null);
+    const complete = left.every((l) => next[l.id] !== undefined);
+    onChange(
+      complete ? { pairs: left.map((l) => [l.id, next[l.id] ?? ''] as [string, string]) } : null,
+    );
+  };
+  const place = (leftId: string, cardId: string) => {
+    const next = Object.fromEntries(Object.entries(pairs).filter(([, c]) => c !== cardId));
+    commit({ ...next, [leftId]: cardId });
+  };
+  const putBack = (cardId: string) =>
+    commit(Object.fromEntries(Object.entries(pairs).filter(([, c]) => c !== cardId)));
+
+  const tapRow = (leftId: string) => {
+    if (selected?.side === 'right') return place(leftId, selected.id);
+    const card = pairs[leftId];
+    if (card !== undefined) return putBack(card);
+    setSelected(selected?.id === leftId ? null : { side: 'left', id: leftId });
+  };
+  const tapCard = (cardId: string) => {
+    if (selected?.side === 'left') return place(selected.id, cardId);
+    setSelected(selected?.id === cardId ? null : { side: 'right', id: cardId });
+  };
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    setDragging(null);
+    const cardId = String(active.id);
+    if (over?.id === POOL) putBack(cardId);
+    else if (over) place(String(over.id).slice(rowId('').length), cardId);
+  };
+
+  const name = (id: unknown) => cardText.get(String(id)) ?? '';
+  const target = (id: unknown) =>
+    id === POOL
+      ? 'zurück zu den Antworten'
+      : `zu ${leftText.get(String(id).slice(rowId('').length)) ?? ''}`;
+  const announcements: Announcements = {
+    onDragStart: ({ active }) => `${name(active.id)} aufgenommen.`,
+    onDragOver: ({ active, over }) => (over ? `${name(active.id)} ${target(over.id)}.` : undefined),
+    onDragEnd: ({ active, over }) =>
+      over ? `${name(active.id)} abgelegt ${target(over.id)}.` : `${name(active.id)} losgelassen.`,
+    onDragCancel: ({ active }) => `${name(active.id)} losgelassen.`,
+  };
+
+  if (revealed) {
+    const solution = new Map(revealed.solution.pairs);
+    return (
+      <div className={GRID_CLASS}>
+        {left.map((l) => {
+          const card = pairs[l.id];
+          const wanted = solution.get(l.id);
+          const state = tileState(true, card === wanted, card !== undefined);
+          return (
+            <div key={l.id} className="contents">
+              <span className={clsx(LABEL_CLASS, 'border-transparent')}>{nb(l.text)}</span>
+              <div className={tileClass(state, false, 'px-md')}>
+                <SolutionMark state={state} />
+                <span>
+                  {nb(cardText.get(card ?? '') ?? '')}
+                  <StateWords state={state} />
+                </span>
+              </div>
+              {state === 'solution' ? (
+                <span className="portrait:hidden" />
+              ) : (
+                <span className="text-option text-correct portrait:col-start-2">
+                  {T.rightIs} {nb(cardText.get(wanted ?? '') ?? '')}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <DndContext
+      sensors={sensors}
+      accessibility={{ announcements, screenReaderInstructions: { draggable: MATCH_INSTRUCTIONS } }}
+      onDragStart={({ active }) => setDragging(String(active.id))}
+      onDragEnd={onDragEnd}
+      onDragCancel={() => setDragging(null)}
+    >
+      <div className={GRID_CLASS}>
+        {left.map((l) => {
+          const card = pairs[l.id];
+          const active = selected?.side === 'left' && selected.id === l.id;
+          return (
+            <div key={l.id} className="contents">
+              <button
+                type="button"
+                aria-pressed={active}
+                disabled={disabled}
+                onClick={() => tapRow(l.id)}
+                className={clsx(
+                  LABEL_CLASS,
+                  active ? 'border-signal-edge bg-signal-soft' : 'border-transparent',
+                )}
+              >
+                {nb(l.text)}
+              </button>
+              <Slot leftId={l.id} active={active}>
+                {card === undefined ? (
+                  <button
+                    type="button"
+                    aria-label={`Feld für ${l.text}`}
+                    disabled={disabled}
+                    onClick={() => tapRow(l.id)}
+                    className={clsx(
+                      'block min-h-touch w-full rounded-control border-2 bg-paper',
+                      active || selected?.side === 'right'
+                        ? 'border-signal-edge'
+                        : 'border-dashed border-line-strong',
+                    )}
+                  />
+                ) : (
+                  <Card
+                    id={card}
+                    state="plain"
+                    disabled={disabled}
+                    label={`${cardText.get(card) ?? ''}, bei ${l.text}`}
+                    onTap={() => tapRow(l.id)}
+                  >
+                    {nb(cardText.get(card) ?? '')}
+                  </Card>
+                )}
+              </Slot>
+            </div>
+          );
+        })}
+        <Pool rows={left.length}>
+          {right
+            .filter((r) => !placed.has(r.id))
+            .map((r) => (
+              <div key={r.id} className="landscape:w-full">
+                <Card
+                  id={r.id}
+                  disabled={disabled}
+                  state={selected?.side === 'right' && selected.id === r.id ? 'selected' : 'plain'}
+                  onTap={() => tapCard(r.id)}
+                >
+                  {nb(r.text)}
+                </Card>
+              </div>
+            ))}
+        </Pool>
+      </div>
+      <DragOverlay dropAnimation={null}>
+        {dragging && (
+          <div className={tileClass('selected', false, 'px-md')}>
+            {nb(cardText.get(dragging) ?? '')}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
+  );
+}

@@ -22,6 +22,13 @@ export interface FeedbackPanelProps {
   onNext(): void;
   /** Learner setting; the button also hides itself where the browser cannot speak. */
   readAloud?: boolean;
+  /**
+   * false for a self-rated short answer: the app judges nothing, so no "Richtig." or "Noch nicht
+   * ganz." – only the explanation that fits the child's own rating.
+   */
+  verdict?: boolean;
+  /** A line under the verdict in both outcomes, e.g. "So schreibt man es: Samstag" (find-error). */
+  note?: { label: string; text: string };
   /** Passed to the band, e.g. data attributes for layout tests. */
   [data: `data-${string}`]: string;
 }
@@ -31,10 +38,12 @@ export function FeedbackPanel({
   feedback,
   onNext,
   readAloud = true,
+  verdict: showVerdict = true,
+  note,
   ...rest
 }: FeedbackPanelProps) {
   const right = correct === true;
-  const verdict = right ? 'Richtig.' : 'Noch nicht ganz.';
+  const verdict = showVerdict ? (right ? 'Richtig.' : 'Noch nicht ganz.') : undefined;
   const explanation = right ? feedback.correct : feedback.incorrect;
   const misconception = right ? undefined : feedback.misconception;
   const messageId = useId();
@@ -43,7 +52,8 @@ export function FeedbackPanel({
 
   useEffect(() => focusQuietly(next.current), []);
 
-  const speech = [verdict, explanation, misconception]
+  const noteText = note && `${note.label} ${note.text}.`;
+  const speech = [verdict, noteText, explanation, misconception]
     .filter((part): part is string => Boolean(part))
     .map(speakable)
     .join(' ');
@@ -62,15 +72,22 @@ export function FeedbackPanel({
       >
         {readAloud && <VorlesenButton text={speech} />}
         <div id={messageId} role="status" className="grid min-w-0 gap-2xs">
-          <h2
-            className={clsx(
-              'flex items-center gap-xs text-option font-bold',
-              right ? 'text-correct' : 'text-notyet',
-            )}
-          >
-            {right ? <CheckGlyph className="size-lg" /> : <SignpostGlyph className="size-lg" />}
-            {verdict}
-          </h2>
+          {verdict && (
+            <h2
+              className={clsx(
+                'flex items-center gap-xs text-option font-bold',
+                right ? 'text-correct' : 'text-notyet',
+              )}
+            >
+              {right ? <CheckGlyph className="size-lg" /> : <SignpostGlyph className="size-lg" />}
+              {verdict}
+            </h2>
+          )}
+          {note && (
+            <p className="text-option">
+              {note.label} <b>{note.text}</b>
+            </p>
+          )}
           <p>{nb(explanation)}</p>
           {misconception && why && <p className="text-ink-muted">{nb(misconception)}</p>}
         </div>

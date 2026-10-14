@@ -1,28 +1,18 @@
-// Developer preview of one item in a fixed state (dev build only): /dev/item/:id?state=
-// answering | richtig | noch-nicht. Used by tests/e2e/layout.spec.ts to check every item for
-// scrolling on real iPad viewports.
+// Developer preview of one item (dev build only): /dev/item/:id?state=
+//   answering | richtig | noch-nicht  a fixed state, for tests/e2e/layout.spec.ts
+//   vergleichen                       short-answer with the model answer shown and the rating band
+//   spielen                           playable: answer, Prüfen, feedback (tests/e2e/formate.spec.ts)
 
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import type { Item } from '../../domain/content';
+import { evaluate, parseAnswer, type Correctness } from '../../domain/evaluation';
 import { createContentLoader } from '../../content-runtime/loader';
+import { preloadFormats } from '../formats/registry';
 import { ItemScreen } from '../screens/ItemScreen';
+import { previewAnswer } from './preview-answers';
 
 const content = createContentLoader();
-
-/** A correct or a wrong answer for the preview; dev-only, so a format switch is fine here. */
-function previewAnswer(item: Item, correct: boolean): unknown {
-  switch (item.format) {
-    case 'single-choice': {
-      const wrong = item.payload.options.find((o) => o.id !== item.solution.optionId);
-      return { optionId: correct ? item.solution.optionId : wrong?.id };
-    }
-    case 'number-input':
-      return { value: correct ? item.solution.value : item.solution.value + 1 };
-    default:
-      return null;
-  }
-}
 
 export function ItemPage() {
   const { id } = useParams();
@@ -30,19 +20,53 @@ export function ItemPage() {
   const state = search.get('state') ?? 'answering';
   const [item, setItem] = useState<Item | null | undefined>(undefined);
   const [answer, setAnswer] = useState<unknown>(null);
+  const [played, setPlayed] = useState<Correctness | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    void preloadFormats();
     void content.loadAllItems().then((items) => {
       const found = items.find((i) => i.id === id) ?? null;
       setItem(found);
-      if (found && state !== 'answering') setAnswer(previewAnswer(found, state === 'richtig'));
+      if (!found) return;
+      if (state === 'richtig' || state === 'noch-nicht') {
+        setAnswer(previewAnswer(found, state === 'richtig'));
+      } else if (state === 'vergleichen') {
+        setAnswer({ text: (previewAnswer(found, true) as { text?: string }).text ?? '' });
+      }
     });
   }, [id, state]);
 
   if (item === undefined) return null;
   if (item === null) return <p className="p-lg">Item {id} nicht gefunden.</p>;
 
-  const feedback = state !== 'answering';
+  if (state === 'spielen') {
+    return (
+      <ItemScreen
+        key={attempt}
+        item={item}
+        attemptIndex={attempt}
+        answer={answer}
+        onAnswer={setAnswer}
+        phase={played === null ? 'answering' : 'feedback'}
+        correct={played}
+        progress={{ current: 1, done: played === null ? 0 : 1, total: 10 }}
+        readAloud
+        onSubmit={(given) => {
+          const parsed = parseAnswer(item.format, given ?? answer);
+          if (parsed.success) setPlayed(evaluate(item, parsed.data).correct);
+        }}
+        onNext={() => {
+          setPlayed(null);
+          setAnswer(null);
+          setAttempt((a) => a + 1);
+        }}
+        pause={{ to: '/' }}
+      />
+    );
+  }
+
+  const feedback = state === 'richtig' || state === 'noch-nicht';
   return (
     <ItemScreen
       item={item}
@@ -56,6 +80,7 @@ export function ItemPage() {
       onSubmit={() => undefined}
       onNext={() => undefined}
       pause={{ to: '/' }}
+      previewComparing={state === 'vergleichen'}
     />
   );
 }

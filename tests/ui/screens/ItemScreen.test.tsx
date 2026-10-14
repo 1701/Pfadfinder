@@ -5,9 +5,11 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Correctness } from '../../../src/domain/evaluation';
+import type { Item } from '../../../src/domain/content';
+import { evaluate, parseAnswer, type Correctness } from '../../../src/domain/evaluation';
 import { ItemScreen } from '../../../src/ui/screens/ItemScreen';
 import { numberInput, singleChoice } from '../../fixtures/items';
+import { contentItem } from '../../fixtures/content-items';
 
 function Harness({ onSubmit }: { onSubmit(): void }) {
   const [answer, setAnswer] = useState<unknown>(null);
@@ -115,5 +117,98 @@ describe('ItemScreen', () => {
     expect(onPause).toHaveBeenCalledOnce();
     await userEvent.click(screen.getByRole('button', { name: 'Weiter' }));
     expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
+  /** Plays one item like the practice store: submit evaluates, the band shows the result. */
+  function Played({ item, onSubmit = () => {} }: { item: Item; onSubmit?(answer: unknown): void }) {
+    const [answer, setAnswer] = useState<unknown>(null);
+    const [correct, setCorrect] = useState<Correctness | null>(null);
+    return (
+      <MemoryRouter>
+        <ItemScreen
+          item={item}
+          attemptIndex={0}
+          answer={answer}
+          onAnswer={setAnswer}
+          phase={correct === null ? 'answering' : 'feedback'}
+          correct={correct}
+          progress={{ current: 3, done: 2, total: 10 }}
+          readAloud
+          onSubmit={(given) => {
+            const submitted = given ?? answer;
+            onSubmit(submitted);
+            const parsed = parseAnswer(item.format, submitted);
+            if (parsed.success) setCorrect(evaluate(item, parsed.data).correct);
+          }}
+          onNext={() => {}}
+          pause={{ to: '/' }}
+        />
+      </MemoryRouter>
+    );
+  }
+
+  describe('short-answer (m-dz-3-003): compare, then rate yourself', () => {
+    const item = contentItem('m-dz-3-003', 'short-answer');
+
+    async function compare() {
+      const onSubmit = vi.fn();
+      const { container } = render(<Played item={item} onSubmit={onSubmit} />);
+      const vergleichen = screen.getByRole('button', { name: 'Vergleichen' }) as HTMLButtonElement;
+      expect(screen.queryByRole('button', { name: 'Prüfen' })).toBeNull();
+      expect(vergleichen.disabled).toBe(true);
+      await userEvent.type(screen.getByRole('textbox', { name: 'Deine Antwort' }), '4 blau, 2 rot');
+      await userEvent.click(vergleichen);
+      return { onSubmit, band: container.querySelector('[data-region="band"]') as HTMLElement };
+    }
+
+    it('"Vergleichen" shows the model answer and asks; nothing is submitted yet', async () => {
+      const { onSubmit, band } = await compare();
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(screen.getByRole('heading', { name: 'So könnte es aussehen:' })).toBeTruthy();
+      expect(screen.getByText('4 blau, 2 rot')).toBeTruthy();
+      expect(within(band).getByRole('heading', { name: 'Hast du es getroffen?' })).toBeTruthy();
+      expect([...band.querySelectorAll(':scope > button')].map((b) => b.textContent)).toEqual([
+        'Getroffen',
+        'Teils',
+        'Noch nicht',
+      ]);
+    });
+
+    it('"Teils" submits 0.5; the band explains without a verdict and offers the Falle', async () => {
+      const { onSubmit, band } = await compare();
+      await userEvent.click(within(band).getByRole('button', { name: 'Teils' }));
+      expect(onSubmit).toHaveBeenCalledWith({ text: '4 blau, 2 rot', rating: 0.5 });
+      const feedback = document.querySelector('[data-region="band"]') as HTMLElement;
+      expect(feedback.textContent).not.toMatch(/Richtig\.|Noch nicht ganz\./);
+      expect(feedback.textContent).toContain(item.feedback.incorrect);
+      expect(within(feedback).getByRole('button', { name: 'Falle zeigen' })).toBeTruthy();
+      expect(screen.getByRole('heading', { name: 'So könnte es aussehen:' })).toBeTruthy();
+    });
+
+    it('"Getroffen" submits 1 and shows the confirming text, no Falle', async () => {
+      const { onSubmit, band } = await compare();
+      await userEvent.click(within(band).getByRole('button', { name: 'Getroffen' }));
+      expect(onSubmit).toHaveBeenCalledWith({ text: '4 blau, 2 rot', rating: 1 });
+      const feedback = document.querySelector('[data-region="band"]') as HTMLElement;
+      expect(feedback.textContent).not.toMatch(/Richtig\./);
+      expect(feedback.textContent).toContain(item.feedback.correct);
+      expect(within(feedback).queryByRole('button', { name: 'Falle zeigen' })).toBeNull();
+    });
+  });
+
+  describe('find-error (d-rss-1-002): the band names the correct spelling', () => {
+    const item = contentItem('d-rss-1-002', 'find-error');
+
+    it.each([
+      ['samstag', 'Richtig.'],
+      ['fahren', 'Noch nicht ganz.'],
+    ])('after choosing "%s": %s and "So schreibt man es: Samstag"', async (word, verdict) => {
+      render(<Played item={item} />);
+      await userEvent.click(screen.getByRole('button', { name: word }));
+      await userEvent.click(screen.getByRole('button', { name: 'Prüfen' }));
+      const band = document.querySelector('[data-region="band"]') as HTMLElement;
+      expect(band.textContent).toContain(verdict);
+      expect(band.textContent).toContain('So schreibt man es: Samstag');
+    });
   });
 });

@@ -91,7 +91,7 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
         total: SESSION_GOAL,
       }}
       readAloud={readAloud}
-      onSubmit={() => void submit()}
+      onSubmit={(given) => void submit(given)}
       onNext={() => void next()}
       pause={{ to: '/' }}
     />

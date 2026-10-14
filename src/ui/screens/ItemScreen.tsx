@@ -1,16 +1,21 @@
 // The item screen, fixed layout (pfadfinder-ui): progress, task sheet with Vorlesen, answer area,
 // and a bottom band where "Prüfen" turns into "Weiter" in the same place. Pure layout: the
 // practice screen, the Einstieg (button "Weiter", no feedback) and the dev preview feed it.
+// A self-rated format (short-answer) has one step more: "Vergleichen" shows the model answer, the
+// band asks for the child's own rating, and only that rating submits the answer.
 
+import { useState } from 'react';
 import { Link } from 'react-router';
-import { readAloudText, type Item } from '../../domain/content';
-import type { Correctness } from '../../domain/evaluation';
+import type { Item, ItemOf } from '../../domain/content';
+import type { Correctness, SelfRating } from '../../domain/evaluation';
+import { comparisonSpeech, itemSpeech } from '../../domain/presentation';
 import { Button } from '../components/Button';
 import { ContentAsset, isWideAsset } from '../components/ContentAsset';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Fortschritt, type FortschrittProps } from '../components/Fortschritt';
+import { RatingBand } from '../components/RatingBand';
 import { VorlesenButton } from '../components/VorlesenButton';
-import { FormatRenderer } from '../formats/registry';
+import { formatEntry, FormatRenderer } from '../formats/registry';
 import { keepNumbersWithWords as nb } from '../text/numbers';
 
 export interface ItemScreenProps {
@@ -23,12 +28,15 @@ export interface ItemScreenProps {
   correct: Correctness | null;
   progress: FortschrittProps;
   readAloud: boolean;
-  onSubmit(): void;
+  /** Submits the current answer; a self-rated format passes the completed answer along. */
+  onSubmit(answer?: unknown): void;
   onNext(): void;
   /** Label of the submit button; the Einstieg says "Weiter" and shows no feedback. */
   submitLabel?: string;
   /** "Pause" either leads somewhere (practice: continued next time) or asks first (Einstieg). */
   pause: { to: string } | { onPause(): void };
+  /** Dev preview only: open a self-rated item directly in the comparing step. */
+  previewComparing?: boolean;
 }
 
 /** Quiet text action at the top left ("Pause", "Zur Karte"). */
@@ -37,10 +45,60 @@ export const QUIET_ACTION_CLASS =
 
 export function ItemScreen(props: ItemScreenProps) {
   const { item, phase, correct } = props;
+  const entry = formatEntry(item);
+  const presentation = `${item.id}#${props.attemptIndex}`;
+  // The comparing step belongs to one presentation; a new item starts without it.
+  const [comparingKey, setComparingKey] = useState<string | null>(
+    props.previewComparing ? presentation : null,
+  );
+  const compared = comparingKey === presentation;
+  const comparing = compared && phase === 'answering';
   const revealed = phase === 'feedback' && correct !== null ? { correct } : undefined;
   const { assetId, assetAlt = '' } = item.stimulus ?? {};
   const asset = assetId && <ContentAsset assetId={assetId} alt={assetAlt} />;
   const assetBeside = assetId !== undefined && !isWideAsset(assetId);
+
+  const rate = (rating: SelfRating) => {
+    const answer = { ...(props.answer as object), rating };
+    props.onAnswer(answer);
+    props.onSubmit(answer);
+  };
+
+  let band;
+  if (revealed) {
+    band = (
+      <FeedbackPanel
+        data-region="band"
+        correct={revealed.correct}
+        feedback={item.feedback}
+        onNext={props.onNext}
+        readAloud={props.readAloud}
+        verdict={!entry.selfRated}
+        note={entry.bandNote?.(item)}
+      />
+    );
+  } else if (comparing) {
+    band = (
+      <RatingBand
+        data-region="band"
+        onRate={rate}
+        speech={comparisonSpeech(item as ItemOf<'short-answer'>)}
+        readAloud={props.readAloud}
+      />
+    );
+  } else {
+    band = (
+      <div data-region="band" className="flex items-end justify-end">
+        <Button
+          variant="primary"
+          disabled={props.answer === null || phase !== 'answering'}
+          onClick={() => (entry.selfRated ? setComparingKey(presentation) : props.onSubmit())}
+        >
+          {props.submitLabel ?? entry.submitLabel ?? 'Prüfen'}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_1fr_auto] gap-sm px-lg py-sm">
@@ -58,7 +116,9 @@ export function ItemScreen(props: ItemScreenProps) {
       </header>
 
       <section className="flex items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
-        {props.readAloud && <VorlesenButton key={item.id} text={readAloudText(item)} />}
+        {props.readAloud && (
+          <VorlesenButton key={item.id} text={itemSpeech(item, props.attemptIndex, props.answer)} />
+        )}
         {/* A narrow picture stands beside the text, a wide one below the stimulus. */}
         <div className="flex min-w-0 flex-1 items-start gap-lg">
           <div className="grid min-w-0 flex-1 gap-xs">
@@ -73,35 +133,18 @@ export function ItemScreen(props: ItemScreenProps) {
       {/* Top-aligned: the options must not move when the feedback rises below them. */}
       <div data-region="answer" className="flex min-h-0 items-start justify-center pt-xs">
         <FormatRenderer
-          key={`${item.id}#${props.attemptIndex}`}
+          key={presentation}
           item={item}
           attemptIndex={props.attemptIndex}
           answer={props.answer}
           onChange={props.onAnswer}
-          disabled={phase !== 'answering'}
+          disabled={phase !== 'answering' || comparing}
           revealed={revealed}
+          showSolution={entry.selfRated && (compared || revealed !== undefined)}
         />
       </div>
 
-      {revealed ? (
-        <FeedbackPanel
-          data-region="band"
-          correct={revealed.correct}
-          feedback={item.feedback}
-          onNext={props.onNext}
-          readAloud={props.readAloud}
-        />
-      ) : (
-        <div data-region="band" className="flex items-end justify-end">
-          <Button
-            variant="primary"
-            disabled={props.answer === null || phase !== 'answering'}
-            onClick={props.onSubmit}
-          >
-            {props.submitLabel ?? 'Prüfen'}
-          </Button>
-        </div>
-      )}
+      {band}
     </main>
   );
 }

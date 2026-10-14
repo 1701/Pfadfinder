@@ -48,3 +48,35 @@ export function SignpostGlyph({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/** order: move up / move down. */
+export function ArrowUpGlyph({ className }: { className?: string }) {
+  return (
+    <svg {...common} className={className}>
+      <path d="M12 19V5" />
+      <path d="M6 11l6-6 6 6" />
+    </svg>
+  );
+}
+
+export function ArrowDownGlyph({ className }: { className?: string }) {
+  return (
+    <svg {...common} className={className}>
+      <path d="M12 5v14" />
+      <path d="M6 13l6 6 6-6" />
+    </svg>
+  );
+}
+
+/** order: the handle to drag a card. */
+export function GripGlyph({ className }: { className?: string }) {
+  return (
+    <svg {...common} className={className}>
+      {[8, 16].flatMap((x) =>
+        [6, 12, 18].map((y) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="1.6" fill="currentColor" stroke="none" />
+        )),
+      )}
+    </svg>
+  );
+}

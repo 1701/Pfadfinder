@@ -69,11 +69,49 @@ for (const file of initial) {
   }
 }
 
+/**
+ * dnd-kit only in the format chunks (match, order): never in what the start page or a route
+ * loads statically. Static imports in the minified output look like `import{…}from"./x.js"` or
+ * `import"./x.js"`; dynamic ones (`import("./x.js")`) are the lazy edges and are not followed.
+ */
+const DND_MARKER = 'DndDescribedBy';
+const assets = path.join(dist, 'assets');
+const staticImports = (file: string): string[] =>
+  [
+    ...readFileSync(path.join(dist, file), 'utf8').matchAll(
+      /import\s*(?:[^"'()]*?from\s*)?["']\.\/([^"']+\.js)["']/g,
+    ),
+  ].map((m) => `assets/${m[1]}`);
+const roots = [
+  ...initial,
+  ...readdirSync(assets)
+    .filter((f) => /-route-[\w-]+\.js$/.test(f))
+    .map((f) => `assets/${f}`),
+];
+const closure = new Set<string>();
+for (const queue = [...roots]; queue.length > 0;) {
+  const file = queue.pop() as string;
+  if (closure.has(file)) continue;
+  closure.add(file);
+  queue.push(...staticImports(file));
+}
+const withDnd = readdirSync(assets)
+  .filter(
+    (f) => f.endsWith('.js') && readFileSync(path.join(assets, f), 'utf8').includes(DND_MARKER),
+  )
+  .map((f) => `assets/${f}`);
+if (withDnd.length === 0) errors.push('assets: dnd-kit fehlt ganz (Marker nicht gefunden)');
+for (const file of withDnd.filter((f) => closure.has(f))) {
+  errors.push(
+    `${file}: dnd-kit gehört in die Format-Chunks (match, order), nicht in Startseite oder Route`,
+  );
+}
+
 if (errors.length > 0) {
   for (const e of errors) console.error(`FEHLER   dist/${e}`);
   process.exit(1);
 }
 console.log(
   `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften und Icons im Precache, ` +
-    `Startseite ${initialKb.toFixed(1)} kB JS (Budget ${START_PAGE_BUDGET_KB} kB, ohne Zod/Dexie).`,
+    `Startseite ${initialKb.toFixed(1)} kB JS (Budget ${START_PAGE_BUDGET_KB} kB, ohne Zod/Dexie), dnd-kit nur in ${withDnd.join(', ')}.`,
 );

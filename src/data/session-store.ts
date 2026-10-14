@@ -55,7 +55,8 @@ export interface SessionState {
   /** "Neu anfangen": the open session ends without an Abschluss, a new round of 10 begins. */
   restart(): Promise<void>;
   setAnswer(answer: unknown): void;
-  submit(): Promise<void>;
+  /** Checks the answer; a self-rated short answer passes its completed answer (with rating). */
+  submit(answer?: unknown): Promise<void>;
   next(): Promise<void>;
   /** Leaves the practice screen; the stored session stays open and is continued next time. */
   leave(): void;
@@ -135,11 +136,12 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
         if (get().status === 'answering') set({ answer });
       },
 
-      async submit() {
-        const { status, practice, current, answer } = get();
+      async submit(given) {
+        const { status, practice, current } = get();
+        const answer = given ?? get().answer;
         if (status !== 'answering' || !practice || !current || answer === null) return;
         const token = run;
-        set({ status: 'checking' });
+        set({ status: 'checking', answer });
         const { ctx, result } = await submitPracticeAnswer(deps, practice, current, answer);
         if (token !== run) return;
         set({
