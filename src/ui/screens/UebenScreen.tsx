@@ -7,6 +7,7 @@ import { SESSION_GOAL } from '../../domain/practice';
 import { useSession } from '../session-context';
 import { AbschlussScreen } from './AbschlussScreen';
 import { ItemScreen } from './ItemScreen';
+import { UebenWahl } from './UebenWahl';
 
 function parseParams(fach?: string, bereich?: string): { fach: Fach; bereich: Bereich } | null {
   const parsed = bereichSchema.safeParse(bereich);
@@ -48,6 +49,8 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   const setAnswer = useSession((s) => s.setAnswer);
   const submit = useSession((s) => s.submit);
   const next = useSession((s) => s.next);
+  const resume = useSession((s) => s.resume);
+  const restart = useSession((s) => s.restart);
 
   useEffect(() => {
     void startPractice(fach, bereich);
@@ -55,6 +58,16 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   }, [fach, bereich, startPractice, leave]);
 
   if (status === 'empty') return <Hinweis text="Hier gibt es noch nicht genug Aufgaben." />;
+  if (status === 'choosing') {
+    return (
+      <UebenWahl
+        answered={answered}
+        readAloud={readAloud}
+        onResume={() => void resume()}
+        onRestart={() => void restart()}
+      />
+    );
+  }
   if (status === 'finished')
     return (
       <AbschlussScreen count={today?.count ?? answered} bereich={bereich} readAloud={readAloud} />

@@ -11,6 +11,7 @@ import {
   ensureLearner,
   loadTodayProgress,
   pickPracticeItem,
+  restartPractice,
   startPractice,
   submitPracticeAnswer,
   type PracticeContext,
@@ -21,6 +22,8 @@ import {
 export type PracticeStatus =
   | 'idle'
   | 'loading'
+  /** Today's session of this Bereich is open: the child chooses Fortsetzen or Neu anfangen. */
+  | 'choosing'
   /** The Bereich has too few practiceable items. */
   | 'empty'
   | 'answering'
@@ -47,6 +50,10 @@ export interface SessionState {
 
   init(): Promise<Learner>;
   startPractice(fach: Fach, bereich: Bereich): Promise<void>;
+  /** "Fortsetzen": the open session goes on where it stopped. */
+  resume(): Promise<void>;
+  /** "Neu anfangen": the open session ends without an Abschluss, a new round of 10 begins. */
+  restart(): Promise<void>;
   setAnswer(answer: unknown): void;
   submit(): Promise<void>;
   next(): Promise<void>;
@@ -102,7 +109,26 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
         const practice = await startPractice(deps, learner.id, fach, bereich);
         if (token !== run) return;
         if (!practice) return set({ ...idle, status: 'empty' });
+        // A new session has no answers yet; one with answers is today's open one.
+        if (practice.session.attemptIds.length > 0) return set({ status: 'choosing', practice });
         await showNext(practice, token);
+      },
+
+      async resume() {
+        const { status, practice } = get();
+        if (status !== 'choosing' || !practice) return;
+        set({ status: 'loading' });
+        await showNext(practice, run);
+      },
+
+      async restart() {
+        const { status, practice } = get();
+        if (status !== 'choosing' || !practice) return;
+        const token = run;
+        set({ status: 'loading' });
+        const fresh = await restartPractice(deps, practice);
+        if (token !== run) return;
+        await showNext(fresh, token);
       },
 
       setAnswer(answer) {

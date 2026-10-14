@@ -20,6 +20,15 @@ export function startPracticeSession(id: string, learnerId: string, startedAt: s
   return { id, learnerId, mode: 'practice', startedAt, attemptIds: [], goalReached: false };
 }
 
+/**
+ * Ends an open session without its goal: a session of an earlier day (planSessionStart) or one
+ * the child leaves with "Neu anfangen". Its attempts stay; there is no Abschluss for it.
+ */
+export function closeSession(session: Session, now: string): Session {
+  if (session.endedAt !== undefined) throw new Error(`Session ${session.id} is already finished`);
+  return { ...session, endedAt: now, goalReached: false };
+}
+
 export interface SessionStartInput {
   /** All sessions of the learner, any order. */
   sessions: readonly Session[];
@@ -60,7 +69,7 @@ export function planSessionStart(input: SessionStartInput): SessionStartPlan {
     .map((session) => ({ session, last: lastActivity(session, attempts) }));
   const close = open
     .filter(({ last }) => !isSameLocalDay(last, now))
-    .map(({ session }) => ({ ...session, endedAt: now, goalReached: false }));
+    .map(({ session }) => closeSession(session, now));
   const resume =
     open
       .filter(

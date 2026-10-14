@@ -26,7 +26,7 @@ import {
   STARTED_TEXT,
   TO_MAP,
 } from '../text/einstieg';
-import { EinstiegBlatt } from './EinstiegBlatt';
+import { Blatt } from './Blatt';
 import { EinstiegErgebnis } from './EinstiegErgebnis';
 import { ItemScreen, QUIET_ACTION_CLASS } from './ItemScreen';
 
@@ -47,7 +47,7 @@ function ZurKarte({ variant }: { variant: 'primary' | 'secondary' }) {
 
 export function Hinweis({ text, readAloud }: { text: string; readAloud: boolean }) {
   return (
-    <EinstiegBlatt
+    <Blatt
       title={text}
       readAloud={readAloud}
       actions={
@@ -62,7 +62,7 @@ export function Hinweis({ text, readAloud }: { text: string; readAloud: boolean 
 
 export function EinstiegIntro(props: { total: number; readAloud: boolean; onStart(): void }) {
   return (
-    <EinstiegBlatt
+    <Blatt
       left={
         <Link to="/" className={QUIET_ACTION_CLASS}>
           {TO_MAP}
@@ -94,7 +94,7 @@ export function EinstiegPause(props: {
   const weiter = useRef<HTMLButtonElement>(null);
   useEffect(() => focusQuietly(weiter.current), []);
   return (
-    <EinstiegBlatt
+    <Blatt
       right={<Fortschritt current={props.index + 1} done={props.index} total={props.total} />}
       title={PAUSE_TEXT}
       readAloud={props.readAloud}

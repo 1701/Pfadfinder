@@ -5,6 +5,7 @@ import type { Bereich, ContentLoader, Fach, Format, Item } from '../domain/conte
 import type { Learner, ReviewEntry, Session } from '../domain/learner';
 import { initialMastery, type MasteryState } from '../domain/mastery';
 import {
+  closeSession,
   planSessionStart,
   recordPracticeAnswer,
   startPracticeSession,
@@ -105,6 +106,24 @@ export async function startPractice(
 
   const session = startPracticeSession(deps.newId(), learnerId, now);
   return { learnerId, fach, bereich, pool, session, mastery, reviewsInSession: 0 };
+}
+
+/**
+ * "Neu anfangen": ends the open session without an Abschluss and starts a new round of
+ * SESSION_GOAL items. Attempts, mastery, Fehlerkiste and Entdeckungen stay as they are, so
+ * today's Fundstücke do not go back. The new session is stored with its first answer.
+ */
+export async function restartPractice(
+  deps: PracticeDeps,
+  ctx: PracticeContext,
+): Promise<PracticeContext> {
+  const now = deps.now();
+  // A session without answers was never stored and has nothing to end.
+  if (ctx.session.attemptIds.length > 0) {
+    await deps.repos.sessions.put(closeSession(ctx.session, now));
+  }
+  const session = startPracticeSession(deps.newId(), ctx.learnerId, now);
+  return { ...ctx, session, reviewsInSession: 0 };
 }
 
 export async function pickPracticeItem(

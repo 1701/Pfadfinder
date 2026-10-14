@@ -4,14 +4,16 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RouterProvider, createMemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { createMemoryRepositories } from '../../../src/data/memory/repos';
+import type { Repositories } from '../../../src/data/repos';
 import { createSessionStore } from '../../../src/data/session-store';
 import { SessionStoreContext } from '../../../src/ui/session-context';
 import { UebenScreen } from '../../../src/ui/screens/UebenScreen';
 import { thinMatheBereich } from '../../fixtures/content-state';
-import { testDeps } from '../../data/helpers';
+import { answerFor, testDeps } from '../../data/helpers';
 
-function renderAt(path: string) {
-  const store = createSessionStore(testDeps());
+function renderAt(path: string, repos?: Repositories) {
+  const store = createSessionStore(testDeps(repos));
   const router = createMemoryRouter(
     [
       { path: '/', element: <p>Übersicht</p> },
@@ -44,6 +46,48 @@ describe('UebenScreen', () => {
     );
     expect(screen.getByText('Du warst heute im Gebiet Zahlen und Rechnen unterwegs.')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Zur Übersicht' }).getAttribute('href')).toBe('/');
+  });
+
+  describe('with an open round of today', () => {
+    /** Three answers in Zahlen und Rechnen, then "Pause". */
+    async function openRound(): Promise<Repositories> {
+      const repos = createMemoryRepositories();
+      const store = createSessionStore(testDeps(repos));
+      await store.getState().startPractice('mathe', 'zahlen-operationen');
+      for (let i = 0; i < 3; i++) {
+        store.getState().setAnswer(answerFor(store.getState().current!.item, true));
+        await store.getState().submit();
+        await store.getState().next();
+      }
+      store.getState().leave();
+      return repos;
+    }
+
+    it('asks first: Fortsetzen bottom right and focused, Neu anfangen beside it', async () => {
+      renderAt('/ueben/mathe/zahlen-operationen', await openRound());
+      expect(
+        await screen.findByRole('heading', { name: 'Hier warst du heute schon unterwegs.' }),
+      ).toBeTruthy();
+      expect(screen.getByText('4 von 10')).toBeTruthy();
+      const band = document.querySelector('[data-region="band"]')!;
+      expect([...band.children].map((c) => c.textContent)).toEqual(['Neu anfangen', 'Fortsetzen']);
+      expect(document.activeElement?.textContent).toBe('Fortsetzen');
+      expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
+    });
+
+    it('Fortsetzen goes on at 4 von 10', async () => {
+      renderAt('/ueben/mathe/zahlen-operationen', await openRound());
+      await userEvent.click(await screen.findByRole('button', { name: 'Fortsetzen' }));
+      expect(await screen.findByRole('button', { name: 'Prüfen' })).toBeTruthy();
+      expect(screen.getByText('4 von 10')).toBeTruthy();
+    });
+
+    it('Neu anfangen starts at 1 von 10 without asking again', async () => {
+      renderAt('/ueben/mathe/zahlen-operationen', await openRound());
+      await userEvent.click(await screen.findByRole('button', { name: 'Neu anfangen' }));
+      expect(await screen.findByRole('button', { name: 'Prüfen' })).toBeTruthy();
+      expect(screen.getByText('1 von 10')).toBeTruthy();
+    });
   });
 
   it('explains when a Bereich has too few items or does not exist', async () => {

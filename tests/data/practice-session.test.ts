@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SESSION_GOAL } from '../../src/domain/practice';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
+import { loadTodayProgress } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
 import { thinMatheBereich } from '../fixtures/content-state';
 import { answerFor, testDeps, tickingClock } from './helpers';
@@ -127,6 +128,10 @@ describe('practice session (store + in-memory repositories + real content)', () 
 
     const second = createSessionStore(testDeps(repos));
     await second.getState().startPractice('mathe', 'zahlen-operationen');
+    // Today's open session: the child chooses first, nothing is shown before.
+    expect(second.getState().status).toBe('choosing');
+    expect(second.getState().current).toBeNull();
+    await second.getState().resume();
     expect(second.getState().practice!.session.id).toBe(pausedId);
     expect(second.getState().practice!.session.attemptIds).toHaveLength(4);
     for (let i = 0; i < 6; i++) {
@@ -139,6 +144,72 @@ describe('practice session (store + in-memory repositories + real content)', () 
     const sessions = await repos.sessions.listByLearner(learnerId);
     expect(sessions).toHaveLength(1);
     expect(sessions[0]!.attemptIds).toHaveLength(SESSION_GOAL);
+  });
+
+  it('"Neu anfangen" ends the open session and starts a new round of 10', async () => {
+    const repos = createMemoryRepositories();
+    const first = createSessionStore(testDeps(repos));
+    await first.getState().startPractice('mathe', 'zahlen-operationen');
+    // 6 correct: a level-up and an Entdeckung before the restart.
+    for (let i = 0; i < 6; i++) {
+      await answer(first, true);
+      await first.getState().next();
+    }
+    const learnerId = first.getState().learner!.id;
+    const oldId = first.getState().practice!.session.id;
+    first.getState().leave();
+    const mastery = await repos.mastery.get(learnerId, 'zahlen-operationen');
+    const collectibles = await repos.collectibles.get(learnerId);
+    const reviews = await repos.reviews.listByLearner(learnerId);
+    expect(collectibles!.unlocked).toEqual(['zahlen-operationen:1']);
+
+    const deps = testDeps(repos);
+    const second = createSessionStore(deps);
+    await second.getState().startPractice('mathe', 'zahlen-operationen');
+    expect(second.getState().status).toBe('choosing');
+    await second.getState().restart();
+
+    // The old session is over, without an Abschluss and with its answers.
+    const old = await repos.sessions.get(oldId);
+    expect(old).toMatchObject({ goalReached: false });
+    expect(old!.endedAt).toBeDefined();
+    expect(old!.attemptIds).toHaveLength(6);
+    expect(second.getState().status).toBe('answering');
+    expect(second.getState().practice!.session.id).not.toBe(oldId);
+    expect(second.getState().practice!.session.attemptIds).toEqual([]);
+    // Nothing else changes: mastery, Entdeckungen, Fehlerkiste, today's Fundstücke.
+    expect(await repos.mastery.get(learnerId, 'zahlen-operationen')).toEqual(mastery);
+    expect(await repos.collectibles.get(learnerId)).toEqual(collectibles);
+    expect(await repos.reviews.listByLearner(learnerId)).toEqual(reviews);
+    expect(await repos.attempts.listByLearner(learnerId)).toHaveLength(6);
+    expect((await loadTodayProgress(deps, learnerId)).count).toBe(6);
+
+    // The new round has 10 items of its own and ends with the Abschluss.
+    await answer(second, true);
+    expect((await loadTodayProgress(deps, learnerId)).count).toBe(7);
+    await second.getState().next();
+    for (let i = 1; i < SESSION_GOAL; i++) {
+      await answer(second, true);
+      await second.getState().next();
+    }
+    expect(second.getState().status).toBe('finished');
+    const sessions = await repos.sessions.listByLearner(learnerId);
+    expect(sessions).toHaveLength(2);
+    expect(sessions[1]!.attemptIds).toHaveLength(SESSION_GOAL);
+    expect(sessions[1]).toMatchObject({ goalReached: true });
+    expect(second.getState().today).toEqual({ count: 10, goal: 10, reached: true });
+  });
+
+  it('starts a new round right away when the open session has no answers yet', async () => {
+    const repos = createMemoryRepositories();
+    const store = createSessionStore(testDeps(repos));
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    expect(store.getState().status).toBe('answering');
+    // resume and restart only act while the child is choosing.
+    await store.getState().restart();
+    await store.getState().resume();
+    expect(store.getState().status).toBe('answering');
+    expect(await repos.sessions.listByLearner(store.getState().learner!.id)).toEqual([]);
   });
 
   it('does not continue a session of another Bereich and stores nothing before the first answer', async () => {

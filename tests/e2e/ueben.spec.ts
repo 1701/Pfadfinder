@@ -69,6 +69,8 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
     if (n === 3) {
       // Answers live in IndexedDB: after a reload the session continues at 4 von 10.
       await page.reload();
+      await expect(page.getByText('4 von 10')).toBeVisible();
+      await page.getByRole('button', { name: 'Fortsetzen' }).click();
     }
   }
 
@@ -78,6 +80,34 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
   await expect(page.getByText('Heute: 10 von 10 Fundstücken. Geschafft.')).toBeVisible();
   await expect(page.getByRole('link', { name: /^Zahlen und Rechnen, Niveau \d/ })).toBeVisible();
   await shot(page, 'start-geschafft');
+});
+
+test('Neu anfangen: neue Runde ab 1, das Tagesziel bleibt', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Später' }).click();
+  await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
+  for (let n = 1; n <= 3; n++) {
+    await expect(page.getByText(`${n} von 10`)).toBeVisible();
+    await answer(page, await currentItem(page), true);
+    await page.getByRole('button', { name: 'Prüfen' }).click();
+    await page.getByRole('button', { name: 'Weiter' }).click();
+  }
+  await page.getByRole('link', { name: 'Pause' }).click();
+  await expect(page.getByText('Heute: 3 von 10 Fundstücken')).toBeVisible();
+
+  await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Hier warst du heute schon unterwegs.' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Neu anfangen' }).click();
+  await expect(page.getByText('1 von 10')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Prüfen' })).toBeVisible();
+  // Back on the map: today's Fundstücke did not go back.
+  await page.getByRole('link', { name: 'Pause' }).click();
+  await expect(page.getByText('Heute: 3 von 10 Fundstücken')).toBeVisible();
+  // The new round has no answers yet: the next visit starts it without asking.
+  await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
+  await expect(page.getByText('1 von 10')).toBeVisible();
 });
 
 test('offline nach dem ersten Laden', async ({ page, context, browserName }) => {

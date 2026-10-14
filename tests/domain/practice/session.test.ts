@@ -4,6 +4,7 @@ import { attemptSchema } from '../../../src/domain/learner';
 import type { Bereich } from '../../../src/domain/content';
 import {
   SESSION_GOAL,
+  closeSession,
   isSameLocalDay,
   lastActivity,
   planSessionStart,
@@ -42,6 +43,22 @@ describe('startPracticeSession', () => {
       attemptIds: [],
       goalReached: false,
     });
+  });
+});
+
+describe('closeSession', () => {
+  it('ends an open session without its goal and keeps its answers', () => {
+    const open = { ...startPracticeSession('ses-1', 'learner-1', NOW), attemptIds: ['a1', 'a2'] };
+    expect(closeSession(open, '2026-10-11T10:05:00.000Z')).toEqual({
+      ...open,
+      endedAt: '2026-10-11T10:05:00.000Z',
+      goalReached: false,
+    });
+  });
+
+  it('refuses a session that has already ended', () => {
+    const ended = { ...startPracticeSession('ses-1', 'learner-1', NOW), endedAt: NOW };
+    expect(() => closeSession(ended, NOW)).toThrow(/already finished/);
   });
 });
 

@@ -4,6 +4,7 @@ import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/nu
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
 import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
+import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
 const NB = '\u00a0';
@@ -21,6 +22,13 @@ describe('child-facing names', () => {
 describe('the Einstieg', () => {
   it.each(EINSTIEG_TEXTS)('"%s" is never a test, at most 2 sentences, no exclamation', (text) => {
     expect(text).not.toMatch(/\b(check|test|prüfung)\b/i);
+    expect(text).not.toContain('!');
+    expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
+  });
+});
+
+describe('the choice before practice goes on', () => {
+  it.each(UEBEN_TEXTS)('"%s" is at most 2 sentences, no exclamation', (text) => {
     expect(text).not.toContain('!');
     expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
   });
