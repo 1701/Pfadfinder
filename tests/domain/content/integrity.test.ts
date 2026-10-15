@@ -228,11 +228,32 @@ describe('validateContent – probetest rules (§6)', () => {
     );
   });
 
-  it('requires the estimated time between 35 and 42 minutes', () => {
+  it('requires 24–32 minutes of estimated time for Mathe (1.0.9)', () => {
     const { items, probetest } = buildMatheProbetest();
-    const quick = items.map((i) => ({ ...i, estimatedSeconds: 60 }));
-    expect(errors(run(toFiles({ items: quick, probetests: [probetest] })).issues)).toEqual([
-      'probetests/mathe-01.json|mathe-01|itemIds|Summe estimatedSeconds ist 20.0 Min., erlaubt sind 35–42 Min.',
+    const timed = (seconds: number) =>
+      run(toFiles({ items: items.map((i) => ({ ...i, estimatedSeconds: seconds })), probetests: [probetest] })).issues;
+    expect(errors(timed(60))).toEqual([
+      'probetests/mathe-01.json|mathe-01|itemIds|Summe estimatedSeconds ist 20.0 Min., erlaubt sind 24–32 Min.',
+    ]);
+    // 20 items: 72 s = 24 min, 96 s = 32 min, 97 s = 32.3 min.
+    expect(timed(72)).toEqual([]);
+    expect(timed(96)).toEqual([]);
+    expect(errors(timed(97))).toEqual([
+      'probetests/mathe-01.json|mathe-01|itemIds|Summe estimatedSeconds ist 32.3 Min., erlaubt sind 24–32 Min.',
+    ]);
+  });
+
+  it('keeps 35–42 minutes for Deutsch (provisional until deutsch-01)', () => {
+    const { items, texts, probetest } = buildDeutschProbetest();
+    const timed = (seconds: number) =>
+      run(toFiles({ items: items.map((i) => ({ ...i, estimatedSeconds: seconds })), texts, probetests: [probetest] }))
+        .issues;
+    expect(errors(timed(90))).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe estimatedSeconds ist 30.0 Min., erlaubt sind 35–42 Min.',
+    ]);
+    expect(timed(126)).toEqual([]);
+    expect(errors(timed(127))).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe estimatedSeconds ist 42.3 Min., erlaubt sind 35–42 Min.',
     ]);
   });
 

@@ -83,7 +83,7 @@ const MATHE_BEREICHE: Bereich[] = [
   'muster-strukturen',
 ];
 
-/** 20 items, 8/8/4 niveaus, 4 per Bereich, 120 s each = 40 min. */
+/** 20 items, 8/8/4 niveaus, 4 per Bereich, 90 s each = 30 min. */
 export function buildMatheProbetest(): { items: Item[]; probetest: Probetest } {
   const niveaus: Niveau[] = [
     ...Array<Niveau>(8).fill(1),
@@ -92,7 +92,7 @@ export function buildMatheProbetest(): { items: Item[]; probetest: Probetest } {
   ];
   const items = niveaus.map((niveau, i) =>
     cloneItem(numberInput, MATHE_BEREICHE[i % 5] as Bereich, niveau, 900 + i, {
-      estimatedSeconds: 120,
+      estimatedSeconds: 90,
     }),
   );
   const probetest: Probetest = {

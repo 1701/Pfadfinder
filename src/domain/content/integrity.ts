@@ -298,10 +298,11 @@ export function validateContent(
     }
 
     const seconds = items.reduce((sum, item) => sum + item.estimatedSeconds, 0);
-    if (seconds < PROBETEST_SECONDS_RANGE.min || seconds > PROBETEST_SECONDS_RANGE.max) {
+    const range = PROBETEST_SECONDS_RANGE[probetest.fach];
+    if (seconds < range.min || seconds > range.max) {
       error(
         file,
-        `Summe estimatedSeconds ist ${(seconds / 60).toFixed(1)} Min., erlaubt sind 35–42 Min.`,
+        `Summe estimatedSeconds ist ${(seconds / 60).toFixed(1)} Min., erlaubt sind ${range.min / 60}–${range.max / 60} Min.`,
         probetest.id,
         'itemIds',
       );

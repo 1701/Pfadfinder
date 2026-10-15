@@ -14,6 +14,7 @@ import {
   fachOfBereich,
   isLesenBereich,
   type Bereich,
+  type Fach,
 } from './taxonomy';
 import { splitUnits } from './units';
 
@@ -409,7 +410,14 @@ export const readingTextSchema = z
 
 export const PROBETEST_ITEM_RANGE = { min: 18, max: 24 } as const;
 export const PROBETEST_NIVEAU_TARGET = { 1: 0.4, 2: 0.4, 3: 0.2 } as const;
-export const PROBETEST_SECONDS_RANGE = { min: 35 * 60, max: 42 * 60 } as const;
+/**
+ * Sum of estimatedSeconds per Fach (§6, since 1.0.9). These are app times; the 45-minute
+ * timer stays, as on paper children may finish early. Deutsch is provisional until deutsch-01.
+ */
+export const PROBETEST_SECONDS_RANGE: Readonly<Record<Fach, { min: number; max: number }>> = {
+  mathe: { min: 24 * 60, max: 32 * 60 },
+  deutsch: { min: 35 * 60, max: 42 * 60 },
+};
 export const PROBETEST_MAX_SHORT_ANSWER_SHARE = 0.15;
 export const PROBETEST_MIN_ITEMS_PER_BEREICH = 2;
 

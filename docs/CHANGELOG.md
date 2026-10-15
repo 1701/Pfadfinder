@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.9 – 2026-10-15
+- §6: Summe `estimatedSeconds` je Probetest für Mathe 24–32 Min. bei 18–24 Items statt 35–42 Min. Befund mathe-01: Der Pool hat im Mittel 65 s je Item, mathe-01 kommt auf 26,7 Min.; selbst die 24 längsten Items ergäben nur 39 Min. und verletzten den Niveau-Mix. Die `estimatedSeconds` sind App-Zeiten, das Papier rechnet mit Lesen und Schreiben. Der Timer bleibt 45 Min. Deutsch bleibt bei 35–42 Min., vorläufig, wird mit `deutsch-01` festgelegt. Der Validator prüft die Grenzen je Fach.
+- §1: `manifest.json` nennt zusätzlich die Probetest-IDs je Fach (die Karte zeigt die Zeile „Probetest Mathe“ nur, wenn es einen gibt). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.8 – 2026-10-14
 - §7 Bilder: Die 24-Zeichen-Regel für Optionen bei Items mit Bild gilt für `single-choice` und `multi-choice`. Messung Aufgabe 7 an m-dz-2-007 (Tabelle unter dem Text, Safari quer, nach Prüfen): einspaltig mit 32–52 Zeichen −23 px, zweispaltig mit höchstens 24 Zeichen +89 px. Nur dokumentiert, der Validator prüft es nicht.
 - §4.9: `solution.model` hat höchstens `payload.maxChars` Zeichen. Neu im Validator (Fehler). Befund Aufgabe 7: m-dz-3-003 hatte 133 Zeichen bei maxChars 80, mit daten-zufall v7 behoben. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.

@@ -6,6 +6,7 @@ import {
   countItems,
   type ContentManifest,
   type Item,
+  type Probetest,
 } from '../../../src/domain/content';
 import { practiceableBereicheFromManifest, practiceableBereiche } from '../../../src/domain/scheduler';
 import { item } from '../../fixtures/pool';
@@ -37,6 +38,19 @@ describe('buildContentManifest', () => {
       textIds: [],
     });
     expect(countItems(manifest.bereiche['raum-form'], ['single-choice'])).toBe(2);
+    expect(manifest.probetests).toEqual({ mathe: [], deutsch: [] });
+  });
+
+  it('lists the Probetests per Fach', () => {
+    const manifest = buildContentManifest(
+      [],
+      [
+        { id: 'mathe-02', fach: 'mathe' },
+        { id: 'mathe-01', fach: 'mathe' },
+        { id: 'deutsch-01', fach: 'deutsch' },
+      ],
+    );
+    expect(manifest.probetests).toEqual({ mathe: ['mathe-01', 'mathe-02'], deutsch: ['deutsch-01'] });
   });
 
   it('lists the reading texts a Bereich refers to', () => {
@@ -51,10 +65,13 @@ describe('content/manifest.json', () => {
   const items = readdirSync('content/items', { recursive: true, encoding: 'utf8' })
     .filter((f) => f.endsWith('.json'))
     .flatMap((f) => JSON.parse(readFileSync(`content/items/${f}`, 'utf8')) as Item[]);
+  const probetests = readdirSync('content/probetests')
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => JSON.parse(readFileSync(`content/probetests/${f}`, 'utf8')) as Probetest);
   const committed = JSON.parse(readFileSync('content/manifest.json', 'utf8')) as ContentManifest;
 
   it('is up to date with the content (run npm run content:validate)', () => {
-    expect(committed).toEqual(buildContentManifest(items));
+    expect(committed).toEqual(buildContentManifest(items, probetests));
   });
 
   it('opens the same Bereiche as the item-based rule', () => {

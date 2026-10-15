@@ -25,7 +25,7 @@ function manifest(
       textIds: [],
     };
   }
-  return { bereiche };
+  return { bereiche, probetests: { mathe: [], deutsch: [] } };
 }
 
 const ZO = 'zahlen-operationen' as const;

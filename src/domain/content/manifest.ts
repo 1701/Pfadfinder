@@ -1,4 +1,5 @@
-// Content manifest (ARCHITECTURE.md §5): what exists per Bereich, without loading the items.
+// Content manifest (ARCHITECTURE.md §5): what exists per Bereich and which Probetests exist,
+// without loading the items.
 // Written to content/manifest.json by scripts/validate-content.ts; the start page reads only this.
 // Deliberately free of Zod and of schemas.ts so it stays out of the start page's bundle.
 
@@ -19,9 +20,14 @@ export interface BereichManifest {
 
 export interface ContentManifest {
   bereiche: Record<Bereich, BereichManifest>;
+  /** Probetest ids per Fach, sorted (the map offers a Probetest only where one exists). */
+  probetests: Record<Fach, string[]>;
 }
 
-export function buildContentManifest(items: readonly Item[]): ContentManifest {
+export function buildContentManifest(
+  items: readonly Item[],
+  probetests: readonly { id: string; fach: Fach }[] = [],
+): ContentManifest {
   const bereiche = {} as Record<Bereich, BereichManifest>;
   for (const fach of FAECHER) {
     for (const bereich of BEREICHE_BY_FACH[fach]) {
@@ -37,7 +43,11 @@ export function buildContentManifest(items: readonly Item[]): ContentManifest {
       bereiche[bereich] = { fach, items: active.length, byFormat, textIds };
     }
   }
-  return { bereiche };
+  const byFach = {} as Record<Fach, string[]>;
+  for (const fach of FAECHER) {
+    byFach[fach] = probetests.filter((p) => p.fach === fach).map((p) => p.id).sort();
+  }
+  return { bereiche, probetests: byFach };
 }
 
 /** Number of active items of the given formats in one Bereich. */

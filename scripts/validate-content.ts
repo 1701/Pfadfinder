@@ -78,7 +78,10 @@ if (errorCount > 0) {
 console.log(`Content gültig: ${summary}`);
 
 const manifest = `${JSON.stringify(
-  buildContentManifest([...bundle.items.values()].map((located) => located.value)),
+  buildContentManifest(
+    [...bundle.items.values()].map((located) => located.value),
+    [...bundle.probetests.values()].map((located) => located.value),
+  ),
   null,
   2,
 )}\n`;
