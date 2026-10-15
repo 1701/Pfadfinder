@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-15 – Aufgabe 8, Teil B: Layout-Budget und Wireframes (wartet auf Freigabe)
+- **Gemessen** (`probetest-layout.spec` auf `/dev/probetest`, vier Viewports, Zahlen in `tests/e2e/screenshots/probetest-budget-*.json`): Kopf „Übersicht | 7 von 24 | 45 Min.“ 48 px hoch, mindestens 193 px Lücke („Noch 5 Minuten“, hoch). Mit 24 Wegstrichen bricht er hoch auf 78 px um (Beleg für die Entscheidung). Item im Test knappstes m-dz-2-002 mit 33 px Luft (Safari quer). Durchsehen „Zurück“ im Band ≥ 50 px, im Kopf ≥ 60 px. Übersicht ohne Scrollen, Tippziele 48 px.
+- **Gebaut (Messgerüst, bleibt für Teil C):** ItemScreen nimmt einen eigenen Kopf und eigene Bandknöpfe. FeedbackPanel kann „Zurück“ und eine andere Beschriftung für „Weiter“. `fitMetrics` gibt die Luft zurück. In CI misst die Spec nur die Safari-Viewports.
+- **Wireframes:** privates Artefakt mit 12 Screens quer und hoch und der Druckansicht als A4-Vorschau.
+- **Offen zur Freigabe (aus der Messung):** A: Die Karte hat hoch unter der Mathe-Insel nur 21–24 px Wasser. Vorschlag: „Probetest Mathe“ links in der Legendenzeile. B: „Zurück“ beim Durchsehen im Band (Vorschlag) oder im Kopf. C: Eine wartende Kurzantwort ist ein gestrichelter Strich.
+- **CI:** [CI #38739254593](https://github.com/1701/Pfadfinder/actions/runs/38739254593) grün (1b57c2e), Workers Builds grün; 735 Tests, e2e 62 bestanden, 4 übersprungen (WebKit offline). Lokal grün: `npm run check`, `probetest-layout` in vier Viewports.
+
 ## 2026-10-15 – Aufgabe 8, Schritt 0 und Teil A: Schema 1.0.9, mathe-01, Probetest-Domain
 - **Schema 1.0.9:** Summe `estimatedSeconds` Mathe 24–32 Min. (statt 35–42), Deutsch bleibt 35–42 (vorläufig bis deutsch-01). Validator prüft je Fach, Obergrenze jetzt getestet. Das Manifest nennt die Probetest-IDs je Fach. `niveauMix`/`bereichMix` erwartet der Validator schon als Anzahlen, es gab nichts zu melden.
 - **Content:** `content/probetests/mathe-01.json` unverändert aus der Zip (24 Items, 26,7 Min.).
