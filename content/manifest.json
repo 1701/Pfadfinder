@@ -207,7 +207,9 @@
     }
   },
   "probetests": {
-    "mathe": [],
+    "mathe": [
+      "mathe-01"
+    ],
     "deutsch": []
   }
 }

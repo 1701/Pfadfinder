@@ -1,0 +1,43 @@
+{
+  "id": "mathe-01",
+  "fach": "mathe",
+  "durationMinutes": 45,
+  "itemIds": [
+    "m-zo-1-011",
+    "m-zo-1-010",
+    "m-zo-2-003",
+    "m-zo-2-001",
+    "m-zo-2-006",
+    "m-zo-3-003",
+    "m-gm-1-004",
+    "m-gm-1-003",
+    "m-gm-1-007",
+    "m-gm-2-002",
+    "m-gm-2-005",
+    "m-gm-3-002",
+    "m-rf-1-009",
+    "m-rf-1-005",
+    "m-rf-1-003",
+    "m-rf-2-001",
+    "m-rf-2-005",
+    "m-rf-3-004",
+    "m-dz-1-004",
+    "m-dz-1-005",
+    "m-dz-2-002",
+    "m-dz-3-002",
+    "m-ms-2-001",
+    "m-ms-3-001"
+  ],
+  "niveauMix": {
+    "1": 10,
+    "2": 9,
+    "3": 5
+  },
+  "bereichMix": {
+    "zahlen-operationen": 6,
+    "groessen-messen": 6,
+    "raum-form": 6,
+    "daten-zufall": 4,
+    "muster-strukturen": 2
+  }
+}
