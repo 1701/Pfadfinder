@@ -54,16 +54,21 @@ async function openItem(page: Page, url: string) {
 for (const viewport of VIEWPORTS) {
   test(`alle Items passen auf ${viewport.name} (${viewport.width}×${viewport.height})`, async ({
     page,
+    context,
   }) => {
     // About 0.8 s per item and state locally; grows with every batch.
     test.setTimeout(Math.max(300_000, ITEMS.length * (STATES.length + 1) * 3_000));
     await page.setViewportSize(viewport);
     const red: string[] = [];
     for (const item of ITEMS) {
+      // A fresh tab per item: in CI one tab crashed after about 300 navigations ("Page crashed").
+      const tab = await context.newPage();
+      await tab.setViewportSize(viewport);
       for (const state of statesOf(item)) {
-        await openItem(page, `/dev/item/${item.id}?state=${state}`);
-        for (const problem of await fitProblems(page)) red.push(`${item.id} ${state}: ${problem}`);
+        await openItem(tab, `/dev/item/${item.id}?state=${state}`);
+        for (const problem of await fitProblems(tab)) red.push(`${item.id} ${state}: ${problem}`);
       }
+      await tab.close();
     }
     await openItem(page, `/dev/item/${worst.id}?state=noch-nicht`);
     await page.waitForTimeout(300);
