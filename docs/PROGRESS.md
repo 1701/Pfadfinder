@@ -2,6 +2,18 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-15 – Aufgabe 8, Teil C: Probetest-Oberfläche und Druck
+- **Gebaut:** `/probetest/:id` (lazy Chunk `probetest-route`):
+  - Ablauf: Intro („schon gemacht“, „Auswertung ansehen“), Aufgaben mit „Zurück“/„Weiter“ und Minuten ohne Sekunden („Noch 5 Minuten“ … „Noch 1 Minute“), Übersicht mit antippbaren Strichen, Rückfragen vor dem Abgeben und vor „Zur Karte“.
+  - Auswertung je Bereich ohne Prozent, wartende Kurzantwort gestrichelt. Durchsehen mit Band, „Hier fehlt deine Antwort.“ und Selbsteinschätzung.
+  - Uhr-Hook mit `visibilitychange`/`pageshow`; die Karten-Zeile „Probetest Mathe“ steht in der Legendenzeile.
+  - `/probetest/:id/print` (Chunk `print-route`): Papierformen je Format, 40 mm Rechenplatz, Lösungsblatt auf eigener Seite, A4.
+- **Freigabe-Änderungen umgesetzt:** Übersicht „Weitermachen“/„Abgeben“, Gelb wechselt nach dem Stand (mit Test); Rückfrage „Weitermachen“ führt in die Übersicht; Item ohne Antwort ohne „Falle“; Rechenplatz im Druck.
+- **Befund und Fix:** Im Durchsehen standen „Zurück“ und „Weiter“ nebeneinander. In Safari hoch blieb der Rückmeldung so nur ein Drittel der Breite, und m-gm-1-004 ohne Antwort lief 8 px unter das Band. Hoch stehen die Knöpfe jetzt untereinander; die knappste Luft beträgt 54 px. Die Übersicht hat Vorlesen bekommen (Kinder-UX-Checkliste).
+- **Messung (vier Viewports):** knappste Luft beim Antworten 33 px (m-dz-2-002, Safari quer), beim Durchsehen 52 px. Kleinster Kartenname mit Zeile 19,1 px. Startseite 281,1 kB (vorher 278,4).
+- **Bekannt:** Gespeichert wird wenige Millisekunden nach dem Tipp; endet die App genau dann, fehlt die letzte Änderung (in der E2E abgewartet). Kurzantwort ohne Einschätzung hat kein Attempt.
+- **CI:** [CI #38752818290](https://github.com/1701/Pfadfinder/actions/runs/38752818290) grün (91257b2), Workers Builds grün; 807 Tests, e2e 81 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, `npm run e2e:chromium` (61/61), `probetest-layout` in vier Viewports, `probetest.spec` 24/24 mit `--repeat-each=3`.
+
 ## 2026-10-15 – Aufgabe 8, Teil B: Layout-Budget und Wireframes (wartet auf Freigabe)
 - **Gemessen** (`probetest-layout.spec` auf `/dev/probetest`, vier Viewports, Zahlen in `tests/e2e/screenshots/probetest-budget-*.json`): Kopf „Übersicht | 7 von 24 | 45 Min.“ 48 px hoch, mindestens 193 px Lücke („Noch 5 Minuten“, hoch). Mit 24 Wegstrichen bricht er hoch auf 78 px um (Beleg für die Entscheidung). Item im Test knappstes m-dz-2-002 mit 33 px Luft (Safari quer). Durchsehen „Zurück“ im Band ≥ 50 px, im Kopf ≥ 60 px. Übersicht ohne Scrollen, Tippziele 48 px.
 - **Gebaut (Messgerüst, bleibt für Teil C):** ItemScreen nimmt einen eigenen Kopf und eigene Bandknöpfe. FeedbackPanel kann „Zurück“ und eine andere Beschriftung für „Weiter“. `fitMetrics` gibt die Luft zurück. In CI misst die Spec nur die Safari-Viewports.
