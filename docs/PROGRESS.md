@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-15 – Nacharbeit Aufgabe 7: nichts springt nach Prüfen
+- **Entschieden (Markus):** „Keine neue Bewegung“ gilt auch für Layout-Sprünge. formate.spec nur in Chromium ist hinnehmbar, Touch-Ziehen nimmt das iPad ab. WebKit in CI reicht über den Üben-Ablauf.
+- **Gebaut:** order behält nach Prüfen die Plätze von Griff und Pfeilen (unsichtbar). match zeigt „Richtig ist:“ als Liste dort, wo der Vorrat war (quer rechts, hoch unten). Vorher standen die Hinweise je Zeile und brachen um, die Zeilen darunter rutschten nach unten (gefunden vom neuen Test). `formate.spec` vergleicht die Lage von order-Karten und match-Begriffen vor und nach Prüfen in vier Viewports.
+- **Befund CI:** [#38721815778](https://github.com/1701/Pfadfinder/actions/runs/38721815778) rot: Chromium „Page crashed“ im Layout-Test nach etwa 300 Navigationen in einem Tab, kein Layout-Befund. Jetzt ein Tab je Item.
+- **Offen für die iPad-Sitzung:** `/dev/item` gibt es live nicht (nur Dev-Build). Vorlesen setzt die erste deutsche Stimme fest, nicht die in iOS gewählte.
+- **CI:** [CI #38724736120](https://github.com/1701/Pfadfinder/actions/runs/38724736120) grün (470420c…e66d00a), Workers Builds grün; 691 Tests, e2e 60 bestanden, 4 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout-Projekt (26/26).
+
 ## 2026-10-14 – Aufgabe 7: Renderer für die sieben restlichen Formate
 - **Gebaut:** multi-choice, match (Tippen und Ziehen), order (Ziehen und ↑/↓), cloze-select, mark-in-text (splitUnits), find-error, short-answer („Vergleichen“, dann Getroffen/Teils/Noch nicht, Band ohne Überschrift). `domain/presentation` mischt und liefert den Vorlesetext („Antworten: …“, auch bei single-choice). Alle neun Formate sind übbar; kein neuer Bereich wird dadurch übbar (ms und rss je 2 Items). match/order in eigenen Chunks, `check-bundle` hält dnd-kit aus Startseite und Routen (Gegenprobe rot). Startseite 278,3 kB.
 - **Content:** drei mark-in-text-Items (rs-strategien zusammengeführt, m-ms-3-001 „falsch geschrieben“), daten-zufall v7. Schema 1.0.8: 24-Zeichen-Regel auch für multi-choice mit Bild, `model` ≤ `maxChars` im Validator.
