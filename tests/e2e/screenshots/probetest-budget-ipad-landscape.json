@@ -5,62 +5,41 @@
     "height": 768
   },
   "header": {
-    "d-45": {
+    "5": {
       "height": 48,
       "middles": 0,
-      "minGap": 348,
-      "overflowX": 0
+      "minGap": 316
     },
-    "d-noch5": {
+    "45": {
       "height": 48,
       "middles": 0,
-      "minGap": 321,
-      "overflowX": 0
-    },
-    "wegstriche-45": {
-      "height": 48,
-      "middles": 0,
-      "minGap": 56,
-      "overflowX": 0
+      "minGap": 343
     }
   },
-  "overview": {
-    "overflow": 0,
-    "slack": 347.21875,
-    "buttonBottom": 12,
-    "buttonHeight": 56,
-    "smallestTarget": 48
-  },
-  "answering": {
-    "tightest": "m-dz-2-002",
-    "slack": 85,
-    "overflow": 0,
-    "problems": []
-  },
-  "reviewR1": {
-    "tightest": "m-dz-3-002",
-    "slack": 112,
-    "overflow": 0,
-    "problems": []
-  },
-  "reviewR2": {
-    "tightest": "m-dz-3-002",
-    "slack": 112,
-    "overflow": 0,
-    "problems": []
-  },
-  "comparing": {
-    "slack": 202,
-    "overflow": 0
+  "slack": {
+    "aufgabe": {
+      "id": "m-dz-2-002",
+      "slack": 85
+    },
+    "durchsehen": {
+      "id": "m-dz-3-002",
+      "slack": 112
+    },
+    "fehlt": {
+      "id": "m-dz-3-002",
+      "slack": 114
+    },
+    "vergleichen": {
+      "id": "m-gm-3-002",
+      "slack": 202
+    }
   },
   "map": {
-    "svgBottom": 696,
-    "matheBottom": 676.326904296875,
-    "matheLeft": 53.279998779296875,
-    "matheRight": 580.3200073242188,
-    "deutschNameTop": 137.75888061523438,
-    "legendTop": 708,
-    "legendHeight": 48,
-    "textScale": 0.976
+    "smallestName": 23.424,
+    "overflow": 0,
+    "line": {
+      "height": 48,
+      "bottom": 756
+    }
   }
 }

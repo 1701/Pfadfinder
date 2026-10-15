@@ -1,0 +1,106 @@
+/* The paper Probetest (/probetest/:id/print, ARCHITECTURE.md §5): A4 portrait, black on white,
+   no app frame. Paper measures live here in mm, not in the components. On screen the same sheet
+   stands on the paper ground with a "Drucken" button above it. */
+
+@layer components {
+  .druck {
+    background: var(--color-print-paper);
+    color: var(--color-print-ink);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 15mm;
+    font-size: 12pt;
+    line-height: 1.45;
+  }
+  .druck-kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6mm;
+    border-bottom: 0.4mm solid currentColor;
+    padding-bottom: 2mm;
+    margin-bottom: 2mm;
+  }
+  .druck-feld {
+    display: inline-block;
+    width: 45mm;
+    border-bottom: 0.3mm solid currentColor;
+  }
+  .druck-aufgabe {
+    display: grid;
+    grid-template-columns: 9mm 1fr;
+    gap: 2mm;
+    padding-block: 4mm;
+    break-inside: avoid;
+  }
+  .druck-aufgabe > div {
+    display: grid;
+    gap: 2mm;
+    min-width: 0;
+  }
+  .druck-loesungen {
+    break-before: page;
+    padding-top: 6mm;
+  }
+  /* Room to calculate before the result box of a number item (decision 2026-10-15). */
+  .druck-rechenplatz {
+    height: 40mm;
+  }
+  .druck-kaestchen {
+    display: inline-block;
+    min-width: 35mm;
+    height: 10mm;
+    border: 0.3mm solid currentColor;
+    vertical-align: middle;
+  }
+  /* The box for the place number of an order element. */
+  .druck-nummer {
+    display: inline-block;
+    flex: none;
+    width: 10mm;
+    height: 8mm;
+    border: 0.3mm solid currentColor;
+  }
+  .druck-kreuz {
+    display: inline-block;
+    flex: none;
+    width: 4mm;
+    height: 4mm;
+    border: 0.3mm solid currentColor;
+  }
+  .druck-punkt {
+    display: inline-block;
+    width: 2mm;
+    height: 2mm;
+    border-radius: var(--radius-round);
+    background: currentColor;
+  }
+  .druck-linie {
+    height: 9mm;
+    border-bottom: 0.3mm solid currentColor;
+  }
+  .druck-markieren {
+    line-height: 2.2;
+  }
+  .druck .content-asset > svg {
+    height: 40mm;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+  html,
+  body {
+    background: var(--color-print-paper);
+  }
+  .druck {
+    max-width: none;
+    padding: 0;
+  }
+  .nur-bildschirm {
+    display: none;
+  }
+}

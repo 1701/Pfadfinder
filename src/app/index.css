@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '../ui/theme/fonts.css';
 @import '../ui/theme/tokens.css';
+@import '../ui/theme/print.css';
 
 @layer base {
   html {

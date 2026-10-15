@@ -23,6 +23,8 @@
   --color-land: #d5e4da; /* reached Etappe: the ink's green, light */
   --color-land-soft: #e7efe9; /* the Etappe the child is on now */
   --color-water: #dde9ee; /* sea between the islands; greyer than correct-surface */
+  --color-print-ink: #000000; /* the paper Probetest only: black on white */
+  --color-print-paper: #ffffff;
 
   /* Andika for everything readable; no second family. */
   --font-*: initial;

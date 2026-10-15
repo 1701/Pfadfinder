@@ -1,215 +1,195 @@
-// Layout budget of the Probetest (task 8, part B), measured on /dev/probetest in all four
-// viewports before the wireframes:
-//   M1   header: "Übersicht" | "7 von 24" | minutes (variant d, the choice) and, for the record,
-//        the variant with 24 Wegstriche
-//   M1b  overview: 24 tappable dashes, "Abgeben", no scroll
-//   M2   every item of mathe-01 while the test runs (answer filled in, band "Zurück" | "Weiter")
-//   M3   every item while looking through, "Noch nicht ganz." with "Falle": "Zurück" in the band
-//        (r1) or quietly in the header (r2); the short answer also while comparing
-//   M4   the map: room for a line "Probetest Mathe" below the Mathe island
-// Writes the numbers to tests/e2e/screenshots/probetest-budget-<viewport>.json. Asserts only what
-// the chosen variants need; the comparisons are recorded, not judged.
+// Layout of the Probetest screens on /dev/probetest (the route's components with fixed data),
+// in all four viewports; in CI only the tightest ones (Safari), like layout.spec:
+//   header       "Übersicht | 7 von 24 | 45 Min." and with "Noch 5 Minuten": one line, apart
+//   screens      intro, overview, questions, result: no scroll, targets ≥ 48 px, band visible
+//   items        every item of mathe-01 while answering and while looking through (wrong answer,
+//                no answer), the short answer while comparing: fitProblems, the least room kept
+//   map          the line "Probetest Mathe" in the legend line: ≥ 48 px, map names still ≥ 18 px
+//   print        /probetest/mathe-01/print as A4 PDF and as a print-media screenshot (Chromium)
+// Numbers go to tests/e2e/screenshots/probetest-budget-<viewport>.json, screenshots beside them.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { BEREICH_NAME } from '../../src/ui/text/bereiche';
-import { SCREENSHOTS, VIEWPORTS, fitMetrics, type FitMetrics } from './helpers';
+import { SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems } from './helpers';
 
 const PROBETEST = JSON.parse(readFileSync('content/probetests/mathe-01.json', 'utf8')) as {
   itemIds: string[];
 };
 const SHORT_ANSWER = 'm-gm-3-002';
 const LONGEST = 'm-rf-3-004';
-const MATHE_NAMES = Object.entries(BEREICH_NAME)
-  .filter(([bereich]) => !/^(lesen|rs)-/.test(bereich))
-  .map(([, name]) => name);
+const SCREENS = [
+  'intro',
+  'intro-fertig',
+  'uebersicht',
+  'uebersicht-fertig',
+  'abgeben',
+  'verlassen',
+  'auswertung',
+  'auswertung-offen',
+] as const;
+
+const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('safari')) : VIEWPORTS;
 
 async function open(page: Page, query: string) {
   await page.goto(`/dev/probetest?${query}`);
-  await page.locator('[data-region="band"] button').last().waitFor();
+  await page.locator('[data-region="band"] button, [data-region="band"] a').last().waitFor();
   await page.evaluate(() => document.fonts.ready);
 }
 
-interface HeaderMetrics {
-  height: number;
-  /** Largest difference between the vertical middles of the header's children (wraps if > 12). */
-  middles: number;
-  /** Smallest horizontal gap between neighbouring children. */
-  minGap: number;
-  overflowX: number;
+/** Problems of a whole screen: scrolling, small targets, the band's last action cut off. */
+async function screenProblems(page: Page): Promise<string[]> {
+  const m = await page.evaluate(() => {
+    const band = document.querySelector('[data-region="band"]');
+    const last = band?.querySelector(':scope > :is(button, a):last-of-type');
+    const targets = [...document.querySelectorAll('main button, main a')].map((e) => {
+      const r = e.getBoundingClientRect();
+      return Math.min(r.width, r.height);
+    });
+    return {
+      overflow: document.documentElement.scrollHeight - window.innerHeight,
+      overflowX: document.documentElement.scrollWidth - window.innerWidth,
+      smallest: Math.min(...targets),
+      bandBottom: last ? window.innerHeight - last.getBoundingClientRect().bottom : -1,
+    };
+  });
+  return [
+    m.overflow > 0 && `page scrolls by ${Math.round(m.overflow)} px`,
+    m.overflowX > 0 && `page scrolls sideways by ${Math.round(m.overflowX)} px`,
+    m.smallest < 48 && `a target is only ${Math.round(m.smallest)} px`,
+    m.bandBottom < 0 && 'the last band action leaves the screen',
+  ].filter((p): p is string => typeof p === 'string');
 }
 
-async function headerMetrics(page: Page): Promise<HeaderMetrics> {
+async function headerMetrics(page: Page) {
   return page.evaluate(() => {
     const header = document.querySelector('[data-kopf]')!;
     const boxes = [...header.children].map((c) => c.getBoundingClientRect());
     const mids = boxes.map((b) => b.top + b.height / 2);
-    const gaps = boxes.slice(1).map((b, i) => b.left - boxes[i]!.right);
     return {
-      height: header.getBoundingClientRect().height,
-      middles: Math.max(...mids) - Math.min(...mids),
-      minGap: Math.min(...gaps),
-      overflowX: document.documentElement.scrollWidth - window.innerWidth,
+      height: Math.round(header.getBoundingClientRect().height),
+      middles: Math.round(Math.max(...mids) - Math.min(...mids)),
+      minGap: Math.round(Math.min(...boxes.slice(1).map((b, i) => b.left - boxes[i]!.right))),
     };
   });
 }
 
-/** Smallest interactive element of the page (touch targets ≥ 48 px). */
-async function smallestTarget(page: Page): Promise<number> {
-  return page.evaluate(() =>
-    Math.min(
-      ...[...document.querySelectorAll('main button, main a')].map((e) => {
-        const r = e.getBoundingClientRect();
-        return Math.min(r.width, r.height);
-      }),
-    ),
-  );
-}
-
-async function itemFits(page: Page, query: string): Promise<FitMetrics> {
-  await open(page, query);
-  const m = await fitMetrics(page);
-  if (!m) throw new Error(`no band on ${query}`);
-  return m;
-}
-
-// In CI only the tightest viewports (iPad with Safari bars), like layout.spec.
-const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('safari')) : VIEWPORTS;
-
-const round = (n: number) => Math.round(n);
-const tightest = (list: { id: string; m: FitMetrics }[]) =>
-  list.reduce((a, b) => (b.m.slack < a.m.slack ? b : a));
-
 for (const viewport of MEASURED) {
-  test(`probetest layout budget – ${viewport.name}`, async ({ browser }) => {
-    test.setTimeout(240_000);
+  test(`probetest screens – ${viewport.name}`, async ({ browser }) => {
+    test.setTimeout(300_000);
     const context = await browser.newContext({ viewport });
-    const fresh = async () => context.newPage();
     const report: Record<string, unknown> = { viewport };
+    const red: string[] = [];
+    let page = await context.newPage();
 
-    // M1: header variants.
-    let page = await fresh();
-    const header: Record<string, HeaderMetrics> = {};
-    for (const [name, query] of [
-      ['d-45', `zustand=aufgabe&item=${LONGEST}&kopf=d`],
-      ['d-noch5', `zustand=aufgabe&item=${LONGEST}&kopf=d&zeit=5`],
-      ['wegstriche-45', `zustand=aufgabe&item=${LONGEST}&kopf=striche`],
-    ] as const) {
-      await open(page, query);
-      header[name] = await headerMetrics(page);
-      await page.screenshot({ path: `${SCREENSHOTS}/probetest-kopf-${name}-${viewport.name}.png` });
+    // Header with the time, normal and in the last five minutes.
+    const header: Record<string, unknown> = {};
+    for (const zeit of ['45', '5']) {
+      await open(page, `zustand=aufgabe&item=${LONGEST}&zeit=${zeit}`);
+      const m = await headerMetrics(page);
+      header[zeit] = m;
+      if (m.middles > 12 || m.minGap <= 0) red.push(`header ${zeit}: ${JSON.stringify(m)}`);
+      await page.screenshot({
+        path: `${SCREENSHOTS}/probetest-aufgabe-zeit${zeit}-${viewport.name}.png`,
+      });
     }
     report.header = header;
-    for (const name of ['d-45', 'd-noch5'] as const) {
-      expect(header[name]!.middles, `${name}: header wraps`).toBeLessThanOrEqual(12);
-      expect(header[name]!.minGap, `${name}: header children touch`).toBeGreaterThan(0);
-      expect(header[name]!.overflowX, `${name}: page scrolls sideways`).toBeLessThanOrEqual(0);
-    }
 
-    // M1b: overview.
-    await open(page, 'zustand=uebersicht');
-    const overview = { ...(await fitMetrics(page))!, smallestTarget: await smallestTarget(page) };
-    report.overview = overview;
-    await page.screenshot({ path: `${SCREENSHOTS}/probetest-uebersicht-${viewport.name}.png` });
-    expect(overview.overflow, 'overview scrolls').toBeLessThanOrEqual(0);
-    expect(overview.smallestTarget, 'overview target < 48 px').toBeGreaterThanOrEqual(48);
+    // Whole screens.
+    for (const zustand of SCREENS) {
+      await open(page, `zustand=${zustand}`);
+      for (const p of await screenProblems(page)) red.push(`${zustand}: ${p}`);
+      await page.screenshot({ path: `${SCREENSHOTS}/probetest-${zustand}-${viewport.name}.png` });
+    }
+    await open(page, 'zustand=auswertung&zeit-um');
+    await page.screenshot({
+      path: `${SCREENSHOTS}/probetest-auswertung-zeit-um-${viewport.name}.png`,
+    });
     await page.close();
 
-    // M2 and M3: every item, a fresh tab each (a tab crashes after many navigations in CI).
-    const answering: { id: string; m: FitMetrics }[] = [];
-    const reviewR1: { id: string; m: FitMetrics }[] = [];
-    const reviewR2: { id: string; m: FitMetrics }[] = [];
+    // Every item: answering, looking through with a wrong answer and without one.
+    const slack: Record<string, { id: string; slack: number }> = {};
+    const keep = (state: string, id: string, value: number) => {
+      if (!slack[state] || value < slack[state].slack)
+        slack[state] = { id, slack: Math.round(value) };
+    };
     for (const id of PROBETEST.itemIds) {
-      page = await fresh();
-      answering.push({ id, m: await itemFits(page, `zustand=aufgabe&item=${id}`) });
-      reviewR1.push({ id, m: await itemFits(page, `zustand=durchsehen&item=${id}&band=r1`) });
-      reviewR2.push({ id, m: await itemFits(page, `zustand=durchsehen&item=${id}&band=r2`) });
+      page = await context.newPage();
+      for (const state of ['aufgabe', 'durchsehen', 'fehlt'] as const) {
+        await open(page, `zustand=${state}&item=${id}`);
+        for (const p of await fitProblems(page)) red.push(`${state} ${id}: ${p}`);
+        keep(state, id, (await fitMetrics(page))!.slack);
+      }
       await page.close();
     }
-    page = await fresh();
-    const comparing = await itemFits(page, `zustand=vergleichen&item=${SHORT_ANSWER}&band=r2`);
+    page = await context.newPage();
+    await open(page, `zustand=vergleichen&item=${SHORT_ANSWER}`);
+    for (const p of await fitProblems(page)) red.push(`vergleichen: ${p}`);
+    keep('vergleichen', SHORT_ANSWER, (await fitMetrics(page))!.slack);
     await page.screenshot({ path: `${SCREENSHOTS}/probetest-vergleichen-${viewport.name}.png` });
-
-    const summary = (list: { id: string; m: FitMetrics }[]) => {
-      const t = tightest(list);
-      return {
-        tightest: t.id,
-        slack: round(t.m.slack),
-        overflow: round(Math.max(...list.map((e) => e.m.overflow))),
-        problems: list
-          .filter((e) => e.m.slack < 0 || e.m.overflow > 0 || e.m.buttonBottom < 0)
-          .map((e) => `${e.id}: slack ${round(e.m.slack)}, overflow ${round(e.m.overflow)}`),
-      };
-    };
-    report.answering = summary(answering);
-    report.reviewR1 = summary(reviewR1);
-    report.reviewR2 = summary(reviewR2);
-    report.comparing = { slack: round(comparing.slack), overflow: round(comparing.overflow) };
-
-    for (const [state, list] of [
-      ['aufgabe', answering],
-      ['durchsehen-r1', reviewR1],
-      ['durchsehen-r2', reviewR2],
-    ] as const) {
-      const t = tightest(list);
-      await open(
-        page,
-        `zustand=${state.startsWith('aufgabe') ? 'aufgabe' : 'durchsehen'}&item=${t.id}&band=${state.endsWith('r1') ? 'r1' : 'r2'}`,
-      );
+    report.slack = slack;
+    for (const [state, { id }] of Object.entries(slack).filter(([s]) => s !== 'vergleichen')) {
+      await open(page, `zustand=${state}&item=${id}`);
       await page.screenshot({
         path: `${SCREENSHOTS}/probetest-${state}-knappstes-${viewport.name}.png`,
       });
     }
-    await open(page, `zustand=aufgabe&item=${LONGEST}`);
-    await page.screenshot({
-      path: `${SCREENSHOTS}/probetest-aufgabe-laengstes-${viewport.name}.png`,
-    });
 
-    // M4: the map on the start page.
+    // The map with the line "Probetest Mathe".
     await page.goto('/');
     await page.locator('svg[aria-label="Karte"]:visible').waitFor();
     await page.evaluate(() => document.fonts.ready);
-    report.map = await page.evaluate((names) => {
+    const line = page.getByRole('link', { name: 'Probetest Mathe' });
+    const box = (await line.boundingBox())!;
+    const map = await page.evaluate(() => {
       const svg = [...document.querySelectorAll('svg[aria-label="Karte"]')].find(
         (s) => s.getBoundingClientRect().width > 0,
-      )!;
-      const regions = [...svg.querySelectorAll('[aria-label]')].filter((e) =>
-        names.some((n) => (e.getAttribute('aria-label') ?? '').startsWith(n)),
+      ) as SVGSVGElement;
+      const scale = svg.getScreenCTM()?.a ?? 1;
+      const sizes = [...svg.querySelectorAll('text')].map(
+        (t) => Number(getComputedStyle(t).fontSize.replace('px', '')) * scale,
       );
-      const rects = regions.map((e) => e.getBoundingClientRect());
-      const mathe = {
-        left: Math.min(...rects.map((r) => r.left)),
-        right: Math.max(...rects.map((r) => r.right)),
-        bottom: Math.max(...rects.map((r) => r.bottom)),
-      };
-      const deutschName = [...svg.querySelectorAll('text')].find(
-        (t) => t.textContent === 'Deutsch',
-      );
-      const legend = document.querySelector('main > p:last-of-type, main p.min-h-touch');
-      const scale = (svg as SVGSVGElement).getScreenCTM()?.a ?? 1;
       return {
-        svgBottom: svg.getBoundingClientRect().bottom,
-        matheBottom: mathe.bottom,
-        matheLeft: mathe.left,
-        matheRight: mathe.right,
-        deutschNameTop: deutschName?.getBoundingClientRect().top,
-        legendTop: legend?.getBoundingClientRect().top,
-        legendHeight: legend?.getBoundingClientRect().height,
-        textScale: scale,
+        smallestName: Math.min(...sizes),
+        overflow: document.documentElement.scrollHeight - window.innerHeight,
       };
-    }, MATHE_NAMES);
+    });
+    report.map = { ...map, line: { height: box.height, bottom: box.y + box.height } };
+    if (box.height < 48) red.push(`map line only ${box.height} px high`);
+    if (box.y + box.height > viewport.height) red.push('map line leaves the screen');
+    if (map.smallestName < 18) red.push(`map name ${map.smallestName.toFixed(1)} px`);
+    if (map.overflow > 0) red.push('map page scrolls');
     await page.screenshot({ path: `${SCREENSHOTS}/probetest-karte-${viewport.name}.png` });
 
     writeFileSync(
       `${SCREENSHOTS}/probetest-budget-${viewport.name}.json`,
       `${JSON.stringify(report, null, 2)}\n`,
     );
-    console.log(viewport.name, JSON.stringify(report));
-
-    // The chosen screens: the test itself must fit in every viewport.
-    expect((report.answering as { problems: string[] }).problems, 'item while answering').toEqual(
-      [],
-    );
     await context.close();
+    expect(red, `probetest layout in ${viewport.name}`).toEqual([]);
   });
 }
+
+test('probetest print sheet – A4 PDF, solutions on their own page', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'page.pdf exists only in Chromium');
+  await page.goto('/probetest/mathe-01/print');
+  await expect(page.locator('[data-item]')).toHaveCount(PROBETEST.itemIds.length);
+  await expect(page.locator('[data-loesung]')).toHaveCount(PROBETEST.itemIds.length);
+  await page.evaluate(() => document.fonts.ready);
+  // Number items leave room to calculate before the result box (decision 2026-10-15).
+  await expect(page.locator('[data-item="m-zo-1-011"] .druck-rechenplatz')).toHaveCount(1);
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.getByRole('button', { name: 'Drucken' })).toBeHidden();
+  expect(
+    await page.locator('.druck-loesungen').evaluate((e) => getComputedStyle(e).breakBefore),
+  ).toBe('page');
+  await page.pdf({
+    path: `${SCREENSHOTS}/probetest-druck.pdf`,
+    format: 'A4',
+    printBackground: true,
+  });
+  await page.setViewportSize({ width: 794, height: 1123 });
+  await page.screenshot({ path: `${SCREENSHOTS}/probetest-druck-seite1.png` });
+});

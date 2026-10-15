@@ -32,6 +32,13 @@ export interface KartenScreenProps {
   postponeOffer(fach: Fach): Promise<void>;
 }
 
+/** The first Probetest of each Fach that has one. */
+function probetestLines(manifest: ContentManifest): { fach: Fach; id: string }[] {
+  return (Object.entries(manifest.probetests) as [Fach, string[]][]).flatMap(([fach, ids]) =>
+    ids[0] ? [{ fach, id: ids[0] }] : [],
+  );
+}
+
 const EMPTY: MapProgressSource = {
   mastery: [],
   unlocked: [],
@@ -84,5 +91,5 @@ export function KartenScreen({
           },
         }
       : null;
-  return <KartenView progress={progress} offer={offer} />;
+  return <KartenView progress={progress} offer={offer} probetests={probetestLines(manifest)} />;
 }

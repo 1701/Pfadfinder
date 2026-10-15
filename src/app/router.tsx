@@ -41,6 +41,12 @@ const PracticeRoute = lazy(() =>
 // The Einstieg (PRODUCT.md §5.4) in its own chunk, like practice.
 const CheckRoute = lazy(() => import('./check-route').then((m) => ({ default: m.CheckRoute })));
 
+// The Probetest and its print sheet, each in its own chunk.
+const ProbetestRoute = lazy(() =>
+  import('./probetest-route').then((m) => ({ default: m.ProbetestRoute })),
+);
+const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.PrintRoute })));
+
 // The Eltern page (only by URL, no link in the app) in its own chunk.
 const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
 
@@ -71,6 +77,8 @@ export function AppRouter() {
           <Route path="/" element={<StartRoute />} />
           <Route path="/ueben/:fach/:bereich" element={<PracticeRoute />} />
           <Route path="/einstieg/:fach" element={<CheckRoute />} />
+          <Route path="/probetest/:id" element={<ProbetestRoute />} />
+          <Route path="/probetest/:id/print" element={<PrintRoute />} />
           <Route path="/eltern" element={<ElternRoute />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}

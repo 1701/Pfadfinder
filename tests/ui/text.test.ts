@@ -5,6 +5,7 @@ import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
 import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
 import { ELTERN_TEXTS } from '../../src/ui/text/eltern';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
+import { PROBETEST_TEXTS } from '../../src/ui/text/probetest';
 import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
@@ -26,6 +27,17 @@ describe('the Einstieg', () => {
     expect(text).not.toContain('!');
     expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
   });
+});
+
+describe('the Probetest', () => {
+  it.each(PROBETEST_TEXTS)(
+    '"%s" is at most 2 sentences, no exclamation, never "falsch"',
+    (text) => {
+      expect(text).not.toContain('!');
+      expect(text).not.toMatch(/falsch|prozent|%|note\b/i);
+      expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
+    },
+  );
 });
 
 describe('the choice before practice goes on', () => {

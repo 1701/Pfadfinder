@@ -56,4 +56,42 @@ describe('KartenScreen', () => {
     expect(within(map).getAllByRole('link')).toHaveLength(OPEN_BEREICHE.length);
     expect(screen.getByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
   });
+
+  it('offers the Probetest of a Fach as a line below the map, only if the manifest has one', async () => {
+    renderScreen(() =>
+      Promise.resolve({
+        mastery: [],
+        unlocked: [],
+        today: { count: 0, goal: 10, reached: false },
+        postponed: [],
+      }),
+    );
+    await screen.findAllByRole('group', { name: 'Karte' });
+    const link = screen.getByRole('link', { name: 'Probetest Mathe' });
+    expect(link.getAttribute('href')).toBe('/probetest/mathe-01');
+    expect(screen.queryByRole('link', { name: 'Probetest Deutsch' })).toBeNull();
+  });
+
+  it('shows no Probetest line without a Probetest in the manifest', async () => {
+    const without = { ...(manifest as ContentManifest), probetests: { mathe: [], deutsch: [] } };
+    render(
+      <MemoryRouter>
+        <KartenScreen
+          manifest={without}
+          formats={SUPPORTED_FORMATS}
+          loadProgress={() =>
+            Promise.resolve({
+              mastery: [],
+              unlocked: [],
+              today: { count: 0, goal: 10, reached: false },
+              postponed: [],
+            })
+          }
+          postponeOffer={() => Promise.resolve()}
+        />
+      </MemoryRouter>,
+    );
+    await screen.findAllByRole('group', { name: 'Karte' });
+    expect(screen.queryByRole('link', { name: /Probetest/ })).toBeNull();
+  });
 });

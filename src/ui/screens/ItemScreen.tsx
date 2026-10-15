@@ -6,6 +6,7 @@
 // The Probetest replaces the header ("Übersicht", "7 von 24", minutes) and, while answering, the
 // band ("Zurück" | "Weiter", no checking; a short answer is only typed in).
 
+import clsx from 'clsx';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import type { Item, ItemOf } from '../../domain/content';
@@ -15,6 +16,7 @@ import { Button } from '../components/Button';
 import { ContentAsset, isWideAsset } from '../components/ContentAsset';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Fortschritt, type FortschrittProps } from '../components/Fortschritt';
+import { QUIET_ACTION_CLASS } from '../components/quiet';
 import { RatingBand } from '../components/RatingBand';
 import { VorlesenButton } from '../components/VorlesenButton';
 import { formatEntry, FormatRenderer } from '../formats/registry';
@@ -45,13 +47,18 @@ export interface ItemScreenProps {
   /** Passed to the feedback band: a second button left of "Weiter", and its label. */
   feedbackBack?: { label: string; onClick(): void };
   nextLabel?: string;
+  /** Feedback band for an item without an answer (Probetest review): this heading, no "Falle". */
+  feedbackMissing?: string;
+  /** Left of the submit button, e.g. "Zurück" before "Vergleichen" in the Probetest review. */
+  bandStart?: ReactNode;
+  /** The answer can no longer change (Probetest review): the renderer is disabled. */
+  locked?: boolean;
   /** Dev preview only: open a self-rated item directly in the comparing step. */
   previewComparing?: boolean;
 }
 
-/** Quiet text action at the top left ("Pause", "Zur Karte"). */
-export const QUIET_ACTION_CLASS =
-  'flex min-h-touch items-center rounded-control px-sm text-ink-muted underline-offset-4 hover:underline';
+/** Quiet text action at the top left; re-exported for the screens that import it from here. */
+export { QUIET_ACTION_CLASS };
 
 export function ItemScreen(props: ItemScreenProps) {
   const { item, phase, correct } = props;
@@ -87,6 +94,7 @@ export function ItemScreen(props: ItemScreenProps) {
         note={entry.bandNote?.(item)}
         back={props.feedbackBack}
         nextLabel={props.nextLabel}
+        missing={props.feedbackMissing}
       />
     );
   } else if (comparing) {
@@ -106,7 +114,14 @@ export function ItemScreen(props: ItemScreenProps) {
     );
   } else {
     band = (
-      <div data-region="band" className="flex items-end justify-end">
+      <div
+        data-region="band"
+        className={clsx(
+          'flex items-end gap-md',
+          props.bandStart ? 'justify-between' : 'justify-end',
+        )}
+      >
+        {props.bandStart}
         <Button
           variant="primary"
           disabled={props.answer === null || phase !== 'answering'}
@@ -159,7 +174,7 @@ export function ItemScreen(props: ItemScreenProps) {
           attemptIndex={props.attemptIndex}
           answer={props.answer}
           onChange={props.onAnswer}
-          disabled={phase !== 'answering' || comparing}
+          disabled={phase !== 'answering' || comparing || props.locked === true}
           revealed={revealed}
           showSolution={entry.selfRated && (compared || revealed !== undefined)}
         />

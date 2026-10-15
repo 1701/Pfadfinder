@@ -16,6 +16,22 @@ import { Button } from './Button';
 import { VorlesenButton } from './VorlesenButton';
 import { CheckGlyph, SignpostGlyph } from './glyphs';
 
+/** Grid places with "Zurück": landscape [message | Zurück | Weiter], portrait stacked. */
+const BACK_LAYOUT = {
+  plain: {
+    message: 'portrait:row-span-2',
+    back: 'col-start-2 row-start-1 portrait:row-start-1',
+    falle: '',
+    next: 'col-start-3 row-start-1 portrait:col-start-2 portrait:row-start-2',
+  },
+  asking: {
+    message: 'row-span-2 portrait:row-span-3',
+    back: 'col-start-2 row-start-2',
+    falle: 'col-start-3 row-start-1 portrait:col-start-2',
+    next: 'col-start-3 row-start-2 portrait:col-start-2 portrait:row-start-3',
+  },
+} as const;
+
 export interface FeedbackPanelProps {
   correct: Correctness;
   feedback: Feedback;
@@ -33,6 +49,11 @@ export interface FeedbackPanelProps {
   back?: { label: string; onClick(): void };
   /** "Weiter" unless set (Probetest review, last item: "Zur Auswertung"). */
   nextLabel?: string;
+  /**
+   * The child gave no answer (Probetest review): this heading instead of the verdict, the
+   * explanation of `incorrect`, no "Falle".
+   */
+  missing?: string;
   /** Passed to the band, e.g. data attributes for layout tests. */
   [data: `data-${string}`]: string;
 }
@@ -46,12 +67,13 @@ export function FeedbackPanel({
   note,
   back,
   nextLabel = 'Weiter',
+  missing,
   ...rest
 }: FeedbackPanelProps) {
-  const right = correct === true;
-  const verdict = showVerdict ? (right ? 'Richtig.' : 'Noch nicht ganz.') : undefined;
+  const right = correct === true && !missing;
+  const verdict = missing ?? (showVerdict ? (right ? 'Richtig.' : 'Noch nicht ganz.') : undefined);
   const explanation = right ? feedback.correct : feedback.incorrect;
-  const misconception = right ? undefined : feedback.misconception;
+  const misconception = right || missing ? undefined : feedback.misconception;
   const messageId = useId();
   const next = useRef<HTMLButtonElement>(null);
   const [why, setWhy] = useState(false);
@@ -65,6 +87,10 @@ export function FeedbackPanel({
     .join(' ');
 
   const asking = Boolean(misconception) && !why;
+  // With "Zurück" (Probetest review): side by side with Weiter in landscape; stacked in portrait,
+  // where two buttons side by side would leave the message a third of the width (measured
+  // 2026-10-15: answers ran 8 px under the band in Safari portrait).
+  const layout = back ? BACK_LAYOUT[asking ? 'asking' : 'plain'] : undefined;
 
   // Weiter stays a direct child of the band, in the same place as Prüfen; "Falle" sits above it.
   return (
@@ -72,13 +98,15 @@ export function FeedbackPanel({
       {...rest}
       className={clsx(
         'grid items-end gap-x-lg gap-y-xs',
-        back ? 'grid-cols-[minmax(0,1fr)_auto_auto]' : 'grid-cols-[minmax(0,1fr)_auto]',
+        back
+          ? 'grid-cols-[minmax(0,1fr)_auto_auto] portrait:grid-cols-[minmax(0,1fr)_auto]'
+          : 'grid-cols-[minmax(0,1fr)_auto]',
       )}
     >
       <section
         className={clsx(
           'feedback-in flex items-start gap-md rounded-sheet px-lg py-sm',
-          asking && 'row-span-2',
+          layout ? layout.message : asking && 'row-span-2',
           right ? 'bg-correct-surface' : 'bg-notyet-surface',
         )}
       >
@@ -105,17 +133,13 @@ export function FeedbackPanel({
         </div>
       </section>
       {back && (
-        <Button
-          size="large"
-          className={clsx('col-start-2', asking && 'row-start-2')}
-          onClick={back.onClick}
-        >
+        <Button size="large" className={layout?.back} onClick={back.onClick}>
           {back.label}
         </Button>
       )}
       {asking && (
         <Button
-          className={back ? 'col-start-3 row-start-1' : 'col-start-2'}
+          className={layout ? layout.falle : 'col-start-2'}
           aria-label={FALLE_LABEL}
           onClick={() => {
             setWhy(true);
@@ -129,7 +153,7 @@ export function FeedbackPanel({
       <Button
         ref={next}
         variant="primary"
-        className={back ? 'col-start-3' : 'col-start-2'}
+        className={layout ? layout.next : 'col-start-2'}
         onClick={onNext}
         aria-describedby={messageId}
       >

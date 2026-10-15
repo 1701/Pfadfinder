@@ -12,6 +12,8 @@ export interface BlattProps {
   right?: ReactNode;
   title: string;
   text?: string;
+  /** A quieter line under the text, read aloud with it (Probetest: "schon gemacht"). */
+  note?: string;
   readAloud: boolean;
   /** The bottom band; the last action sits at the bottom right. */
   actions: ReactNode;
@@ -19,7 +21,17 @@ export interface BlattProps {
   children?: ReactNode;
 }
 
-export function Blatt({ left, right, title, text, readAloud, actions, children }: BlattProps) {
+export function Blatt({
+  left,
+  right,
+  title,
+  text,
+  note,
+  readAloud,
+  actions,
+  children,
+}: BlattProps) {
+  const speech = [title, text, note].filter(Boolean).join(' ');
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_1fr_auto] gap-sm px-lg py-sm">
       <header className="flex min-h-touch items-center justify-between gap-md">
@@ -28,10 +40,11 @@ export function Blatt({ left, right, title, text, readAloud, actions, children }
       </header>
       <div className="flex min-h-0 flex-col items-center justify-center gap-lg">
         <section className="flex w-full items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
-          {readAloud && <VorlesenButton key={title} text={text ? `${title} ${text}` : title} />}
+          {readAloud && <VorlesenButton key={title} text={speech} />}
           <div className="grid gap-xs pt-xs">
             <h1 className="text-prompt font-bold">{title}</h1>
             {text && <p className="text-option">{text}</p>}
+            {note && <p className="text-option text-ink-muted">{note}</p>}
           </div>
         </section>
         {children}

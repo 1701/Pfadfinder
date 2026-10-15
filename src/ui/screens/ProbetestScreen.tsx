@@ -1,0 +1,167 @@
+// Route /probetest/:id – the Probetest (PRODUCT.md §5.4): intro, items with "Zurück"/"Weiter"
+// and the time, the overview, the questions before ending, the result and looking through.
+// Everything is stored as it happens; a reload continues at the same item with the time the
+// wall clock has left.
+
+import { useEffect } from 'react';
+import { Navigate, useParams } from 'react-router';
+import type { Bereich } from '../../domain/content';
+import {
+  isAnswered,
+  isFinalMinutes,
+  itemOutcome,
+  probetestReadAloud,
+  remainingMinutes,
+} from '../../domain/probetest';
+import { runDeadline } from '../../data/probetest';
+import { useProbetestClock } from '../probetest-clock';
+import { useProbetest } from '../probetest-context';
+import { ProbetestAufgabe } from './ProbetestAufgabe';
+import { ProbetestAuswertung } from './ProbetestAuswertung';
+import { AbgebenFrage, ProbetestFehlt, ProbetestIntro, VerlassenFrage } from './ProbetestBlaetter';
+import { ProbetestDurchsehen } from './ProbetestDurchsehen';
+import { ProbetestUebersicht } from './ProbetestUebersicht';
+
+export function ProbetestScreen() {
+  const id = useParams().id ?? '';
+  return <Probetest key={id} id={id} />;
+}
+
+function Probetest({ id }: { id: string }) {
+  const s = useProbetest((state) => state);
+  const { status, context, run, index, intro } = s;
+  const learnerReadAloud = s.learner?.settings.readAloud ?? true;
+  const open = s.open;
+
+  useEffect(() => {
+    void open(id);
+  }, [id, open]);
+
+  const running = run?.status === 'running' ? run : null;
+  const deadline = context && running ? runDeadline(context, running) : null;
+  const now = useProbetestClock(
+    deadline,
+    (visible) => void s.timeUp(visible),
+    () => void s.checkTime(),
+  );
+
+  if (status === 'left') return <Navigate to="/" replace />;
+  if (status === 'unavailable') return <ProbetestFehlt readAloud={learnerReadAloud} />;
+  if (!context) return null;
+
+  const { items, probetest } = context;
+  const total = items.length;
+  const iso = new Date(now).toISOString();
+  const time =
+    deadline === null
+      ? { minutes: 0, final: false }
+      : { minutes: remainingMinutes(iso, deadline), final: isFinalMinutes(iso, deadline) };
+
+  if (status === 'intro' && intro) {
+    return (
+      <ProbetestIntro
+        doneBefore={intro.doneBefore}
+        readAloud={learnerReadAloud}
+        onStart={() => void s.begin()}
+        onShowResult={s.showResult}
+      />
+    );
+  }
+
+  if (running) {
+    const answered = items.map((item) => isAnswered(item, running.answers[item.id]));
+    if (status === 'answering') {
+      const item = items[index];
+      if (!item) return null;
+      return (
+        <ProbetestAufgabe
+          key={item.id}
+          item={item}
+          attemptIndex={running.attemptIndex[item.id] ?? 0}
+          answer={running.answers[item.id] ?? null}
+          onAnswer={s.setAnswer}
+          current={index + 1}
+          total={total}
+          time={time}
+          readAloud={learnerReadAloud && probetestReadAloud(probetest.fach, item)}
+          onBack={s.back}
+          onNext={s.next}
+          onOverview={s.showOverview}
+        />
+      );
+    }
+    if (status === 'overview') {
+      return (
+        <ProbetestUebersicht
+          answered={answered}
+          current={index}
+          time={time}
+          readAloud={learnerReadAloud}
+          onJump={s.goTo}
+          onContinue={() => s.goTo(index)}
+          onSubmit={() => void s.askSubmit()}
+          onLeave={s.askLeave}
+        />
+      );
+    }
+    if (status === 'confirmSubmit') {
+      return (
+        <AbgebenFrage
+          open={answered.filter((a) => !a).length}
+          time={time}
+          readAloud={learnerReadAloud}
+          onSubmit={() => void s.submit()}
+          onContinue={s.cancel}
+        />
+      );
+    }
+    if (status === 'confirmLeave') {
+      return (
+        <VerlassenFrage
+          time={time}
+          readAloud={learnerReadAloud}
+          onLeave={() => void s.leave()}
+          onContinue={s.cancel}
+        />
+      );
+    }
+    return null;
+  }
+
+  if (run?.status === 'submitted' && run.result) {
+    if (status === 'result') {
+      const bereiche = [...new Set(items.map((i) => i.bereich))] as Bereich[];
+      return (
+        <ProbetestAuswertung
+          result={run.result}
+          bereiche={bereiche}
+          timeUp={run.endReason === 'time'}
+          readAloud={learnerReadAloud}
+          onReview={() => s.review(0)}
+        />
+      );
+    }
+    if (status === 'review') {
+      const item = items[index];
+      if (!item) return null;
+      return (
+        <ProbetestDurchsehen
+          key={item.id}
+          item={item}
+          attemptIndex={run.attemptIndex[item.id] ?? 0}
+          answer={run.answers[item.id] ?? null}
+          outcome={itemOutcome(item, run)}
+          rating={run.ratings[item.id]}
+          current={index + 1}
+          total={total}
+          readAloud={learnerReadAloud && probetestReadAloud(probetest.fach, item)}
+          onBack={s.back}
+          onNext={s.next}
+          onResult={s.showResult}
+          onRate={(rating) => void s.rate(rating)}
+        />
+      );
+    }
+  }
+  return null;
+}

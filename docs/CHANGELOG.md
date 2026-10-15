@@ -43,6 +43,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## App
 
+### 0.7.0 – 2026-10-15
+- Probetest: Zeile „Probetest Mathe“ auf der Karte, Intro, Aufgaben mit „Zurück“/„Weiter“ und ruhiger Zeitanzeige („Noch 5 Minuten“), Übersicht zum Springen, Abgeben mit Rückfrage, Auswertung je Bereich ohne Prozent, Durchsehen mit Selbsteinschätzung der Kurzantwort. Alles wird sofort gespeichert; Neuladen setzt fort, die Zeit läuft nach Wanduhr.
+- Druckansicht `/probetest/:id/print`: Aufgabenblatt und Lösungsblatt, A4 hoch.
+- Exportformat Version 2 (Probetest-Läufe mit Status und Entwürfen), v1-Dateien werden umgewandelt.
+
 ### 0.6.0 – 2026-10-14
 - Renderer für alle neun Formate: Mehrfachwahl, Zuordnen (Tippen und Ziehen), Reihenfolge (Ziehen und Pfeile), Lückentext, Im Text markieren, Fehler finden, Kurzantwort mit Vergleichen und Selbsteinschätzung. dnd-kit nur in den Chunks von Zuordnen und Reihenfolge.
 - Vorlesen liest die Antworten in der Reihenfolge auf dem Bildschirm.

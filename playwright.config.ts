@@ -26,23 +26,23 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-landscape',
-      testMatch: /(ueben|pwa|einstieg|eltern)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: PREVIEW },
     },
     {
       name: 'chromium-portrait',
-      testMatch: /(ueben|pwa|einstieg|eltern)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
       use: { ...portrait, browserName: 'chromium', baseURL: PREVIEW },
     },
     // The target device is an iPad: Safari's engine for the smoke flow (h-dvh, IndexedDB).
     {
       name: 'webkit-landscape',
-      testMatch: /(ueben|pwa|einstieg|eltern)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
       use: { ...landscape, browserName: 'webkit', baseURL: PREVIEW },
     },
     {
       name: 'webkit-portrait',
-      testMatch: /(ueben|pwa|einstieg|eltern)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
       use: { ...portrait, browserName: 'webkit', baseURL: PREVIEW },
     },
     {
