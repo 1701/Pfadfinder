@@ -1,7 +1,8 @@
 // Reihenfolge: a list of cards, each with a handle (drag, dnd-kit sortable) and the buttons ↑ and ↓
 // for keyboard and screen readers. The list never starts solved (presentedOrder), and Prüfen
-// waits for the first move. After checking handles and arrows go away; cards in the right place
-// get a check mark, and a line names the right order. Own chunk (registry), like Match.
+// waits for the first move. After checking handles and arrows go away, but their places stay, so
+// no card moves; cards in the right place get a check mark, and a line names the right order.
+// Own chunk (registry), like Match.
 
 import {
   DndContext,
@@ -149,12 +150,18 @@ export function Order({
           {ids.map((id, i) => {
             const state = tileState(true, id === solution[i], true);
             return (
-              <li key={id} className={tileClass(state, false, 'px-md')}>
-                <SolutionMark state={state} />
-                <span>
-                  {nb(text.get(id) ?? '')}
-                  <StateWords state={state} />
+              <li key={id} className="flex items-center gap-sm">
+                {/* Handle and arrows go, their places stay: the cards must not move. */}
+                <span aria-hidden="true" className="invisible size-touch shrink-0" />
+                <span className={tileClass(state, false, 'flex-1 px-md')}>
+                  <SolutionMark state={state} />
+                  <span>
+                    {nb(text.get(id) ?? '')}
+                    <StateWords state={state} />
+                  </span>
                 </span>
+                <span aria-hidden="true" className="invisible size-touch shrink-0" />
+                <span aria-hidden="true" className="invisible size-touch shrink-0" />
               </li>
             );
           })}

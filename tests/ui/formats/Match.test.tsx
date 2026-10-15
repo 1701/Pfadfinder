@@ -80,7 +80,7 @@ describe('Match (m-rf-1-004)', () => {
     expect(onChange).toHaveBeenCalled();
   });
 
-  it('after checking: no pool, a check mark or "Richtig ist" per row', () => {
+  it('after checking: no pool, check marks, and the right cards listed where the pool was', () => {
     const swapped = item.solution.pairs.map(
       ([l], i, all) => [l, all[i === 0 ? 1 : i === 1 ? 0 : i]![1]] as [string, string],
     );
@@ -96,7 +96,9 @@ describe('Match (m-rf-1-004)', () => {
     );
     expect(screen.queryByRole('group', { name: 'Antworten' })).toBeNull();
     expect(screen.queryAllByRole('button')).toEqual([]);
-    expect(screen.getAllByText(/^Richtig ist:/)).toHaveLength(2);
+    expect(screen.getAllByText(/^Richtig ist:/)).toHaveLength(1);
+    expect(screen.getByText('Würfel: 6 gleich große Quadrate')).toBeTruthy();
+    expect(screen.getByText('Kugel: rund, rollt in alle Richtungen')).toBeTruthy();
     expect(screen.getAllByText(/\(richtige Antwort\)/)).toHaveLength(2);
     expect(screen.getAllByText(/\(deine Wahl\)/)).toHaveLength(2);
   });

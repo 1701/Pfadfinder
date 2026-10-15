@@ -33,6 +33,25 @@ async function open(page: Page, item: ContentItem) {
 
 const band = (page: Page) => page.locator('[data-region="band"]');
 
+/**
+ * What must stay in place when Prüfen is pressed (no layout jump): the cards of order, the row
+ * labels of match. Rounded to whole pixels.
+ */
+const STILL: Record<string, string> = {
+  order: '[data-region="answer"] li > span:nth-child(2)',
+  match: '[data-region="answer"] [class*="px-sm"]',
+};
+async function boxes(page: Page, format: string): Promise<string[]> {
+  const selector = STILL[format];
+  if (!selector) return [];
+  return page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return [r.x, r.y, r.width, r.height].map(Math.round).join(',');
+    }),
+  );
+}
+
 async function expectBand(page: Page, item: ContentItem, correct: boolean) {
   const verdict = verdictOf(item, correct);
   if (verdict) await expect(band(page).getByRole('heading', { name: verdict })).toBeVisible();
@@ -83,6 +102,7 @@ for (const [format, id] of CASES) {
       await page.screenshot({
         path: `${SCREENSHOTS}/format-${format}-vorher-${viewport.name}.png`,
       });
+      const before = await boxes(page, it.format);
       if (it.format === 'short-answer') {
         await page.getByRole('button', { name: 'Vergleichen' }).click();
         await expect(page.getByRole('heading', { name: 'So könnte es aussehen:' })).toBeVisible();
@@ -97,6 +117,7 @@ for (const [format, id] of CASES) {
       await expectBand(page, it, false);
       await page.waitForTimeout(300); // let the feedback finish rising
       await expectFitsScreen(page, `${id} Rückmeldung ${viewport.name}`);
+      expect(await boxes(page, it.format), `${id}: nothing moves on Prüfen`).toEqual(before);
       await page.screenshot({
         path: `${SCREENSHOTS}/format-${format}-nachher-${viewport.name}.png`,
       });
