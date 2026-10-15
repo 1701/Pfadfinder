@@ -29,6 +29,10 @@ export interface FeedbackPanelProps {
   verdict?: boolean;
   /** A line under the verdict in both outcomes, e.g. "So schreibt man es: Samstag" (find-error). */
   note?: { label: string; text: string };
+  /** A second button left of "Weiter", in its row (Probetest review: "Zurück"). */
+  back?: { label: string; onClick(): void };
+  /** "Weiter" unless set (Probetest review, last item: "Zur Auswertung"). */
+  nextLabel?: string;
   /** Passed to the band, e.g. data attributes for layout tests. */
   [data: `data-${string}`]: string;
 }
@@ -40,6 +44,8 @@ export function FeedbackPanel({
   readAloud = true,
   verdict: showVerdict = true,
   note,
+  back,
+  nextLabel = 'Weiter',
   ...rest
 }: FeedbackPanelProps) {
   const right = correct === true;
@@ -62,7 +68,13 @@ export function FeedbackPanel({
 
   // Weiter stays a direct child of the band, in the same place as Prüfen; "Falle" sits above it.
   return (
-    <div {...rest} className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-lg gap-y-xs">
+    <div
+      {...rest}
+      className={clsx(
+        'grid items-end gap-x-lg gap-y-xs',
+        back ? 'grid-cols-[minmax(0,1fr)_auto_auto]' : 'grid-cols-[minmax(0,1fr)_auto]',
+      )}
+    >
       <section
         className={clsx(
           'feedback-in flex items-start gap-md rounded-sheet px-lg py-sm',
@@ -92,9 +104,18 @@ export function FeedbackPanel({
           {misconception && why && <p className="text-ink-muted">{nb(misconception)}</p>}
         </div>
       </section>
+      {back && (
+        <Button
+          size="large"
+          className={clsx('col-start-2', asking && 'row-start-2')}
+          onClick={back.onClick}
+        >
+          {back.label}
+        </Button>
+      )}
       {asking && (
         <Button
-          className="col-start-2"
+          className={back ? 'col-start-3 row-start-1' : 'col-start-2'}
           aria-label={FALLE_LABEL}
           onClick={() => {
             setWhy(true);
@@ -108,11 +129,11 @@ export function FeedbackPanel({
       <Button
         ref={next}
         variant="primary"
-        className="col-start-2"
+        className={back ? 'col-start-3' : 'col-start-2'}
         onClick={onNext}
         aria-describedby={messageId}
       >
-        Weiter
+        {nextLabel}
       </Button>
     </div>
   );

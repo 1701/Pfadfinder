@@ -3,8 +3,10 @@
 // practice screen, the Einstieg (button "Weiter", no feedback) and the dev preview feed it.
 // A self-rated format (short-answer) has one step more: "Vergleichen" shows the model answer, the
 // band asks for the child's own rating, and only that rating submits the answer.
+// The Probetest replaces the header ("Übersicht", "7 von 24", minutes) and, while answering, the
+// band ("Zurück" | "Weiter", no checking; a short answer is only typed in).
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import type { Item, ItemOf } from '../../domain/content';
 import type { Correctness, SelfRating } from '../../domain/evaluation';
@@ -26,7 +28,8 @@ export interface ItemScreenProps {
   phase: 'answering' | 'checking' | 'feedback';
   /** Set in the feedback phase. */
   correct: Correctness | null;
-  progress: FortschrittProps;
+  /** Shown in the default header; not needed with `header`. */
+  progress?: FortschrittProps;
   readAloud: boolean;
   /** Submits the current answer; a self-rated format passes the completed answer along. */
   onSubmit(answer?: unknown): void;
@@ -34,7 +37,14 @@ export interface ItemScreenProps {
   /** Label of the submit button; the Einstieg says "Weiter" and shows no feedback. */
   submitLabel?: string;
   /** "Pause" either leads somewhere (practice: continued next time) or asks first (Einstieg). */
-  pause: { to: string } | { onPause(): void };
+  pause?: { to: string } | { onPause(): void };
+  /** Replaces the default header (Pause + Fortschritt): a complete <header> element. */
+  header?: ReactNode;
+  /** Replaces the submit button while answering: the band's buttons (Probetest navigation). */
+  actions?: ReactNode;
+  /** Passed to the feedback band: a second button left of "Weiter", and its label. */
+  feedbackBack?: { label: string; onClick(): void };
+  nextLabel?: string;
   /** Dev preview only: open a self-rated item directly in the comparing step. */
   previewComparing?: boolean;
 }
@@ -75,6 +85,8 @@ export function ItemScreen(props: ItemScreenProps) {
         readAloud={props.readAloud}
         verdict={!entry.selfRated}
         note={entry.bandNote?.(item)}
+        back={props.feedbackBack}
+        nextLabel={props.nextLabel}
       />
     );
   } else if (comparing) {
@@ -85,6 +97,12 @@ export function ItemScreen(props: ItemScreenProps) {
         speech={comparisonSpeech(item as ItemOf<'short-answer'>)}
         readAloud={props.readAloud}
       />
+    );
+  } else if (props.actions) {
+    band = (
+      <div data-region="band" className="flex items-end justify-between gap-md">
+        {props.actions}
+      </div>
     );
   } else {
     band = (
@@ -102,18 +120,21 @@ export function ItemScreen(props: ItemScreenProps) {
 
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_1fr_auto] gap-sm px-lg py-sm">
-      <header className="flex items-center justify-between gap-md">
-        {'to' in props.pause ? (
-          <Link to={props.pause.to} className={QUIET_ACTION_CLASS}>
-            Pause
-          </Link>
-        ) : (
-          <button type="button" onClick={props.pause.onPause} className={QUIET_ACTION_CLASS}>
-            Pause
-          </button>
-        )}
-        <Fortschritt {...props.progress} />
-      </header>
+      {props.header ?? (
+        <header className="flex items-center justify-between gap-md">
+          {props.pause &&
+            ('to' in props.pause ? (
+              <Link to={props.pause.to} className={QUIET_ACTION_CLASS}>
+                Pause
+              </Link>
+            ) : (
+              <button type="button" onClick={props.pause.onPause} className={QUIET_ACTION_CLASS}>
+                Pause
+              </button>
+            ))}
+          {props.progress && <Fortschritt {...props.progress} />}
+        </header>
+      )}
 
       <section className="flex items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
         {props.readAloud && (

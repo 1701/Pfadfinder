@@ -52,12 +52,18 @@ export const VIEWPORTS = [
   { name: 'safari-portrait', width: 768, height: 900 },
 ];
 
-/**
- * Measures one screen: no page scroll, answers never under the band, the band's last button fully
- * visible and 56 px high. Returns what is wrong (empty when it fits), so a caller can collect.
- */
-export async function fitProblems(page: Page): Promise<string[]> {
-  const m = await page.evaluate(() => {
+export interface FitMetrics {
+  /** Page scroll in px (> 0 is a problem). */
+  overflow: number;
+  /** Free space between the answers and the band in px (< 0: answers run under it). */
+  slack: number;
+  buttonBottom: number;
+  buttonHeight: number;
+}
+
+/** The raw numbers behind fitProblems; null when answer area, band or band button is missing. */
+export async function fitMetrics(page: Page): Promise<FitMetrics | null> {
+  return page.evaluate(() => {
     const answer = document.querySelector('[data-region="answer"]')?.firstElementChild;
     const band = document.querySelector('[data-region="band"]');
     const button = band?.querySelector(':scope > button:last-of-type');
@@ -69,6 +75,14 @@ export async function fitProblems(page: Page): Promise<string[]> {
       buttonHeight: button.getBoundingClientRect().height,
     };
   });
+}
+
+/**
+ * Measures one screen: no page scroll, answers never under the band, the band's last button fully
+ * visible and 56 px high. Returns what is wrong (empty when it fits), so a caller can collect.
+ */
+export async function fitProblems(page: Page): Promise<string[]> {
+  const m = await fitMetrics(page);
   if (!m) return ['answer area, band or band button missing'];
   const px = (n: number) => `${Math.round(n)} px`;
   return [

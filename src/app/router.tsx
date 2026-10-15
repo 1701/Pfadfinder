@@ -55,6 +55,9 @@ const KartePage = import.meta.env.DEV
 const EinstiegPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/EinstiegPage').then((m) => ({ default: m.EinstiegPage })))
   : null;
+const ProbetestPage = import.meta.env.DEV
+  ? lazy(() => import('../ui/dev/ProbetestPage').then((m) => ({ default: m.ProbetestPage })))
+  : null;
 const ItemPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/ItemPage').then((m) => ({ default: m.ItemPage })))
   : null;
@@ -73,6 +76,7 @@ export function AppRouter() {
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
           {KartePage && <Route path="/dev/karte" element={<KartePage />} />}
           {EinstiegPage && <Route path="/dev/einstieg" element={<EinstiegPage />} />}
+          {ProbetestPage && <Route path="/dev/probetest" element={<ProbetestPage />} />}
         </Routes>
       </Suspense>
     </BrowserRouter>

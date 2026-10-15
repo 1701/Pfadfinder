@@ -211,4 +211,38 @@ describe('ItemScreen', () => {
       expect(band.textContent).toContain('So schreibt man es: Samstag');
     });
   });
+
+  it('takes another header and, while answering, other band buttons (Probetest)', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <ItemScreen
+          item={contentItem('m-gm-3-002', 'short-answer')}
+          attemptIndex={0}
+          answer={{ text: 'Weil' }}
+          onAnswer={() => {}}
+          phase="answering"
+          correct={null}
+          readAloud
+          onSubmit={() => {}}
+          onNext={() => {}}
+          header={<header>7 von 24</header>}
+          actions={
+            <>
+              <button type="button">Zurück</button>
+              <button type="button">Weiter</button>
+            </>
+          }
+        />
+      </MemoryRouter>,
+    );
+    expect(container.querySelector('header')?.textContent).toBe('7 von 24');
+    expect(screen.queryByText('Pause')).toBeNull();
+    const band = container.querySelector('[data-region="band"]') as HTMLElement;
+    expect([...band.querySelectorAll('button')].map((b) => b.textContent)).toEqual([
+      'Zurück',
+      'Weiter',
+    ]);
+    // A short answer is only typed in: no "Vergleichen".
+    expect(screen.queryByRole('button', { name: 'Vergleichen' })).toBeNull();
+  });
 });

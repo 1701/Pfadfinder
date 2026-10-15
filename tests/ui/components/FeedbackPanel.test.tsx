@@ -130,4 +130,27 @@ describe('FeedbackPanel', () => {
       expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
     });
   });
+
+  it('can offer "Zurück" left of "Weiter" and another label for "Weiter" (Probetest review)', async () => {
+    const back = vi.fn();
+    const next = vi.fn();
+    const { container } = render(
+      <FeedbackPanel
+        correct={false}
+        feedback={feedback}
+        onNext={next}
+        back={{ label: 'Zurück', onClick: back }}
+        nextLabel="Zur Auswertung"
+      />,
+    );
+    const buttons = [...container.querySelectorAll(':scope > div > button')].map(
+      (b) => b.textContent,
+    );
+    // Weiter stays the last button of the band; "Falle" above it.
+    expect(buttons).toEqual(['Zurück', 'Falle', 'Zur Auswertung']);
+    await userEvent.click(screen.getByRole('button', { name: 'Zurück' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Zur Auswertung' }));
+    expect(back).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledOnce();
+  });
 });

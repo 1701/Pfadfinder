@@ -1,0 +1,66 @@
+{
+  "viewport": {
+    "name": "safari-landscape",
+    "width": 1024,
+    "height": 660
+  },
+  "header": {
+    "d-45": {
+      "height": 48,
+      "middles": 0,
+      "minGap": 348,
+      "overflowX": 0
+    },
+    "d-noch5": {
+      "height": 48,
+      "middles": 0,
+      "minGap": 321,
+      "overflowX": 0
+    },
+    "wegstriche-45": {
+      "height": 48,
+      "middles": 0,
+      "minGap": 56,
+      "overflowX": 0
+    }
+  },
+  "overview": {
+    "overflow": 0,
+    "slack": 239.21875,
+    "buttonBottom": 12,
+    "buttonHeight": 56,
+    "smallestTarget": 48
+  },
+  "answering": {
+    "tightest": "m-dz-2-002",
+    "slack": 33,
+    "overflow": 0,
+    "problems": []
+  },
+  "reviewR1": {
+    "tightest": "m-rf-3-004",
+    "slack": 52,
+    "overflow": 0,
+    "problems": []
+  },
+  "reviewR2": {
+    "tightest": "m-dz-3-002",
+    "slack": 60,
+    "overflow": 0,
+    "problems": []
+  },
+  "comparing": {
+    "slack": 94,
+    "overflow": 0
+  },
+  "map": {
+    "svgBottom": 588,
+    "matheBottom": 572.06982421875,
+    "matheLeft": 137.64010620117188,
+    "matheRight": 567.7557373046875,
+    "deutschNameTop": 132.47738647460938,
+    "legendTop": 600,
+    "legendHeight": 48,
+    "textScale": 0.7965104166666667
+  }
+}

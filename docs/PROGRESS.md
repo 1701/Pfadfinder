@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-15 – Aufgabe 8, Schritt 0 und Teil A: Schema 1.0.9, mathe-01, Probetest-Domain
+- **Schema 1.0.9:** Summe `estimatedSeconds` Mathe 24–32 Min. (statt 35–42), Deutsch bleibt 35–42 (vorläufig bis deutsch-01). Validator prüft je Fach, Obergrenze jetzt getestet. Das Manifest nennt die Probetest-IDs je Fach. `niveauMix`/`bereichMix` erwartet der Validator schon als Anzahlen, es gab nichts zu melden.
+- **Content:** `content/probetests/mathe-01.json` unverändert aus der Zip (24 Items, 26,7 Min.).
+- **Gebaut:** `domain/probetest` (Wanduhr-Zeit, `onOpen`/`onDeadline` mit 60 s Kulanz, `finishRun`, `rateShortAnswer`, `scoreRun` mit solved/total/pending, `introState`, Vorlese-Schalter je Fach), `data/probetest` und `data/probetest-store` (jede Änderung sofort gespeichert, in Reihenfolge). ProbetestRun mit Status, Entwürfen, Einschätzungen, Ergebnis ohne Prozent. Export Version 2 mit Migration v1 → v2.
+- **Entscheidungen (Markus):** kein Prozent gespeichert, `FOREGROUND_GRACE_MS` 60 000, „Auswertung ansehen“ mit nachholbarer Einschätzung. Eigene: Unbeantwortete Kurzantwort zählt als offen, nicht als wartend. Attempts entstehen beim Ende des Durchgangs, Kurzantworten erst mit Einschätzung.
+- **Bekannte Lücke:** Eine Kurzantwort ohne Einschätzung hat kein Attempt (der Text steht nur im Durchgang).
+- **Beobachtung:** Der Scheduler zählt Probetest-Attempts wie alle für „zuletzt gesehen“ und `attemptIndex` (unverändert, „wie bisher“).
+- **Tests:** 18 Domain-, 17 Store-Tests (Neuladen, abgelaufene Zeit beim Öffnen, Zeitablauf vorn/verdeckt, offene Items, Teils, kein Mastery/Fehlerkiste/Tagesziel, zweiter Durchgang, ein laufender je ID). Gegenprobe: Kulanz und Teils-Regel gebrochen → je 2 Tests rot.
+- **CI:** [CI #38736144023](https://github.com/1701/Pfadfinder/actions/runs/38736144023) grün (c5998b2…8fe27cd), Workers Builds grün. Lokal grün: `npm run check` (732 Tests).
+
 ## 2026-10-15 – Nacharbeit Aufgabe 7: nichts springt nach Prüfen
 - **Entschieden (Markus):** „Keine neue Bewegung“ gilt auch für Layout-Sprünge. formate.spec nur in Chromium ist hinnehmbar, Touch-Ziehen nimmt das iPad ab. WebKit in CI reicht über den Üben-Ablauf.
 - **Gebaut:** order behält nach Prüfen die Plätze von Griff und Pfeilen (unsichtbar). match zeigt „Richtig ist:“ als Liste dort, wo der Vorrat war (quer rechts, hoch unten). Vorher standen die Hinweise je Zeile und brachen um, die Zeilen darunter rutschten nach unten (gefunden vom neuen Test). `formate.spec` vergleicht die Lage von order-Karten und match-Begriffen vor und nach Prüfen in vier Viewports.
