@@ -73,12 +73,14 @@ Attempt        { id; learnerId; itemId; fach; bereich; niveau; format; correct: 
 MasteryState   { learnerId; fach; bereich; niveau: 1|2|3; window: (0 | 0.5 | 1)[] /* letzte 8, Kurzantwort "teils" = 0.5 */; mastered: boolean; updatedAt }
 ReviewEntry    { learnerId; itemId; dueAt: ISO; stage: 1 | 2 | "done" }         // Fehlerkiste: +1 Tag, +3 Tage
 Session        { id; learnerId; mode; startedAt; endedAt?; attemptIds: string[]; goalReached: boolean }
-ProbetestRun   { id; learnerId; probetestId; startedAt; submittedAt?; attemptIds; result?: { byBereich: Record<Bereich, {correct, total}>; percent } }
+ProbetestRun   { id; learnerId; probetestId; startedAt; status: "running"|"submitted"|"aborted"; endedAt?; endReason?: "submit"|"time"|"leave"|"expired";
+                 currentIndex; answers: Record<itemId, Draft>; itemMs; attemptIndex; ratings: Record<itemId, 1|0.5|0>; attemptIds;
+                 result?: { byBereich: Record<Bereich, {solved, total, pending}>; total: {solved, total, pending} } }   // kein Prozent (2026-10-15)
 Collectibles   { learnerId; unlocked: string[] }                                 // Entdeckungen je gemeisterter Etappe
 PostponedOffer { fach; at: ISO }                                                  // "Später" beim Einstieg-Angebot, je Fach; geräteweit, nicht im Export (Dexie v2)
 ```
 
-Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews, sessions, probetestRuns, collectibles }` als JSON-Datei. Import validiert mit Zod und migriert nach Versionsnummer. Das Export-Format ist das spätere Sync-Format (Roadmap v2).
+Export-Format: `{ version: "2", exportedAt, learner, attempts, mastery, reviews, sessions, probetestRuns, collectibles }` als JSON-Datei. Import validiert mit Zod und migriert nach Versionsnummer: v1 → v2 (2026-10-15) gibt jedem Probetest-Lauf einen Status (mit `submittedAt` „submitted“, sonst „aborted“/„expired“), leere Entwürfe und ein Ergebnis ohne Prozent mit abgerundeten gelösten Items. Das Export-Format ist das spätere Sync-Format (Roadmap v2).
 
 ## 5. Kernabläufe
 
@@ -92,7 +94,14 @@ Export-Format: `{ version: "1", exportedAt, learner, attempts, mastery, reviews,
 
 **Fehlerkiste.** `ReviewEntry` fällig → erscheint vor neuen Items im Üben-Modus (max. 3 pro Session). Richtig: stage 1→2 (+3 Tage) → done. Falsch: stage bleibt, +1 Tag. Fällig ist ein Eintrag ab Beginn seines Fälligkeitstags (lokale Zeit des Geräts).
 
-**Probetest.** Timer läuft im Domain-Modell (startedAt + 45 Min.), UI zeigt verbleibende Zeit nur dezent (kein rotes Blinken). Navigation vor/zurück erlaubt wie auf Papier. Abgabe manuell oder bei Ablauf. Auswertung pro Bereich und gesamt; Attempts fließen **nicht** in Mastery (Probetest ist Messung, nicht Training).
+**Probetest** (seit 2026-10-15, Domain und Daten). Reine Funktionen in `domain/probetest`, Dienst `data/probetest`, Store `data/probetest-store`.
+- *Zeit:* `deadlineOf` = `startedAt` + `durationMinutes` nach Wanduhr; `remainingMinutes` rundet auf. `onOpen` (Laden, Rückkehr in den Vordergrund) setzt fort oder bricht ab (`expired`, ohne Auswertung). `onDeadline({ deadline, firedAt, visible })` gibt nur dann ab (`time`, mit Auswertung), wenn die Seite sichtbar ist und der Timer höchstens `FOREGROUND_GRACE_MS` (60 s) zu spät feuert; sonst ist die Zeit abgelaufen, ohne dass das Kind es gesehen hat. Die Timer selbst liegen in der UI, sie ruft `timeUp(visible)` und `checkTime()`.
+- *Speichern:* Der Lauf hält Entwürfe (`answers`), Position (`currentIndex`) und Verweildauer (`itemMs`) und wird bei jeder Änderung gespeichert (Promise-Kette, Reihenfolge bleibt). `attemptIndex` wird beim Start festgelegt, die Reihenfolge der Optionen bleibt so über Neuladen und Durchsehen gleich. Höchstens ein laufender Lauf je Probetest-ID (`beginRun` setzt einen laufenden fort).
+- *Ende:* `finishRun` schreibt für jedes beantwortete Item ein Attempt mit mode "probetest" in derselben Transaktion wie den Lauf; Abgabe (`submit`) und Zeitablauf (`time`) ergeben `submitted` mit `result`, „Zur Karte“ (`leave`) und abgelaufene Zeit (`expired`) `aborted` ohne `result`. Eine Kurzantwort bekommt ihr Attempt erst mit der Selbsteinschätzung beim Durchsehen (`rateShortAnswer`, einmal, auch später über „Auswertung ansehen“), weil ein gespeichertes Kurzantwort-Attempt seine Wertung trägt.
+- *Auswertung:* `scoreRun` zählt je Bereich und gesamt `solved`/`total`/`pending`. Gelöst ist ein richtiges Item oder eine Kurzantwort mit „Getroffen“; Teils, Noch nicht und offene Items zählen nicht (keine halben Striche); eingetragene, noch nicht eingeschätzte Kurzantworten sind `pending`. Kein Prozent wird gespeichert.
+- Probetest-Attempts verändern weder Mastery noch Fehlerkiste noch Tagesziel (`updateMastery` und `todayProgress` filtern den Modus, `finishRun` ruft die Fehlerkiste nicht). Der Scheduler sieht sie wie alle Attempts (zuletzt gesehen, `attemptIndex`).
+- *Intro:* `introState` liefert den laufenden Lauf, den letzten abgegebenen (für „Auswertung ansehen“) und `doneBefore` (nur nach einem abgegebenen Lauf).
+- *Vorlesen:* `probetestReadAloud(fach, item)` mit `PROBETEST_READ_ALOUD` (Mathe `all`, Deutsch `not-reading-texts`); der Schalter für Deutsch ist vorgesehen, aber nicht verdrahtet.
 
 **Vorlesen.** Jeder Item-Screen hat einen Button; Text = `presentation.itemSpeech`: `readAloud ?? stimulus.text + stimulus.assetAlt + prompt`, danach „Antworten: …“ in der Reihenfolge auf dem Bildschirm (seit 2026-10-14, für alle Formate einschließlich single-choice; number-input hängt nichts an). match liest erst die Zeilen, dann die Karten als Antworten; order die aktuelle Reihenfolge; cloze-select den Satz mit „Lücke 1“ und je Lücke ihre Optionen; mark-in-text und find-error die Einheiten mit Komma, ohne `speakable()` (sonst würde „100 200“ zu „100200“); short-answer den Tipp. Beim Vergleichen liest das Band Frage, Musterlösung und Kernpunkte (`comparisonSpeech`). Rechtschreib-Items bekommen keine Absicherung, Groß-/Kleinschreibung hört man nicht. Mischen und Vorlesen nutzen dieselben Funktionen (`domain/presentation`: `presentedOptions`, `presentedMatch`, `presentedOrder`, `presentedGapOptions`). Im Probetest deaktiviert, außer bei Mathe (Lesehürde ist dort nicht Testgegenstand – Entscheidung Markus, Default: an).
 

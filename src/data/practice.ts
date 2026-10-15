@@ -50,7 +50,9 @@ export interface PracticeItem {
 }
 
 /** The first learner on this device; created without a name on the very first start. */
-export async function ensureLearner(deps: PracticeDeps): Promise<Learner> {
+export async function ensureLearner(
+  deps: Pick<PracticeDeps, 'repos' | 'now' | 'newId'>,
+): Promise<Learner> {
   const { repos } = deps;
   return repos.transaction(async () => {
     const [existing] = await repos.learners.list();

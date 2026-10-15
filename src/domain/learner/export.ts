@@ -1,5 +1,5 @@
 // Export/import of all learner data (ARCHITECTURE.md §4). The export format is the future
-// sync format, so it is versioned; parseImport migrates older versions once they exist.
+// sync format, so it is versioned; parseImport migrates older versions step by step.
 
 import { z } from 'zod';
 import { formatIssuePath } from '../content';
@@ -19,7 +19,8 @@ import {
   type Session,
 } from './model';
 
-export const EXPORT_VERSION = '1' as const;
+/** 2 since 2026-10-15: ProbetestRun has status, drafts and self-ratings, a result without percent. */
+export const EXPORT_VERSION = '2' as const;
 
 /** Everything stored on the device for one learner. */
 export interface LearnerData {
@@ -83,7 +84,9 @@ export function parseImport(json: unknown): ImportResult {
 
   const version =
     typeof raw === 'object' && raw !== null ? (raw as { version?: unknown }).version : undefined;
-  if (version !== EXPORT_VERSION) {
+  if (version === '1') {
+    raw = migrateV1(raw as Record<string, unknown>);
+  } else if (version !== EXPORT_VERSION) {
     const message =
       typeof version === 'string' && Number(version) > Number(EXPORT_VERSION)
         ? 'Die Datei stammt aus einer neueren Version der App. Bitte aktualisiere die App.'
@@ -109,6 +112,58 @@ export function parseImport(json: unknown): ImportResult {
     data: { learner, attempts, mastery, reviews, sessions, probetestRuns, collectibles },
     exportedAt,
   };
+}
+
+type Raw = Record<string, unknown>;
+
+/**
+ * v1 → v2: v1 runs only knew submittedAt and a result with `correct` (halves possible) and
+ * `percent`. A run with submittedAt becomes "submitted"; one without was never finished and
+ * becomes "aborted" (time is long up). Solved counts are rounded down (Teils is not solved).
+ * Malformed input is copied as it is; the v2 schema reports it afterwards.
+ */
+function migrateV1(file: Raw): Raw {
+  const runs = Array.isArray(file.probetestRuns) ? (file.probetestRuns as unknown[]) : [];
+  return {
+    ...file,
+    version: EXPORT_VERSION,
+    probetestRuns: runs.map((entry) => {
+      if (typeof entry !== 'object' || entry === null) return entry;
+      const { submittedAt, result, ...run } = entry as Raw;
+      const submitted = typeof submittedAt === 'string';
+      const migrated: Raw = {
+        ...run,
+        status: submitted ? 'submitted' : 'aborted',
+        endedAt: submitted ? submittedAt : file.exportedAt,
+        endReason: submitted ? 'submit' : 'expired',
+        currentIndex: 0,
+        answers: {},
+        itemMs: {},
+        attemptIndex: {},
+        ratings: {},
+      };
+      if (submitted) migrated.result = migrateV1Result(result);
+      return migrated;
+    }),
+  };
+}
+
+function migrateV1Result(result: unknown): Raw {
+  const total = { solved: 0, total: 0, pending: 0 };
+  const byBereich: Raw = {};
+  const v1 = (result as { byBereich?: unknown } | undefined)?.byBereich;
+  if (typeof v1 === 'object' && v1 !== null) {
+    for (const [bereich, score] of Object.entries(v1 as Raw)) {
+      const { correct, total: count } = (score ?? {}) as { correct?: unknown; total?: unknown };
+      const solved = typeof correct === 'number' ? Math.floor(correct) : correct;
+      byBereich[bereich] = { solved, total: count, pending: 0 };
+      if (typeof solved === 'number' && typeof count === 'number') {
+        total.solved += solved;
+        total.total += count;
+      }
+    }
+  }
+  return { byBereich, total };
 }
 
 function fail(errors: ImportError[]): ImportResult {

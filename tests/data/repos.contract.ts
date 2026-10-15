@@ -124,6 +124,18 @@ export function repositoryContract(
       expect(await repos.probetestRuns.get('run-1')).toEqual(run);
     });
 
+    it("overwrites a probetest run on put and lists only the learner's runs", async () => {
+      const run = data.probetestRuns[0]!;
+      const { endedAt: _e, endReason: _r, result: _res, ...rest } = run;
+      await repos.probetestRuns.put({ ...rest, status: 'running', answers: {} });
+      await repos.probetestRuns.put({ ...run, id: 'other', learnerId: 'learner-2' });
+      await repos.probetestRuns.put(run);
+      expect(await repos.probetestRuns.get('run-1')).toEqual(run);
+      expect((await repos.probetestRuns.listByLearner(learnerId)).map((p) => p.id)).toEqual([
+        'run-1',
+      ]);
+    });
+
     it('stores collectibles per learner', async () => {
       await repos.collectibles.put({ learnerId, unlocked: ['zo-1'] });
       await repos.collectibles.put({ learnerId, unlocked: ['zo-1', 'zo-2'] });

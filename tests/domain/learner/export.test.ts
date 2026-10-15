@@ -23,7 +23,7 @@ function exportJson(
 }
 
 describe('serialize', () => {
-  it('writes version 1 with all collections', () => {
+  it('writes version 2 with all collections', () => {
     const file = serialize(sampleLearnerData(), EXPORTED_AT);
     expect(file.version).toBe(EXPORT_VERSION);
     expect(file.exportedAt).toBe(EXPORTED_AT);
@@ -42,6 +42,54 @@ describe('serialize', () => {
 });
 
 describe('parseImport', () => {
+  it('migrates a version 1 file: runs get a status, results lose percent and halves', () => {
+    const v2 = serialize(sampleLearnerData(), EXPORTED_AT);
+    const {
+      result: _r,
+      endedAt: _e,
+      endReason: _x,
+      status: _s,
+      currentIndex: _c,
+      answers: _a,
+      itemMs: _m,
+      attemptIndex: _i,
+      ratings: _t,
+      ...base
+    } = v2.probetestRuns[0]!;
+    const v1 = {
+      ...v2,
+      version: '1',
+      probetestRuns: [
+        {
+          ...base,
+          submittedAt: '2026-10-11T09:40:00.000Z',
+          result: { byBereich: { 'zahlen-operationen': { correct: 1.5, total: 3 } }, percent: 50 },
+        },
+        { ...base, id: 'run-2', attemptIds: [] },
+      ],
+    };
+    const result = parseImport(JSON.stringify(v1));
+    if (!result.ok) throw new Error(JSON.stringify(result.errors));
+    const [submitted, unfinished] = result.data.probetestRuns;
+    expect(submitted).toMatchObject({
+      status: 'submitted',
+      endedAt: '2026-10-11T09:40:00.000Z',
+      endReason: 'submit',
+      answers: {},
+      ratings: {},
+      result: {
+        byBereich: { 'zahlen-operationen': { solved: 1, total: 3, pending: 0 } },
+        total: { solved: 1, total: 3, pending: 0 },
+      },
+    });
+    expect(unfinished).toMatchObject({
+      status: 'aborted',
+      endReason: 'expired',
+      endedAt: EXPORTED_AT,
+    });
+    expect(unfinished).not.toHaveProperty('result');
+  });
+
   it('roundtrip: serialize → JSON → parseImport returns the same data', () => {
     const data = sampleLearnerData();
     const result = parseImport(JSON.stringify(serialize(data, EXPORTED_AT)));
@@ -61,13 +109,13 @@ describe('parseImport', () => {
   it('rejects a missing or unknown version', () => {
     expect(errorsOf(parseImport('{}'))[0]?.path).toBe('version');
     expect(errorsOf(parseImport('[]'))[0]?.path).toBe('version');
-    expect(errorsOf(parseImport(exportJson((f) => (f.version = '0' as '1'))))[0]?.message).toMatch(
+    expect(errorsOf(parseImport(exportJson((f) => (f.version = '0' as '2'))))[0]?.message).toMatch(
       /keine gültige/,
     );
   });
 
   it('explains files from a newer app version', () => {
-    expect(errorsOf(parseImport(exportJson((f) => (f.version = '2' as '1'))))).toEqual([
+    expect(errorsOf(parseImport(exportJson((f) => (f.version = '3' as '2'))))).toEqual([
       {
         path: 'version',
         message: 'Die Datei stammt aus einer neueren Version der App. Bitte aktualisiere die App.',

@@ -62,13 +62,39 @@ describe('learner entity schemas', () => {
     ]);
   });
 
-  it('ProbetestRun: percent within 0–100, result optional', () => {
+  it('ProbetestRun: status, end and result fit together', () => {
     const run = data.probetestRuns[0]!;
-    expect(
-      paths(probetestRunSchema.safeParse({ ...run, result: { ...run.result!, percent: 120 } })),
-    ).toEqual(['result.percent']);
-    const { result: _result, submittedAt: _submittedAt, ...running } = run;
+    const { endedAt: _e, endReason: _r, result: _res, ...rest } = run;
+    const running = { ...rest, status: 'running' as const };
     expect(probetestRunSchema.safeParse(running).success).toBe(true);
+    expect(paths(probetestRunSchema.safeParse({ ...running, result: run.result }))).toEqual([
+      'status',
+    ]);
+    expect(paths(probetestRunSchema.safeParse({ ...run, endReason: 'leave' }))).toEqual([
+      'endReason',
+    ]);
+    expect(paths(probetestRunSchema.safeParse({ ...rest, status: 'submitted' }))).toEqual([
+      'endedAt',
+    ]);
+    const aborted = { ...rest, status: 'aborted', endedAt: run.endedAt, endReason: 'expired' };
+    expect(probetestRunSchema.safeParse(aborted).success).toBe(true);
+    expect(paths(probetestRunSchema.safeParse({ ...aborted, result: run.result }))).toEqual([
+      'result',
+    ]);
+  });
+
+  it('ProbetestRun: no percent, no half solved items, ratings are 1, 0.5 or 0', () => {
+    const run = data.probetestRuns[0]!;
+    const total = { solved: 0.5, total: 1, pending: 0 };
+    expect(
+      paths(probetestRunSchema.safeParse({ ...run, result: { ...run.result!, total } })),
+    ).toEqual(['result.total.solved']);
+    expect(
+      paths(probetestRunSchema.safeParse({ ...run, result: { ...run.result!, percent: 50 } })),
+    ).toEqual(['result']);
+    expect(paths(probetestRunSchema.safeParse({ ...run, ratings: { 'm-zo-3-002': 0.7 } }))).toEqual(
+      ['ratings.m-zo-3-002'],
+    );
   });
 
   it('timestamps must be ISO date-times', () => {

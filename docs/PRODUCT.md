@@ -106,7 +106,13 @@ Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
    - Bereiche, die erst später Content bekommen, starten auf Niveau 1.
 2. **Üben** (Kern): Kind wählt Bereich (oder "Überrasch mich"), bekommt Items auf aktuellem Niveau, sofortiges Feedback, Erklärung. Session-Ziel: 8–10 Items, dann Pause-Vorschlag. Wer heute schon im Gebiet war und die Runde nicht beendet hat, wählt beim Betreten "Fortsetzen" oder "Neu anfangen" (ohne Rückfrage: Antworten, Tagesziel, Niveau und Entdeckungen bleiben, nur die Zählung "x von 10" beginnt neu).
 3. **Fehlerkiste**: falsch beantwortete Items kommen nach 1 Tag und nach 3 Tagen wieder (einfaches Intervall, kein SRS-Algorithmus im MVP).
-4. **Probetest**: 45 Min., Timer, gemischte Bereiche, Niveau-Verteilung wie Original, am Ende Auswertung pro Bereich. Zusätzlich **als PDF druckbar** (Aufgaben + separates Lösungsblatt), weil der echte Test auf Papier stattfindet. Empfehlung in der App: höchstens 2 Probetests pro Woche.
+4. **Probetest**: 45 Min., Timer, gemischte Bereiche, Niveau-Verteilung wie Original, am Ende Auswertung pro Bereich. Zusätzlich **als PDF druckbar** (Aufgaben + separates Lösungsblatt), weil der echte Test auf Papier stattfindet. Empfehlung in der App: höchstens 2 Probetests pro Woche. Festlegungen (2026-10-15):
+   - *Einstieg:* eine ruhige Zeile „Probetest Mathe“ unter der Insel des Fachs, nur wenn es einen Probetest gibt. Intro: „45 Minuten, wie in der Schule. Du kannst vor und zurück.“ mit Vorlesen und „Starten“. Nach einem abgegebenen Lauf zusätzlich „Du hast diesen Probetest schon gemacht.“ und leise „Auswertung ansehen“ (dort kann die Selbsteinschätzung nachgeholt werden). Ein zweiter Durchlauf ist erlaubt.
+   - *Zeit:* verbleibende Minuten rechts im Kopf, ohne Sekunden, kein Rot, keine Animation; ab 5 Minuten ersetzt „Noch 5 Minuten“ … „Noch 1 Minute“ die Anzeige. Die Zeit läuft nach Wanduhr ab Start, auch über Neuladen und Hintergrund. Endet sie, während die App genutzt wird, folgt die Auswertung; war die App weg, ist der Lauf ohne Auswertung vorbei und das Intro zeigt sich normal. Keine Pause.
+   - *Ablauf:* kein Feedback, kein Band, keine „Falle“. Jedes Item hat „Zurück“ und „Weiter“, der Kopf links leise „Übersicht“, mittig „7 von 24“. „Weiter“ beim letzten Item führt in die Übersicht (Wegstriche antippbar, beantwortet/offen). „Abgeben“ nur dort, mit Rückfrage bei offenen Items. „Zur Karte“ dort fragt „Dann ist der Probetest vorbei.“ und bricht ab. Kurzantworten werden nur eingegeben. Vorlesen ist in Mathe an; Deutsch schaltet es für Lesetexte ab.
+   - *Auswertung:* je Bereich „gelöst von gesamt“ als Wegstriche und Zahl, darunter gesamt; kein Prozent, keine Note, kein Vergleich. Offene Items zählen als nicht gelöst. Eingetragene Kurzantworten erscheinen als leerer Strich mit „N Aufgaben schaust du dir beim Durchsehen an“; nach der Selbsteinschätzung zählt „Getroffen“ als gelöst, „Teils“ und „Noch nicht“ nicht. „Durchsehen“ zeigt jedes Item mit eigener Antwort, Lösung und dem normalen Band inkl. „Falle“, mit „Zurück“, „Weiter“ und leise „Zur Auswertung“.
+   - Probetest-Antworten verändern weder Niveau noch Fehlerkiste noch Tagesziel.
+   - *Druck:* `/probetest/:id/print`, nur per Adresse, kein Link auf Kinder-Screens: Aufgabenblatt wie ein Papiertest, Lösungsblatt auf eigener Seite, A4 hoch.
 
 ### 5.5 Adaptivität (MVP-Variante, bewusst simpel)
 
@@ -158,7 +164,7 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 ## 8. Eltern-Sicht (MVP, minimal)
 
 - Übersicht: Karte mit Niveau je Bereich, Anzahl geübter Items, letzte Probetest-Auswertung
-- Probetest-Auswertung: Prozent je Bereich, Hinweis welche Bereiche unter 50 % liegen – ohne Schulartprognose
+- Probetest-Auswertung: Prozent je Bereich (bei der Anzeige aus gelöst/gesamt berechnet, nicht gespeichert, seit 2026-10-15), Hinweis welche Bereiche unter 50 % liegen – ohne Schulartprognose
 - Einstellungen: Daten löschen, Export/Import des Fortschritts als Datei (Gerätewechsel)
 - Stand 2026-10-14: gebaut ist nur "Alles löschen" mit Rückfrage ("Wirklich alles löschen? Das kann nicht rückgängig gemacht werden."); danach zeigt die Karte wieder das Einstieg-Angebot. Übersicht und Export/Import folgen.
 - Klartext-Hinweis: "Diese App ersetzt keine Beratung durch die Lehrkraft und sagt kein Testergebnis voraus."
