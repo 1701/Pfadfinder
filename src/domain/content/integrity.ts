@@ -21,7 +21,7 @@ import {
   type Fach,
 } from './taxonomy';
 import type { Item, Niveau, Probetest, ReadingText } from './types';
-import { splitWords } from './units';
+import { splitSentences, splitWords } from './units';
 
 export type Severity = 'error' | 'warning';
 
@@ -63,6 +63,12 @@ export interface ValidateContentResult {
 }
 
 const WORD_COUNT_TOLERANCE = 10;
+/**
+ * mark-in-text beside a reading text (1.0.11): the text box takes part of the screen, so the
+ * passage to mark stays short. Measured in task 9: a whole paragraph of 5 sentences was the
+ * tightest screen in landscape.
+ */
+export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
 
@@ -210,6 +216,20 @@ export function validateContent(
     if ((item.format === 'single-choice' || item.format === 'multi-choice') && !item.payload.keepOrder) {
       if (item.payload.options.every((o) => LABEL_OPTION.test(o.text.trim()))) {
         warn(file, 'Optionen sind Bildbeschriftungen (A, B, …): keepOrder setzen?', item.id, 'payload.keepOrder');
+      }
+    }
+
+    if (item.format === 'mark-in-text' && textRef !== undefined) {
+      const { maxSentences, maxChars } = MARK_IN_TEXT_WITH_TEXT;
+      const sentences = splitSentences(item.payload.text).length;
+      const chars = item.payload.text.length;
+      if (sentences > maxSentences || chars > maxChars) {
+        warn(
+          file,
+          `mark-in-text mit Lesetext: höchstens ${maxSentences} Sätze und ${maxChars} Zeichen, hier ${sentences} Sätze und ${chars} Zeichen`,
+          item.id,
+          'payload.text',
+        );
       }
     }
 

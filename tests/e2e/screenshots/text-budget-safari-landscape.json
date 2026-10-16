@@ -5,34 +5,72 @@
     "height": 660
   },
   "current": {
-    "slack": 18,
-    "at": "mark-in-text noch-nicht"
+    "slack": 25,
+    "at": "order noch-nicht"
   },
-  "box": {
-    "width": 332,
-    "height": 576
+  "formats": {
+    "single-choice": {
+      "box": {
+        "width": 332,
+        "height": 576
+      },
+      "slack": 92,
+      "at": "noch-nicht"
+    },
+    "mark-in-text": {
+      "box": {
+        "width": 332,
+        "height": 576
+      },
+      "slack": 97,
+      "at": "noch-nicht"
+    },
+    "order": {
+      "box": {
+        "width": 332,
+        "height": 576
+      },
+      "slack": 25,
+      "at": "noch-nicht"
+    },
+    "multi-choice": {
+      "box": {
+        "width": 332,
+        "height": 576
+      },
+      "slack": 36,
+      "at": "richtig"
+    },
+    "short-answer": {
+      "box": {
+        "width": 332,
+        "height": 576
+      },
+      "slack": 48,
+      "at": "noch-nicht"
+    }
   },
-  "token": "--spacing-reading-column",
+  "token": "--reading-column",
   "sweep": {
     "34%": {
-      "slack": 18,
-      "at": "mark-in-text noch-nicht"
+      "slack": 25,
+      "at": "order noch-nicht"
     },
     "36%": {
-      "slack": -6,
-      "at": "mark-in-text richtig"
+      "slack": -2,
+      "at": "order noch-nicht"
     },
     "38%": {
-      "slack": -9,
-      "at": "multi-choice noch-nicht"
+      "slack": -31,
+      "at": "order noch-nicht"
     },
     "40%": {
       "slack": -56,
       "at": "multi-choice noch-nicht"
     },
     "42%": {
-      "slack": -67,
-      "at": "mark-in-text richtig"
+      "slack": -56,
+      "at": "multi-choice noch-nicht"
     },
     "44%": {
       "slack": -158,
@@ -75,31 +113,31 @@
     },
     "mark-in-text": {
       "antworten": {
-        "34%": 74,
-        "36%": 74,
-        "38%": 74,
-        "40%": 74,
-        "42%": 39,
-        "44%": 39,
-        "46%": 15
+        "34%": 153,
+        "36%": 153,
+        "38%": 118,
+        "40%": 118,
+        "42%": 118,
+        "44%": 118,
+        "46%": 95
       },
       "richtig": {
-        "34%": 20,
-        "36%": -6,
-        "38%": -6,
-        "40%": -6,
-        "42%": -67,
-        "44%": -67,
-        "46%": -91
+        "34%": 99,
+        "36%": 73,
+        "38%": 38,
+        "40%": 38,
+        "42%": 12,
+        "44%": 12,
+        "46%": -11
       },
       "noch-nicht": {
-        "34%": 18,
-        "36%": 18,
-        "38%": -6,
-        "40%": -6,
-        "42%": -41,
-        "44%": -71,
-        "46%": -94
+        "34%": 97,
+        "36%": 97,
+        "38%": 38,
+        "40%": 38,
+        "42%": 38,
+        "44%": 8,
+        "46%": -15
       }
     },
     "order": {
@@ -122,12 +160,12 @@
         "46%": -49
       },
       "noch-nicht": {
-        "34%": 260,
-        "36%": 234,
-        "38%": 234,
-        "40%": 234,
-        "42%": 215,
-        "44%": 159,
+        "34%": 25,
+        "36%": -2,
+        "38%": -31,
+        "40%": -31,
+        "42%": -50,
+        "44%": -106,
         "46%": -153
       }
     },

@@ -12,6 +12,7 @@ import {
   onDeadline,
   onOpen,
   probetestReadAloud,
+  probetestTextReadAloud,
   rateShortAnswer,
   remainingMinutes,
   scoreRun,
@@ -310,5 +311,17 @@ describe('probetestReadAloud', () => {
     expect(probetestReadAloud('mathe', numberInput)).toBe(true);
     expect(probetestReadAloud('deutsch', { stimulus: { textRef: 't-sach-001' } })).toBe(false);
     expect(probetestReadAloud('deutsch', {})).toBe(true);
+  });
+});
+
+describe('probetestTextReadAloud', () => {
+  const item = { stimulus: { textRef: 't-sach-001' } };
+  it('keeps the text box of a Deutsch reading item silent, whatever the text allows', () => {
+    expect(probetestTextReadAloud('deutsch', item, { readAloud: true })).toBe(false);
+  });
+
+  it('follows the text where the Fach reads everything aloud', () => {
+    expect(probetestTextReadAloud('mathe', item, { readAloud: true })).toBe(true);
+    expect(probetestTextReadAloud('mathe', item, { readAloud: false })).toBe(false);
   });
 });

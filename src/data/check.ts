@@ -3,7 +3,7 @@
 // Entdeckungen are stored in one transaction. Leaving earlier leaves nothing behind
 // (decision 2026-10-14: Pause = Abbruch).
 
-import { BEREICHE_BY_FACH, type Fach, type Item } from '../domain/content';
+import { BEREICHE_BY_FACH, type Fach, type Item, type ReadingText } from '../domain/content';
 import { completeCheck, recordCheckAnswer } from '../domain/check';
 import type { Attempt } from '../domain/learner';
 import type { MasteryState } from '../domain/mastery';
@@ -27,6 +27,8 @@ export interface CheckContext {
   sessionId: string;
   startedAt: string;
   plan: CheckPlan;
+  /** Reading texts of the checked Lesen-Bereiche. */
+  texts: ReadingText[];
   answers: CheckAnswer[];
   attempts: Attempt[];
   /** Earlier answers per item id: seeds the option order. */
@@ -39,6 +41,8 @@ export interface CheckQuestion {
   /** 0-based position and number of questions, for the progress. */
   index: number;
   total: number;
+  /** The reading text the item refers to (stimulus.textRef). */
+  text?: ReadingText;
 }
 
 export interface CheckOutcome {
@@ -74,6 +78,9 @@ export async function startCheck(
   for (const a of await repos.attempts.listByLearner(learnerId)) {
     seen[a.itemId] = (seen[a.itemId] ?? 0) + 1;
   }
+  const texts = (
+    await Promise.all(bereiche.map((bereich) => deps.content.loadTexts(fach, bereich)))
+  ).flat();
   const sessionId = deps.newId();
   return {
     learnerId,
@@ -81,6 +88,7 @@ export async function startCheck(
     sessionId,
     startedAt: deps.now(),
     plan: buildCheck(fach, pool, { bereiche, seed: sessionId }),
+    texts,
     answers: [],
     attempts: [],
     seen,
@@ -91,11 +99,13 @@ export async function startCheck(
 export function currentCheckQuestion(ctx: CheckContext): CheckQuestion | null {
   const next = nextCheckItem(ctx.plan, ctx.answers);
   if (!next) return null;
+  const text = ctx.texts.find((t) => t.id === next.item.stimulus?.textRef);
   return {
     item: next.item,
     attemptIndex: ctx.seen[next.item.id] ?? 0,
     index: next.slotIndex,
     total: next.total,
+    ...(text && { text }),
   };
 }
 

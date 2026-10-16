@@ -12,6 +12,17 @@ const PAGES = [
     name: `einstieg-${zustand}`,
     path: `/dev/einstieg?zustand=${zustand}`,
   })),
+  // Reading texts (task 9) with the fixture: reading screen, an item beside the text, feedback.
+  { name: 'lesetext-lesen', path: '/dev/text/t-sach-900?zustand=lesen' },
+  { name: 'lesetext-aufgabe', path: '/dev/text/t-sach-900?item=d-lsa-2-951&zustand=antworten' },
+  {
+    name: 'lesetext-rueckmeldung',
+    path: '/dev/text/t-sach-900?item=d-lsa-1-950&zustand=noch-nicht',
+  },
+  {
+    name: 'lesetext-einstieg',
+    path: '/dev/text/t-sach-900?item=d-lsa-1-951&zustand=antworten&einstieg',
+  },
 ];
 // iPad touch/scale profile, but exactly the viewports named in the skill.
 const VIEWPORTS = [

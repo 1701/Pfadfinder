@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.11 – 2026-10-16
+- §4.7/§7 Deutsch: `mark-in-text` mit `stimulus.textRef` hat in `payload.text` höchstens 4 Sätze und 200 Zeichen. Messung Aufgabe 9 (Fixture t-sach-900, Safari quer 1024 × 660, Textspalte 34 %): ein ganzer Absatz mit 5 Sätzen war der knappste Screen (18 px Luft, bei 36 % −6 px). Der Validator warnt (`MARK_IN_TEXT_WITH_TEXT`). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.10 – 2026-10-16
 - §5 `paragraphs`: „Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen“ statt „Zeilen werden im Test nummeriert“. Grund: Der Lesetext steht in der App in einem Kasten, dessen Zeilenumbruch von Bildschirm und Ausrichtung abhängt; eine Zeilennummer wäre auf jedem Gerät eine andere. Die App zeigt die Absatznummer am linken Rand. Nur Doku, keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 
@@ -45,6 +48,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 - Umgesetzt als Zod-Schemas in `src/domain/content/schemas.ts`, geprüft durch `npm run content:validate`.
 
 ## App
+
+### 0.8.0 – 2026-10-16
+- Lesetexte beim Üben und im Einstieg: Lese-Screen vor der ersten Aufgabe eines Textes, danach der Text im Kasten neben (quer) oder über (hoch) jeder Aufgabe, mit Absatznummern, eigenem Vorlesen und ruhigem Verlauf oben und unten. Die Aufgaben eines Textes bleiben zusammen, die Scrollposition bleibt.
+- Einstieg: Lesen-Bereiche als Block aus einem Text. Fehlerkiste: Wiederholungen zeigen den Text ohne Lese-Screen.
+- Content-Loader lädt Lesetexte je Bereich (über `kind`), offline im Precache.
 
 ### 0.7.1 – 2026-10-16
 - Vorlesen wählt keine Stimme mehr, nur Deutsch: iOS nimmt die Stimme aus den Bedienungshilfen.

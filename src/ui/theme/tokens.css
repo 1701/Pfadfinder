@@ -62,9 +62,18 @@
   --spacing-asset: 200px; /* height of a task picture, landscape */
   --spacing-asset-tall: 240px; /* height of a task picture, portrait */
   --spacing-asset-reserve: 516px; /* landscape: the rest of the item screen at most; below 716px height the picture shrinks */
-  --spacing-reading-column: 34%; /* landscape: width of the reading text beside the item; 36% breaks Safari 1024×660 (task 9) */
-  --spacing-reading-box-reserve: 704px; /* portrait: the item below the reading text at most; box = screen height minus this (task 9) */
-  --spacing-reading-box-min: 160px; /* portrait: the box never gets smaller (shorter screens than the iPad's) */
+  /* Reading text beside an item (task 9, measured in tests/e2e/text-layout.spec.ts). */
+  --spacing-reading-column: 34%; /* landscape below 768px height: 36% breaks Safari 1024×660 */
+  --spacing-reading-column-tall: 42%; /* landscape from 768px height (iPad without bars) */
+  --spacing-reading-box-min: 160px; /* portrait: the box never gets smaller */
+  /* Portrait: box height = screen height minus the reserve of the item's format, the most its
+     tightest state needs with 18px air (values from text-budget-*.json). Stable within an item. */
+  --spacing-reading-reserve: 704px; /* any other format */
+  --spacing-reading-reserve-single-choice: 574px;
+  --spacing-reading-reserve-multi-choice: 654px;
+  --spacing-reading-reserve-order: 665px;
+  --spacing-reading-reserve-mark-in-text: 593px;
+  --spacing-reading-reserve-short-answer: 704px;
   --spacing-reading-fade: 48px; /* the fade at the bottom of the text box: more text below */
 
   /* Readable column width for text-heavy pages (Eltern-Bereich, dev pages). */

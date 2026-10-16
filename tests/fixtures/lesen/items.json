@@ -58,9 +58,9 @@
     "stimulus": {
       "textRef": "t-sach-900"
     },
-    "prompt": "Hier steht Absatz 2. Tippe den Satz an, der erklärt, warum Biber viel nagen müssen.",
+    "prompt": "Hier steht der Anfang von Absatz 2. Tippe den Satz an, der erklärt, warum Biber viel nagen müssen.",
     "payload": {
-      "text": "Die Zähne der Biber sind orange und sehr hart. Sie wachsen das ganze Leben lang nach. Deshalb müssen Biber viel nagen. Mit ihren Zähnen fällen sie sogar dicke Bäume. Für einen Baum, so dick wie ein Eimer, brauchen sie nur eine Nacht.",
+      "text": "Die Zähne der Biber sind orange und sehr hart. Sie wachsen das ganze Leben lang nach. Deshalb müssen Biber viel nagen. Mit ihren Zähnen fällen sie sogar dicke Bäume.",
       "unit": "sentence",
       "maxSelect": 1
     },

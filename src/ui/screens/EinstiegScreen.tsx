@@ -12,9 +12,11 @@ import { mapRegionState } from '../../domain/progress';
 import type { CheckOutcome } from '../../data/check';
 import { Button, buttonClass } from '../components/Button';
 import { Fortschritt } from '../components/Fortschritt';
+import { TextKasten } from '../components/TextKasten';
 import { Wegstriche } from '../components/Wegstriche';
 import { useCheck } from '../check-context';
 import { focusQuietly } from '../focus';
+import { useTextScroll } from '../text-scroll';
 import { SUPPORTED_FORMATS } from '../formats/supported';
 import {
   CONTINUE,
@@ -29,6 +31,7 @@ import {
 import { Blatt } from './Blatt';
 import { EinstiegErgebnis } from './EinstiegErgebnis';
 import { ItemScreen, QUIET_ACTION_CLASS } from './ItemScreen';
+import { LeseScreen } from './LeseScreen';
 
 const MANIFEST = manifest as ContentManifest;
 
@@ -135,6 +138,8 @@ function Einstieg({ fach }: { fach: Fach }) {
   const next = useCheck((s) => s.next);
   const pause = useCheck((s) => s.pause);
   const resume = useCheck((s) => s.resume);
+  const doneReading = useCheck((s) => s.doneReading);
+  const scroll = useTextScroll();
 
   useEffect(() => {
     void start(fach);
@@ -159,6 +164,22 @@ function Einstieg({ fach }: { fach: Fach }) {
       />
     );
   }
+  const text = current?.text;
+  if (status === 'reading' && current && text) {
+    return (
+      <LeseScreen
+        text={text}
+        readAloud={readAloud}
+        textReadAloud={text.readAloud}
+        progress={{ current: current.index + 1, done: current.index, total: current.total }}
+        pause={{ onPause: pause }}
+        onNext={() => {
+          scroll.reset(text.id);
+          doneReading();
+        }}
+      />
+    );
+  }
   if (status === 'answering' && current) {
     return (
       <ItemScreen
@@ -174,6 +195,16 @@ function Einstieg({ fach }: { fach: Fach }) {
         onSubmit={() => void next()}
         onNext={() => undefined}
         pause={{ onPause: pause }}
+        text={
+          text && (
+            <TextKasten
+              text={text}
+              readAloud={readAloud && text.readAloud}
+              scrollTop={scroll.of(text.id)}
+              onScroll={(top) => scroll.keep(text.id, top)}
+            />
+          )
+        }
       />
     );
   }

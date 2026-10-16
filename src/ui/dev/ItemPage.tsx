@@ -2,12 +2,14 @@
 //   answering | richtig | noch-nicht  a fixed state, for tests/e2e/layout.spec.ts
 //   vergleichen                       short-answer with the model answer shown and the rating band
 //   spielen                           playable: answer, Prüfen, feedback (tests/e2e/formate.spec.ts)
+// An item of a reading text shows its text box, like in practice (task 9).
 
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import type { Item } from '../../domain/content';
+import type { Item, ReadingText } from '../../domain/content';
 import { evaluate, parseAnswer, type Correctness } from '../../domain/evaluation';
 import { createContentLoader } from '../../content-runtime/loader';
+import { TextKasten } from '../components/TextKasten';
 import { preloadFormats } from '../formats/registry';
 import { ItemScreen } from '../screens/ItemScreen';
 import { previewAnswer } from './preview-answers';
@@ -19,6 +21,7 @@ export function ItemPage() {
   const [search] = useSearchParams();
   const state = search.get('state') ?? 'answering';
   const [item, setItem] = useState<Item | null | undefined>(undefined);
+  const [text, setText] = useState<ReadingText | null>(null);
   const [answer, setAnswer] = useState<unknown>(null);
   const [played, setPlayed] = useState<Correctness | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -27,6 +30,8 @@ export function ItemPage() {
     void preloadFormats();
     void content.loadAllItems().then((items) => {
       const found = items.find((i) => i.id === id) ?? null;
+      const textRef = found?.stimulus?.textRef;
+      if (textRef) void content.loadReadingText(textRef).then(setText);
       setItem(found);
       if (!found) return;
       if (state === 'richtig' || state === 'noch-nicht') {
@@ -38,6 +43,7 @@ export function ItemPage() {
   }, [id, state]);
 
   if (item === undefined) return null;
+  if (item?.stimulus?.textRef && !text) return null;
   if (item === null) return <p className="p-lg">Item {id} nicht gefunden.</p>;
 
   if (state === 'spielen') {
@@ -62,6 +68,7 @@ export function ItemPage() {
           setAttempt((a) => a + 1);
         }}
         pause={{ to: '/' }}
+        text={text && <TextKasten text={text} readAloud={text.readAloud} />}
       />
     );
   }
@@ -81,6 +88,7 @@ export function ItemPage() {
       onNext={() => undefined}
       pause={{ to: '/' }}
       previewComparing={state === 'vergleichen'}
+      text={text && <TextKasten text={text} readAloud={text.readAloud} />}
     />
   );
 }

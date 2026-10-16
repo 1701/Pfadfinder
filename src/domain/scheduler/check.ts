@@ -3,9 +3,10 @@
 // plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
 // rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
 // first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
-// A Lesen-Bereich takes all its items from one reading text (2026-10-16).
+// A Lesen-Bereich takes all its items from one reading text and asks them as one block, before
+// the rounds, so the items of the text follow each other (2026-10-16).
 
-import type { Bereich, Fach, Item, Niveau } from '../content';
+import { isLesenBereich, type Bereich, type Fach, type Item, type Niveau } from '../content';
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
 import { seededShuffle } from './shuffle';
 
@@ -13,7 +14,7 @@ export const CHECK_ITEM_COUNT = 12;
 
 export interface CheckPlan {
   fach: Fach;
-  /** Bereiche in the order of every round. */
+  /** Bereiche in the given order; Lesen-Bereiche are asked as blocks, the others in rounds. */
   bereiche: Bereich[];
   /** Number of questions; fixed before the first answer, so the progress never jumps. */
   total: number;
@@ -49,10 +50,22 @@ function capacity(plan: Pick<CheckPlan, 'candidates'>, bereich: Bereich): number
   return Math.min(CHECK_ITEMS_PER_BEREICH.max, plan.candidates[bereich]?.length ?? 0);
 }
 
+/** Bereich of every question of the blocks: each Lesen-Bereich with all its places in a row. */
+function blockSlots(plan: Pick<CheckPlan, 'bereiche' | 'candidates'>): Bereich[] {
+  return plan.bereiche
+    .filter(isLesenBereich)
+    .flatMap((b) => Array<Bereich>(capacity(plan, b)).fill(b));
+}
+
+/** The Bereiche asked in rounds: all but the Lesen-Bereiche. */
+function roundBereiche(plan: Pick<CheckPlan, 'bereiche'>): Bereich[] {
+  return plan.bereiche.filter((b) => !isLesenBereich(b));
+}
+
 /** Bereich of every question in rounds 1 and 2, in order. */
 function firstRounds(plan: Pick<CheckPlan, 'bereiche' | 'candidates'>): Bereich[] {
   const rounds = Array.from({ length: CHECK_ITEMS_PER_BEREICH.min }, (_, round) =>
-    plan.bereiche.filter((b) => capacity(plan, b) > round),
+    roundBereiche(plan).filter((b) => capacity(plan, b) > round),
   );
   return rounds.flat();
 }
@@ -71,9 +84,10 @@ export function buildCheck(
     candidates[bereich] = seededShuffle(oneText(items, seed), seed);
   }
   const plan = { fach, bereiche: [...options.bereiche], candidates };
+  const block = blockSlots(plan).length;
   const first = firstRounds(plan).length;
-  const third = plan.bereiche.filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
-  return { ...plan, total: Math.min(CHECK_ITEM_COUNT, first + third.length) };
+  const third = roundBereiche(plan).filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
+  return { ...plan, total: Math.min(CHECK_ITEM_COUNT, block + first + third.length) };
 }
 
 /**
@@ -103,7 +117,7 @@ function oneText(items: readonly Item[], seed: string): Item[] {
 function thirdRound(plan: CheckPlan, firstAnswers: readonly CheckAnswer[], places: number) {
   const passed = (bereich: Bereich) =>
     firstAnswers.filter((a) => a.bereich === bereich).map((a) => a.correct === true);
-  const open = plan.bereiche.filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
+  const open = roundBereiche(plan).filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
   const mixed = open.filter((b) => new Set(passed(b)).size > 1);
   const same = open.filter((b) => !mixed.includes(b));
   return [...mixed, ...same].slice(0, places);
@@ -115,10 +129,14 @@ function slotBereich(
   slotIndex: number,
 ): Bereich | undefined {
   if (slotIndex >= plan.total) return undefined;
+  const block = blockSlots(plan);
+  if (slotIndex < block.length) return block[slotIndex];
   const first = firstRounds(plan);
-  if (slotIndex < first.length) return first[slotIndex];
-  const third = thirdRound(plan, answers.slice(0, first.length), plan.total - first.length);
-  return third[slotIndex - first.length];
+  const round = slotIndex - block.length;
+  if (round < first.length) return first[round];
+  const asked = block.length + first.length;
+  const third = thirdRound(plan, answers.slice(0, asked), plan.total - asked);
+  return third[round - first.length];
 }
 
 /**

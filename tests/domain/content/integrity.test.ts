@@ -6,7 +6,7 @@ import {
   type Item,
   type ValidateContentOptions,
 } from '../../../src/domain/content';
-import { findError, numberInput, order, sachtext, shortAnswer, singleChoice, validItemsByFormat } from '../../fixtures/items';
+import { findError, markInText, numberInput, order, sachtext, shortAnswer, singleChoice, validItemsByFormat } from '../../fixtures/items';
 import { buildDeutschProbetest, buildMatheProbetest, cloneItem, toFiles } from '../../fixtures/builders';
 
 const noAssets: ValidateContentOptions = { assetExists: () => false };
@@ -166,6 +166,46 @@ describe('validateContent – reading texts', () => {
     text.wordCount = 220;
     const { issues } = run(toFiles({ items, texts: [text] }));
     expect(issues).toEqual([expect.objectContaining({ severity: 'warning', path: 'wordCount' })]);
+  });
+});
+
+describe('validateContent – mark-in-text beside a reading text (1.0.11)', () => {
+  const words = (n: number) => Array.from({ length: n }, () => 'Wort').join(' ');
+  function withText(passage: string, textRef = true) {
+    const text = structuredClone(sachtext);
+    const items = text.itemIds.map((id) => {
+      const [, , niveau, n] = id.split('-');
+      return cloneItem(findError, 'lesen-sachtext', Number(niveau) as 1 | 2 | 3, Number(n), { stimulus: { textRef: text.id } });
+    });
+    const mark = cloneItem(markInText, 'lesen-sachtext', 3, 902, {
+      ...(textRef && { stimulus: { textRef: text.id } }),
+    }) as typeof markInText;
+    mark.payload = { text: passage, unit: 'sentence', maxSelect: 1 };
+    mark.solution = { indices: [0] };
+    if (textRef) text.itemIds = [...text.itemIds, mark.id];
+    return run(toFiles({ items: [...items, mark], texts: [text] })).issues;
+  }
+
+  it('accepts 4 sentences with 200 characters', () => {
+    const passage = ['A', 'B', 'C', 'D'].map((x) => `${x}${'x'.repeat(47)}.`).join(' ').slice(0, 200);
+    expect(passage.length).toBeLessThanOrEqual(200);
+    expect(withText(passage)).toEqual([]);
+  });
+
+  it('warns at a fifth sentence', () => {
+    expect(withText('Eins. Zwei. Drei. Vier. Fünf.')).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.text', message: expect.stringContaining('5 Sätze') }),
+    ]);
+  });
+
+  it('warns above 200 characters, even in one sentence', () => {
+    const passage = `${words(45)}.`;
+    expect(passage.length).toBeGreaterThan(200);
+    expect(withText(passage)).toEqual([expect.objectContaining({ severity: 'warning', path: 'payload.text' })]);
+  });
+
+  it('does not apply to mark-in-text without a reading text', () => {
+    expect(withText('Eins. Zwei. Drei. Vier. Fünf.', false)).toEqual([]);
   });
 });
 

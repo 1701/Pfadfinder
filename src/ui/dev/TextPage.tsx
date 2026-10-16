@@ -4,21 +4,47 @@
 //   /dev/text/:id?item=<id>&zustand=antworten|richtig|noch-nicht|vergleichen
 //                                                     an item with the text box
 //   &einstieg     the Einstieg variant ("Weiter", no feedback, Pause asks)
-//   &scroll=ende  the box starts at the end of the text (no fade)
+//   &scroll=ende  the box starts at the end of the text (no fade below)
 //   &hoehe=280    portrait box height in px, &breite=42 landscape column in % (measuring only)
+//   /dev/text/:id?runde  a real practice round in lesen-sachtext with the fixture texts: the
+//                 session store on in-memory repositories (nothing stored; tests/e2e/lesen.spec.ts)
 
 import type { CSSProperties } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { LESEN_ITEMS, LESEN_TEXTS } from '../../../tests/fixtures/lesen';
+import { LESEN_ITEMS, LESEN_TEXTS, lesenContentModules } from '../../../tests/fixtures/lesen';
+import { createContentLoader } from '../../content-runtime/loader';
+import { createMemoryRepositories } from '../../data/memory/repos';
+import { createSessionStore } from '../../data/session-store';
 import { TextKasten } from '../components/TextKasten';
 import { preloadFormats } from '../formats/registry';
+import { SUPPORTED_FORMATS } from '../formats/supported';
 import { ItemScreen } from '../screens/ItemScreen';
 import { LeseScreen } from '../screens/LeseScreen';
+import { Practice } from '../screens/UebenScreen';
+import { SessionStoreContext } from '../session-context';
 import { previewAnswer } from './preview-answers';
 
 /** Beyond the end of any text: the browser stops at the end. */
 const END = 1_000_000;
+
+/** A practice round like /ueben/deutsch/lesen-sachtext, on the fixture and in memory. */
+function Runde() {
+  const [store] = useState(() =>
+    createSessionStore({
+      repos: createMemoryRepositories(),
+      content: createContentLoader(lesenContentModules()),
+      now: () => new Date().toISOString(),
+      newId: () => crypto.randomUUID(),
+      formats: SUPPORTED_FORMATS,
+    }),
+  );
+  return (
+    <SessionStoreContext value={store}>
+      <Practice fach="deutsch" bereich="lesen-sachtext" />
+    </SessionStoreContext>
+  );
+}
 
 export function TextPage() {
   const { id } = useParams();
@@ -30,10 +56,11 @@ export function TextPage() {
   const breite = search.get('breite');
   const style = {
     ...(hoehe && { '--reading-box': `${hoehe}px` }),
-    ...(breite && { '--spacing-reading-column': `${breite}%` }),
+    ...(breite && { '--reading-column': `${breite}%` }),
   } as CSSProperties;
 
   useEffect(() => void preloadFormats(), []);
+  if (search.has('runde')) return <Runde />;
 
   const itemId = search.get('item');
   const item = LESEN_ITEMS.find((i) => i.id === itemId);
@@ -45,7 +72,8 @@ export function TextPage() {
       <div style={style}>
         <LeseScreen
           text={text}
-          readAloud={text.readAloud}
+          readAloud
+          textReadAloud={text.readAloud}
           progress={{ current: 1, done: 0, total: 10 }}
           pause={{ to: '/' }}
           onNext={() => undefined}

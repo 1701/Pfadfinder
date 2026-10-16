@@ -37,8 +37,11 @@ function fakeScroll(el: HTMLElement, { scrollHeight = 1000, clientHeight = 200 }
 }
 
 describe('TextKasten', () => {
-  it('numbers the paragraphs on the left, under the title', () => {
-    render(<TextKasten text={biberText} readAloud={false} />);
+  it('numbers the paragraphs on the left; the title only on the reading screen', () => {
+    const { rerender } = render(<TextKasten text={biberText} readAloud={false} />);
+    expect(screen.queryByRole('heading')).toBeNull();
+    rerender(<TextKasten text={biberText} readAloud={false} showTitle />);
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(biberText.title);
     const region = screen.getByRole('region', { name: biberText.title });
     const paragraphs = within(region).getAllByRole('listitem');
     expect(paragraphs).toHaveLength(biberText.paragraphs.length);
@@ -59,16 +62,25 @@ describe('TextKasten', () => {
     expect(spoken(synth)).toBe([biberText.title, ...biberText.paragraphs].join(' '));
   });
 
-  it('shows the fade while text is left below, and none at the end', () => {
+  it('shows a fade below while text follows and above once scrolled', () => {
     const { container } = render(<TextKasten text={biberText} readAloud={false} />);
-    const region = screen.getByRole('region');
+    const region = screen.getByRole('region', { name: biberText.title });
+    const fades = () =>
+      [...container.querySelectorAll('[data-fade]')].map((f) => f.getAttribute('data-fade'));
     fakeScroll(region);
-    region.scrollTop = 0;
-    act(() => void region.dispatchEvent(new Event('scroll')));
-    expect(container.querySelector('[data-fade]')).not.toBeNull();
-    region.scrollTop = 800;
-    act(() => void region.dispatchEvent(new Event('scroll')));
-    expect(container.querySelector('[data-fade]')).toBeNull();
+    const scrollTo = (top: number) => {
+      region.scrollTop = top;
+      act(() => void region.dispatchEvent(new Event('scroll')));
+    };
+    scrollTo(0);
+    expect(fades()).toEqual(['below']);
+    scrollTo(400);
+    expect(fades()).toEqual(['above', 'below']);
+    scrollTo(800);
+    expect(fades()).toEqual(['above']);
+    const box = container.querySelector('[data-region="text"]')!;
+    expect(box.getAttribute('data-more-above')).toBe('true');
+    expect(box.getAttribute('data-more-below')).toBe('false');
   });
 
   it('starts at the given scroll position and reports where the child scrolled to', () => {
@@ -115,27 +127,49 @@ describe('item with a reading text', () => {
 });
 
 describe('LeseScreen', () => {
-  it('shows the whole text with Vorlesen and the yellow Weiter', async () => {
-    installSpeech();
+  it('shows "Lies den Text.", the whole text with its title and the yellow Weiter', async () => {
+    const synth = installSpeech();
     const onNext = vi.fn();
     render(
       <MemoryRouter>
         <LeseScreen
           text={biberText}
           readAloud
+          textReadAloud
           progress={{ current: 1, done: 0, total: 10 }}
           pause={{ to: '/' }}
           onNext={onNext}
         />
       </MemoryRouter>,
     );
-    expect(screen.getByRole('heading', { name: biberText.title })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Lies den Text.');
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(biberText.title);
     expect(screen.getAllByRole('listitem')).toHaveLength(biberText.paragraphs.length);
-    expect(screen.getByRole('button', { name: 'Vorlesen' })).toBeTruthy();
+    // The instruction's Vorlesen reads it with the title; the box reads the text.
+    const sheet = document.querySelector('[data-region="sheet"]') as HTMLElement;
+    await userEvent.click(within(sheet).getByRole('button', { name: 'Vorlesen' }));
+    expect(spoken(synth)).toBe(`Lies den Text. ${biberText.title}`);
+    const box = document.querySelector('[data-region="text"]') as HTMLElement;
+    await userEvent.click(within(box).getByRole('button', { name: 'Vorlesen' }));
+    expect(spoken(synth)).toBe(textSpeech(biberText));
     expect(screen.getByText(/1 von 10/)).toBeTruthy();
     const weiter = screen.getByRole('button', { name: 'Weiter' });
     expect(weiter.className).toContain('bg-signal');
     await userEvent.click(weiter);
     expect(onNext).toHaveBeenCalledOnce();
+  });
+});
+
+describe('LeseScreen without Vorlesen for the text', () => {
+  it('keeps the instruction readable, but not the text', () => {
+    installSpeech();
+    render(
+      <MemoryRouter>
+        <LeseScreen text={biberText} readAloud textReadAloud={false} onNext={() => {}} />
+      </MemoryRouter>,
+    );
+    const box = document.querySelector('[data-region="text"]') as HTMLElement;
+    expect(within(box).queryByRole('button', { name: 'Vorlesen' })).toBeNull();
+    expect(screen.getAllByRole('button', { name: 'Vorlesen' })).toHaveLength(1);
   });
 });

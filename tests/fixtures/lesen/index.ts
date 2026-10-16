@@ -18,8 +18,8 @@ import {
 import type { ContentModules } from '../../../src/content-runtime/loader';
 import { cloneItem } from '../builders';
 import { findError, sachtext } from '../items';
-import biberItemsJson from './items.json';
-import biberTextJson from './t-sach-900.json';
+import biberItemsJson from './items.json' with { type: 'json' };
+import biberTextJson from './t-sach-900.json' with { type: 'json' };
 
 export const biberText: ReadingText = readingTextSchema.parse(biberTextJson);
 export const biberItems: Item[] = z.array(itemSchema).parse(biberItemsJson);

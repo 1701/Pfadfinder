@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.10 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.11 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -141,6 +141,7 @@ solution: { gaps: Record<string, string> }                                 // { 
 payload:  { text: string; unit: "word" | "sentence"; maxSelect: number }   // Kind tippt Wort/Satz an
 solution: { indices: number[] }                                            // 0-basierte Index der Einheiten
 ```
+Mit `stimulus.textRef` (seit 1.0.11): `payload.text` hat höchstens 4 Sätze und 200 Zeichen. Neben dem Textkasten bleibt weniger Platz; ein ganzer Absatz mit 5 Sätzen war quer der knappste Screen (Messung Aufgabe 9). Der Validator warnt.
 
 ### 4.8 `find-error`
 ```ts
@@ -203,6 +204,7 @@ Regeln:
 
 **Deutsch**
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
+- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7)
 - Rechtschreibung nur mit Grundschul-Regelwissen lösbar (Verlängern, Ableiten, Silben, Wortbausteine, Groß-/Kleinschreibung); keine Ausnahmewörter als Fehlerquelle
 - `find-error` enthält pro Satz nur Fehlertypen eines Bereichs
 

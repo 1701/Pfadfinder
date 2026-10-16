@@ -6,11 +6,54 @@
   },
   "current": {
     "slack": 18,
-    "at": "short-answer vergleichen"
+    "at": "single-choice noch-nicht"
   },
-  "box": {
-    "width": 720,
-    "height": 196
+  "formats": {
+    "single-choice": {
+      "box": {
+        "width": 720,
+        "height": 326
+      },
+      "slack": 18,
+      "at": "noch-nicht",
+      "reserve": 574
+    },
+    "mark-in-text": {
+      "box": {
+        "width": 720,
+        "height": 307
+      },
+      "slack": 18,
+      "at": "noch-nicht",
+      "reserve": 593
+    },
+    "order": {
+      "box": {
+        "width": 720,
+        "height": 235
+      },
+      "slack": 18,
+      "at": "noch-nicht",
+      "reserve": 665
+    },
+    "multi-choice": {
+      "box": {
+        "width": 720,
+        "height": 246
+      },
+      "slack": 18,
+      "at": "noch-nicht",
+      "reserve": 654
+    },
+    "short-answer": {
+      "box": {
+        "width": 720,
+        "height": 196
+      },
+      "slack": 18,
+      "at": "vergleichen",
+      "reserve": 704
+    }
   },
   "token": "--reading-box",
   "sweep": {
@@ -110,46 +153,46 @@
     },
     "mark-in-text": {
       "antworten": {
-        "200px": 102,
-        "220px": 82,
-        "240px": 62,
-        "260px": 42,
-        "280px": 22,
-        "300px": 2,
-        "320px": -18,
-        "340px": -38,
-        "360px": -58,
-        "380px": -78,
-        "400px": -98,
-        "420px": -118
+        "200px": 181,
+        "220px": 161,
+        "240px": 141,
+        "260px": 121,
+        "280px": 101,
+        "300px": 81,
+        "320px": 61,
+        "340px": 41,
+        "360px": 21,
+        "380px": 1,
+        "400px": -19,
+        "420px": -39
       },
       "richtig": {
-        "200px": 48,
-        "220px": 28,
-        "240px": 8,
-        "260px": -12,
-        "280px": -32,
-        "300px": -52,
-        "320px": -72,
-        "340px": -92,
-        "360px": -112,
-        "380px": -132,
-        "400px": -152,
-        "420px": -172
+        "200px": 127,
+        "220px": 107,
+        "240px": 87,
+        "260px": 67,
+        "280px": 47,
+        "300px": 27,
+        "320px": 7,
+        "340px": -13,
+        "360px": -33,
+        "380px": -53,
+        "400px": -73,
+        "420px": -93
       },
       "noch-nicht": {
-        "200px": 46,
-        "220px": 26,
-        "240px": 6,
-        "260px": -14,
-        "280px": -34,
-        "300px": -54,
-        "320px": -74,
-        "340px": -94,
-        "360px": -114,
-        "380px": -134,
-        "400px": -154,
-        "420px": -174
+        "200px": 125,
+        "220px": 105,
+        "240px": 85,
+        "260px": 65,
+        "280px": 45,
+        "300px": 25,
+        "320px": 5,
+        "340px": -15,
+        "360px": -35,
+        "380px": -55,
+        "400px": -75,
+        "420px": -95
       }
     },
     "order": {

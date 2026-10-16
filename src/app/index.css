@@ -62,13 +62,38 @@
      box does. Landscape: the text is a column on the left, the task on the right. Portrait: the
      text is a block of fixed height above the task. Sheet, answer and band keep their rows. */
   .item-with-text {
-    grid-template-columns: var(--spacing-reading-column) minmax(0, 1fr);
+    --reading-reserve: var(--spacing-reading-reserve);
+    grid-template-columns: var(--reading-column, var(--spacing-reading-column)) minmax(0, 1fr);
     grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'head head'
       'text sheet'
       'text answer'
       'text band';
+  }
+  .item-with-text[data-format='single-choice'] {
+    --reading-reserve: var(--spacing-reading-reserve-single-choice);
+  }
+  .item-with-text[data-format='multi-choice'] {
+    --reading-reserve: var(--spacing-reading-reserve-multi-choice);
+  }
+  .item-with-text[data-format='order'] {
+    --reading-reserve: var(--spacing-reading-reserve-order);
+  }
+  .item-with-text[data-format='mark-in-text'] {
+    --reading-reserve: var(--spacing-reading-reserve-mark-in-text);
+  }
+  .item-with-text[data-format='short-answer'] {
+    --reading-reserve: var(--spacing-reading-reserve-short-answer);
+  }
+  /* From 768 px screen height the column is wider. 48rem = 768 px: media queries count rem in
+     the browser's 16 px, not in the root size; custom properties do not work here. */
+  @media (orientation: landscape) and (min-height: 48rem) {
+    .item-with-text {
+      grid-template-columns:
+        var(--reading-column, var(--spacing-reading-column-tall))
+        minmax(0, 1fr);
+    }
   }
   .item-with-text > header {
     grid-area: head;
@@ -88,18 +113,15 @@
   @media (orientation: portrait) {
     .item-with-text {
       grid-template-columns: minmax(0, 1fr);
-      /* Height follows the screen: 196 px in Safari (768×900), 320 px on the iPad (768×1024).
-         --reading-box is unset in the app; the dev page sets it to measure. */
+      /* Height follows the screen and the item's format (--reading-reserve), stable within an
+         item. --reading-box is unset in the app; the dev page sets it to measure. */
       grid-template-rows:
-        auto var(
-          --reading-box,
-          max(var(--spacing-reading-box-min), 100vh - var(--spacing-reading-box-reserve))
-        )
+        auto var(--reading-box, max(var(--spacing-reading-box-min), 100vh - var(--reading-reserve)))
         auto minmax(0, 1fr) auto;
       grid-template-rows:
         auto var(
           --reading-box,
-          max(var(--spacing-reading-box-min), 100dvh - var(--spacing-reading-box-reserve))
+          max(var(--spacing-reading-box-min), 100dvh - var(--reading-reserve))
         )
         auto minmax(0, 1fr) auto;
       grid-template-areas: 'head' 'text' 'sheet' 'answer' 'band';
@@ -122,11 +144,31 @@
         'read body';
     }
   }
-  /* "There is more below": a still fade into the sheet colour, gone at the end of the text.
-     Not decoration: it is the only hint that the box scrolls (no arrow, no motion). */
-  .text-box-fade {
+  /* Beside an item the box has no title. Landscape: Vorlesen on top, the text below over the
+     full width of the narrow column. Portrait: Vorlesen in its column, the text beside it. */
+  .text-box.text-box-untitled {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'read'
+      'body';
+  }
+  @media (orientation: portrait) {
+    .text-box.text-box-untitled {
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      grid-template-areas: 'read body';
+    }
+  }
+  /* "There is more": a still fade into the sheet colour at the bottom while text follows, and at
+     the top once the text is scrolled. Not decoration: it is the only hint that the box scrolls
+     (no arrow, no motion). */
+  .text-box-fade-below {
     height: var(--spacing-reading-fade);
     background: linear-gradient(to bottom, transparent, var(--color-surface));
+  }
+  .text-box-fade-above {
+    height: var(--spacing-reading-fade);
+    background: linear-gradient(to top, transparent, var(--color-surface));
   }
 
   /* Map (src/ui/map): a Gebiet's focus ring and press follow its outline, not its box. */

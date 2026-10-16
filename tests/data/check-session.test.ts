@@ -7,7 +7,10 @@ import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { ensureLearner } from '../../src/data/practice';
 import type { Repositories } from '../../src/data/repos';
 import { initialMastery } from '../../src/domain/mastery';
+import { createContentLoader } from '../../src/content-runtime/loader';
 import { OPEN_BEREICHE } from '../fixtures/content-state';
+import { lesenContentModules } from '../fixtures/lesen';
+import { makePool } from '../fixtures/pool';
 import { answerFor, FORMATS, testDeps } from './helpers';
 
 const MATHE_OPEN = OPEN_BEREICHE.filter((b) =>
@@ -204,5 +207,46 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     const store = createCheckStore(testDeps());
     await store.getState().start('deutsch');
     expect(store.getState()).toMatchObject({ status: 'unavailable', unavailable: 'empty' });
+  });
+});
+
+describe('Einstiegscheck with a reading text (fixture t-sach-900/901 and a synthetic rs-strategien)', () => {
+  function lesenCheckDeps() {
+    const modules = lesenContentModules();
+    const rs = makePool('deutsch', 4, ['rs-strategien']);
+    modules.items['fixtures/deutsch/rs-strategien.json'] = async () => structuredClone(rs);
+    return { ...testDeps(createMemoryRepositories()), content: createContentLoader(modules) };
+  }
+
+  it('reads the text first, then asks its items as a block with the text beside them', async () => {
+    const store = createCheckStore(lesenCheckDeps());
+    await store.getState().start('deutsch');
+    expect(store.getState().status).toBe('intro');
+    store.getState().begin();
+
+    // The Lesen block comes first: the reading screen before its first item.
+    expect(store.getState().status).toBe('reading');
+    const text = store.getState().current!.text!;
+    expect(text).toBeDefined();
+    // Pause on the reading screen goes back to it.
+    store.getState().pause();
+    expect(store.getState().status).toBe('paused');
+    store.getState().resume();
+    expect(store.getState().status).toBe('reading');
+    store.getState().doneReading();
+
+    const statuses: string[] = [];
+    const texts: (string | undefined)[] = [];
+    while (store.getState().status === 'answering' || store.getState().status === 'reading') {
+      statuses.push(store.getState().status);
+      const { item, text: shown } = store.getState().current!;
+      texts.push(shown?.id);
+      store.getState().setAnswer(answerFor(item, true));
+      await store.getState().next();
+    }
+    expect(statuses.every((s) => s === 'answering')).toBe(true);
+    expect(texts.slice(0, 3)).toEqual([text.id, text.id, text.id]);
+    expect(texts.slice(3).every((t) => t === undefined)).toBe(true);
+    expect(store.getState().status).toBe('finished');
   });
 });

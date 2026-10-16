@@ -168,6 +168,7 @@ export function ItemScreen(props: ItemScreenProps) {
         'screen-fit mx-auto grid max-w-page gap-sm px-lg py-sm',
         props.text ? 'item-with-text' : 'grid-rows-[auto_auto_1fr_auto]',
       )}
+      data-format={props.text ? item.format : undefined}
     >
       {props.header ?? <ItemKopf pause={props.pause} progress={props.progress} />}
 

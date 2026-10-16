@@ -4,9 +4,12 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
 import { bereichSchema, fachOfBereich, type Bereich, type Fach } from '../../domain/content';
 import { SESSION_GOAL } from '../../domain/practice';
+import { TextKasten } from '../components/TextKasten';
 import { useSession } from '../session-context';
+import { useTextScroll } from '../text-scroll';
 import { AbschlussScreen } from './AbschlussScreen';
 import { ItemScreen } from './ItemScreen';
+import { LeseScreen } from './LeseScreen';
 import { UebenWahl } from './UebenWahl';
 
 function parseParams(fach?: string, bereich?: string): { fach: Fach; bereich: Bereich } | null {
@@ -36,7 +39,8 @@ export function UebenScreen() {
   return <Practice key={target.bereich} {...target} />;
 }
 
-function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
+/** A practice round in one Bereich; also used by the dev page /dev/text with the fixture. */
+export function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   const startPractice = useSession((s) => s.startPractice);
   const leave = useSession((s) => s.leave);
   const status = useSession((s) => s.status);
@@ -51,6 +55,8 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
   const next = useSession((s) => s.next);
   const resume = useSession((s) => s.resume);
   const restart = useSession((s) => s.restart);
+  const doneReading = useSession((s) => s.doneReading);
+  const scroll = useTextScroll();
 
   useEffect(() => {
     void startPractice(fach, bereich);
@@ -72,6 +78,22 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
     return (
       <AbschlussScreen count={today?.count ?? answered} bereich={bereich} readAloud={readAloud} />
     );
+  const { text } = current ?? {};
+  if (status === 'reading' && text) {
+    return (
+      <LeseScreen
+        text={text}
+        readAloud={readAloud}
+        textReadAloud={text.readAloud}
+        progress={{ current: answered + 1, done: answered, total: SESSION_GOAL }}
+        pause={{ to: '/' }}
+        onNext={() => {
+          scroll.reset(text.id);
+          doneReading();
+        }}
+      />
+    );
+  }
   if (!current || (status !== 'answering' && status !== 'checking' && status !== 'feedback')) {
     return <main className="screen-fit" aria-busy="true" />;
   }
@@ -94,6 +116,16 @@ function Practice({ fach, bereich }: { fach: Fach; bereich: Bereich }) {
       onSubmit={(given) => void submit(given)}
       onNext={() => void next()}
       pause={{ to: '/' }}
+      text={
+        text && (
+          <TextKasten
+            text={text}
+            readAloud={readAloud && text.readAloud}
+            scrollTop={scroll.of(text.id)}
+            onScroll={(top) => scroll.keep(text.id, top)}
+          />
+        )
+      }
     />
   );
 }
