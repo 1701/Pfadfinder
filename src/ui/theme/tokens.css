@@ -36,6 +36,8 @@
   --text-body--line-height: 1.45;
   --text-option: 1.2222rem; /* 22px: answer options, digit pad */
   --text-option--line-height: 1.35;
+  --text-reading: 1.2222rem; /* 22px like the stimulus: reading texts (TextKasten) */
+  --text-reading--line-height: 1.6; /* more air than running text: the child finds the line again */
   --text-prompt: 1.5556rem; /* 28px: the task itself */
   --text-prompt--line-height: 1.25;
   --text-heading: 1.7778rem; /* 32px */
@@ -60,9 +62,15 @@
   --spacing-asset: 200px; /* height of a task picture, landscape */
   --spacing-asset-tall: 240px; /* height of a task picture, portrait */
   --spacing-asset-reserve: 516px; /* landscape: the rest of the item screen at most; below 716px height the picture shrinks */
+  --spacing-reading-column: 34%; /* landscape: width of the reading text beside the item; 36% breaks Safari 1024×660 (task 9) */
+  --spacing-reading-box-reserve: 704px; /* portrait: the item below the reading text at most; box = screen height minus this (task 9) */
+  --spacing-reading-box-min: 160px; /* portrait: the box never gets smaller (shorter screens than the iPad's) */
+  --spacing-reading-fade: 48px; /* the fade at the bottom of the text box: more text below */
 
   /* Readable column width for text-heavy pages (Eltern-Bereich, dev pages). */
   --container-page: 60rem;
+  /* The reading screen: about 60 characters per line. */
+  --container-reading: 44rem;
 
   /* Radii carry meaning: sheets are square like a map, controls are round to the touch. */
   --radius-*: initial;

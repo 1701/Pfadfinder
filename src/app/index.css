@@ -58,6 +58,77 @@
     }
   }
 
+  /* Item with a reading text (ItemScreen `text`, task 9). The page never scrolls, only the text
+     box does. Landscape: the text is a column on the left, the task on the right. Portrait: the
+     text is a block of fixed height above the task. Sheet, answer and band keep their rows. */
+  .item-with-text {
+    grid-template-columns: var(--spacing-reading-column) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'head head'
+      'text sheet'
+      'text answer'
+      'text band';
+  }
+  .item-with-text > header {
+    grid-area: head;
+  }
+  .item-with-text > [data-region='text'] {
+    grid-area: text;
+  }
+  .item-with-text > [data-region='sheet'] {
+    grid-area: sheet;
+  }
+  .item-with-text > [data-region='answer'] {
+    grid-area: answer;
+  }
+  .item-with-text > [data-region='band'] {
+    grid-area: band;
+  }
+  @media (orientation: portrait) {
+    .item-with-text {
+      grid-template-columns: minmax(0, 1fr);
+      /* Height follows the screen: 196 px in Safari (768×900), 320 px on the iPad (768×1024).
+         --reading-box is unset in the app; the dev page sets it to measure. */
+      grid-template-rows:
+        auto var(
+          --reading-box,
+          max(var(--spacing-reading-box-min), 100vh - var(--spacing-reading-box-reserve))
+        )
+        auto minmax(0, 1fr) auto;
+      grid-template-rows:
+        auto var(
+          --reading-box,
+          max(var(--spacing-reading-box-min), 100dvh - var(--spacing-reading-box-reserve))
+        )
+        auto minmax(0, 1fr) auto;
+      grid-template-areas: 'head' 'text' 'sheet' 'answer' 'band';
+    }
+  }
+
+  /* The text box: Vorlesen top left. Landscape: title beside it, the text below over the full
+     width of the narrow column. Portrait: Vorlesen keeps its column, title and text beside it. */
+  .text-box {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      'read title'
+      'body body';
+  }
+  @media (orientation: portrait) {
+    .text-box {
+      grid-template-areas:
+        'read title'
+        'read body';
+    }
+  }
+  /* "There is more below": a still fade into the sheet colour, gone at the end of the text.
+     Not decoration: it is the only hint that the box scrolls (no arrow, no motion). */
+  .text-box-fade {
+    height: var(--spacing-reading-fade);
+    background: linear-gradient(to bottom, transparent, var(--color-surface));
+  }
+
   /* Map (src/ui/map): a Gebiet's focus ring and press follow its outline, not its box. */
   .map-region {
     outline: none;

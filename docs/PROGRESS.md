@@ -2,6 +2,22 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-16 – Aufgabe 9, Teil B: Layout-Budget und Wireframes (wartet auf Freigabe)
+- **Gebaut (Messgerüst, bleibt für Teil C):** `TextKasten` (Absatznummern am Rand, `text-reading` 22 px/1,6, eigener Vorlesen mit `textSpeech`, Verlauf unten nur solange Text folgt, fokussierbar), `LeseScreen`, `ItemScreen` mit `text` (quer Spalte links, hoch Block oben, `.item-with-text`), `ItemKopf`. Dev-Seite `/dev/text/:id?item=…&zustand=…` mit dem Fixture, nur im Dev-Build (`check-bundle` sucht den Fixture-Titel).
+- **Gemessen** (`text-layout.spec`, vier Viewports, `text-budget-*.json`): hoch kostet jedes Pixel Kasten genau ein Pixel Luft; Grenze short-answer „vergleichen“. Quer springt die Luft mit den Umbrüchen; Grenze mark-in-text mit ganzem Absatz. Vorschlag: hoch `100dvh − 704 px` (196 px Safari, 320 px iPad), quer fest 34 % (36 % bricht Safari quer um 6 px). Knappste Luft damit überall 18 px oder mehr.
+- **Verworfen (gemessen):** Band quer über beide Spalten, bringt nur 38 % statt 34 % und kürzt den Kasten bei der Rückmeldung.
+- **Befund:** `sr-only`-Absatznamen im Scroll-Kasten verlängerten die Seite um 238 px, bis der Scroller `relative` bekam.
+- **Wireframes:** privates Artefakt mit 10 Screens quer und hoch (Safari und iPad) und 8 Fragen zur Freigabe.
+- **CI:** steht im nächsten Eintrag nach dem Push. Lokal grün: `npm run check` (849 Tests), `text-layout` in vier Viewports.
+
+## 2026-10-16 – Aufgabe 9, Schritt 0 und Teil A: Schema 1.0.10, Lesetexte in Domain und Loader
+- **Schema 1.0.10 (nur Doku):** §5 „Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen“. CHANGELOG.
+- **Gebaut:** `pickNext` hält einen laufenden Text zusammen (`sessionItemIds`), nächstes Niveau zuerst; `buildCheck` nimmt die 2–3 Items eines Lesen-Bereichs aus einem Text (Seed); `readingStep` (Lese-Screen vor dem ersten Item eines Textes in der Runde, nie bei Wiederholungen); Session-Store mit Status `reading`, `doneReading()`, `shownTextIds` nur im Speicher; Zeit des Items erst ab „Weiter“. `loadTexts` ordnet über `kind` zu (Freigabe), `createContentLoader(modules)` für Fixtures; `check-bundle` prüft Text-Chunks im Precache.
+- **Abweichung (gewollt, Freigabe):** Solange ein Text läuft, wiederholt `pickNext` auch Items aus den letzten 20, und fällige Wiederholungen warten bis zum Textende (ARCHITECTURE §5, Test `pick-next-text`).
+- **Fixture:** `tests/fixtures/lesen`: t-sach-900 „Baumeister am Bach“ (250 Wörter, fünf Formate) und t-sach-901 mit fünf Klonen; zusammen 10 Items, sonst wäre der Bereich nicht übbar. Eigener Test: gültig ohne Warnungen.
+- **Offen:** Einstieg Deutsch ist erst erreichbar, wenn zwei Deutsch-Bereiche übbar sind (PRODUCT §5.4). Gegenproben: ohne Text-Regel 5 Tests rot, ohne Text-Wahl im Check 2.
+- **CI:** [CI #38957542169](https://github.com/1701/Pfadfinder/actions/runs/38957542169) grün (723dd8c), Workers Builds grün; 840 Tests, e2e 85 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-16 – Zwischenschritt: Vorlesen-Stimme und Sicherung
 - **Vorlesen:** keine `voice` mehr, nur `lang` de-DE und `rate` 0,9. iOS nimmt so die in den Bedienungshilfen eingestellte Stimme; bisher setzte die App die erste deutsche Stimme der Liste fest (offen seit Aufgabe 7). Ein Test sichert, dass keine Stimme gesetzt und keine Liste gelesen wird. PRODUCT §8 hält den Elternhinweis „Premium-Stimme unter Bedienungshilfen laden“ als Text für später fest.
 - **Eltern:** „Sicherung herunterladen“ über „Alles löschen“, nicht gelb, beide gleich breit. `backupFile` (data/backup) baut die Datei über `exportLearnerData`/`serialize` und benennt sie `pfadfinder-sicherung-JJJJ-MM-TT.json` nach dem lokalen Tag. Ausgeliefert wird sie als Blob-Download, ohne Netz. Ohne Learner wird zuerst einer angelegt, damit die Datei gültig ist. Schlägt die Sicherung fehl, steht ein Hinweis da, und es wird nichts gelöscht.

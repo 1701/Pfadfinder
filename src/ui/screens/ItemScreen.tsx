@@ -5,6 +5,8 @@
 // band asks for the child's own rating, and only that rating submits the answer.
 // The Probetest replaces the header ("Übersicht", "7 von 24", minutes) and, while answering, the
 // band ("Zurück" | "Weiter", no checking; a short answer is only typed in).
+// An item of a reading text gets the TextKasten (`text`): a column on the left in landscape, a
+// block of fixed height on top in portrait (.item-with-text); only that box scrolls.
 
 import clsx from 'clsx';
 import { useState, type ReactNode } from 'react';
@@ -55,6 +57,33 @@ export interface ItemScreenProps {
   locked?: boolean;
   /** Dev preview only: open a self-rated item directly in the comparing step. */
   previewComparing?: boolean;
+  /** The reading text of the item (a TextKasten). */
+  text?: ReactNode;
+}
+
+export interface ItemKopfProps {
+  /** "Pause" either leads somewhere (practice: continued next time) or asks first (Einstieg). */
+  pause?: { to: string } | { onPause(): void };
+  progress?: FortschrittProps;
+}
+
+/** The default top line: Pause on the left, Fortschritt on the right (also the reading screen). */
+export function ItemKopf({ pause, progress }: ItemKopfProps) {
+  return (
+    <header className="flex items-center justify-between gap-md">
+      {pause &&
+        ('to' in pause ? (
+          <Link to={pause.to} className={QUIET_ACTION_CLASS}>
+            Pause
+          </Link>
+        ) : (
+          <button type="button" onClick={pause.onPause} className={QUIET_ACTION_CLASS}>
+            Pause
+          </button>
+        ))}
+      {progress && <Fortschritt {...progress} />}
+    </header>
+  );
 }
 
 /** Quiet text action at the top left; re-exported for the screens that import it from here. */
@@ -134,24 +163,20 @@ export function ItemScreen(props: ItemScreenProps) {
   }
 
   return (
-    <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_1fr_auto] gap-sm px-lg py-sm">
-      {props.header ?? (
-        <header className="flex items-center justify-between gap-md">
-          {props.pause &&
-            ('to' in props.pause ? (
-              <Link to={props.pause.to} className={QUIET_ACTION_CLASS}>
-                Pause
-              </Link>
-            ) : (
-              <button type="button" onClick={props.pause.onPause} className={QUIET_ACTION_CLASS}>
-                Pause
-              </button>
-            ))}
-          {props.progress && <Fortschritt {...props.progress} />}
-        </header>
+    <main
+      className={clsx(
+        'screen-fit mx-auto grid max-w-page gap-sm px-lg py-sm',
+        props.text ? 'item-with-text' : 'grid-rows-[auto_auto_1fr_auto]',
       )}
+    >
+      {props.header ?? <ItemKopf pause={props.pause} progress={props.progress} />}
 
-      <section className="flex items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
+      {props.text}
+
+      <section
+        data-region="sheet"
+        className="flex items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm"
+      >
         {props.readAloud && (
           <VorlesenButton key={item.id} text={itemSpeech(item, props.attemptIndex, props.answer)} />
         )}

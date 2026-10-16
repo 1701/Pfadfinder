@@ -2,7 +2,14 @@
 // answers in the order on screen ("Antworten: …"). number-input adds nothing. Spelling items get
 // no special care: capital letters or a silent h cannot be heard anyway (decision 2026-10-14).
 
-import { readAloudText, speakable, splitUnits, type Item, type ItemOf } from '../content';
+import {
+  readAloudText,
+  speakable,
+  splitUnits,
+  type Item,
+  type ItemOf,
+  type ReadingText,
+} from '../content';
 import {
   clozeParts,
   presentedGapOptions,
@@ -102,4 +109,13 @@ export function corrections(item: ItemOf<'find-error'>): string {
     .filter((w) => item.solution.errorIds.includes(w.id))
     .map((w) => item.solution.corrections[w.id] ?? w.text)
     .join(', ');
+}
+
+/**
+ * The text box's own Vorlesen: title and paragraphs as written (task 9). Not speakable(): that is
+ * for maths notation, in prose "1990 – 2000" must not become "minus". The item's button never
+ * reads the text (itemSpeech has no textRef), so a child can hear the question alone.
+ */
+export function textSpeech(text: Pick<ReadingText, 'title' | 'paragraphs'>): string {
+  return [text.title, ...text.paragraphs].join(' ');
 }
