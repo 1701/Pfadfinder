@@ -8,7 +8,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Verworfen (gemessen):** Band quer über beide Spalten, bringt nur 38 % statt 34 % und kürzt den Kasten bei der Rückmeldung.
 - **Befund:** `sr-only`-Absatznamen im Scroll-Kasten verlängerten die Seite um 238 px, bis der Scroller `relative` bekam.
 - **Wireframes:** privates Artefakt mit 10 Screens quer und hoch (Safari und iPad) und 8 Fragen zur Freigabe.
-- **CI:** steht im nächsten Eintrag nach dem Push. Lokal grün: `npm run check` (849 Tests), `text-layout` in vier Viewports.
+- **CI:** [CI #38963521312](https://github.com/1701/Pfadfinder/actions/runs/38963521312) grün (6c088ad), Workers Builds grün; 849 Tests, e2e 87 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout-Projekt (35/35, `text-layout` in vier Viewports).
 
 ## 2026-10-16 – Aufgabe 9, Schritt 0 und Teil A: Schema 1.0.10, Lesetexte in Domain und Loader
 - **Schema 1.0.10 (nur Doku):** §5 „Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen“. CHANGELOG.
