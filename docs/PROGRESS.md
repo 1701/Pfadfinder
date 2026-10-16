@@ -2,7 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
-## 2026-10-16 – Aufgabe 9, Teil B: Layout-Budget und Wireframes (wartet auf Freigabe)
+## 2026-10-16 – Aufgabe 9, Teil C: Lesetexte beim Üben und im Einstieg, Schema 1.0.11
+- **Gebaut:** Lese-Screen („Lies den Text.“, Vorlesen liest Anweisung und Titel; Titel nur hier) vor dem ersten Item eines Textes, in Üben und Einstieg (Check-Store `reading`, Pause kehrt zurück). Beim Item der Kasten ohne Titel, Verlauf unten und oben (`data-more-above`). `ui/text-scroll` hält die Scrollposition je Text, nach dem Lese-Screen oben. `buildCheck`: Lesen-Bereiche als Block vor den Runden. `probetestTextReadAloud` vorgesehen, `/dev/item` zeigt den Text, Dev-Runde `/dev/text/:id?runde` mit echtem Store.
+- **Freigabe umgesetzt (gemessen):** hoch Reserve je Format (single-choice 574, mark-in-text 593, multi-choice 654, order 665, short-answer 704 px): in Safari 196–326 px, auf dem iPad 320–450 px Kasten, jedes Format genau 18 px Luft. Quer 34 % unter, 42 % ab 768 px Höhe (Media Query `48rem`: In Media Queries gilt 16 px je rem, und `px` verbietet der Literal-Test); knappste Luft 25 bzw. 52 px.
+- **Schema 1.0.11:** mark-in-text mit `textRef` höchstens 4 Sätze und 200 Zeichen, Validator warnt; Fixture auf 4 Sätze gekürzt.
+- **Tests:** `lesen.spec` (Lese-Screen → drei Items desselben Textes → Scrollposition bleibt → Item-Vorlesen ohne Text, Kasten-Vorlesen mit Text, beide iPad-Formate; Gegenprobe: Kasten je Item neu → rot). `text-layout.spec` prüft 18 px je Format und beide Spaltenbreiten. Store-Test Einstieg mit Lesetext.
+- **Offen:** Lokal einmal `blatt-layout` (ipad quer) „Prüfen“ nicht gefunden, einzeln 12/12 grün, in CI grün; Verdacht: bekannter Ladefehler des Dev-Servers unter Last.
+- **CI:** [CI #38970869050](https://github.com/1701/Pfadfinder/actions/runs/38970869050) grün (dc84072), Workers Builds grün; 861 Tests, e2e 89 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, `text-layout` und `lesen.spec` in allen Viewports.
+
+## 2026-10-16 – Aufgabe 9, Teil B: Layout-Budget und Wireframes (freigegeben mit sieben Änderungen, siehe Teil C)
 - **Gebaut (Messgerüst, bleibt für Teil C):** `TextKasten` (Absatznummern am Rand, `text-reading` 22 px/1,6, eigener Vorlesen mit `textSpeech`, Verlauf unten nur solange Text folgt, fokussierbar), `LeseScreen`, `ItemScreen` mit `text` (quer Spalte links, hoch Block oben, `.item-with-text`), `ItemKopf`. Dev-Seite `/dev/text/:id?item=…&zustand=…` mit dem Fixture, nur im Dev-Build (`check-bundle` sucht den Fixture-Titel).
 - **Gemessen** (`text-layout.spec`, vier Viewports, `text-budget-*.json`): hoch kostet jedes Pixel Kasten genau ein Pixel Luft; Grenze short-answer „vergleichen“. Quer springt die Luft mit den Umbrüchen; Grenze mark-in-text mit ganzem Absatz. Vorschlag: hoch `100dvh − 704 px` (196 px Safari, 320 px iPad), quer fest 34 % (36 % bricht Safari quer um 6 px). Knappste Luft damit überall 18 px oder mehr.
 - **Verworfen (gemessen):** Band quer über beide Spalten, bringt nur 38 % statt 34 % und kürzt den Kasten bei der Rückmeldung.
