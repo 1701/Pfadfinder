@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.10 – 2026-10-16
+- §5 `paragraphs`: „Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen“ statt „Zeilen werden im Test nummeriert“. Grund: Der Lesetext steht in der App in einem Kasten, dessen Zeilenumbruch von Bildschirm und Ausrichtung abhängt; eine Zeilennummer wäre auf jedem Gerät eine andere. Die App zeigt die Absatznummer am linken Rand. Nur Doku, keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.9 – 2026-10-15
 - §6: Summe `estimatedSeconds` je Probetest für Mathe 24–32 Min. bei 18–24 Items statt 35–42 Min. Befund mathe-01: Der Pool hat im Mittel 65 s je Item, mathe-01 kommt auf 26,7 Min.; selbst die 24 längsten Items ergäben nur 39 Min. und verletzten den Niveau-Mix. Die `estimatedSeconds` sind App-Zeiten, das Papier rechnet mit Lesen und Schreiben. Der Timer bleibt 45 Min. Deutsch bleibt bei 35–42 Min., vorläufig, wird mit `deutsch-01` festgelegt. Der Validator prüft die Grenzen je Fach.
 - §1: `manifest.json` nennt zusätzlich die Probetest-IDs je Fach (die Karte zeigt die Zeile „Probetest Mathe“ nur, wenn es einen gibt). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.

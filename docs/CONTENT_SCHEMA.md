@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.9 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.10 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -164,7 +164,7 @@ type ReadingText = {
   kind: "sachtext" | "literarisch";
   title: string;
   wordCount: number;                 // 150–250 (MVP)
-  paragraphs: string[];              // je Absatz ein String; Zeilen werden im Test nummeriert
+  paragraphs: string[];              // je Absatz ein String; Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen
   readAloud: boolean;                // true: Vorlesen erlaubt im Üben-Modus; im Probetest immer aus
   itemIds: string[];                 // 4–6 Items, die diesen Text referenzieren, aufsteigend nach Niveau
 };
