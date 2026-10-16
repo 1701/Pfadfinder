@@ -167,6 +167,8 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 - Probetest-Auswertung: Prozent je Bereich (bei der Anzeige aus gelöst/gesamt berechnet, nicht gespeichert, seit 2026-10-15), Hinweis welche Bereiche unter 50 % liegen – ohne Schulartprognose
 - Einstellungen: Daten löschen, Export/Import des Fortschritts als Datei (Gerätewechsel)
 - Stand 2026-10-14: gebaut ist nur "Alles löschen" mit Rückfrage ("Wirklich alles löschen? Das kann nicht rückgängig gemacht werden."); danach zeigt die Karte wieder das Einstieg-Angebot. Übersicht und Export/Import folgen.
+- Stand 2026-10-16: Über "Alles löschen" steht "Sicherung herunterladen" (nicht gelb). Er lädt alle Daten dieses Geräts als `pfadfinder-sicherung-JJJJ-MM-TT.json` herunter (Exportformat Version 2, erzeugt auf dem Gerät, kein Netz). Import und Übersicht folgen.
+- Hinweis für Eltern (Text für später, noch nicht in der App): "Für eine angenehmere Vorlese-Stimme auf dem iPad: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch, dort eine Premium-Stimme laden." Die App wählt keine Stimme selbst, nur die Sprache Deutsch; iOS nimmt dann die dort eingestellte Standardstimme (seit 2026-10-16).
 - Klartext-Hinweis: "Diese App ersetzt keine Beratung durch die Lehrkraft und sagt kein Testergebnis voraus."
 
 ## 9. Content-Ziele

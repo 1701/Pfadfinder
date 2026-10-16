@@ -13,6 +13,7 @@ import { answerFor, testDeps } from '../../data/helpers';
 function renderScreen(
   deleteAll: () => Promise<void> = vi.fn().mockResolvedValue(undefined),
   onDeleted = vi.fn(),
+  downloadBackup: () => Promise<void> = vi.fn().mockResolvedValue(undefined),
 ) {
   const questions = [
     { a: 47, b: 38 },
@@ -21,13 +22,14 @@ function renderScreen(
   render(
     <MemoryRouter>
       <ElternScreen
+        downloadBackup={downloadBackup}
         deleteAll={deleteAll}
         onDeleted={onDeleted}
         newQuestion={() => questions.shift()!}
       />
     </MemoryRouter>,
   );
-  return { deleteAll, onDeleted };
+  return { deleteAll, onDeleted, downloadBackup };
 }
 
 async function type(digits: string) {
@@ -125,5 +127,32 @@ describe('ElternScreen', () => {
       today: { count: 0, goal: 10, reached: false },
       postponed: [],
     });
+  });
+
+  it('offers "Sicherung herunterladen" above "Alles löschen", not yellow', async () => {
+    const { downloadBackup, deleteAll } = renderScreen();
+    await passGate();
+    const backup = screen.getByRole('button', { name: 'Sicherung herunterladen' });
+    const remove = screen.getByRole('button', { name: 'Alles löschen' });
+    expect(backup.compareDocumentPosition(remove) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(backup.className).not.toContain('bg-signal');
+    await userEvent.click(backup);
+    expect(downloadBackup).toHaveBeenCalledOnce();
+    expect(deleteAll).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Alles löschen' })).toBeTruthy();
+  });
+
+  it('says so when the backup fails, and nothing is deleted', async () => {
+    const { deleteAll } = renderScreen(
+      undefined,
+      undefined,
+      vi.fn().mockRejectedValue(new Error('x')),
+    );
+    await passGate();
+    await userEvent.click(screen.getByRole('button', { name: 'Sicherung herunterladen' }));
+    expect(
+      await screen.findByText('Die Sicherung hat nicht geklappt. Versuch es bitte noch einmal.'),
+    ).toBeTruthy();
+    expect(deleteAll).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,7 @@
-// Route /eltern, reached only by typing the URL (no link in the app): a sum to get in, then one
-// button that deletes everything on this device after asking back. Export and an overview come
-// later (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
+// Route /eltern, reached only by typing the URL (no link in the app): a sum to get in, then
+// "Sicherung herunterladen" (a file with all data, since 2026-10-16) above the button that
+// deletes everything on this device after asking back. Import and an overview come later
+// (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
 
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
@@ -10,6 +11,8 @@ import { ZiffernBlock } from '../components/ZiffernBlock';
 import { focusQuietly } from '../focus';
 import { TO_MAP } from '../text/einstieg';
 import {
+  BACKUP,
+  BACKUP_FAILED,
   CANCEL,
   CONFIRM_DELETE,
   CONFIRM_TITLE,
@@ -25,6 +28,8 @@ import { Blatt } from './Blatt';
 import { QUIET_ACTION_CLASS } from './ItemScreen';
 
 export interface ElternScreenProps {
+  /** Writes all data of this device into a file and hands it to the browser. */
+  downloadBackup(): Promise<void>;
   /** Deletes every table on this device. */
   deleteAll(): Promise<void>;
   /** After deleting: back to the map, which offers the Einstieg again. */
@@ -42,27 +47,47 @@ const zurKarte = (
 );
 
 export function ElternScreen({
+  downloadBackup,
   deleteAll,
   onDeleted,
   newQuestion = gateQuestion,
 }: ElternScreenProps) {
   const [step, setStep] = useState<Step>('frage');
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<'backup' | 'delete' | null>(null);
+  const [saving, setSaving] = useState(false);
 
   if (step === 'frage') return <Frage newQuestion={newQuestion} onPass={() => setStep('offen')} />;
   if (step === 'offen') {
+    const backup = async () => {
+      setSaving(true);
+      try {
+        await downloadBackup();
+        setFailed(null);
+      } catch {
+        setFailed('backup');
+      }
+      setSaving(false);
+    };
     return (
       <Blatt
         left={zurKarte}
         title={DELETE_TITLE}
-        text={failed ? DELETE_FAILED : DELETE_TEXT}
+        text={
+          failed === 'backup' ? BACKUP_FAILED : failed === 'delete' ? DELETE_FAILED : DELETE_TEXT
+        }
         readAloud={false}
         actions={
           <>
             <span />
-            <Button size="large" onClick={() => setStep('rueckfrage')}>
-              {DELETE_ALL}
-            </Button>
+            {/* Not yellow: neither is a next step on the way (task 6b). */}
+            <div className="flex flex-col items-stretch gap-sm">
+              <Button size="large" disabled={saving} onClick={() => void backup()}>
+                {BACKUP}
+              </Button>
+              <Button size="large" onClick={() => setStep('rueckfrage')}>
+                {DELETE_ALL}
+              </Button>
+            </div>
           </>
         }
       />
@@ -73,7 +98,7 @@ export function ElternScreen({
     try {
       await deleteAll();
     } catch {
-      setFailed(true);
+      setFailed('delete');
       setStep('offen');
       return;
     }

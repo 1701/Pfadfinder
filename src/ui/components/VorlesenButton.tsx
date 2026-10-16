@@ -1,5 +1,7 @@
 // Reads the task aloud with the browser's own speech (SpeechSynthesis, de-DE): no network.
-// Hidden where the browser cannot speak. A second tap stops.
+// Hidden where the browser cannot speak. A second tap stops. No voice is chosen, only the
+// language: iOS then uses the voice set under Bedienungshilfen (parents can load a better one
+// there), where picking the first German voice of the list overrode it (decision 2026-10-16).
 
 import { useEffect, useState } from 'react';
 import { SpeakerGlyph, StopGlyph } from './glyphs';
@@ -25,8 +27,6 @@ export function VorlesenButton({ text }: { text: string }) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'de-DE';
     utterance.rate = 0.9;
-    const voice = synth.getVoices().find((v) => v.lang.replace('_', '-').startsWith('de'));
-    if (voice) utterance.voice = voice;
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
     synth.speak(utterance);

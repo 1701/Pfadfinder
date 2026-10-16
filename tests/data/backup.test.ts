@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { exportLearnerData, importLearnerData } from '../../src/data/backup';
+import {
+  backupFile,
+  backupFileName,
+  exportLearnerData,
+  importLearnerData,
+} from '../../src/data/backup';
+import { EXPORT_VERSION, parseImport } from '../../src/domain/learner';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { createCheckStore } from '../../src/data/check-store';
 import { createSessionStore } from '../../src/data/session-store';
@@ -81,5 +87,26 @@ describe('export/import over the repositories', () => {
     await expect(
       exportLearnerData(createMemoryRepositories(), 'nobody', EXPORTED_AT),
     ).rejects.toThrow(/nobody/);
+  });
+});
+
+describe('the backup file for the Eltern page', () => {
+  it('is named after the local calendar day', () => {
+    expect(backupFileName(new Date(2026, 9, 16, 23, 59))).toBe(
+      'pfadfinder-sicherung-2026-10-16.json',
+    );
+    expect(backupFileName(new Date(2026, 0, 5, 0, 1))).toBe('pfadfinder-sicherung-2026-01-05.json');
+  });
+
+  it('holds a valid export file that parseImport reads back', async () => {
+    const { repos, learnerId } = await playedRepos();
+    const { name, text } = await backupFile(repos, learnerId, new Date(2026, 9, 16, 9, 30));
+    expect(name).toBe('pfadfinder-sicherung-2026-10-16.json');
+    const parsed = JSON.parse(text) as { version: string; attempts: unknown[] };
+    expect(parsed.version).toBe(EXPORT_VERSION);
+    expect(parsed.attempts).toHaveLength(3);
+    const result = parseImport(text);
+    expect(result.ok).toBe(true);
+    expect(result.ok && result.data.learner.id).toBe(learnerId);
   });
 });

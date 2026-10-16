@@ -43,6 +43,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## App
 
+### 0.7.1 – 2026-10-16
+- Vorlesen wählt keine Stimme mehr, nur Deutsch: iOS nimmt die Stimme aus den Bedienungshilfen.
+- Eltern-Seite: „Sicherung herunterladen“ speichert alle Daten als Datei (`pfadfinder-sicherung-JJJJ-MM-TT.json`).
+
 ### 0.7.0 – 2026-10-15
 - Probetest: Zeile „Probetest Mathe“ auf der Karte, Intro, Aufgaben mit „Zurück“/„Weiter“ und ruhiger Zeitanzeige („Noch 5 Minuten“), Übersicht zum Springen, Abgeben mit Rückfrage, Auswertung je Bereich ohne Prozent, Durchsehen mit Selbsteinschätzung der Kurzantwort. Alles wird sofort gespeichert; Neuladen setzt fort, die Zeit läuft nach Wanduhr.
 - Druckansicht `/probetest/:id/print`: Aufgabenblatt und Lösungsblatt, A4 hoch.

@@ -7,8 +7,11 @@ export const gateTitle = ({ a, b }: GateQuestion) => `Für Erwachsene: Wie viel 
 export const GATE_RETRY = 'Das passt nicht. Hier ist eine neue Rechnung.';
 export const GATE_SUBMIT = 'Weiter';
 
-export const DELETE_TITLE = 'Hier kannst du alle Daten auf diesem Gerät löschen.';
-export const DELETE_TEXT = 'Gelöscht werden alle Antworten, Niveaus und Entdeckungen.';
+export const DELETE_TITLE = 'Hier kannst du die Daten auf diesem Gerät sichern oder löschen.';
+export const DELETE_TEXT =
+  'Die Sicherung ist eine Datei mit allen Antworten, Niveaus und Entdeckungen. Löschen entfernt alles von diesem Gerät.';
+export const BACKUP = 'Sicherung herunterladen';
+export const BACKUP_FAILED = 'Die Sicherung hat nicht geklappt. Versuch es bitte noch einmal.';
 export const DELETE_ALL = 'Alles löschen';
 
 export const CONFIRM_TITLE = 'Wirklich alles löschen? Das kann nicht rückgängig gemacht werden.';
@@ -23,6 +26,8 @@ export const ELTERN_TEXTS = [
   GATE_SUBMIT,
   DELETE_TITLE,
   DELETE_TEXT,
+  BACKUP,
+  BACKUP_FAILED,
   DELETE_ALL,
   CONFIRM_TITLE,
   CANCEL,
