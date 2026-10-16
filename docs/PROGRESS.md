@@ -7,7 +7,8 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Freigabe umgesetzt (gemessen):** hoch Reserve je Format (single-choice 574, mark-in-text 593, multi-choice 654, order 665, short-answer 704 px): in Safari 196–326 px, auf dem iPad 320–450 px Kasten, jedes Format genau 18 px Luft. Quer 34 % unter, 42 % ab 768 px Höhe (Media Query `48rem`: In Media Queries gilt 16 px je rem, und `px` verbietet der Literal-Test); knappste Luft 25 bzw. 52 px.
 - **Schema 1.0.11:** mark-in-text mit `textRef` höchstens 4 Sätze und 200 Zeichen, Validator warnt; Fixture auf 4 Sätze gekürzt.
 - **Tests:** `lesen.spec` (Lese-Screen → drei Items desselben Textes → Scrollposition bleibt → Item-Vorlesen ohne Text, Kasten-Vorlesen mit Text, beide iPad-Formate; Gegenprobe: Kasten je Item neu → rot). `text-layout.spec` prüft 18 px je Format und beide Spaltenbreiten. Store-Test Einstieg mit Lesetext.
-- **Offen:** Lokal einmal `blatt-layout` (ipad quer) „Prüfen“ nicht gefunden, einzeln 12/12 grün, in CI grün; Verdacht: bekannter Ladefehler des Dev-Servers unter Last.
+- **Entschieden (Markus, 2026-10-17):** Vorlesen auf dem Lese-Screen liest Anweisung und Titel, den Text nur der Kasten. Die freie Fläche neben „Vorlesen“ im Kasten (quer) bleibt.
+- **Beobachten:** Lokal einmal `blatt-layout` (ipad quer) „Prüfen“ nicht gefunden, einzeln 12/12 grün, in CI grün; Verdacht: bekannter Ladefehler des Dev-Servers unter Last. Tritt es noch einmal auf, wartet die Spec auf einen Marker „App bereit“ statt auf „Prüfen“.
 - **CI:** [CI #38970869050](https://github.com/1701/Pfadfinder/actions/runs/38970869050) grün (dc84072), Workers Builds grün; 861 Tests, e2e 89 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, `text-layout` und `lesen.spec` in allen Viewports.
 
 ## 2026-10-16 – Aufgabe 9, Teil B: Layout-Budget und Wireframes (freigegeben mit sieben Änderungen, siehe Teil C)
