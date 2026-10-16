@@ -1,0 +1,220 @@
+[
+  {
+    "id": "d-lsa-1-950",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Lies Absatz 3. Warum liegt der Eingang der Burg unter Wasser?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Damit Fuchs und Wolf nicht hineinkommen."
+        },
+        {
+          "id": "b",
+          "text": "Damit die Burg im Winter warm bleibt."
+        },
+        {
+          "id": "c",
+          "text": "Damit der Biber schneller tauchen lernt."
+        },
+        {
+          "id": "d",
+          "text": "Damit kein Wasser in die Wohnhöhle läuft."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau. Absatz 3 sagt: So kommen Fuchs und Wolf nicht hinein.",
+      "incorrect": "Lies Absatz 3 noch einmal. Der Satz nach dem Eingang nennt den Grund.",
+      "misconception": "Die Wohnhöhle ist trocken, aber das ist nicht der Grund für den Eingang unter Wasser."
+    },
+    "tags": ["informationen-entnehmen"],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-16",
+      "calibration": "none"
+    }
+  },
+  {
+    "id": "d-lsa-1-951",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Hier steht Absatz 2. Tippe den Satz an, der erklärt, warum Biber viel nagen müssen.",
+    "payload": {
+      "text": "Die Zähne der Biber sind orange und sehr hart. Sie wachsen das ganze Leben lang nach. Deshalb müssen Biber viel nagen. Mit ihren Zähnen fällen sie sogar dicke Bäume. Für einen Baum, so dick wie ein Eimer, brauchen sie nur eine Nacht.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [1]
+    },
+    "feedback": {
+      "correct": "Richtig. Die Zähne wachsen immer nach, darum nagen Biber so viel.",
+      "incorrect": "Suche den Satz vor dem Wort „Deshalb“. Er nennt den Grund.",
+      "misconception": "Viele tippen den Satz mit „Deshalb“ an. Er sagt, was passiert, nicht warum."
+    },
+    "tags": ["informationen-entnehmen", "begruendung-finden"],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-16",
+      "calibration": "none"
+    }
+  },
+  {
+    "id": "d-lsa-2-950",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Lies Absatz 4. Bringe die Sätze in die richtige Reihenfolge.",
+    "payload": {
+      "items": [
+        {
+          "id": "c",
+          "text": "Ein kleiner Teich entsteht."
+        },
+        {
+          "id": "a",
+          "text": "Der Biber baut einen Damm."
+        },
+        {
+          "id": "d",
+          "text": "Der Biber baut seine Burg."
+        },
+        {
+          "id": "b",
+          "text": "Das Wasser staut sich."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": ["a", "b", "c", "d"]
+    },
+    "feedback": {
+      "correct": "Genau. Erst der Damm, dann staut sich das Wasser, dann ist der Teich tief genug.",
+      "incorrect": "Der Damm kommt zuerst. Überlege dann, was mit dem Wasser hinter dem Damm passiert.",
+      "misconception": "Viele setzen die Burg an den Anfang. Am flachen Bach geht das aber erst nach dem Damm."
+    },
+    "tags": ["reihenfolge", "zusammenhaenge"],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-16",
+      "calibration": "none"
+    }
+  },
+  {
+    "id": "d-lsa-2-951",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Lies die Absätze 3 und 5. Was stimmt? Tippe zwei Antworten an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die Familie schläft am Tag in der Wohnhöhle."
+        },
+        {
+          "id": "b",
+          "text": "Im Winter fressen Biber die Rinde von Zweigen."
+        },
+        {
+          "id": "c",
+          "text": "Biber halten im Winter Winterschlaf."
+        },
+        {
+          "id": "d",
+          "text": "Der Eingang der Burg liegt über dem Wasser."
+        },
+        {
+          "id": "e",
+          "text": "Im Herbst sammeln Biber Steine für den Winter."
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": ["a", "b"]
+    },
+    "feedback": {
+      "correct": "Richtig. Beides steht im Text, einmal in Absatz 3 und einmal in Absatz 5.",
+      "incorrect": "Prüfe jede Antwort mit dem Text. Absatz 5 sagt im letzten Satz etwas über den Winterschlaf.",
+      "misconception": "Viele Tiere halten Winterschlaf. Der Biber nicht, das steht am Ende von Absatz 5."
+    },
+    "tags": ["informationen-verknuepfen"],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-16",
+      "calibration": "none"
+    }
+  },
+  {
+    "id": "d-lsa-3-950",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Warum nennen Forscher den Biber einen Helfer der Natur? Begründe mit dem Text.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Denk an die Teiche der Biber."
+    },
+    "solution": {
+      "model": "Seine Teiche sind ein Zuhause für viele Tiere, zum Beispiel für Frösche, Fische und Libellen.",
+      "keyPoints": [
+        "Biber machen mit Dämmen Teiche.",
+        "In den Teichen finden andere Tiere ein Zuhause."
+      ]
+    },
+    "feedback": {
+      "correct": "Gut begründet. Der Damm macht einen Teich, und der Teich hilft vielen Tieren.",
+      "incorrect": "Lies Absatz 6. Wer wohnt in den Teichen der Biber?",
+      "misconception": "Dass Biber Bäume fällen, ärgert manche Menschen. Es ist nicht der Grund für das Lob."
+    },
+    "tags": ["begruenden", "schlussfolgern"],
+    "estimatedSeconds": 120,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-16",
+      "calibration": "none"
+    }
+  }
+]

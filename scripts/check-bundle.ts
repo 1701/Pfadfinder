@@ -1,6 +1,7 @@
 // Runs after `vite build`: guards properties of the production bundle that unit tests cannot see.
 //  - developer pages (/dev/*) must not be in the bundle
-//  - self-hosted fonts must be precached for offline use
+//  - test fixtures (reading text t-sach-900) only reach the dev pages, never the bundle
+//  - self-hosted fonts and reading texts must be precached for offline use
 //  - the start page's JS (entry + modulepreloads) stays below the budget and contains neither
 //    Zod nor Dexie: both belong to the lazy practice chunk (ARCHITECTURE.md §5)
 
@@ -28,6 +29,9 @@ for (const file of files) {
     'EinstiegPage',
     '/dev/probetest',
     'ProbetestPage',
+    '/dev/text',
+    'TextPage',
+    'Baumeister am Bach',
   ]) {
     if (text.includes(marker)) errors.push(`${file}: enthält Entwicklerseite ("${marker}")`);
   }
@@ -36,6 +40,16 @@ for (const file of files) {
 const sw = readFileSync(path.join(dist, 'sw.js'), 'utf8');
 for (const font of ['fonts/andika/Andika-Regular.woff2', 'fonts/andika/Andika-Bold.woff2']) {
   if (!sw.includes(font)) errors.push(`sw.js: ${font} fehlt im Precache`);
+}
+// Reading texts: one lazy chunk per file (content-runtime/loader), named after the file.
+const textsDir = path.resolve(dist, '..', 'content', 'texts', 'deutsch');
+for (const file of readdirSync(textsDir).filter((f) => f.endsWith('.json'))) {
+  const id = file.replace(/\.json$/, '');
+  const chunk = readdirSync(path.join(dist, 'assets')).find(
+    (f) => f.startsWith(`${id}-`) && f.endsWith('.js'),
+  );
+  if (!chunk) errors.push(`assets: kein Chunk für content/texts/deutsch/${file}`);
+  else if (!sw.includes(`assets/${chunk}`)) errors.push(`sw.js: Lesetext ${id} fehlt im Precache`);
 }
 // App icons: listed in the manifest, linked for iOS, precached for offline start.
 const manifest = readFileSync(path.join(dist, 'manifest.webmanifest'), 'utf8');

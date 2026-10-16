@@ -13,6 +13,7 @@ import {
 } from '../../../src/domain/scheduler';
 import { OPEN_BEREICHE } from '../../fixtures/content-state';
 import { item, makePool } from '../../fixtures/pool';
+import { LESEN_ITEMS, LESEN_TEXTS, biberItems, igelItems, igelText } from '../../fixtures/lesen';
 
 const MATHE: readonly Bereich[] = BEREICHE_BY_FACH.mathe;
 const DEUTSCH: readonly Bereich[] = BEREICHE_BY_FACH.deutsch;
@@ -258,5 +259,46 @@ describe('buildCheck with the real content', () => {
     expect(answers).toHaveLength(plan.total);
     expect([...perBereich(answers).keys()]).toEqual(bereiche);
     expect([...perBereich(answers).values()].every((c) => c === 2 || c === 3)).toBe(true);
+  });
+});
+
+describe('buildCheck – a Lesen-Bereich takes its items from one text', () => {
+  const LSA: Bereich = 'lesen-sachtext';
+  const textOf = (i: Item) => i.stimulus?.textRef;
+
+  it('checks 2–3 items of one text only, chosen by the seed', () => {
+    const chosen = new Set<string>();
+    for (const seed of ['a', 'b', 'c', 'd', 'e', 'f']) {
+      const plan = buildCheck('deutsch', LESEN_ITEMS, opts([LSA], seed));
+      const answers = runCheck(plan, () => true);
+      expect(answers.length).toBeGreaterThanOrEqual(2);
+      expect(answers.length).toBeLessThanOrEqual(3);
+      const texts = new Set(
+        answers.map((a) => textOf(LESEN_ITEMS.find((i) => i.id === a.itemId)!)),
+      );
+      expect(texts.size).toBe(1);
+      chosen.add([...texts][0]!);
+      // Every candidate belongs to that text: the ladder can only pick from it.
+      expect(new Set(plan.candidates[LSA]!.map(textOf))).toEqual(texts);
+    }
+    expect(chosen).toEqual(new Set(LESEN_TEXTS.map((t) => t.id)));
+  });
+
+  it('is reproducible for the same seed', () => {
+    const a = buildCheck('deutsch', LESEN_ITEMS, opts([LSA], 'x'));
+    const b = buildCheck('deutsch', LESEN_ITEMS, opts([LSA], 'x'));
+    expect(a).toEqual(b);
+  });
+
+  it('skips a text with fewer than 2 auto-check items (short-answer does not count)', () => {
+    const biber = biberItems
+      .filter((i) => i.format === 'short-answer' || i.niveau === 1)
+      .slice(0, 2);
+    // One auto-check item and the short answer: not enough for the Biber text.
+    const pool = [...biber.filter((i) => i.format !== 'mark-in-text'), ...igelItems];
+    for (const seed of ['a', 'b', 'c', 'd']) {
+      const plan = buildCheck('deutsch', pool, opts([LSA], seed));
+      expect(new Set(plan.candidates[LSA]!.map(textOf))).toEqual(new Set([igelText.id]));
+    }
   });
 });

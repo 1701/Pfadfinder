@@ -49,6 +49,11 @@ export function isLesenBereich(bereich: Bereich): boolean {
   return (LESEN_BEREICHE as readonly string[]).includes(bereich);
 }
 
+/** The Lesen-Bereich whose items use a text of this kind (CONTENT_SCHEMA §5). */
+export function bereichOfTextKind(kind: 'sachtext' | 'literarisch'): Bereich {
+  return kind === 'sachtext' ? 'lesen-sachtext' : 'lesen-literarisch';
+}
+
 export function isRechtschreibungBereich(bereich: Bereich): boolean {
   return (RECHTSCHREIBUNG_BEREICHE as readonly string[]).includes(bereich);
 }

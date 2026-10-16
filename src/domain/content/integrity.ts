@@ -14,6 +14,7 @@ import {
 import {
   BEREICHE_BY_FACH,
   FAECHER,
+  bereichOfTextKind,
   isLesenBereich,
   isRechtschreibungBereich,
   type Bereich,
@@ -223,7 +224,7 @@ export function validateContent(
   // -- 3. Reading texts ------------------------------------------------------------------------
 
   for (const { value: text, file } of bundle.texts.values()) {
-    const expectedBereich: Bereich = text.kind === 'sachtext' ? 'lesen-sachtext' : 'lesen-literarisch';
+    const expectedBereich = bereichOfTextKind(text.kind);
     let previousNiveau: Niveau | undefined;
     text.itemIds.forEach((itemId, i) => {
       const item = bundle.items.get(itemId)?.value;

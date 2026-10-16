@@ -3,6 +3,7 @@
 // plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
 // rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
 // first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
+// A Lesen-Bereich takes all its items from one reading text (2026-10-16).
 
 import type { Bereich, Fach, Item, Niveau } from '../content';
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
@@ -66,12 +67,33 @@ export function buildCheck(
     const items = pool.filter(
       (i) => i.fach === fach && i.bereich === bereich && isCheckEligible(i),
     );
-    candidates[bereich] = seededShuffle(items, `${options.seed}/${bereich}`);
+    const seed = `${options.seed}/${bereich}`;
+    candidates[bereich] = seededShuffle(oneText(items, seed), seed);
   }
   const plan = { fach, bereiche: [...options.bereiche], candidates };
   const first = firstRounds(plan).length;
   const third = plan.bereiche.filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
   return { ...plan, total: Math.min(CHECK_ITEM_COUNT, first + third.length) };
+}
+
+/**
+ * A Lesen-Bereich is checked with 2–3 items of one reading text (PROGRESS 3C): the seed picks a
+ * text with at least 2 eligible items, and only its items are candidates. Items without a
+ * textRef only count when no text qualifies; Bereiche without texts are left as they are.
+ */
+function oneText(items: readonly Item[], seed: string): Item[] {
+  const byText = new Map<string, Item[]>();
+  for (const item of items) {
+    const textRef = item.stimulus?.textRef;
+    if (textRef !== undefined) byText.set(textRef, [...(byText.get(textRef) ?? []), item]);
+  }
+  if (byText.size === 0) return [...items];
+  const usable = [...byText.keys()]
+    .filter((id) => (byText.get(id)?.length ?? 0) >= CHECK_ITEMS_PER_BEREICH.min)
+    .sort();
+  const [textRef] = seededShuffle(usable, `${seed}/text`);
+  if (textRef === undefined) return items.filter((i) => i.stimulus?.textRef === undefined);
+  return byText.get(textRef) ?? [];
 }
 
 /**

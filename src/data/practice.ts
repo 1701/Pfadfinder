@@ -1,7 +1,7 @@
 // Application service for the practice mode: load from the repositories, call the pure domain
 // functions, save the result. No decisions are made here (ARCHITECTURE.md §1).
 
-import type { Bereich, ContentLoader, Fach, Format, Item } from '../domain/content';
+import type { Bereich, ContentLoader, Fach, Format, Item, ReadingText } from '../domain/content';
 import type { Learner, ReviewEntry, Session } from '../domain/learner';
 import { initialMastery, type MasteryState } from '../domain/mastery';
 import {
@@ -23,7 +23,7 @@ import type { Repositories } from './repos';
 
 export interface PracticeDeps {
   repos: Repositories;
-  content: Pick<ContentLoader, 'loadItems'>;
+  content: Pick<ContentLoader, 'loadItems' | 'loadTexts'>;
   /** Current time as ISO string. */
   now: () => string;
   newId: () => string;
@@ -37,6 +37,8 @@ export interface PracticeContext {
   bereich: Bereich;
   /** Practiceable items of the Bereich. */
   pool: Item[];
+  /** Reading texts of the Bereich (Lesen only), loaded with the items. */
+  texts: ReadingText[];
   session: Session;
   mastery: MasteryState;
   reviewsInSession: number;
@@ -47,6 +49,8 @@ export interface PracticeItem {
   source: PracticeSource;
   /** How often the learner has answered this item before; seeds the option order. */
   attemptIndex: number;
+  /** The reading text the item refers to (stimulus.textRef). */
+  text?: ReadingText;
 }
 
 /** The first learner on this device; created without a name on the very first start. */
@@ -83,6 +87,7 @@ export async function startPractice(
   const { repos } = deps;
   const pool = practiceableItems(await deps.content.loadItems(fach, bereich), deps.formats);
   if (pool.length < MIN_ITEMS_FOR_PRACTICE) return null;
+  const texts = await deps.content.loadTexts(fach, bereich);
 
   const now = deps.now();
   const mastery =
@@ -103,11 +108,20 @@ export async function startPractice(
     const reviewsInSession = plan.resume.attemptIds.filter(
       (id) => attempts.find((a) => a?.id === id)?.mode === 'review',
     ).length;
-    return { learnerId, fach, bereich, pool, session: plan.resume, mastery, reviewsInSession };
+    return {
+      learnerId,
+      fach,
+      bereich,
+      pool,
+      texts,
+      session: plan.resume,
+      mastery,
+      reviewsInSession,
+    };
   }
 
   const session = startPracticeSession(deps.newId(), learnerId, now);
-  return { learnerId, fach, bereich, pool, session, mastery, reviewsInSession: 0 };
+  return { learnerId, fach, bereich, pool, texts, session, mastery, reviewsInSession: 0 };
 }
 
 /**
@@ -136,6 +150,8 @@ export async function pickPracticeItem(
   const now = deps.now();
   const attempts = await repos.attempts.listByBereich(ctx.learnerId, ctx.bereich);
   const dueReviews = await repos.reviews.listDueBefore(ctx.learnerId, reviewDueCutoff(now));
+  const itemOfAttempt = new Map(attempts.map((a) => [a.id, a.itemId]));
+  const sessionItemIds = ctx.session.attemptIds.flatMap((id) => itemOfAttempt.get(id) ?? []);
 
   const picked = pickNext({
     fach: ctx.fach,
@@ -143,6 +159,7 @@ export async function pickPracticeItem(
     mastery: ctx.mastery,
     pool: ctx.pool,
     recentItemIds: attempts.map((a) => a.itemId),
+    sessionItemIds,
     dueReviews,
     reviewsInSession: ctx.reviewsInSession,
     now,
@@ -151,7 +168,9 @@ export async function pickPracticeItem(
   if (!picked) return null;
 
   const attemptIndex = attempts.filter((a) => a.itemId === picked.item.id).length;
-  return { item: picked.item, source: picked.source, attemptIndex };
+  const textRef = picked.item.stimulus?.textRef;
+  const text = ctx.texts.find((t) => t.id === textRef);
+  return { item: picked.item, source: picked.source, attemptIndex, ...(text && { text }) };
 }
 
 /** Entdeckungen are only ever added (PRODUCT.md §6: keine Abzüge). */

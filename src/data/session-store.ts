@@ -6,6 +6,7 @@ import type { Bereich, Fach } from '../domain/content';
 import type { Correctness, EvaluationDetail } from '../domain/evaluation';
 import type { Learner } from '../domain/learner';
 import type { MasteryTransition } from '../domain/mastery';
+import { readingStep } from '../domain/practice';
 import type { TodayProgress } from '../domain/progress';
 import {
   ensureLearner,
@@ -26,6 +27,8 @@ export type PracticeStatus =
   | 'choosing'
   /** The Bereich has too few practiceable items. */
   | 'empty'
+  /** The first item of a reading text in this round: the text comes first, then the item. */
+  | 'reading'
   | 'answering'
   | 'checking'
   | 'feedback'
@@ -47,6 +50,8 @@ export interface SessionState {
   feedback: Feedback | null;
   /** Set when the session is finished: today's Fundstücke, as the map counts them. */
   today: TodayProgress | null;
+  /** Reading texts shown in this round; in memory only, so a reload reads the text again. */
+  shownTextIds: readonly string[];
 
   init(): Promise<Learner>;
   startPractice(fach: Fach, bereich: Bereich): Promise<void>;
@@ -54,6 +59,8 @@ export interface SessionState {
   resume(): Promise<void>;
   /** "Neu anfangen": the open session ends without an Abschluss, a new round of 10 begins. */
   restart(): Promise<void>;
+  /** "Weiter" on the reading screen: the item comes, with the text beside it. */
+  doneReading(): void;
   setAnswer(answer: unknown): void;
   /** Checks the answer; a self-rated short answer passes its completed answer (with rating). */
   submit(answer?: unknown): Promise<void>;
@@ -71,6 +78,7 @@ const idle = {
   answer: null,
   feedback: null,
   today: null,
+  shownTextIds: [],
 } as const;
 
 export function createSessionStore(deps: PracticeDeps): SessionStore {
@@ -82,12 +90,17 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
       const picked = await pickPracticeItem(deps, practice);
       if (token !== run) return;
       if (!picked) return set({ ...idle, status: 'empty', practice });
+      const { shownTextIds } = get();
+      const step = readingStep(picked.item, picked.source, new Set(shownTextIds));
+      const textRef = picked.item.stimulus?.textRef;
       set({
-        status: 'answering',
+        status: step === 'read-first' ? 'reading' : 'answering',
         practice,
         current: { ...picked, shownAt: deps.now() },
         answer: null,
         feedback: null,
+        ...(textRef !== undefined &&
+          !shownTextIds.includes(textRef) && { shownTextIds: [...shownTextIds, textRef] }),
       });
     }
 
@@ -126,10 +139,18 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
         const { status, practice } = get();
         if (status !== 'choosing' || !practice) return;
         const token = run;
-        set({ status: 'loading' });
+        set({ status: 'loading', shownTextIds: [] });
         const fresh = await restartPractice(deps, practice);
         if (token !== run) return;
         await showNext(fresh, token);
+      },
+
+      doneReading() {
+        const { status, current } = get();
+        // The item's time starts when it is on screen, not with the reading screen.
+        if (status === 'reading' && current) {
+          set({ status: 'answering', current: { ...current, shownAt: deps.now() } });
+        }
       },
 
       setAnswer(answer) {
