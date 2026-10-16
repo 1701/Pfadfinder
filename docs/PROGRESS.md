@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-16 – Zwischenschritt: Vorlesen-Stimme und Sicherung
+- **Vorlesen:** keine `voice` mehr, nur `lang` de-DE und `rate` 0,9. iOS nimmt so die in den Bedienungshilfen eingestellte Stimme; bisher setzte die App die erste deutsche Stimme der Liste fest (offen seit Aufgabe 7). Ein Test sichert, dass keine Stimme gesetzt und keine Liste gelesen wird. PRODUCT §8 hält den Elternhinweis „Premium-Stimme unter Bedienungshilfen laden“ als Text für später fest.
+- **Eltern:** „Sicherung herunterladen“ über „Alles löschen“, nicht gelb, beide gleich breit. `backupFile` (data/backup) baut die Datei über `exportLearnerData`/`serialize` und benennt sie `pfadfinder-sicherung-JJJJ-MM-TT.json` nach dem lokalen Tag. Ausgeliefert wird sie als Blob-Download, ohne Netz. Ohne Learner wird zuerst einer angelegt, damit die Datei gültig ist. Schlägt die Sicherung fehl, steht ein Hinweis da, und es wird nichts gelöscht.
+- **Abweichung vom Auftrag:** Die Datei ist ExportFile **Version 2**, nicht v1. Version 2 gilt seit Aufgabe 8; v1-Dateien werden beim Import umgewandelt. Die Tests prüfen gegen `EXPORT_VERSION`.
+- **Tests:** Unit (Dateiname, Datei lesbar mit `parseImport`, Knopf-Reihenfolge, Fehlerfall). E2E mit echtem Download: zwei Attempts in der Datei, `parseImport` ok, in Chromium und WebKit. `blatt-layout` in vier Viewports grün.
+- **Offen:** Import und Übersicht im Eltern-Bereich. Am iPad prüfen: Wie Safari den Download anbietet und ob die Premium-Stimme greift.
+- **CI:** [CI #38952700004](https://github.com/1701/Pfadfinder/actions/runs/38952700004) grün (0248d4f), Workers Builds grün; 815 Tests, e2e 85 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-15 – Aufgabe 8, Teil C: Probetest-Oberfläche und Druck
 - **Gebaut:** `/probetest/:id` (lazy Chunk `probetest-route`):
   - Ablauf: Intro („schon gemacht“, „Auswertung ansehen“), Aufgaben mit „Zurück“/„Weiter“ und Minuten ohne Sekunden („Noch 5 Minuten“ … „Noch 1 Minute“), Übersicht mit antippbaren Strichen, Rückfragen vor dem Abgeben und vor „Zur Karte“.
