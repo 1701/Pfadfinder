@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Content: Lesen Sachtexte (3 Texte, 16 Items), Einstieg Deutsch mit Lesen-Block
+- **Eingespielt:** Batch vom 2026-10-18: t-sach-001 „Der Igel im Winter“, t-sach-002 „Notruf 112: Was dann passiert“, t-sach-003 „Aus alt mach neu: Papier“ und `lesen-sachtext.json` (d-lsa-1-001 … d-lsa-3-003, draft, Niveau 7/6/3), dazu Patch 1 (2-001, 2-003, 2-004, 3-001, 3-002) und Patch 2 (2-004 mit 4 Elementen). `content:validate` 0/0; `text` neben `textRef` (2-003) wird angenommen. `pilot-lsa.md` nicht im Repo.
+- **Gebaut:** `/dev/text` zeigt auch Texte und Items aus `content/`. `text-layout.spec` prüft jeden echten Lesetext: Lese-Screen und jedes Item in jedem Zustand, ≥ 18 px Luft über dem Band; Werte je Item und Zustand in `text-inhalt-*.json`, Screenshots nur von Befunden.
+- **Gemessen:** Batch: 2-004 order bis −138 px (Safari quer, noch nicht), 3-001/3-002 short-answer bis −20 px, 2-003 2 px, 2-001 17 px. Nach Patch 1 nur noch 2-004 noch nicht −14 (hoch) / −7 (Safari quer), Ursache das fünfte Element. Nach Patch 2 überall ≥ 18 px (knappste: 1-001, 1-004, 2-002, 3-002 hoch 18; 2-005 iPad quer 18), zwei Läufe byte-gleich. Lese-Screens aller drei Texte ohne Befund, mark-in-text ≥ 93 px.
+- **Einstieg Deutsch:** lesen-sachtext ist übbar, der Einstieg endet mit dem Lesen-Block (Aufgabe 10): 6 Rechtschreib-Fragen, Lese-Screen, 3 Fragen aus einem Text. Test mit echtem Content; 300 Seeds verteilen sich auf t-sach-001/002/003 mit 101/106/93.
+- **Nicht committet:** die rund 50 von den Läufen neu geschriebenen Screenshots sowie `text-inhalt-*.json` und `text-t-sach-*-lesen-*.png`.
+- **CI:** [CI #39158653997](https://github.com/1701/Pfadfinder/actions/runs/39158653997) grün (ca46ef8), Workers Builds grün; 937 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout-Specs 29/29, `text-layout` 8/8 (zweimal).
+
 ## 2026-10-18 – Aufgabe 12, Nachtrag: Apostroph, Messung der Lesetexte
 - **Entschieden (Markus):** typografischer Apostroph in „Wo geht’s in Mathe los?“, „Wo geht’s in Deutsch los?“ und „Wohin geht’s heute?“ (Code, Tests, PRODUCT §5.4, Karten-Screenshots). Das Intro bleibt zweizeilig. Zeilenende hoch jetzt Mathe 706 / Deutsch 731 px (37 px bis zum Rand). „so geht’s auch“ in PRODUCT §5.6 und CONTENT_SCHEMA (Anleitung für Content, keine UI) nicht geändert.
 - **Gebaut:** `text-layout.spec` wartet in `open()`, bis der Suspense-Platzhalter (`aria-busy`) im Antwortbereich weg ist. Ursache der Schwankung: Bei match/order wurde der 48-px-Platzhalter statt der Aufgabe gemessen, so dass order 168 px zu viel Luft zeigte (iPad hoch 200 px: 492 statt 324; Safari quer und hoch: die ganze Zeile „richtig“, z. B. 46 %: 189 statt −49 px). Die Dateien werden weiter nur geschrieben, nicht verglichen.
