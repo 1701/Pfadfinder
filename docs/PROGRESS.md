@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Schema 1.0.13: Grenzen für Items neben einem Lesetext
+- **Gebaut:** Der Validator warnt bei Items mit `textRef` (`WITH_TEXT` in `integrity.ts`): order höchstens 4 Elemente zu je 30 Zeichen; short-answer `model` höchstens 93 Zeichen und höchstens 2 `keyPoints`; single-choice mit zusätzlichem `stimulus.text` höchstens 3 Optionen. CONTENT_SCHEMA §4.1/§4.5/§4.9/§7, CHANGELOG 1.0.13.
+- **Ableitung:** Jede Grenze ist der größte Wert, der in allen vier Viewports ≥ 18 px Luft ließ (`text-inhalt-*.json`, Fixture t-sach-900: order-Element 30 bei d-lsa-2-002, `model` 93 beim Fixture). Der ursprüngliche Batch ergibt damit 7 Warnungen (2-003, 2-004, 3-001), der jetzige Content und die Fixture keine. Tests mit Gegenprobe (ohne Prüfung 3 rot).
+- **Offen:** multi-choice ohne Grenze, weil 5 Optionen zweimal passten und einmal um 1 px fehlten (2-001, 99 Zeichen Prompt). Ebenfalls ohne Regel: die Rückmeldung bei short-answer; 3-002 lief vor Patch 1 bei „noch nicht“ in Safari quer 20 px unter das Band (incorrect + misconception 176 Zeichen, jetzt 158).
+- **CI:** [CI #39160815614](https://github.com/1701/Pfadfinder/actions/runs/39160815614) grün (f3bb232…e74a38f), Workers Builds grün; 942 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-18 – Content: Lesen Sachtexte (3 Texte, 16 Items), Einstieg Deutsch mit Lesen-Block
 - **Eingespielt:** Batch vom 2026-10-18: t-sach-001 „Der Igel im Winter“, t-sach-002 „Notruf 112: Was dann passiert“, t-sach-003 „Aus alt mach neu: Papier“ und `lesen-sachtext.json` (d-lsa-1-001 … d-lsa-3-003, draft, Niveau 7/6/3), dazu Patch 1 (2-001, 2-003, 2-004, 3-001, 3-002) und Patch 2 (2-004 mit 4 Elementen). `content:validate` 0/0; `text` neben `textRef` (2-003) wird angenommen. `pilot-lsa.md` nicht im Repo.
 - **Gebaut:** `/dev/text` zeigt auch Texte und Items aus `content/`. `text-layout.spec` prüft jeden echten Lesetext: Lese-Screen und jedes Item in jedem Zustand, ≥ 18 px Luft über dem Band; Werte je Item und Zustand in `text-inhalt-*.json`, Screenshots nur von Befunden.
