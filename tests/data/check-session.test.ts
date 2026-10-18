@@ -213,9 +213,25 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     expect(store.getState().status).toBe('intro');
     store.getState().begin();
     const shown = await play(store, () => true);
+    // With lesen-sachtext practiceable, the check ends with its block: one reading screen, then
+    // the items of one real text (task 10).
+    const readings: string[] = [];
+    while (store.getState().status === 'reading') {
+      readings.push(store.getState().current!.text!.id);
+      store.getState().doneReading();
+      shown.push(...(await play(store, () => true)));
+    }
     expect(store.getState().status).toBe('finished');
     expect(new Set(shown.map((i) => i.bereich))).toEqual(new Set(deutschOpen));
     expect(shown.some((i) => i.format === 'short-answer')).toBe(false);
+    if (deutschOpen.includes('lesen-sachtext')) {
+      expect(readings).toHaveLength(1);
+      expect(['t-sach-001', 't-sach-002', 't-sach-003']).toContain(readings[0]);
+      const first = shown.findIndex((i) => i.bereich === 'lesen-sachtext');
+      const block = shown.slice(first);
+      expect(block.length).toBeGreaterThanOrEqual(2);
+      expect(block.every((i) => i.stimulus?.textRef === readings[0])).toBe(true);
+    }
   });
 
   it('is not available with fewer than two practiceable Bereiche', async () => {

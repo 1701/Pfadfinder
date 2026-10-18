@@ -9,10 +9,14 @@
 // Budget: in portrait the box height, in landscape the column width are swept; the smallest air
 // per step and, per format, the reserve that leaves 18 px go to text-budget-*.json.
 // Screenshots text-*.png. In CI only the two Safari sizes run.
+// The texts of content/ get the same checks at the token values: the reading screen of every
+// text (a short text may fit without scrolling, then without a fade) and every item of it in
+// every state; the air per item and state goes to text-inhalt-*.json, a screenshot only to the
+// screens with a finding.
 
 import { expect, test, type Page } from '@playwright/test';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { SCREENSHOTS, VIEWPORTS as ALL_VIEWPORTS, fitMetrics, fitProblems } from './helpers';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { ITEMS, SCREENSHOTS, VIEWPORTS as ALL_VIEWPORTS, fitMetrics, fitProblems } from './helpers';
 
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
@@ -32,10 +36,16 @@ const WIDTHS = [34, 36, 38, 40, 42, 44, 46];
 const AIR = 18;
 /** Landscape column below and from 768 px screen height (tokens.css). */
 const COLUMN = { short: 0.34, tall: 0.42 };
+/** Reading texts of content/ with their items. */
+const contentTexts = readdirSync('content/texts', { recursive: true })
+  .map(String)
+  .filter((file) => file.endsWith('.json'))
+  .map((file) => JSON.parse(readFileSync(`content/texts/${file}`, 'utf8')) as { id: string })
+  .map((text) => ({ ...text, items: ITEMS.filter((i) => i.stimulus?.textRef === text.id) }));
 
-async function open(page: Page, query: string) {
+async function open(page: Page, query: string, text = TEXT) {
   const band = page.locator('[data-region="band"] > button:last-of-type');
-  const url = `/dev/text/${TEXT}?${query}`;
+  const url = `/dev/text/${text}?${query}`;
   await page.goto(url);
   try {
     await band.waitFor({ timeout: 20_000 });
@@ -130,6 +140,14 @@ async function boxMetrics(page: Page): Promise<BoxMetrics> {
 }
 
 type Where = 'start' | 'middle' | 'end';
+
+/** A real text may fit its box: then it needs no fade, otherwise the fades of boxProblems. */
+function contentBoxProblems(m: BoxMetrics, where: Where): string[] {
+  if (m.scrolls) return boxProblems(m, where);
+  return boxProblems({ ...m, scrolls: true, below: false, above: false }, 'end').concat(
+    m.below || m.above ? ['fade on a box that does not scroll'] : [],
+  );
+}
 
 function boxProblems(m: BoxMetrics, where: Where): string[] {
   return [
@@ -241,5 +259,71 @@ for (const viewport of VIEWPORTS) {
     );
     await context.close();
     expect(red, `reading text layout in ${viewport.name}`).toEqual([]);
+  });
+}
+
+for (const viewport of VIEWPORTS) {
+  test(`echte Lesetexte passen auf ${viewport.name} (${viewport.width}×${viewport.height})`, async ({
+    browser,
+  }) => {
+    const states = contentTexts.reduce(
+      (n, t) => n + t.items.reduce((m, i) => m + statesOf(i.format).length, 1),
+      0,
+    );
+    test.setTimeout(Math.max(120_000, states * 4_000));
+    const context = await browser.newContext({ viewport });
+    const red: string[] = [];
+    /** Air above the band per item and state; the reading screen's page overflow per text. */
+    const air: Record<string, Record<string, number>> = {};
+    const lesen: Record<string, { scrolls: boolean; overflow: number }> = {};
+    for (const text of contentTexts) {
+      const page = await context.newPage();
+      await open(page, 'zustand=lesen', text.id);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollHeight - window.innerHeight,
+      );
+      const button = await page.evaluate(
+        () =>
+          window.innerHeight -
+          document.querySelector('[data-region="band"] button')!.getBoundingClientRect().bottom,
+      );
+      if (overflow > 0) red.push(`${text.id} lesen: page scrolls by ${overflow} px`);
+      if (button < 0) red.push(`${text.id} lesen: Weiter leaves the screen`);
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lies den Text.');
+      const start = await boxMetrics(page);
+      lesen[text.id] = { scrolls: start.scrolls, overflow };
+      for (const p of contentBoxProblems(start, 'start')) red.push(`${text.id} lesen: ${p}`);
+      await page.screenshot({ path: `${SCREENSHOTS}/text-${text.id}-lesen-${viewport.name}.png` });
+      await scrollToEnd(page);
+      for (const p of contentBoxProblems(await boxMetrics(page), 'end'))
+        red.push(`${text.id} lesen ende: ${p}`);
+
+      for (const item of text.items) {
+        for (const state of statesOf(item.format)) {
+          await open(page, `item=${item.id}&zustand=${state}`, text.id);
+          const label = `${item.id} ${item.format} ${state}`;
+          const problems = [
+            ...(await fitProblems(page)),
+            ...contentBoxProblems(await boxMetrics(page), 'start'),
+          ];
+          const at = Math.round((await fitMetrics(page))?.slack ?? -Infinity);
+          (air[item.id] ??= {})[state] = at;
+          if (at < AIR) problems.push(`only ${at} px air (${AIR} px wanted)`);
+          for (const p of problems) red.push(`${label}: ${p}`);
+          // Only the screens with a finding: one picture per item would be 30 per text.
+          if (problems.length > 0)
+            await page.screenshot({
+              path: `${SCREENSHOTS}/text-${item.id}-${state}-${viewport.name}.png`,
+            });
+        }
+      }
+      await page.close();
+    }
+    writeFileSync(
+      `${SCREENSHOTS}/text-inhalt-${viewport.name}.json`,
+      `${JSON.stringify({ viewport, lesen, air }, null, 2)}\n`,
+    );
+    await context.close();
+    expect(red, `content reading texts in ${viewport.name}`).toEqual([]);
   });
 }

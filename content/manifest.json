@@ -172,9 +172,54 @@
     },
     "lesen-sachtext": {
       "fach": "deutsch",
-      "items": 0,
-      "byFormat": {},
-      "textIds": []
+      "items": 16,
+      "byFormat": {
+        "cloze-select": {
+          "1": 1,
+          "2": 0,
+          "3": 0
+        },
+        "mark-in-text": {
+          "1": 2,
+          "2": 0,
+          "3": 0
+        },
+        "match": {
+          "1": 0,
+          "2": 1,
+          "3": 0
+        },
+        "multi-choice": {
+          "1": 0,
+          "2": 2,
+          "3": 0
+        },
+        "number-input": {
+          "1": 2,
+          "2": 0,
+          "3": 0
+        },
+        "order": {
+          "1": 0,
+          "2": 2,
+          "3": 0
+        },
+        "short-answer": {
+          "1": 0,
+          "2": 0,
+          "3": 2
+        },
+        "single-choice": {
+          "1": 2,
+          "2": 1,
+          "3": 1
+        }
+      },
+      "textIds": [
+        "t-sach-001",
+        "t-sach-002",
+        "t-sach-003"
+      ]
     },
     "lesen-literarisch": {
       "fach": "deutsch",

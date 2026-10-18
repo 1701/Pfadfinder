@@ -1,0 +1,21 @@
+{
+  "id": "t-sach-002",
+  "kind": "sachtext",
+  "title": "Notruf 112: Was dann passiert",
+  "wordCount": 169,
+  "paragraphs": [
+    "Wenn es brennt, wählt man die Nummer 112. In der Leitstelle nimmt jemand den Anruf an. Dort fragt man: Wo ist es passiert? Was ist passiert? Wer ruft an? Danach legt man nicht sofort auf, sondern wartet auf Rückfragen.",
+    "Die Leitstelle alarmiert die Feuerwehr. In vielen Orten arbeiten die Feuerwehrleute nicht hauptberuflich bei der Feuerwehr. Sie sind Bäcker, Lehrerinnen oder Mechaniker. Ein Piepser oder eine Sirene ruft sie zum Gerätehaus. Man nennt das Freiwillige Feuerwehr.",
+    "Im Gerätehaus ziehen sie die Schutzkleidung an. Jacke, Hose und Helm schützen vor Hitze. Dann steigen sie in das Löschfahrzeug. Auf dem Weg leuchtet das Blaulicht, und das Martinshorn ertönt. Andere Autos müssen Platz machen.",
+    "Am Einsatzort entscheidet die Einsatzleiterin oder der Einsatzleiter, was zu tun ist. Zuerst werden Menschen gerettet. Erst danach wird gelöscht. Dafür zieht die Feuerwehr Schläuche vom Fahrzeug zum Feuer.",
+    "Die Feuerwehr hilft nicht nur bei Bränden. Sie pumpt nach einem Unwetter Keller leer. Nach einem Unfall befreit sie Menschen aus Autos. Manchmal holt sie sogar eine Katze vom Dach."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lsa-1-004",
+    "d-lsa-1-005",
+    "d-lsa-2-003",
+    "d-lsa-2-004",
+    "d-lsa-3-002"
+  ]
+}

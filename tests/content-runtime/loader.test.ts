@@ -49,8 +49,10 @@ describe('content loader – reading texts', () => {
     expect(loads).toBe(1);
   });
 
-  it('the app content has no texts yet, and loading them works', async () => {
+  it('loads the texts of the app content for their Bereich', async () => {
     const loader = createContentLoader();
-    expect(await loader.loadTexts('deutsch', 'lesen-sachtext')).toEqual([]);
+    const texts = await loader.loadTexts('deutsch', 'lesen-sachtext');
+    expect(texts.map((t) => t.id).sort()).toEqual(['t-sach-001', 't-sach-002', 't-sach-003']);
+    expect(await loader.loadTexts('deutsch', 'rs-strategien')).toEqual([]);
   });
 });

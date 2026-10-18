@@ -1,0 +1,21 @@
+{
+  "id": "t-sach-003",
+  "kind": "sachtext",
+  "title": "Aus alt mach neu: Papier",
+  "wordCount": 151,
+  "paragraphs": [
+    "Jeden Tag landet viel Papier im Müll: Zeitungen, Hefte, Kartons. Weggeworfen wird es aber nicht. Aus altem Papier wird neues Papier. Das nennt man Recycling.",
+    "Zu Hause kommt das Altpapier in die blaue Tonne. Ein Müllwagen bringt es in die Papierfabrik. Dort wird es zuerst sortiert. Büroklammern und Plastik haben im Papier nichts zu suchen.",
+    "Dann kommt das Papier mit viel Wasser in einen großen Bottich. Ein Rührwerk zerkleinert es zu einem grauen Brei. Dieser Brei heißt Pulpe. Aus ihm wird die Druckfarbe herausgewaschen.",
+    "Die Pulpe fließt auf ein langes Sieb. Das Wasser tropft ab, zurück bleibt eine dünne Schicht. Heiße Walzen pressen und trocknen sie. Am Ende rollt eine riesige Papierbahn aus der Maschine.",
+    "Recycling spart Bäume, denn für neues Papier aus Holz müssen Bäume gefällt werden. Es spart auch Wasser und Strom. Ein Blatt Papier kann so bis zu sieben Mal neu entstehen. Danach sind die Fasern zu kurz."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lsa-1-006",
+    "d-lsa-1-007",
+    "d-lsa-2-005",
+    "d-lsa-2-006",
+    "d-lsa-3-003"
+  ]
+}

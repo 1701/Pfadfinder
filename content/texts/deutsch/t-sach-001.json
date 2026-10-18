@@ -1,0 +1,22 @@
+{
+  "id": "t-sach-001",
+  "kind": "sachtext",
+  "title": "Der Igel im Winter",
+  "wordCount": 154,
+  "paragraphs": [
+    "Im Herbst frisst der Igel so viel, wie er kann. Er sucht Käfer, Würmer und Schnecken. Dabei wird er richtig dick. Das Fett braucht er für den Winter.",
+    "Wenn es kalt wird, baut er sich ein Nest. Dafür sammelt er Laub, Gras und kleine Zweige. Das Nest liegt unter einer Hecke oder in einem Laubhaufen. Dort ist es dunkel und windgeschützt.",
+    "Im Nest hält der Igel Winterschlaf. Sein Herz schlägt dann nur noch etwa fünfmal in der Minute. Im Sommer schlägt es bis zu zweihundertmal. Der Igel atmet nur selten, und sein Körper wird kalt. So verbraucht er fast kein Fett.",
+    "Im Frühling wacht der Igel auf. Er ist dann sehr dünn und hungrig. Zum Glück gibt es jetzt wieder Käfer und Schnecken.",
+    "Wer dem Igel helfen will, lässt im Garten einen Laubhaufen liegen. Darin findet er ein Zuhause. Füttern muss man ihn nicht. Eine Schale mit Wasser hilft ihm aber an warmen Tagen."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lsa-1-001",
+    "d-lsa-1-002",
+    "d-lsa-1-003",
+    "d-lsa-2-001",
+    "d-lsa-2-002",
+    "d-lsa-3-001"
+  ]
+}

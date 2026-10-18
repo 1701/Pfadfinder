@@ -9,7 +9,7 @@ export interface ContentItem {
   format: string;
   status: string;
   prompt: string;
-  stimulus?: { text?: string; assetId?: string };
+  stimulus?: { text?: string; assetId?: string; textRef?: string };
   payload: {
     options?: Entry[];
     left?: Entry[];

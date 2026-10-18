@@ -1,1 +1,778 @@
-[]
+[
+  {
+    "id": "d-lsa-1-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Was frisst der Igel im Herbst? Lies im 1. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Käfer, Würmer und Schnecken"
+        },
+        {
+          "id": "b",
+          "text": "Laub, Gras und Zweige"
+        },
+        {
+          "id": "c",
+          "text": "Beeren und Nüsse"
+        },
+        {
+          "id": "d",
+          "text": "Fett und Wasser"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Das steht im 1. Absatz: Käfer, Würmer und Schnecken.",
+      "incorrect": "Lies den 1. Absatz noch einmal. Dort steht, was der Igel sucht.",
+      "misconception": "Laub, Gras und Zweige sammelt der Igel für sein Nest, nicht zum Fressen."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-1"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Tippe den Satz an, der sagt, warum das Nest ein guter Ort ist.",
+    "payload": {
+      "text": "Dafür sammelt er Laub, Gras und kleine Zweige. Das Nest liegt unter einer Hecke oder in einem Laubhaufen. Dort ist es dunkel und windgeschützt.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        2
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Dunkel und windgeschützt, darum ist das Nest dort gut.",
+      "incorrect": "Suche den Satz, der sagt, wie es im Nest ist. Nicht, wo es liegt oder woraus es ist.",
+      "misconception": "Der Satz mit Hecke und Laubhaufen sagt nur, wo das Nest liegt."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-2",
+      "markieren"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Wie oft schlägt das Herz des Igels im Winterschlaf in einer Minute? Lies im 3. Absatz nach.",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 5
+    },
+    "feedback": {
+      "correct": "Richtig! Nur etwa fünfmal in der Minute.",
+      "incorrect": "Im 3. Absatz stehen zwei Zahlen. Eine gilt für den Winterschlaf, eine für den Sommer.",
+      "misconception": "Zweihundert ist die Zahl für den Sommer."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-3",
+      "zahl"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Warum verbraucht der Igel im Winterschlaf fast kein Fett? Tippe alle Gründe an, die im Text stehen.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Sein Herz schlägt langsam."
+        },
+        {
+          "id": "b",
+          "text": "Er atmet nur selten."
+        },
+        {
+          "id": "c",
+          "text": "Er frisst im Nest Schnecken."
+        },
+        {
+          "id": "d",
+          "text": "Sein Körper wird kalt."
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Langsames Herz, seltenes Atmen, kalter Körper. Alles drei steht im 3. Absatz.",
+      "incorrect": "Lies den 3. Absatz Satz für Satz. Drei Sätze sagen, was im Körper des Igels anders ist.",
+      "misconception": "Im Winterschlaf frisst der Igel nichts. Er lebt vom Fett."
+    },
+    "tags": [
+      "verknuepfen",
+      "absatz-3"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Bringe in die richtige Reihenfolge, was der Igel im Jahr macht.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Er hält Winterschlaf."
+        },
+        {
+          "id": "b",
+          "text": "Er frisst sich dick."
+        },
+        {
+          "id": "c",
+          "text": "Er wacht dünn und hungrig auf."
+        },
+        {
+          "id": "d",
+          "text": "Er baut ein Nest."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Dick fressen, Nest bauen, Winterschlaf, aufwachen. So wie die Absätze 1 bis 4.",
+      "incorrect": "Der Text erzählt in der Reihenfolge des Jahres. Schau, was im 1. Absatz passiert und was danach.",
+      "misconception": "Viele setzen das Nest vor das Fressen. Der Igel frisst sich erst dick, dann wird es kalt."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 65,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-3-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-001"
+    },
+    "prompt": "Warum ist der Igel im Frühling so dünn? Erkläre mit dem Text.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Was hat er im Winter gemacht, was nicht?"
+    },
+    "solution": {
+      "model": "Im Winterschlaf frisst der Igel nichts. Er lebt vom Fett aus dem Herbst.",
+      "keyPoints": [
+        "Im Winterschlaf frisst er nichts",
+        "Er lebt vom Fett aus dem Herbst"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Das Fett vom Herbst ist im Frühling aufgebraucht.",
+      "incorrect": "Verbinde den 1. und den 3. Absatz: Wofür braucht der Igel das Fett?",
+      "misconception": "Nur „Er hat geschlafen“ reicht nicht. Er hat dabei vom Fett gelebt."
+    },
+    "tags": [
+      "begruenden",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-002"
+    },
+    "prompt": "Was ruft die Feuerwehrleute zum Gerätehaus? Lies im 2. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Ein Piepser oder eine Sirene"
+        },
+        {
+          "id": "b",
+          "text": "Das Blaulicht"
+        },
+        {
+          "id": "c",
+          "text": "Ein Brief von der Leitstelle"
+        },
+        {
+          "id": "d",
+          "text": "Der Einsatzleiter"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Ein Piepser oder eine Sirene, so steht es im 2. Absatz.",
+      "incorrect": "Lies den 2. Absatz. Ein Satz sagt, was die Feuerwehrleute ruft.",
+      "misconception": "Das Blaulicht leuchtet erst auf der Fahrt, das steht im 3. Absatz."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-2"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-002"
+    },
+    "prompt": "Tippe den Satz an, der sagt, wovor die Schutzkleidung schützt.",
+    "payload": {
+      "text": "Im Gerätehaus ziehen sie die Schutzkleidung an. Jacke, Hose und Helm schützen vor Hitze. Dann steigen sie in das Löschfahrzeug.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        1
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Jacke, Hose und Helm schützen vor Hitze.",
+      "incorrect": "Suche das Wort schützen. In diesem Satz steht, wovor.",
+      "misconception": "Der erste Satz sagt nur, dass sie die Kleidung anziehen, nicht wozu."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-3",
+      "markieren"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-002",
+      "text": "Im 2. Absatz steht: „Sie sind Bäcker, Lehrerinnen oder Mechaniker.“"
+    },
+    "prompt": "Wer ist mit „Sie“ gemeint?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "die Feuerwehrleute"
+        },
+        {
+          "id": "b",
+          "text": "die Leute in der Leitstelle"
+        },
+        {
+          "id": "c",
+          "text": "die Menschen, die anrufen"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Der Satz davor spricht von den Feuerwehrleuten. Sie haben andere Berufe.",
+      "incorrect": "Lies den Satz davor. Von wem ist dort die Rede? Auf die bezieht sich das Sie.",
+      "misconception": "Die Leitstelle kommt im Satz davor auch vor, aber sie alarmiert nur."
+    },
+    "tags": [
+      "pronomen",
+      "verknuepfen",
+      "absatz-2"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-002"
+    },
+    "prompt": "Bringe in die richtige Reihenfolge, was nach dem Anruf passiert.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Fahrt mit Blaulicht"
+        },
+        {
+          "id": "b",
+          "text": "Alarm von der Leitstelle"
+        },
+        {
+          "id": "c",
+          "text": "Löschen"
+        },
+        {
+          "id": "d",
+          "text": "Menschen retten"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "a",
+        "d",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Alarm, Fahrt, Retten, Löschen.",
+      "incorrect": "Geh die Absätze 2, 3 und 4 der Reihe nach durch.",
+      "misconception": "Im 4. Absatz steht: Zuerst werden Menschen gerettet, erst danach wird gelöscht."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-3-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-002"
+    },
+    "prompt": "Warum heißt es Freiwillige Feuerwehr? Erkläre mit dem 2. Absatz.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Was arbeiten die Feuerwehrleute sonst?"
+    },
+    "solution": {
+      "model": "Die Feuerwehrleute haben einen anderen Beruf. Bei Alarm kommen sie freiwillig dazu.",
+      "keyPoints": [
+        "Sie arbeiten nicht hauptberuflich bei der Feuerwehr",
+        "Bei Alarm kommen sie freiwillig dazu"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Bäcker, Lehrerin, Mechaniker, und bei Alarm kommen sie dazu.",
+      "incorrect": "Im 2. Absatz steht, was die Feuerwehrleute arbeiten. Was heißt das für die Feuerwehr?",
+      "misconception": "Nur „Sie löschen freiwillig“ reicht nicht. Der andere Beruf ist der Kern."
+    },
+    "tags": [
+      "begruenden",
+      "absatz-2"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-003"
+    },
+    "prompt": "Wähle, was im 2. Absatz steht.",
+    "payload": {
+      "template": "In der Fabrik wird das Altpapier zuerst {1}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "sortiert",
+            "gewaschen",
+            "gepresst"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "sortiert"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Zuerst wird sortiert, Büroklammern und Plastik müssen raus.",
+      "incorrect": "Lies den 2. Absatz. Das Wort zuerst hilft dir.",
+      "misconception": "Gewaschen und gepresst kommt auch vor, aber erst in den Absätzen 3 und 4."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-2"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-003"
+    },
+    "prompt": "Wie oft kann ein Blatt Papier höchstens neu entstehen? Lies im 5. Absatz nach.",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
+    "feedback": {
+      "correct": "Richtig! Bis zu sieben Mal, dann sind die Fasern zu kurz.",
+      "incorrect": "Im 5. Absatz steht eine Zahl als Wort. Lies den vorletzten Satz.",
+      "misconception": "Die Zahl steht als Wort im Text, nicht als Ziffer."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-5",
+      "zahl"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-003"
+    },
+    "prompt": "Ordne jedem Wort zu, was es im Text bedeutet. Eine Erklärung bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Pulpe"
+        },
+        {
+          "id": "l2",
+          "text": "Recycling"
+        },
+        {
+          "id": "l3",
+          "text": "Rührwerk"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "grauer Brei aus Papier und Wasser"
+        },
+        {
+          "id": "r2",
+          "text": "aus Altem wird Neues"
+        },
+        {
+          "id": "r3",
+          "text": "Maschine, die zerkleinert"
+        },
+        {
+          "id": "r4",
+          "text": "Walze, die trocknet"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Alle drei Wörter erklärt der Text selbst, in den Absätzen 1 und 3.",
+      "incorrect": "Suche jedes Wort im Text. Der Satz daneben erklärt es.",
+      "misconception": "Die Walze trocknet die Papierbahn. Das ist kein Rührwerk."
+    },
+    "tags": [
+      "verknuepfen",
+      "wortbedeutung"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-003"
+    },
+    "prompt": "Was spart Recycling? Tippe alles an, was im 5. Absatz steht.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Bäume"
+        },
+        {
+          "id": "b",
+          "text": "Wasser"
+        },
+        {
+          "id": "c",
+          "text": "Strom"
+        },
+        {
+          "id": "d",
+          "text": "Zeit"
+        },
+        {
+          "id": "e",
+          "text": "Geld"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Bäume, Wasser und Strom. Genau das steht im 5. Absatz.",
+      "incorrect": "Lies den 5. Absatz. Zwei Sätze sagen, was Recycling spart.",
+      "misconception": "Zeit und Geld klingen richtig, stehen aber nicht im Text. Es zählt nur, was dort steht."
+    },
+    "tags": [
+      "verknuepfen",
+      "absatz-5"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-3-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-003"
+    },
+    "prompt": "Welche Überschrift passt am besten zum 5. Absatz?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Recycling schont die Natur."
+        },
+        {
+          "id": "b",
+          "text": "Papier kommt in die blaue Tonne."
+        },
+        {
+          "id": "c",
+          "text": "Walzen trocknen die Pulpe."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau: Bäume, Wasser, Strom. Der ganze Absatz sagt, was Recycling für die Natur tut.",
+      "incorrect": "Eine Überschrift sagt, worum es im ganzen Absatz geht. Lies alle vier Sätze und frage: Was ist allen gemeinsam?",
+      "misconception": "Die blaue Tonne steht im Text, aber im 2. Absatz. Sie ist nicht der Kern des 5. Absatzes."
+    },
+    "tags": [
+      "hauptgedanke",
+      "absatz-5"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  }
+]
