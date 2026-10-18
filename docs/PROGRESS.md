@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Content: Rechtschreibung „Laut und Buchstabe“ (20 Items)
+- **Eingespielt:** Batch vom 2026-10-17 unverändert als `rs-laut-buchstabe.json` (vorher leer): d-rsl-1-001 … d-rsl-3-004, Status draft, Niveau 8/8/4, acht Formate, ohne Bilder und ohne `textRef`. `content:validate`: 0 Fehler, 0 Warnungen. Der Bereich ist jetzt übbar. Der Einstieg Deutsch ist noch zu, weil rs-strategien erst 2 Items hat.
+- **Layout:** Das Layout-Projekt ist lokal grün (21/21, alle 121 Items in vier Viewports). Einzeln angesehen: 3-002 steht in einer Spalte, jede Option passt in eine Zeile. 3-004: Jede Karte passt in eine Zeile, hoch ist sie 540 px breit. 2-001: Der Unterstrich ist in Andika gut sichtbar.
+- **Befund Vorlesen 2-001 (gemeldet, nicht behoben):** Vorlesen sagt „Antworten: Fu_. Flu_. Stra_e. Ku_. Nu_.“ Wie eine Stimme „_“ ausspricht, ist lokal nicht prüfbar (keine Stimme installiert). Schwerer wiegt: Jede Stimme spricht „Flu“, „Ku“, „Nu“ als offene Silbe mit langem u, und das führt bei „Hör auf den Selbstlaut“ zum ß. `readAloud` ersetzt nur den Aufgabenteil; die Antworten getrennt vertonen oder für ein Item weglassen geht nur mit einer Schemaänderung.
+- **Offen:** Entscheidung zu 2-001 (Schema-Erweiterung oder Item umbauen).
+- **CI:** [CI #39118886077](https://github.com/1701/Pfadfinder/actions/runs/39118886077) grün (d32253c), Workers Builds grün; 878 Tests, e2e 97 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-18 – Aufgabe 10: Einstieg-Reihenfolge, Impressum/Datenschutz, Runde über Mitternacht, Hülle
 - **Gebaut:** (0) Einstieg: Lesen-Blöcke nach den Runden statt davor; beim Kürzen auf 12 verliert nur Runde 3 Plätze. (1) `/impressum` und `/datenschutz` als statische Seiten (lazy Chunk, dürfen scrollen, kein Vorlesen), verlinkt nur aus `/eltern` oben rechts, schon vor der Rechenfrage; Marker `[NAME]`, `[ADRESSE]`, `[E-MAIL]`, Ersetzen steht in DEPLOY §6. (2) Eine Antwort zählt für den Tag, an dem ihre Runde begann: Abschluss mit dem Starttag, Karte über `practiceDay` (offene Runde von gestern, die nach Mitternacht weiterläuft), „Später“ gilt so lange weiter. (3) `index.html` zeigt vor dem JS „Pfadfinder“ in Andika Bold auf Papier.
 - **Datenschutz-Inhalt:** Alles bleibt auf dem Gerät (IndexedDB, § 25 Abs. 2 Nr. 2 TDDDG), keine Cookies, kein Tracking, Sicherung entsteht auf dem Gerät. Cloudflare als Hoster mit Zugriffsprotokollen (Art. 6 Abs. 1 lit. f DSGVO, EU-US Data Privacy Framework). Neu und wahrheitsgemäß: Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google; auf dem iPad bleibt er auf dem Gerät.
