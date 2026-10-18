@@ -34,7 +34,7 @@ test('Fokusring nach Prüfen nur bei Tastatur', async ({ page }) => {
 
 test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 10', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: "Wohin geht's heute?" })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wohin geht’s heute?' })).toBeVisible();
   // A new learner is offered the Einstieg first; "Später" brings back the Tagesziel.
   await page.getByRole('button', { name: 'Später' }).click();
   await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();

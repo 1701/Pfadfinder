@@ -26,7 +26,7 @@ import { OFFER_GO, OFFER_LATER, offerTitle } from '../text/einstieg';
 import { Karte } from './Karte';
 import { Tagesziel, tageszielText } from './Tagesziel';
 
-export const KARTEN_TITLE = "Wohin geht's heute?";
+export const KARTEN_TITLE = 'Wohin geht’s heute?';
 
 export interface KartenViewProps {
   /** Null while the progress is being read: the title shows, the map follows at once. */

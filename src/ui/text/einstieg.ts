@@ -4,7 +4,7 @@
 import { FAECHER, type Fach } from '../../domain/content/taxonomy';
 import { FACH_NAME } from './bereiche';
 
-export const offerTitle = (fach: Fach) => `Wo geht's in ${FACH_NAME[fach]} los?`;
+export const offerTitle = (fach: Fach) => `Wo geht’s in ${FACH_NAME[fach]} los?`;
 export const OFFER_GO = 'Los';
 export const OFFER_LATER = 'Später';
 

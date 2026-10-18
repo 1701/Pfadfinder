@@ -7,11 +7,11 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { answer, currentItem } from './helpers';
 
-const OFFER = "Wo geht's in Mathe los?";
-const OFFER_DEUTSCH = "Wo geht's in Deutsch los?";
+const OFFER = 'Wo geht’s in Mathe los?';
+const OFFER_DEUTSCH = 'Wo geht’s in Deutsch los?';
 /** Any offer, whatever the Fach. */
-const ANY_OFFER = /^Wo geht's in /;
-const MAP_TITLE = "Wohin geht's heute?";
+const ANY_OFFER = /^Wo geht’s in /;
+const MAP_TITLE = 'Wohin geht’s heute?';
 
 // Practiceable Mathe Bereiche from the manifest: 3 questions each, at most 12.
 const manifest = JSON.parse(readFileSync('content/manifest.json', 'utf8')) as {

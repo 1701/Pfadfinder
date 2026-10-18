@@ -6,7 +6,7 @@ import { FAECHER, fachOfBereich, type Bereich } from '../../domain/content/taxon
 import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 
-const TITLE = "Wohin geht's heute?";
+const TITLE = 'Wohin geht’s heute?';
 
 /** bereiche: the practiceable Bereiche (from the content manifest), in taxonomy order. */
 export function ListenScreen({ bereiche }: { bereiche: readonly Bereich[] }) {

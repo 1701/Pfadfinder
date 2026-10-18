@@ -16,7 +16,7 @@ const VIEWPORTS = [
 ];
 const ZUSTAENDE = ['intro', 'intro-deutsch', 'aufgabe', 'pause', 'ergebnis', 'hinweis'] as const;
 /** What the offer asks, per Fach (src/ui/text/einstieg.ts). */
-const OFFER_TITLE = (fach: string) => `Wo geht's in ${fach} los?`;
+const OFFER_TITLE = (fach: string) => `Wo geht’s in ${fach} los?`;
 
 async function measure(page: Page) {
   await page.evaluate(() => document.fonts.ready);

@@ -50,11 +50,11 @@ function renderStored(repos: Repositories, now: () => string) {
 describe('Einstieg offer on the map', () => {
   it('makes the question the title, with Los and Später, and sets the Tagesziel aside', async () => {
     renderScreen();
-    expect(await screen.findByRole('heading', { name: "Wo geht's in Mathe los?" })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Mathe los?' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe('/einstieg/mathe');
     expect(screen.getByRole('button', { name: 'Später' })).toBeTruthy();
     expect(screen.queryByText(/Fundstücken/)).toBeNull();
-    expect(screen.queryByRole('heading', { name: "Wohin geht's heute?" })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Wohin geht’s heute?' })).toBeNull();
   });
 
   it('rests after "Später" until the end of the day, also when the map opens again', async () => {
@@ -63,7 +63,7 @@ describe('Einstieg offer on the map', () => {
     let now = '2026-10-14T16:00:00.000Z';
     const first = renderStored(repos, () => now);
     await userEvent.click(await screen.findByRole('button', { name: 'Später' }));
-    expect(screen.getByRole('heading', { name: "Wohin geht's heute?" })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Wohin geht’s heute?' })).toBeTruthy();
     expect(screen.getByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
     first.unmount();
 
@@ -71,13 +71,13 @@ describe('Einstieg offer on the map', () => {
     now = '2026-10-14T21:59:00.000Z';
     const second = renderStored(repos, () => now);
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: /^Wo geht's in / })).toBeNull();
+    expect(screen.queryByRole('heading', { name: /^Wo geht’s in / })).toBeNull();
     second.unmount();
 
     // The next morning it is back.
     now = '2026-10-15T06:00:00.000Z';
     renderStored(repos, () => now);
-    expect(await screen.findByRole('heading', { name: "Wo geht's in Mathe los?" })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Mathe los?' })).toBeTruthy();
   });
 
   it('"Später" rests the day for every Fach: Deutsch only comes the next morning', async () => {
@@ -103,7 +103,7 @@ describe('Einstieg offer on the map', () => {
 
     now = '2026-10-15T06:00:00.000Z';
     renderStored(repos, () => now);
-    expect(await screen.findByRole('heading', { name: "Wo geht's in Deutsch los?" })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Deutsch los?' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
       '/einstieg/deutsch',
     );
@@ -138,12 +138,12 @@ describe('Einstieg offer on the map', () => {
       </MemoryRouter>,
     );
     await userEvent.click(await screen.findByRole('button', { name: 'Später' }));
-    expect(screen.getByRole('heading', { name: "Wohin geht's heute?" })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Wohin geht’s heute?' })).toBeTruthy();
   });
 
   it('moves on to Deutsch once Mathe has a mastery state (after the check or after practice)', async () => {
     renderScreen({ ...NEW, mastery: [masteryFor('daten-zufall', 1)] });
-    expect(await screen.findByRole('heading', { name: "Wo geht's in Deutsch los?" })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Deutsch los?' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
       '/einstieg/deutsch',
     );
@@ -155,6 +155,6 @@ describe('Einstieg offer on the map', () => {
       mastery: [masteryFor('daten-zufall', 1), masteryFor('rs-strategien', 1, 'deutsch')],
     });
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: /^Wo geht's in / })).toBeNull();
+    expect(screen.queryByRole('heading', { name: /^Wo geht’s in / })).toBeNull();
   });
 });

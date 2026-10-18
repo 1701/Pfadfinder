@@ -45,7 +45,7 @@ describe('ListenScreen', () => {
     );
     renderWith(['zahlen-operationen']);
     (await screen.findByRole('button', { name: 'Vorlesen' })).click();
-    expect((speak.mock.calls[0]![0] as { text: string }).text).toBe("Wohin geht's heute?");
+    expect((speak.mock.calls[0]![0] as { text: string }).text).toBe('Wohin geht’s heute?');
   });
 
   afterEach(() => vi.unstubAllGlobals());

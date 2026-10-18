@@ -32,7 +32,7 @@ describe('KartenScreen', () => {
   it('shows the title first and the map once the progress is read', async () => {
     let resolve!: (p: MapProgressSource) => void;
     renderScreen(() => new Promise((r) => (resolve = r)));
-    expect(screen.getByRole('heading', { name: "Wohin geht's heute?" })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Wohin geht’s heute?' })).toBeTruthy();
     expect(screen.queryByRole('group', { name: 'Karte' })).toBeNull();
     // Both Fächer have begun: no Einstieg offer, the Tagesziel shows.
     resolve({
