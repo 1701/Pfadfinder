@@ -80,5 +80,20 @@ for (const viewport of VIEWPORTS) {
     await expect(page.getByRole('button', { name: 'Ja, alles löschen' })).toBeVisible();
     await expectFits(page, `eltern-rueckfrage ${viewport.name}`);
     await shot('eltern-rueckfrage');
+
+    // Impressum and Datenschutz may scroll (text for adults), never sideways.
+    for (const legal of ['impressum', 'datenschutz']) {
+      await page.goto(`/${legal}`);
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      const overflowX = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      );
+      expect(overflowX, `${legal} ${viewport.name}: page scrolls sideways`).toBeLessThanOrEqual(0);
+      await page.screenshot({
+        path: `${SCREENSHOTS}/${legal}-${viewport.name}.png`,
+        fullPage: true,
+      });
+    }
   });
 }

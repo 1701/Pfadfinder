@@ -212,7 +212,7 @@ Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: 
 ## 12. Rechtliches und Datenschutz
 
 - Keine personenbezogenen Daten verlassen das Gerät; kein Analytics, keine Cookies außer technisch notwendigen → Datenschutzerklärung kurz, DSGVO Art. 8 (Einwilligung bei Kindern) greift nicht
-- Impressumspflicht nach DDG gilt trotzdem (Markus privat)
+- Impressumspflicht nach DDG gilt trotzdem (Markus privat). Seit Aufgabe 10 (2026-10-18): `/impressum` und `/datenschutz` als statische Seiten, verlinkt nur aus `/eltern` (oben rechts, schon vor der Rechenfrage), ohne Vorlesen; Name, Anschrift und E-Mail stehen dort als Marker `[NAME]`, `[ADRESSE]`, `[E-MAIL]`, bis sie vor der Veröffentlichung ersetzt werden (DEPLOY §6). Die Datenschutzerklärung nennt Cloudflare als Hoster (Zugriffsprotokolle) und die Sprachausgabe des Browsers (Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google)
 - Produktname darf "Kompass 4" beschreibend nennen ("Übungen zur Vorbereitung auf Kompass 4"), nicht als Marke führen
 - Alle Items sind Eigenschöpfungen; Originalaufgaben und IQB/VERA-Items dienen nur als Format- und Niveaureferenz, werden nicht übernommen
 - Lizenz: offen – Code MIT, Content CC BY-SA 4.0

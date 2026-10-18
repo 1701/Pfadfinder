@@ -54,6 +54,22 @@ describe('ElternScreen', () => {
     expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
   });
 
+  it('links Impressum and Datenschutz before the sum and after it', async () => {
+    renderScreen();
+    const links = () =>
+      screen
+        .getAllByRole('link')
+        .filter((l) => l.closest('nav'))
+        .map((l) => [l.textContent, l.getAttribute('href')]);
+    const expected = [
+      ['Impressum', '/impressum'],
+      ['Datenschutz', '/datenschutz'],
+    ];
+    expect(links()).toEqual(expected);
+    await passGate();
+    expect(links()).toEqual(expected);
+  });
+
   it('gives a new sum after a wrong answer', async () => {
     renderScreen();
     await type('84');

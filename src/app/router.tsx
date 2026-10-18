@@ -50,6 +50,11 @@ const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.
 // The Eltern page (only by URL, no link in the app) in its own chunk.
 const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
 
+// Impressum and Datenschutz (linked only from /eltern) share one small chunk.
+const RechtlichesScreen = lazy(() =>
+  import('../ui/screens/RechtlichesScreen').then((m) => ({ default: m.RechtlichesScreen })),
+);
+
 // Developer pages exist only in the dev build; the condition is replaced at build time,
 // so the imports and their chunks are dropped from the production bundle.
 const TokensPage = import.meta.env.DEV
@@ -83,6 +88,8 @@ export function AppRouter() {
           <Route path="/probetest/:id" element={<ProbetestRoute />} />
           <Route path="/probetest/:id/print" element={<PrintRoute />} />
           <Route path="/eltern" element={<ElternRoute />} />
+          <Route path="/impressum" element={<RechtlichesScreen page="impressum" />} />
+          <Route path="/datenschutz" element={<RechtlichesScreen page="datenschutz" />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
           {TextPage && <Route path="/dev/text/:id" element={<TextPage />} />}

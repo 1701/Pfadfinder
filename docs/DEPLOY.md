@@ -66,7 +66,7 @@ Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem
 
 ## 6. Noch nicht öffentlich
 
-Bis Pfadfinder bewusst veröffentlicht wird, sperrt `public/robots.txt` alle Crawler (`Disallow: /`), und `index.html` trägt `<meta name="robots" content="noindex">`. Beides zusammen entfernen, wenn es so weit ist. Lighthouse-SEO ist bis dahin niedrig; das ist gewollt und zählt nicht (ARCHITECTURE §8).
+Bis Pfadfinder bewusst veröffentlicht wird, sperrt `public/robots.txt` alle Crawler (`Disallow: /`), und `index.html` trägt `<meta name="robots" content="noindex">`. Beides zusammen entfernen, wenn es so weit ist. Vorher in `src/ui/text/rechtliches.ts` die Marker `[NAME]`, `[ADRESSE]` und `[E-MAIL]` (Impressum und Datenschutz) durch die echten Angaben ersetzen. Lighthouse-SEO ist bis dahin niedrig; das ist gewollt und zählt nicht (ARCHITECTURE §8).
 
 ## 7. Bekanntes Verhalten
 

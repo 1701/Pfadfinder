@@ -2,6 +2,7 @@
 // "Sicherung herunterladen" (a file with all data, since 2026-10-16) above the button that
 // deletes everything on this device after asking back. Import and an overview come later
 // (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
+// Impressum and Datenschutz are linked here only, top right, already before the sum (task 10).
 
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
@@ -10,6 +11,7 @@ import { Button } from '../components/Button';
 import { ZiffernBlock } from '../components/ZiffernBlock';
 import { focusQuietly } from '../focus';
 import { TO_MAP } from '../text/einstieg';
+import { DATENSCHUTZ_LINK, IMPRESSUM_LINK } from '../text/rechtliches';
 import {
   BACKUP,
   BACKUP_FAILED,
@@ -46,6 +48,17 @@ const zurKarte = (
   </Link>
 );
 
+const rechtliches = (
+  <nav aria-label="Rechtliches" className="flex gap-xs">
+    <Link to="/impressum" className={QUIET_ACTION_CLASS}>
+      {IMPRESSUM_LINK}
+    </Link>
+    <Link to="/datenschutz" className={QUIET_ACTION_CLASS}>
+      {DATENSCHUTZ_LINK}
+    </Link>
+  </nav>
+);
+
 export function ElternScreen({
   downloadBackup,
   deleteAll,
@@ -71,6 +84,7 @@ export function ElternScreen({
     return (
       <Blatt
         left={zurKarte}
+        right={rechtliches}
         title={DELETE_TITLE}
         text={
           failed === 'backup' ? BACKUP_FAILED : failed === 'delete' ? DELETE_FAILED : DELETE_TEXT
@@ -122,6 +136,7 @@ function Frage({ newQuestion, onPass }: { newQuestion: () => GateQuestion; onPas
   return (
     <Blatt
       left={zurKarte}
+      right={rechtliches}
       title={gateTitle(question)}
       text={retry ? GATE_RETRY : undefined}
       readAloud={false}

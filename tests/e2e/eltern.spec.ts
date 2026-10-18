@@ -87,3 +87,23 @@ test('Üben → /eltern → Sicherung herunterladen: eine gültige Datei, die si
   // Nothing was deleted: the button to delete is still there, the data too.
   await expect(page.getByRole('button', { name: 'Alles löschen' })).toBeVisible();
 });
+
+test('Impressum und Datenschutz: nur von /eltern verlinkt, schon vor der Rechenfrage', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  await expect(page.locator('a[href*="impressum"], a[href*="datenschutz"]')).toHaveCount(0);
+
+  await page.goto('/eltern');
+  for (const [link, section] of [
+    ['Impressum', 'Angaben nach §\u00a05\u00a0DDG'],
+    ['Datenschutz', 'Hosting bei Cloudflare'],
+  ] as const) {
+    await page.getByRole('link', { name: link }).click();
+    await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
+    await page.getByRole('button', { name: 'Zurück' }).click();
+    await expect(page.getByRole('heading', { name: /^Für Erwachsene/ })).toBeVisible();
+  }
+});
