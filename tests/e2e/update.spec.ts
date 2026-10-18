@@ -1,7 +1,7 @@
 // The update of the installed app (task 11) with a real second build: version A is installed,
 // the server switches to B, the app finds B when it comes back to the foreground. The quiet
-// "Neue Version – Neu laden" shows on /eltern and on the map, nothing reloads during a round,
-// and a tap on the map brings B. Chromium only: Playwright's WebKit has no service workers.
+// "Neue Version – Neu laden" shows on /eltern, "Neu laden" on the map (landscape here), nothing
+// reloads during a round, and a tap on the map brings B. Chromium only: Playwright's WebKit has no service workers.
 
 import { expect, test, type Page } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
@@ -12,6 +12,7 @@ import { startBuildServer, type BuildServer } from './update-server';
 
 const SECOND = 'zweiter-build';
 const RELOAD = { name: 'Neue Version – Neu laden' };
+const MAP_RELOAD = { name: 'Neu laden', exact: true };
 
 let dir: string;
 let server: BuildServer;
@@ -64,22 +65,22 @@ test('neue Version: leiser Hinweis auf /eltern und der Karte, Neuladen nur auf T
   await expect(page.getByRole('button', RELOAD)).toBeVisible({ timeout: 20_000 });
 
   await page.getByRole('link', { name: 'Zur Karte' }).click();
-  await expect(page.getByRole('button', RELOAD)).toBeVisible();
+  await expect(page.getByRole('button', MAP_RELOAD)).toBeVisible();
 
   // A round: no hint, and nothing reloads on its own, not even back in the foreground.
   await page.evaluate(() => Object.assign(window, { stillHere: true }));
   await page.getByRole('link', { name: /^Zahlen und Rechnen/ }).click();
   await expect(page.getByText('1 von 10')).toBeVisible();
-  await expect(page.getByRole('button', RELOAD)).toHaveCount(0);
+  await expect(page.getByRole('button', MAP_RELOAD)).toHaveCount(0);
   await backToForeground(page);
   await page.waitForTimeout(1_000);
   expect(await page.evaluate(() => 'stillHere' in window)).toBe(true);
   await expect(page.getByText('1 von 10')).toBeVisible();
 
   await page.getByRole('link', { name: 'Pause' }).click();
-  await Promise.all([page.waitForEvent('load'), page.getByRole('button', RELOAD).click()]);
+  await Promise.all([page.waitForEvent('load'), page.getByRole('button', MAP_RELOAD).click()]);
   expect(await page.evaluate(() => 'stillHere' in window)).toBe(false);
   await page.goto(`${server.url}/eltern`);
   await expect(page.getByText(`Version ${SECOND}`)).toBeVisible();
-  await expect(page.getByRole('button', RELOAD)).toHaveCount(0);
+  await expect(page.getByRole('button', MAP_RELOAD)).toHaveCount(0);
 });

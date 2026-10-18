@@ -2,7 +2,7 @@
 // "Sicherung herunterladen" (a file with all data, since 2026-10-16) above the button that
 // deletes everything on this device after asking back. Import and an overview come later
 // (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
-// Impressum and Datenschutz are linked here only, top right, already before the sum (task 10).
+// Impressum and Datenschutz top right, already before the sum (task 10); also on the map (task 11).
 // Bottom left, quietly: the build ("Version a1b2c3d · 18.10.2026") and, once a new version
 // waits, "Neue Version – Neu laden" (task 11), also before the sum.
 
@@ -10,11 +10,11 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { gateQuestion, isGateAnswer, type GateQuestion } from '../../domain/parents';
 import { Button } from '../components/Button';
+import { RechtlichesLinks } from '../components/RechtlichesLinks';
 import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { ZiffernBlock } from '../components/ZiffernBlock';
 import { focusQuietly } from '../focus';
 import { TO_MAP } from '../text/einstieg';
-import { DATENSCHUTZ_LINK, IMPRESSUM_LINK } from '../text/rechtliches';
 import {
   BACKUP,
   BACKUP_FAILED,
@@ -64,16 +64,7 @@ function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
   );
 }
 
-const rechtliches = (
-  <nav aria-label="Rechtliches" className="flex gap-xs">
-    <Link to="/impressum" className={QUIET_ACTION_CLASS}>
-      {IMPRESSUM_LINK}
-    </Link>
-    <Link to="/datenschutz" className={QUIET_ACTION_CLASS}>
-      {DATENSCHUTZ_LINK}
-    </Link>
-  </nav>
-);
+const rechtliches = <RechtlichesLinks />;
 
 export function ElternScreen({
   downloadBackup,

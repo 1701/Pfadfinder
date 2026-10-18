@@ -150,14 +150,14 @@ describe('Karte', () => {
 
   it('explains the dashed outline once, and not at all when nothing is unexplored', () => {
     const { unmount } = renderMap();
-    expect(screen.getAllByText('Gestrichelte Gebiete sind noch unerforscht.')).toHaveLength(1);
+    expect(screen.getAllByText('Gestrichelt: noch unerforscht.')).toHaveLength(1);
     expect(screen.queryByText(/noch unerforscht/)).not.toBeNull();
     unmount();
     const open = {} as Record<Bereich, RegionState>;
     for (const b of BEREICHE)
       open[b] = { kind: 'neu', niveau: 1, erschlossen: [false, false, false] };
     renderMap(open);
-    expect(screen.queryByText('Gestrichelte Gebiete sind noch unerforscht.')).toBeNull();
+    expect(screen.queryByText('Gestrichelt: noch unerforscht.')).toBeNull();
   });
 });
 

@@ -30,8 +30,8 @@
         "width": 410,
         "height": 684
       },
-      "slack": 155,
-      "at": "richtig"
+      "slack": 58,
+      "at": "noch-nicht"
     },
     "multi-choice": {
       "box": {
@@ -53,16 +53,16 @@
   "token": "--reading-column",
   "sweep": {
     "34%": {
-      "slack": 144,
-      "at": "multi-choice richtig"
+      "slack": 133,
+      "at": "order noch-nicht"
     },
     "36%": {
-      "slack": 118,
-      "at": "multi-choice noch-nicht"
+      "slack": 106,
+      "at": "order noch-nicht"
     },
     "38%": {
-      "slack": 99,
-      "at": "multi-choice noch-nicht"
+      "slack": 77,
+      "at": "order noch-nicht"
     },
     "40%": {
       "slack": 52,
@@ -160,13 +160,13 @@
         "46%": 59
       },
       "noch-nicht": {
-        "34%": 368,
-        "36%": 342,
-        "38%": 342,
-        "40%": 342,
-        "42%": 323,
-        "44%": 267,
-        "46%": 267
+        "34%": 133,
+        "36%": 106,
+        "38%": 77,
+        "40%": 77,
+        "42%": 58,
+        "44%": 2,
+        "46%": -45
       }
     },
     "multi-choice": {

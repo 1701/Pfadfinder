@@ -57,14 +57,28 @@ describe('KartenScreen', () => {
     const failing = () => Promise.reject(new Error('blocked'));
     renderScreen(failing);
     await screen.findAllByRole('group', { name: 'Karte' });
-    expect(screen.queryByRole('button', { name: 'Neue Version – Neu laden' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Neu laden' })).toBeNull();
   });
 
-  it('reloads for a waiting version on a tap', async () => {
+  it('links Impressum and Datenschutz in the legend line', async () => {
+    renderScreen(() => Promise.reject(new Error('blocked')));
+    await screen.findAllByRole('group', { name: 'Karte' });
+    const nav = screen.getByRole('navigation', { name: 'Rechtliches' });
+    expect(
+      within(nav)
+        .getAllByRole('link')
+        .map((l) => [l.textContent, l.getAttribute('href')]),
+    ).toEqual([
+      ['Impressum', '/impressum'],
+      ['Datenschutz', '/datenschutz'],
+    ]);
+  });
+
+  it('reloads for a waiting version on a tap, "Neu laden" only (the line is short)', async () => {
     const onReload = vi.fn();
     renderScreen(() => Promise.reject(new Error('blocked')), { onReload });
     await screen.findAllByRole('group', { name: 'Karte' });
-    screen.getByRole('button', { name: 'Neue Version – Neu laden' }).click();
+    screen.getByRole('button', { name: 'Neu laden' }).click();
     expect(onReload).toHaveBeenCalledOnce();
   });
 

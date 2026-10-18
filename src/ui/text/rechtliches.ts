@@ -13,8 +13,7 @@ export interface LegalPage {
   sections: LegalSection[];
 }
 
-export const IMPRESSUM_LINK = 'Impressum';
-export const DATENSCHUTZ_LINK = 'Datenschutz';
+export { DATENSCHUTZ_LINK, IMPRESSUM_LINK } from './rechtliches-links';
 
 const CONTACT = '[NAME]\n[ADRESSE]\nE-Mail: [E-MAIL]';
 

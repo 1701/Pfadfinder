@@ -1,5 +1,6 @@
 // Developer preview of the map with every state at once (dev build only): /dev/karte.
-// Used by tests/e2e/karte.spec.ts for the layout check and the screenshots.
+// Used by tests/e2e/karte.spec.ts for the layout check and the screenshots; ?neu fills the
+// legend line (Probetest, legend, new version, Impressum · Datenschutz).
 
 import { BEREICHE, type Bereich } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
@@ -18,8 +19,11 @@ const DEMO: Record<Bereich, RegionState> = {
   'rs-strategien': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
 };
 
+/** ?neu: the fullest legend line, with the Probetest line and a waiting new version. */
 export function KartePage() {
-  const reached = new URLSearchParams(window.location.search).has('geschafft');
+  const search = new URLSearchParams(window.location.search);
+  const reached = search.has('geschafft');
+  const full = search.has('neu');
   return (
     <KartenView
       progress={{
@@ -28,6 +32,8 @@ export function KartePage() {
           ? { count: 10, goal: 10, reached: true }
           : { count: 4, goal: 10, reached: false },
       }}
+      probetests={full ? [{ fach: 'mathe', id: 'mathe-01' }] : []}
+      update={full ? { onReload: () => undefined } : null}
     />
   );
 }

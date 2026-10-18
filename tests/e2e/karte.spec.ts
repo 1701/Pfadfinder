@@ -3,6 +3,7 @@
 // focus ring. /dev/karte shows every state at once (dev build only); / is the real start page.
 
 import { expect, test, type Page } from '@playwright/test';
+import { writeFileSync } from 'node:fs';
 import { SCREENSHOTS } from './helpers';
 
 const VIEWPORTS = [
@@ -37,6 +38,12 @@ async function measure(page: Page) {
       ),
       mapBottom: map.getBoundingClientRect().bottom,
       height: window.innerHeight,
+      // The quiet actions below the map: Probetest, new version, Impressum · Datenschutz.
+      // Hidden ones (width 0) do not count: "Neu laden" in Safari portrait.
+      legend: [...document.querySelectorAll('main > div:last-child :is(a, button)')]
+        .map((e) => ({ name: e.textContent, rect: e.getBoundingClientRect() }))
+        .filter(({ rect }) => rect.width > 0)
+        .map(({ name, rect }) => ({ name, height: rect.height, bottom: rect.bottom })),
     };
   });
 }
@@ -46,7 +53,8 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     await page.setViewportSize(viewport);
-    for (const url of ['/dev/karte', '/']) {
+    const budget: Record<string, number> = {};
+    for (const url of ['/dev/karte', '/dev/karte?neu', '/']) {
       await page.goto(url);
       const m = await measure(page);
       expect(m.overflow, `${url}: page scrolls`).toBeLessThanOrEqual(0);
@@ -55,10 +63,31 @@ for (const viewport of VIEWPORTS) {
       expect(m.smallestName, `${url}: names below 18 px`).toBeGreaterThanOrEqual(18);
       expect(m.smallestTarget, `${url}: Gebiet smaller than 48 px`).toBeGreaterThanOrEqual(48);
       expect(m.mapBottom, `${url}: map leaves the screen`).toBeLessThanOrEqual(m.height);
+      expect(m.legend.map((l) => l.name)).toEqual(
+        expect.arrayContaining(['Impressum', 'Datenschutz']),
+      );
+      if (url.endsWith('?neu')) {
+        // "Neu laden" in portrait only from 1024 px height: the installed app, not Safari's bars.
+        const reload = m.legend.some((l) => l.name === 'Neu laden');
+        expect(reload, `${url}: "Neu laden"`).toBe(viewport.name !== 'safari-portrait');
+      }
+      for (const l of m.legend) {
+        expect(l.height, `${url}: "${l.name}" below 48 px`).toBeGreaterThanOrEqual(48);
+        expect(l.bottom, `${url}: "${l.name}" leaves the screen`).toBeLessThanOrEqual(m.height);
+      }
+      budget[url] = Number(m.smallestName.toFixed(1));
     }
+    // Smallest Gebietsname per page (task 11: 18 px with Impressum · Datenschutz and Neu laden).
+    writeFileSync(
+      `${SCREENSHOTS}/karte-budget-${viewport.name}.json`,
+      `${JSON.stringify(budget, null, 2)}\n`,
+    );
     await page.goto('/dev/karte');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-${viewport.name}.png` });
+    await page.goto('/dev/karte?neu');
+    await measure(page);
+    await page.screenshot({ path: `${SCREENSHOTS}/karte-rechtliches-${viewport.name}.png` });
     await page.goto('/dev/karte?geschafft');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-geschafft-${viewport.name}.png` });
