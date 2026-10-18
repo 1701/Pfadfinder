@@ -5,8 +5,8 @@
     "height": 660
   },
   "current": {
-    "slack": 36,
-    "at": "multi-choice richtig"
+    "slack": 25,
+    "at": "order noch-nicht"
   },
   "formats": {
     "single-choice": {
@@ -30,8 +30,8 @@
         "width": 332,
         "height": 576
       },
-      "slack": 92,
-      "at": "richtig"
+      "slack": 25,
+      "at": "noch-nicht"
     },
     "multi-choice": {
       "box": {
@@ -53,16 +53,16 @@
   "token": "--reading-column",
   "sweep": {
     "34%": {
-      "slack": 36,
-      "at": "multi-choice richtig"
+      "slack": 25,
+      "at": "order noch-nicht"
     },
     "36%": {
-      "slack": 10,
-      "at": "multi-choice noch-nicht"
+      "slack": -2,
+      "at": "order noch-nicht"
     },
     "38%": {
-      "slack": -9,
-      "at": "multi-choice noch-nicht"
+      "slack": -31,
+      "at": "order noch-nicht"
     },
     "40%": {
       "slack": -56,
@@ -142,7 +142,7 @@
     },
     "order": {
       "antworten": {
-        "34%": 340,
+        "34%": 172,
         "36%": 172,
         "38%": 172,
         "40%": 172,
@@ -160,12 +160,12 @@
         "46%": -49
       },
       "noch-nicht": {
-        "34%": 260,
-        "36%": 234,
-        "38%": 234,
-        "40%": 234,
-        "42%": 215,
-        "44%": 159,
+        "34%": 25,
+        "36%": -2,
+        "38%": -31,
+        "40%": -31,
+        "42%": -50,
+        "44%": -106,
         "46%": -153
       }
     },
