@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Aufgabe 11, Nachtrag: Kartenlegende gestrichen
+- **Entschieden (Markus):** „Gestrichelt: noch unerforscht.“ entfällt hoch und quer, samt Beispielstrich und `text/karte.ts`. Begründung (Markus): Die Bedeutung erschließt sich durch das Antippen. Die Probetest-Legende „gestrichelt: noch nicht verglichen“ bleibt.
+- **Befund (offen):** Ein gestricheltes Gebiet reagiert heute nicht auf Antippen (kein Link, `role="img"`); ob es dann etwas zeigen soll, ist noch zu entscheiden.
+- **Gebaut:** Gestrichelte Gebiete heißen für Screenreader „…, noch unerforscht“ (gab es schon, jetzt mit Test auf der ganzen Karte, Gegenprobe rot). Zeile unter der Karte: links „Probetest Mathe“, rechts „Neu laden“ und „Impressum · Datenschutz“, einreihig in vier Viewports; kleinster Name Safari hoch 18,2 / `/` 19,1 px, Safari quer 19,1, iPad hoch 21,5, iPad quer 23,4. `karte.spec` ohne Legendenprüfungen, `karte-legende-*` gelöscht, `karte-rechtliches-*` neu.
+- **CI:** [CI #39140317281](https://github.com/1701/Pfadfinder/actions/runs/39140317281) grün (b30c375), Workers Builds grün; 920 Tests, e2e 98 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout `karte`/`einstieg-layout`/`probetest-layout` 14/14.
+
 ## 2026-10-18 – Aufgabe 11, Nachtrag: Legende ins Meer der Karte
 - **Gebaut:** „Gestrichelt: noch unerforscht.“ steht mit gestricheltem Beispielstrich im Meer, in Namensgröße (24 Einheiten), `ink-muted`, ohne Rahmen; nur auf der ganzen Karte, nicht auf der Einzelinsel im Einstieg. Hoch: Kanal zwischen den Inseln rechts von „Deutsch“, einzeilig (viewBox x 190, Box 374 × 38). Quer: oben rechts neben „Deutsch“ über der Küste, zweizeilig nach dem Doppelpunkt (x 750, Box 242 × 66). Die Zeile unter der Karte hat links „Probetest Mathe“, rechts „Neu laden“ und Rechtliches.
 - **Verworfen (gemessen):** quer der Streifen unter der Deutsch-Insel (40 Einheiten hoch, eine Zeile braucht 38): 0,3 bzw. 0,9 px zur Küste.
