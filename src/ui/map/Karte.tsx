@@ -6,6 +6,8 @@
 // no contour lines, not selectable. Both layouts are in the DOM; CSS shows one by orientation,
 // and the hidden one is display:none, so it has no tab stops. With `fach` only that island is
 // drawn (Einstieg result); `interactive={false}` draws the Gebiete as pictures, not links.
+// While a Gebiet is a blank spot, the legend "Gestrichelt: noch unerforscht." lies in the open sea
+// of the whole map, with a dashed sample before it (task 11; not on a single island).
 
 import clsx from 'clsx';
 import { Fragment, useLayoutEffect, useRef, useState, type RefObject } from 'react';
@@ -20,6 +22,7 @@ import {
 import type { Niveau } from '../../domain/content/types';
 import type { RegionState } from '../../domain/progress';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
+import { MAP_LEGEND } from '../text/karte';
 import {
   MAP_LAYOUTS,
   MAP_STYLE,
@@ -68,6 +71,7 @@ function KartenLayout({
     ([fach]) => only === undefined || fach === only,
   );
   const bereiche: readonly Bereich[] = only ? BEREICHE_BY_FACH[only] : BEREICHE;
+  const unexplored = bereiche.some((b) => states[b].kind === 'unerforscht');
   return (
     <svg
       viewBox={only ? islandViewBox(layout, only) : `0 0 ${layout.width} ${layout.height}`}
@@ -96,7 +100,43 @@ function KartenLayout({
           interactive={interactive}
         />
       ))}
+      {only === undefined && unexplored && <Legende {...layout.legend} />}
     </svg>
+  );
+}
+
+/** The dashed sample is the outline of a blank Gebiet; the text is quiet, like the island names. */
+function Legende({ at: [x, y], lines }: MapLayout['legend']) {
+  const { size, lineHeight, sample, gap } = MAP_STYLE.legend;
+  const textX = x + sample + gap;
+  // One text for screen readers; two lines break after the colon.
+  const [head, rest] = MAP_LEGEND.split(/(?<=:) /);
+  const middle = y - size * 0.32;
+  return (
+    <g data-map-legend="">
+      <line
+        x1={x}
+        y1={middle}
+        x2={x + sample}
+        y2={middle}
+        className="stroke-line-strong"
+        strokeWidth={MAP_STYLE.outlineWidth}
+        strokeDasharray={MAP_STYLE.unexploredDash}
+        aria-hidden="true"
+      />
+      <text x={textX} y={y} fontSize={size} className="fill-ink-muted">
+        {lines === 1 ? (
+          MAP_LEGEND
+        ) : (
+          <>
+            <tspan>{head} </tspan>
+            <tspan x={textX} dy={lineHeight}>
+              {rest}
+            </tspan>
+          </>
+        )}
+      </text>
+    </g>
   );
 }
 

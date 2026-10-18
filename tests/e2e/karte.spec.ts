@@ -44,6 +44,93 @@ async function measure(page: Page) {
         .map((e) => ({ name: e.textContent, rect: e.getBoundingClientRect() }))
         .filter(({ rect }) => rect.width > 0)
         .map(({ name, rect }) => ({ name, height: rect.height, bottom: rect.bottom })),
+      mapLegend: (() => {
+        const legend = map.querySelector<SVGGElement>('[data-map-legend]');
+        if (!legend) return null;
+        const box = legend.getBBox();
+        const view = map.viewBox.baseVal;
+        // Distance from the legend's box to a segment (0 when it crosses the box).
+        const rect = { l: box.x, t: box.y, r: box.x + box.width, b: box.y + box.height };
+        const inBox = (x: number, y: number) =>
+          x >= rect.l && x <= rect.r && y >= rect.t && y <= rect.b;
+        const toBox = (x: number, y: number) =>
+          Math.hypot(Math.max(rect.l - x, 0, x - rect.r), Math.max(rect.t - y, 0, y - rect.b));
+        const toSegment = (
+          px: number,
+          py: number,
+          ax: number,
+          ay: number,
+          bx: number,
+          by: number,
+        ) => {
+          const [dx, dy] = [bx - ax, by - ay];
+          const t = Math.max(
+            0,
+            Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)),
+          );
+          return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+        };
+        const corners: [number, number][] = [
+          [rect.l, rect.t],
+          [rect.r, rect.t],
+          [rect.r, rect.b],
+          [rect.l, rect.b],
+        ];
+        let coast = Infinity;
+        for (const polygon of map.querySelectorAll('polygon')) {
+          const pts = [...polygon.points].map((p) => [p.x, p.y] as const);
+          pts.forEach(([ax, ay], i) => {
+            const [bx, by] = pts[(i + 1) % pts.length]!;
+            // A crossing edge or a corner inside the box: overlap.
+            const steps = 20;
+            for (let s = 0; s <= steps; s++) {
+              const [x, y] = [ax + ((bx - ax) * s) / steps, ay + ((by - ay) * s) / steps];
+              if (inBox(x, y)) coast = 0;
+            }
+            coast = Math.min(
+              coast,
+              toBox(ax, ay),
+              ...corners.map(([x, y]) => toSegment(x, y, ax, ay, bx, by)),
+            );
+          });
+          // The box inside a Gebiet.
+          const probe = new DOMPoint(rect.l, rect.t);
+          if (polygon.isPointInFill(probe)) coast = 0;
+        }
+        // Island names (bold texts outside the legend) and the Gebiet name plates.
+        let names = Infinity;
+        for (const other of map.querySelectorAll<SVGGraphicsElement>('text, rect')) {
+          if (legend.contains(other)) continue;
+          const o = other.getBBox();
+          const dx = Math.max(o.x - rect.r, 0, rect.l - (o.x + o.width));
+          const dy = Math.max(o.y - rect.b, 0, rect.t - (o.y + o.height));
+          names = Math.min(names, Math.hypot(dx, dy));
+        }
+        const r = legend.getBoundingClientRect();
+        return {
+          // Objects, not arrays: JSON.stringify then writes what Prettier accepts.
+          units: {
+            x: Math.round(box.x),
+            y: Math.round(box.y),
+            w: Math.round(box.width),
+            h: Math.round(box.height),
+          },
+          px: {
+            x: Math.round(r.left),
+            y: Math.round(r.top),
+            w: Math.round(r.width),
+            h: Math.round(r.height),
+          },
+          fontPx: parseFloat(getComputedStyle(legend.querySelector('text')!).fontSize) * scale,
+          inside:
+            rect.l >= view.x &&
+            rect.t >= view.y &&
+            rect.r <= view.x + view.width &&
+            rect.b <= view.y + view.height,
+          coastPx: coast * scale,
+          namesPx: names * scale,
+        };
+      })(),
     };
   });
 }
@@ -53,7 +140,7 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     await page.setViewportSize(viewport);
-    const budget: Record<string, number> = {};
+    const budget: Record<string, unknown> = {};
     for (const url of ['/dev/karte', '/dev/karte?neu', '/']) {
       await page.goto(url);
       const m = await measure(page);
@@ -66,16 +153,36 @@ for (const viewport of VIEWPORTS) {
       expect(m.legend.map((l) => l.name)).toEqual(
         expect.arrayContaining(['Impressum', 'Datenschutz']),
       );
+      // The line below the map stays one row: a second one took the names below 18 px.
+      expect(new Set(m.legend.map((l) => Math.round(l.bottom))).size, `${url}: line wraps`).toBe(1);
       if (url.endsWith('?neu')) {
-        // "Neu laden" in portrait only from 1024 px height: the installed app, not Safari's bars.
+        // Since the legend moved into the sea, "Neu laden" fits the line in every viewport.
         const reload = m.legend.some((l) => l.name === 'Neu laden');
-        expect(reload, `${url}: "Neu laden"`).toBe(viewport.name !== 'safari-portrait');
+        expect(reload, `${url}: "Neu laden"`).toBe(true);
+      }
+      // The legend of the blank spots in open sea: inside the map, as large as the names,
+      // clear of coast, Gebiete and name plates.
+      if (url.startsWith('/dev/karte')) expect(m.mapLegend, `${url}: map legend`).not.toBeNull();
+      if (m.mapLegend) {
+        expect(m.mapLegend.inside, `${url}: legend outside the map`).toBe(true);
+        expect(m.mapLegend.fontPx, `${url}: legend below 18 px`).toBeGreaterThanOrEqual(18);
+        expect(m.mapLegend.coastPx, `${url}: legend touches the coast`).toBeGreaterThanOrEqual(4);
+        expect(m.mapLegend.namesPx, `${url}: legend touches a name`).toBeGreaterThanOrEqual(4);
       }
       for (const l of m.legend) {
         expect(l.height, `${url}: "${l.name}" below 48 px`).toBeGreaterThanOrEqual(48);
         expect(l.bottom, `${url}: "${l.name}" leaves the screen`).toBeLessThanOrEqual(m.height);
       }
-      budget[url] = Number(m.smallestName.toFixed(1));
+      budget[url] = {
+        smallestName: Number(m.smallestName.toFixed(1)),
+        lineRows: new Set(m.legend.map((l) => Math.round(l.bottom))).size,
+        mapLegend: m.mapLegend && {
+          ...m.mapLegend,
+          fontPx: Number(m.mapLegend.fontPx.toFixed(1)),
+          coastPx: Number(m.mapLegend.coastPx.toFixed(1)),
+          namesPx: Number(m.mapLegend.namesPx.toFixed(1)),
+        },
+      };
     }
     // Smallest Gebietsname per page (task 11: 18 px with Impressum · Datenschutz and Neu laden).
     writeFileSync(
@@ -88,6 +195,9 @@ for (const viewport of VIEWPORTS) {
     await page.goto('/dev/karte?neu');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-rechtliches-${viewport.name}.png` });
+    await page.goto('/dev/karte?neu');
+    await measure(page);
+    await page.screenshot({ path: `${SCREENSHOTS}/karte-legende-${viewport.name}.png` });
     await page.goto('/dev/karte?geschafft');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-geschafft-${viewport.name}.png` });

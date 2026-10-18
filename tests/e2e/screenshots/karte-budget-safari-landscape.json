@@ -1,5 +1,68 @@
 {
-  "/dev/karte": 19.1,
-  "/dev/karte?neu": 19.1,
-  "/": 19.1
+  "/dev/karte": {
+    "smallestName": 19.1,
+    "lineRows": 1,
+    "mapLegend": {
+      "units": {
+        "x": 750,
+        "y": 4,
+        "w": 242,
+        "h": 66
+      },
+      "px": {
+        "x": 711,
+        "y": 113,
+        "w": 193,
+        "h": 52
+      },
+      "fontPx": 19.1,
+      "inside": true,
+      "coastPx": 8.1,
+      "namesPx": 13.6
+    }
+  },
+  "/dev/karte?neu": {
+    "smallestName": 19.1,
+    "lineRows": 1,
+    "mapLegend": {
+      "units": {
+        "x": 750,
+        "y": 4,
+        "w": 242,
+        "h": 66
+      },
+      "px": {
+        "x": 711,
+        "y": 113,
+        "w": 193,
+        "h": 52
+      },
+      "fontPx": 19.1,
+      "inside": true,
+      "coastPx": 8.1,
+      "namesPx": 13.6
+    }
+  },
+  "/": {
+    "smallestName": 19.1,
+    "lineRows": 1,
+    "mapLegend": {
+      "units": {
+        "x": 750,
+        "y": 4,
+        "w": 242,
+        "h": 66
+      },
+      "px": {
+        "x": 711,
+        "y": 113,
+        "w": 193,
+        "h": 52
+      },
+      "fontPx": 19.1,
+      "inside": true,
+      "coastPx": 8.1,
+      "namesPx": 13.6
+    }
+  }
 }

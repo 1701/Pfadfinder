@@ -1,16 +1,15 @@
 // The start page: title with Vorlesen, Tagesziel, the map filling the rest of the screen, and one
-// legend line when there are blank spots. No scrolling on any iPad viewport.
+// line below it. No scrolling on any iPad viewport. The legend of the blank spots lies in the sea
+// of the map since task 11 (Karte).
 // While the Einstieg is offered, its question is the title, with "Los" and "Später" beside it,
 // and the Tagesziel steps aside (it could only say "0 von 10"): the map keeps its full size.
 // A Fach with a Probetest gets a quiet line "Probetest Mathe" at the left of the legend line,
 // right below the Mathe island in landscape; in portrait the water between the islands is too
 // narrow for a 48 px target (measured 2026-10-15), so it stays in the same line.
-// At the right of the legend line, quietly: "Neu laden" while a new version waits (portrait only
-// from 1024 px height, see UpdateHinweis), and "Impressum · Datenschutz" in every viewport (DDG).
-// Measured in Safari (task 11): the long "Neue Version – Neu laden" took the Gebietsnamen to
-// 17.2 px landscape and 15.7 px portrait; the long legend wrapped the line in portrait (17.0 px).
-// With "Gestrichelt: noch unerforscht." Safari portrait keeps one row (19.1 px); the iPad in
-// portrait wraps "Impressum · Datenschutz" below while Neu laden shows (20.3 px).
+// At the right of the line, quietly: "Neu laden" while a new version waits, and
+// "Impressum · Datenschutz" in every viewport (DDG). Measured in Safari (task 11): the long
+// "Neue Version – Neu laden" took the Gebietsnamen to 17.2 px landscape and 15.7 px portrait;
+// a second row costs them about 1.2 px in Safari portrait, so the line stays one row.
 
 import clsx from 'clsx';
 import { Link } from 'react-router';
@@ -28,7 +27,6 @@ import { Karte } from './Karte';
 import { Tagesziel, tageszielText } from './Tagesziel';
 
 export const KARTEN_TITLE = "Wohin geht's heute?";
-const LEGEND = 'Gestrichelt: noch unerforscht.';
 
 export interface KartenViewProps {
   /** Null while the progress is being read: the title shows, the map follows at once. */
@@ -64,8 +62,6 @@ export function KartenView({
   readAloud = true,
   update = null,
 }: KartenViewProps) {
-  const unexplored =
-    progress !== null && BEREICHE.some((b) => progress.states[b].kind === 'unerforscht');
   return (
     <main
       className="screen-fit mx-auto grid max-w-page grid-rows-[auto_minmax(0,1fr)_auto] gap-sm px-lg py-sm"
@@ -95,16 +91,13 @@ export function KartenView({
         {progress && !offer && <Tagesziel {...progress.today} />}
       </header>
       <div className="min-h-0">{progress && <Karte states={progress.states} />}</div>
-      {/* Reserved line: the map does not jump when the legend appears. */}
-      {/* One flat row: where it is too narrow (portrait), Impressum · Datenschutz wraps to a second
-          line at the right, never three lines (measured task 11). */}
+      {/* Reserved line: the map does not jump when "Neu laden" appears. */}
       <div className="flex min-h-touch flex-wrap items-center justify-end gap-x-lg">
         {probetests.map(({ fach, id }) => (
           <Link key={id} to={`/probetest/${id}`} className={clsx(QUIET_ACTION_CLASS, 'mr-auto')}>
             Probetest {FACH_NAME[fach]}
           </Link>
         ))}
-        <p className="text-ink-muted">{unexplored && LEGEND}</p>
         <UpdateHinweis update={update} onMap />
         <RechtlichesLinks />
       </div>

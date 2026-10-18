@@ -48,6 +48,7 @@ function renderMap(states = STATES, today = TODAY) {
 
 /** jsdom ignores the orientation CSS: both layouts are in the DOM, so use the first map. */
 const wide = () => screen.getAllByRole('group', { name: 'Karte' })[0]!;
+const tall = () => screen.getAllByRole('group', { name: 'Karte' })[1]!;
 
 describe('Karte', () => {
   it('makes every open Gebiet a link named with its niveau', () => {
@@ -148,10 +149,16 @@ describe('Karte', () => {
     expect(screen.getByTestId('where').textContent).toBe('/ueben/mathe/raum-form');
   });
 
-  it('explains the dashed outline once, and not at all when nothing is unexplored', () => {
+  it('explains the dashed outline in the sea of each layout, not at all when nothing is unexplored', () => {
     const { unmount } = renderMap();
-    expect(screen.getAllByText('Gestrichelt: noch unerforscht.')).toHaveLength(1);
-    expect(screen.queryByText(/noch unerforscht/)).not.toBeNull();
+    // Tall: one line; wide: two lines, broken after the colon.
+    expect(within(tall()).getByText('Gestrichelt: noch unerforscht.')).toBeTruthy();
+    const wideLegend = wide().querySelector('[data-map-legend] text')!;
+    expect(wideLegend.textContent).toBe('Gestrichelt: noch unerforscht.');
+    expect([...wideLegend.querySelectorAll('tspan')].map((t) => t.textContent)).toEqual([
+      'Gestrichelt: ',
+      'noch unerforscht.',
+    ]);
     unmount();
     const open = {} as Record<Bereich, RegionState>;
     for (const b of BEREICHE)
@@ -184,6 +191,8 @@ describe('one island as a picture (Einstieg result)', () => {
     ]);
     expect(map.textContent).toContain('Mathe');
     expect(map.textContent).not.toContain('Deutsch');
+    // Unexplored Gebiete on the island, but no legend: it belongs to the whole map.
+    expect(map.querySelector('[data-map-legend]')).toBeNull();
   });
 });
 
