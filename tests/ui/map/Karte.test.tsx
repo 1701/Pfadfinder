@@ -4,7 +4,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { BEREICHE, type Bereich } from '../../../src/domain/content';
+import type { Bereich } from '../../../src/domain/content';
 import type { RegionState } from '../../../src/domain/progress';
 import { Karte } from '../../../src/ui/map/Karte';
 import { KartenView } from '../../../src/ui/map/KartenView';
@@ -48,7 +48,6 @@ function renderMap(states = STATES, today = TODAY) {
 
 /** jsdom ignores the orientation CSS: both layouts are in the DOM, so use the first map. */
 const wide = () => screen.getAllByRole('group', { name: 'Karte' })[0]!;
-const tall = () => screen.getAllByRole('group', { name: 'Karte' })[1]!;
 
 describe('Karte', () => {
   it('makes every open Gebiet a link named with its niveau', () => {
@@ -149,22 +148,21 @@ describe('Karte', () => {
     expect(screen.getByTestId('where').textContent).toBe('/ueben/mathe/raum-form');
   });
 
-  it('explains the dashed outline in the sea of each layout, not at all when nothing is unexplored', () => {
-    const { unmount } = renderMap();
-    // Tall: one line; wide: two lines, broken after the colon.
-    expect(within(tall()).getByText('Gestrichelt: noch unerforscht.')).toBeTruthy();
-    const wideLegend = wide().querySelector('[data-map-legend] text')!;
-    expect(wideLegend.textContent).toBe('Gestrichelt: noch unerforscht.');
-    expect([...wideLegend.querySelectorAll('tspan')].map((t) => t.textContent)).toEqual([
-      'Gestrichelt: ',
-      'noch unerforscht.',
+  it('names a dashed Gebiet "noch unerforscht"; no legend on the map (task 11)', () => {
+    renderMap();
+    const map = wide();
+    expect(
+      within(map)
+        .getAllByRole('img')
+        .map((g) => g.getAttribute('aria-label')),
+    ).toEqual([
+      'Daten und Zufall, noch unerforscht',
+      'Muster und Zahlenfolgen, noch unerforscht',
+      'Sachtexte lesen, noch unerforscht',
+      'Geschichten lesen, noch unerforscht',
+      'Laute und Buchstaben, noch unerforscht',
     ]);
-    unmount();
-    const open = {} as Record<Bereich, RegionState>;
-    for (const b of BEREICHE)
-      open[b] = { kind: 'neu', niveau: 1, erschlossen: [false, false, false] };
-    renderMap(open);
-    expect(screen.queryByText('Gestrichelt: noch unerforscht.')).toBeNull();
+    expect(screen.queryByText(/Gestrichelt/)).toBeNull();
   });
 });
 
@@ -191,8 +189,6 @@ describe('one island as a picture (Einstieg result)', () => {
     ]);
     expect(map.textContent).toContain('Mathe');
     expect(map.textContent).not.toContain('Deutsch');
-    // Unexplored Gebiete on the island, but no legend: it belongs to the whole map.
-    expect(map.querySelector('[data-map-legend]')).toBeNull();
   });
 });
 

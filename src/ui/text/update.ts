@@ -3,7 +3,7 @@
 
 export const versionLine = (buildId: string) => `Version ${buildId}`;
 export const UPDATE_RELOAD = 'Neue Version – Neu laden';
-/** In the map's legend line: the long text took the Gebietsnamen below 18 px in Safari. */
+/** In the line below the map: the long text took the Gebietsnamen below 18 px in Safari. */
 export const UPDATE_RELOAD_SHORT = 'Neu laden';
 
 /** For the language checks in tests/ui/text.test.ts. */

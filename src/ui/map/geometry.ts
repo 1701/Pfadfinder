@@ -21,14 +21,6 @@ export interface MapLayout {
   height: number;
   /** Island names, left baseline. */
   islands: Record<Fach, Point>;
-  /**
-   * The legend "Gestrichelt: noch unerforscht.": left end of its dashed sample and the baseline of
-   * its first line; `lines: 2` breaks after the colon. Open sea in every viewport (task 11,
-   * measured in karte.spec): tall in the channel between the islands right of "Deutsch", one
-   * line; wide top right, beside "Deutsch" above its coast, two lines (the strip below the
-   * island is 40 units high, one line of text needs 38, so it touched the coast).
-   */
-  legend: { at: Point; lines: 1 | 2 };
   regions: Record<Bereich, RegionShape>;
 }
 
@@ -50,8 +42,6 @@ export const MAP_STYLE = {
   /** Screen pixels (non-scaling stroke). */
   contourWidth: 1,
   unexploredDash: '8 6',
-  /** Same size as the Gebiet names, so it is as large as the smallest name (≥ 18 px). */
-  legend: { size: 24, lineHeight: 28, sample: 36, gap: 10 },
 } as const;
 
 // Corners of the wide layout (viewBox 1000 × 600).
@@ -81,7 +71,6 @@ export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
     width: 1000,
     height: 600,
     islands: { mathe: [40, 28], deutsch: [625, 62] },
-    legend: { at: [750, 33], lines: 2 },
     regions: {
       'zahlen-operationen': { points: [W.A, W.B, W.F, W.E], label: [132, 175] },
       'raum-form': { points: [W.B, W.C, W.G, W.N, W.F], label: [308, 193] },
@@ -101,7 +90,6 @@ export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
     width: 720,
     height: 900,
     islands: { mathe: [30, 32], deutsch: [30, 525] },
-    legend: { at: [190, 510], lines: 1 },
     regions: {
       'zahlen-operationen': { points: [T.A, T.B, T.F, T.E], label: [135, 159] },
       'raum-form': { points: [T.B, T.C, T.G, T.N, T.F], label: [360, 175] },

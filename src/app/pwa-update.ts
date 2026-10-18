@@ -1,7 +1,7 @@
 // Updates of the installed app (task 11). The app registers its service worker itself and asks for
 // a new version at start and whenever it comes back to the foreground (an iPad home-screen app is
 // mostly suspended, not restarted). A new worker waits; only a tap on "Neu laden" (/eltern and the
-// map's legend line) activates it and reloads. Nothing reloads on its own, so a round or a
+// line below the map) activates it and reloads. Nothing reloads on its own, so a round or a
 // Probetest is never interrupted, and a worker taking over from another tab reloads nothing here.
 
 import { useSyncExternalStore } from 'react';

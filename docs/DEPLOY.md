@@ -88,7 +88,7 @@ Bis Aufgabe 11 stand `registerType: 'autoUpdate'` in `vite.config.ts`, hatte abe
 
 Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 - Die App registriert `/sw.js` selbst und ruft `registration.update()` beim Start und bei jeder Rückkehr in den Vordergrund (`visibilitychange`) auf.
-- Ein neuer Service Worker installiert sich und wartet. Auf `/eltern` steht dann unten links neben der Kennung leise „Neue Version – Neu laden“, in der Legendenzeile der Karte kurz „Neu laden“. Auf der Karte steht der Hinweis in jedem Viewport (seit die Legende im Meer der Karte steht, bleibt die Zeile einreihig). Ein Tipp aktiviert ihn (`SKIP_WAITING`) und lädt neu, sobald er die Seite steuert.
+- Ein neuer Service Worker installiert sich und wartet. Auf `/eltern` steht dann unten links neben der Kennung leise „Neue Version – Neu laden“, in der Zeile unter der Karte kurz „Neu laden“. Auf der Karte steht der Hinweis in jedem Viewport (die Zeile bleibt einreihig). Ein Tipp aktiviert ihn (`SKIP_WAITING`) und lädt neu, sobald er die Seite steuert.
 - Von selbst lädt die App nie neu, also nie mitten in einer Runde oder einem Probetest. Ohne Tipp übernimmt die neue Version wie bisher, wenn die App ganz geschlossen war.
 - `/eltern` zeigt die Build-Kennung, z. B. `Version d7f1924 · 18.10.2026` (kurzer Git-Hash, bei Cloudflare notfalls aus `WORKERS_CI_COMMIT_SHA`, und der Build-Tag in Europe/Berlin).
 - `check-bundle.ts` prüft nach jedem Build: `sw.js` übernimmt nicht von selbst, kein `registerSW.js`, Kennung eingesetzt. `update.spec` (nur Chromium) baut eine zweite Version und spielt den Ablauf durch.
@@ -98,7 +98,7 @@ Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 **Prüfschritt am iPad** (nach einem Deploy, wenn auf dem iPad schon eine Version ab Aufgabe 11 läuft):
 1. Die App auf dem Home-Bildschirm öffnen. Sie hat keine Adresszeile; `/eltern` erreicht sie über Karte → „Impressum“ → „Für Eltern“. Kennung notieren. Safari hat auf dem iPad einen eigenen Speicher und einen eigenen Service Worker, `/eltern` in Safari zeigt die Version von Safari.
 2. Einen neuen Stand auf `main` pushen und warten, bis Workers Builds grün ist.
-3. Die App in den Hintergrund schicken und wieder holen (nicht neu starten). Nach wenigen Sekunden steht in der Legendenzeile der Karte „Neu laden“.
+3. Die App in den Hintergrund schicken und wieder holen (nicht neu starten). Nach wenigen Sekunden steht in der Zeile unter der Karte „Neu laden“.
 4. Eine Runde beginnen, die App in den Hintergrund und zurück: kein Hinweis, kein Neuladen, die Runde läuft weiter.
 5. Zur Karte, „Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg, `/eltern` (über „Impressum“ → „Für Eltern“) zeigt die neue Kennung.
 6. In der installierten App auf `/eltern` „Sicherung herunterladen“ tippen: Liefert iOS eine Datei (Teilen-Menü oder „In Dateien sichern“)? Ergebnis hier eintragen; ohne Datei braucht die Sicherung in der installierten App einen anderen Weg.

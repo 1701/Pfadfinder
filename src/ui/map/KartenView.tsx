@@ -1,6 +1,6 @@
 // The start page: title with Vorlesen, Tagesziel, the map filling the rest of the screen, and one
-// line below it. No scrolling on any iPad viewport. The legend of the blank spots lies in the sea
-// of the map since task 11 (Karte).
+// line below it. No scrolling on any iPad viewport. There is no legend of the blank spots (task
+// 11): a dashed Gebiet says "noch unerforscht" in its name for screen readers (Karte).
 // While the Einstieg is offered, its question is the title, with "Los" and "Später" beside it,
 // and the Tagesziel steps aside (it could only say "0 von 10"): the map keeps its full size.
 // A Fach with a Probetest gets a quiet line "Probetest Mathe" at the left of the legend line,
@@ -36,7 +36,7 @@ export interface KartenViewProps {
   /** The Probetest each Fach offers (the first in the manifest); none for a Fach without one. */
   probetests?: readonly { fach: Fach; id: string }[];
   readAloud?: boolean;
-  /** "Neu laden" in the legend line, for adults (task 11). */
+  /** "Neu laden" in the line below the map, for adults (task 11). */
   update?: AppUpdate;
 }
 

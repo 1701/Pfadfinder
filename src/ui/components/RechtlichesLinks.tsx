@@ -1,4 +1,4 @@
-// "Impressum · Datenschutz", quiet, on /eltern (top right) and in the map's legend line (task 11).
+// "Impressum · Datenschutz", quiet, on /eltern (top right) and in the line below the map (task 11).
 
 import { Link } from 'react-router';
 import { DATENSCHUTZ_LINK, IMPRESSUM_LINK } from '../text/rechtliches-links';
