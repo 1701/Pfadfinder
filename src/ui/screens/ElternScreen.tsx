@@ -1,4 +1,5 @@
-// Route /eltern, reached only by typing the URL (no link in the app): a sum to get in, then
+// Route /eltern, by URL or "Für Eltern" at the end of Impressum and Datenschutz (task 11), never
+// from a child's screen: a sum to get in, then
 // "Sicherung herunterladen" (a file with all data, since 2026-10-16) above the button that
 // deletes everything on this device after asking back. Import and an overview come later
 // (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.

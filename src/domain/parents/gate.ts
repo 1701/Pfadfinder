@@ -1,6 +1,6 @@
 // The question in front of the Eltern page (PRODUCT.md §7): a sign "for parents", not a lock.
-// Any child in year 4 can add two two-digit numbers; the protection is that no link in the app
-// leads to /eltern (ARCHITECTURE.md §7).
+// Any child in year 4 can add two two-digit numbers; the protection is that no child's screen
+// links to /eltern, only the legal pages do (ARCHITECTURE.md §7).
 
 export interface GateQuestion {
   a: number;

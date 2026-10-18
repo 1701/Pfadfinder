@@ -80,3 +80,5 @@ export const DATENSCHUTZ: LegalPage = {
 };
 
 export const LEGAL_BACK = 'Zurück';
+/** At the end of both pages: the way to /eltern in the installed app, which has no address bar. */
+export const ELTERN_LINK = 'Für Eltern';

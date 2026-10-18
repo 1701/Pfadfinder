@@ -1,4 +1,4 @@
-// The Eltern page as its own lazy chunk (it needs IndexedDB). Reached only by typing /eltern.
+// The Eltern page as its own lazy chunk (it needs IndexedDB). Reached by URL or from the legal pages.
 
 import { backupFile } from '../data/backup';
 import { appRepositories } from '../data/dexie/instance';

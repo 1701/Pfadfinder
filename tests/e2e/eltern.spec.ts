@@ -1,4 +1,4 @@
-// The Eltern page (/eltern, only by URL): sum on the digit pad, "Alles löschen" with a question
+// The Eltern page (/eltern, by URL or "Für Eltern" on the legal pages, never from a child's screen): sum on the digit pad, "Alles löschen" with a question
 // back, then the map of a new device that offers the Einstieg again. Production build.
 
 import { readFile } from 'node:fs/promises';
@@ -21,7 +21,7 @@ async function passGate(page: Page) {
 test('Üben → /eltern → alles löschen → Karte mit Angebot', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Später' }).click();
-  // No way to the Eltern page inside the app.
+  // No way to the Eltern page from the map (only from Impressum and Datenschutz, task 11).
   await expect(page.locator('a[href*="eltern"]')).toHaveCount(0);
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   for (let n = 1; n <= 2; n++) {

@@ -1,4 +1,4 @@
-// The Eltern page (/eltern, only by URL). Written for adults, still Du and at most two sentences
+// The Eltern page (/eltern, by URL or from Impressum and Datenschutz). Written for adults, still Du and at most two sentences
 // per element, like everything else in the app.
 
 import type { GateQuestion } from '../../domain/parents';

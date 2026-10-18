@@ -36,7 +36,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - [ ] Ziffernblock bietet nur bei allowDecimal ein Komma an, nie einen Punkt.
 
 ## Definition of Done (je Aufgabe)
-1. `npm run check` grün
+1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`), nicht nur das Layout-Projekt
 2. Betroffene Tests ergänzt/aktualisiert
 3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, CI-Status (max. 10 Zeilen). CI-Status wird nach dem Push mit `gh run list --limit 1` gelesen und als Link eingetragen, nie aus einem früheren Eintrag übernommen. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)

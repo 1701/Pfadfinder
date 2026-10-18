@@ -1,10 +1,17 @@
-// Routes /impressum and /datenschutz: static text for adults, linked from the map and /eltern. Unlike a
-// task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in the history, or to the
-// map when the page was opened directly.
+// Routes /impressum and /datenschutz: static text for adults, linked from the map and /eltern.
+// Unlike a task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in the history, or
+// to the map when the page was opened directly. At the end, quietly, "Für Eltern" leads to /eltern:
+// the home-screen app has no address bar, so this is its only way there (task 11).
 
-import { useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
-import { DATENSCHUTZ, IMPRESSUM, LEGAL_BACK, type LegalPage } from '../text/rechtliches';
+import {
+  DATENSCHUTZ,
+  ELTERN_LINK,
+  IMPRESSUM,
+  LEGAL_BACK,
+  type LegalPage,
+} from '../text/rechtliches';
 
 const PAGES = { impressum: IMPRESSUM, datenschutz: DATENSCHUTZ } as const;
 
@@ -38,6 +45,11 @@ function Rechtliches({ page }: { page: LegalPage }) {
           ))}
         </section>
       ))}
+      <footer className="flex">
+        <Link to="/eltern" className={QUIET_ACTION_CLASS}>
+          {ELTERN_LINK}
+        </Link>
+      </footer>
     </main>
   );
 }

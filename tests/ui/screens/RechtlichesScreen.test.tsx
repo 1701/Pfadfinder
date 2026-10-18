@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '../dom';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
@@ -48,6 +48,20 @@ describe('Impressum and Datenschutz', () => {
     expect(text).toMatch(/keine Cookies/);
     expect(text).toContain('Cloudflare');
     expect(text).toContain('Zugriffsprotokollen');
+  });
+
+  it('end with a quiet link "Für Eltern" to /eltern, the way there in the installed app', async () => {
+    for (const page of ['/impressum', '/datenschutz']) {
+      renderAt([page]);
+      const links = screen.getAllByRole('link');
+      expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
+        ['Für Eltern', '/eltern'],
+      ]);
+      expect(links[0]!.className).not.toContain('bg-signal');
+      await userEvent.click(links[0]!);
+      expect(screen.getByRole('heading', { name: 'Eltern' })).toBeTruthy();
+      cleanup();
+    }
   });
 
   it('"Zurück" goes back to the Eltern page it came from', async () => {
