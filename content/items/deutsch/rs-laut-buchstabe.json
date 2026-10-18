@@ -388,23 +388,28 @@
       "options": [
         {
           "id": "a",
-          "text": "Flu_"
+          "text": "Flu_",
+          "readAloud": "Fluss"
         },
         {
           "id": "b",
-          "text": "Fu_"
+          "text": "Fu_",
+          "readAloud": "Fuß"
         },
         {
           "id": "c",
-          "text": "Ku_"
+          "text": "Ki_en",
+          "readAloud": "Kissen"
         },
         {
           "id": "d",
-          "text": "Stra_e"
+          "text": "Stra_e",
+          "readAloud": "Straße"
         },
         {
           "id": "e",
-          "text": "Nu_"
+          "text": "Nu_",
+          "readAloud": "Nuss"
         }
       ],
       "minSelect": 3
@@ -417,7 +422,7 @@
       ]
     },
     "feedback": {
-      "correct": "Richtig! Bei Fluss, Kuss und Nuss ist der Selbstlaut kurz. Nach kurzem Selbstlaut steht ss.",
+      "correct": "Richtig! Bei Fluss, Kissen und Nuss ist der Selbstlaut kurz. Nach kurzem Selbstlaut steht ss.",
       "incorrect": "Sprich jedes Wort und hör auf den Selbstlaut. Kurz wie in Fluss: ss. Lang wie in Fuß: ß.",
       "misconception": "Fuß und Fluss klingen ähnlich. Der Unterschied ist die Länge des u."
     },

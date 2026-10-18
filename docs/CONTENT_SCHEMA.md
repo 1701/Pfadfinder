@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.11 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.12 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -98,16 +98,18 @@ type Item = {
 
 ### 4.1 `single-choice`
 ```ts
-payload:  { options: { id: string; text: string; assetId?: string }[]; keepOrder?: boolean }   // 3–4 Optionen
+payload:  { options: { id: string; text: string; readAloud?: string; assetId?: string }[]; keepOrder?: boolean }   // 3–4 Optionen
 solution: { optionId: string }
 ```
 `keepOrder` (seit 1.0.4): `true`, wenn die Optionen Beschriftungen im Bild benennen („A“ bis „D“); dann bleibt die Reihenfolge wie geschrieben. Sonst werden Optionen gemischt. Der Validator warnt, wenn alle Optionen nur Bildbeschriftungen sind und `keepOrder` fehlt.
+
+`readAloud` an einer Option (seit 1.0.12): Vorlesen liest diesen Text statt `text`, unverändert. Gedacht für Optionen, die man nicht vorlesen kann, ohne die Aufgabe zu verändern, z. B. Lückenwörter („Ki_en“ → „Kissen“). Nur an Optionen von `single-choice` und `multi-choice` erlaubt, nicht leer.
 ```ts
 ```
 
 ### 4.2 `multi-choice`
 ```ts
-payload:  { options: { id: string; text: string }[]; minSelect: number; keepOrder?: boolean }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1); keepOrder wie 4.1
+payload:  { options: { id: string; text: string; readAloud?: string }[]; minSelect: number; keepOrder?: boolean }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1); keepOrder und readAloud wie 4.1
 solution: { optionIds: string[] }                                         // exakt diese Menge
 ```
 

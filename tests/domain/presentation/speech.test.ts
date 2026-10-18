@@ -26,6 +26,9 @@ import {
 const musterStrukturen = JSON.parse(
   readFileSync('content/items/mathe/muster-strukturen.json', 'utf8'),
 ) as Item[];
+const lautBuchstabe = JSON.parse(
+  readFileSync('content/items/deutsch/rs-laut-buchstabe.json', 'utf8'),
+) as Item[];
 
 describe('itemSpeech', () => {
   it('reads the task, then the options in the order on screen', () => {
@@ -59,6 +62,33 @@ describe('itemSpeech', () => {
       solution: { optionId: 'a' },
     };
     expect(answersSpeech(item, 0)).toBe('Antworten: 6 mal 40. 10000. Ja!');
+  });
+});
+
+describe('itemSpeech – readAloud on options (schema 1.0.12)', () => {
+  it('reads the readAloud of an option as written instead of its text', () => {
+    const item: ItemOf<'single-choice'> = {
+      ...singleChoice,
+      payload: {
+        options: [
+          { id: 'a', text: 'Ki_en', readAloud: 'Kissen' },
+          { id: 'b', text: '6 · 40', readAloud: '6 · 40' },
+          { id: 'c', text: '6 · 40' },
+        ],
+        keepOrder: true,
+      },
+      solution: { optionId: 'a' },
+    };
+    expect(answersSpeech(item, 0)).toBe('Antworten: Kissen. 6 · 40. 6 mal 40.');
+  });
+
+  it('d-rsl-2-001 reads whole words: "Kissen", no gap', () => {
+    const item = lautBuchstabe.find((i) => i.id === 'd-rsl-2-001')!;
+    for (const attempt of [0, 1, 2, 3]) {
+      const speech = itemSpeech(item, attempt);
+      expect(speech).toContain('Kissen');
+      expect(speech).not.toContain('_');
+    }
   });
 });
 

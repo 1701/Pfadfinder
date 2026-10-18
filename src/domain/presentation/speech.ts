@@ -29,6 +29,11 @@ function list(texts: string[]): string {
   return texts.map((t) => sentence(speakable(t))).join(' ');
 }
 
+/** Choice options: an option's own readAloud is read as written (like the item's), else its text. */
+function options(shown: { text: string; readAloud?: string }[]): string {
+  return shown.map((o) => sentence(o.readAloud ?? speakable(o.text))).join(' ');
+}
+
 /**
  * Text units (words of mark-in-text and find-error) joined with commas, without speakable():
  * "100 200" in a number row must stay two numbers, not become "100200".
@@ -44,9 +49,8 @@ type Speaker<F extends Item['format']> = (
 ) => string;
 
 const speakers: { [F in Item['format']]: Speaker<F> } = {
-  'single-choice': (item, i) =>
-    `${T.answers} ${list(presentedOptions(item, i).map((o) => o.text))}`,
-  'multi-choice': (item, i) => `${T.answers} ${list(presentedOptions(item, i).map((o) => o.text))}`,
+  'single-choice': (item, i) => `${T.answers} ${options(presentedOptions(item, i))}`,
+  'multi-choice': (item, i) => `${T.answers} ${options(presentedOptions(item, i))}`,
   'number-input': () => '',
   match: (item, i) => {
     const { left, right } = presentedMatch(item, i);

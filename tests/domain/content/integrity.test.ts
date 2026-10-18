@@ -228,6 +228,16 @@ describe('validateContent – soft checks', () => {
   });
 });
 
+describe('validateContent – readAloud on choice options (since 1.0.12)', () => {
+  it('reports an empty readAloud with file, id and path', () => {
+    const item = structuredClone(singleChoice);
+    item.payload.options[1] = { ...item.payload.options[1]!, readAloud: '' };
+    expect(run(toFiles({ items: [item] })).issues).toEqual([
+      expect.objectContaining({ severity: 'error', id: item.id, path: '[0].payload.options[1].readAloud' }),
+    ]);
+  });
+});
+
 describe('validateContent – probetest rules (§6)', () => {
   it('accepts a valid Mathe probetest', () => {
     const { items, probetest } = buildMatheProbetest();

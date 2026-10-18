@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.12 – 2026-10-18
+- §4.1/§4.2: Optionen von `single-choice` und `multi-choice` haben ein optionales Feld `readAloud` (nicht leer). Vorlesen liest es statt `text`, ohne es zu verändern; angezeigt und gedruckt wird weiter `text`. Befund d-rsl-2-001: „Flu_“, „Ku_“, „Nu_“ klingen vorgelesen wie offene Silben mit langem u und führen beim Hinhören zum ß. Der Validator lehnt `readAloud` an anderen Stellen (match, order, find-error) und leere Werte ab. Optionales Feld, jedes bisherige Item bleibt gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.11 – 2026-10-16
 - §4.7/§7 Deutsch: `mark-in-text` mit `stimulus.textRef` hat in `payload.text` höchstens 4 Sätze und 200 Zeichen. Messung Aufgabe 9 (Fixture t-sach-900, Safari quer 1024 × 660, Textspalte 34 %): ein ganzer Absatz mit 5 Sätzen war der knappste Screen (18 px Luft, bei 36 % −6 px). Der Validator warnt (`MARK_IN_TEXT_WITH_TEXT`). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 

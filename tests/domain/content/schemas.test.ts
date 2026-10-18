@@ -118,6 +118,31 @@ describe('itemSchema – keepOrder (since 1.0.4)', () => {
   });
 });
 
+describe('itemSchema – readAloud on choice options (since 1.0.12)', () => {
+  it('is optional on single- and multi-choice options', () => {
+    const single = mutate(singleChoice, (d) => Object.assign(d.payload.options[0]!, { readAloud: 'Kissen' }));
+    expect(issuePaths(itemSchema, single)).toEqual([]);
+    const multi = mutate(multiChoice, (d) => Object.assign(d.payload.options[1]!, { readAloud: 'Fluss' }));
+    expect(issuePaths(itemSchema, multi)).toEqual([]);
+  });
+
+  it('must not be empty', () => {
+    for (const empty of ['', '   ']) {
+      const item = mutate(multiChoice, (d) => Object.assign(d.payload.options[0]!, { readAloud: empty }));
+      expect(issuePaths(itemSchema, item)).toContain('payload.options[0].readAloud');
+    }
+  });
+
+  it('is not allowed on cards, elements or words of other formats', () => {
+    const cards = mutate(match, (d) => Object.assign(d.payload.left[0]!, { readAloud: 'x' }));
+    expect(issuePaths(itemSchema, cards)).toContain('payload.left[0]');
+    const elements = mutate(order, (d) => Object.assign(d.payload.items[0]!, { readAloud: 'x' }));
+    expect(issuePaths(itemSchema, elements)).toContain('payload.items[0]');
+    const words = mutate(findError, (d) => Object.assign(d.payload.words[0]!, { readAloud: 'x' }));
+    expect(issuePaths(itemSchema, words)).toContain('payload.words[0]');
+  });
+});
+
 describe('itemSchema – common fields (§2, §3)', () => {
   it('rejects an unknown format', () => {
     expect(issuePaths(itemSchema, { ...numberInput, format: 'drawing' })).toContain('format');
