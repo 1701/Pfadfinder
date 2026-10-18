@@ -2,7 +2,15 @@
 // Reload (IndexedDB) and offline use. Screenshots in both iPad formats (Chromium projects).
 
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, answer, check, currentItem, expectFitsScreen, verdictOf } from './helpers';
+import {
+  SCREENSHOTS,
+  answer,
+  check,
+  currentItem,
+  expectFitsScreen,
+  postponeDeutschOffer,
+  verdictOf,
+} from './helpers';
 
 const viewportName = (page: Page) =>
   page.viewportSize()!.width > page.viewportSize()!.height ? 'ipad-landscape' : 'ipad-portrait';
@@ -80,6 +88,7 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
   await expect(page.getByRole('heading', { name: 'Heute geschafft: 10 Fundstücke' })).toBeVisible();
   await shot(page, 'abschluss');
   await page.getByRole('link', { name: 'Zur Übersicht' }).click();
+  await postponeDeutschOffer(page);
   await expect(page.getByText('Heute: 10 von 10 Fundstücken. Geschafft.')).toBeVisible();
   await expect(page.getByRole('link', { name: /^Zahlen und Rechnen, Niveau \d/ })).toBeVisible();
   await shot(page, 'start-geschafft');
@@ -97,6 +106,7 @@ test('Neu anfangen: neue Runde ab 1, das Tagesziel bleibt', async ({ page }) => 
     await page.getByRole('button', { name: 'Weiter' }).click();
   }
   await page.getByRole('link', { name: 'Pause' }).click();
+  await postponeDeutschOffer(page);
   await expect(page.getByText('Heute: 3 von 10 Fundstücken')).toBeVisible();
 
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();

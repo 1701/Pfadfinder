@@ -203,8 +203,29 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     expect(data).toMatchObject({ attempts: [], mastery: [], sessions: [] });
   });
 
-  it('is not available for Deutsch (fewer than two practiceable Bereiche)', async () => {
+  it('plays the Deutsch check over its practiceable Bereiche, without short answers', async () => {
+    const deutschOpen = OPEN_BEREICHE.filter((b) =>
+      (BEREICHE_BY_FACH.deutsch as readonly Bereich[]).includes(b),
+    );
+    expect(deutschOpen.length).toBeGreaterThanOrEqual(2);
     const store = createCheckStore(testDeps());
+    await store.getState().start('deutsch');
+    expect(store.getState().status).toBe('intro');
+    store.getState().begin();
+    const shown = await play(store, () => true);
+    expect(store.getState().status).toBe('finished');
+    expect(new Set(shown.map((i) => i.bereich))).toEqual(new Set(deutschOpen));
+    expect(shown.some((i) => i.format === 'short-answer')).toBe(false);
+  });
+
+  it('is not available with fewer than two practiceable Bereiche', async () => {
+    const rs = makePool('deutsch', 4, ['rs-strategien']);
+    const content = createContentLoader({
+      items: { 'fixtures/deutsch/rs-strategien.json': async () => structuredClone(rs) },
+      texts: {},
+      probetests: {},
+    });
+    const store = createCheckStore({ ...testDeps(), content });
     await store.getState().start('deutsch');
     expect(store.getState()).toMatchObject({ status: 'unavailable', unavailable: 'empty' });
   });

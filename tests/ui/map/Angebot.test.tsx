@@ -95,8 +95,19 @@ describe('Einstieg offer on the map', () => {
     expect(screen.getByRole('heading', { name: "Wohin geht's heute?" })).toBeTruthy();
   });
 
-  it('is never offered once Mathe has a mastery state (after the check or after practice)', async () => {
+  it('moves on to Deutsch once Mathe has a mastery state (after the check or after practice)', async () => {
     renderScreen({ ...NEW, mastery: [masteryFor('daten-zufall', 1)] });
+    expect(await screen.findByRole('heading', { name: 'Wo geht deine Reise los?' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
+      '/einstieg/deutsch',
+    );
+  });
+
+  it('is never offered once both Fächer have a mastery state', async () => {
+    renderScreen({
+      ...NEW,
+      mastery: [masteryFor('daten-zufall', 1), masteryFor('rs-strategien', 1, 'deutsch')],
+    });
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
     expect(screen.queryByRole('heading', { name: 'Wo geht deine Reise los?' })).toBeNull();
   });

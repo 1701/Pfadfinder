@@ -7,38 +7,22 @@
     "niveau": 1,
     "format": "mark-in-text",
     "status": "draft",
-    "stimulus": {
-      "text": "Dieser Satz ist ganz klein geschrieben."
-    },
-    "prompt": "Tippe alle Wörter an, die man großschreibt.",
+    "stimulus": { "text": "Dieser Satz ist ganz klein geschrieben." },
+    "prompt": "Tippe alle Nomen an.",
     "payload": {
       "text": "am morgen frühstückt leyla mit ihrer schwester",
       "unit": "word",
       "maxSelect": 3
     },
-    "solution": {
-      "indices": [
-        1,
-        3,
-        6
-      ]
-    },
+    "solution": { "indices": [1, 3, 6] },
     "feedback": {
       "correct": "Richtig! Morgen, Leyla und Schwester sind Nomen. Nomen schreibt man groß.",
       "incorrect": "Nomen erkennst du so: Du kannst der, die oder das davorsetzen. Namen schreibt man auch groß.",
-      "misconception": "Das erste Wort ist hier absichtlich klein. Es geht nur um Nomen, nicht um den Satzanfang."
+      "misconception": "Morgen ist hier ein Nomen: der Morgen. Viele halten es für ein Zeitwort wie heute oder gestern."
     },
-    "tags": [
-      "grossschreibung",
-      "nomen",
-      "artikelprobe"
-    ],
+    "tags": ["grossschreibung", "nomen", "artikelprobe"],
     "estimatedSeconds": 50,
-    "meta": {
-      "author": "claude",
-      "createdAt": "2026-10-14",
-      "calibration": "vera3"
-    }
+    "meta": { "author": "claude", "createdAt": "2026-10-14", "calibration": "vera3" }
   },
   {
     "id": "d-rss-1-002",
@@ -65,5 +49,504 @@
     "tags": ["grossschreibung", "nomen", "wochentage"],
     "estimatedSeconds": 40,
     "meta": { "author": "claude", "createdAt": "2026-10-11", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz ist ein Wort falsch geschrieben. Tippe es an.",
+    "payload": {
+      "words": [
+        { "id": "w1", "text": "Der" }, { "id": "w2", "text": "Hunt" }, { "id": "w3", "text": "bellt" },
+        { "id": "w4", "text": "vor" }, { "id": "w5", "text": "der" }, { "id": "w6", "text": "Tür." }
+      ],
+      "errorCount": 1
+    },
+    "solution": { "errorIds": ["w2"], "corrections": { "w2": "Hund" } },
+    "feedback": {
+      "correct": "Richtig: Hund. Verlängere das Wort zu Hunde, dann hörst du das d.",
+      "incorrect": "Am Wortende klingen d und t gleich. Mach das Wort länger: Hunde. Jetzt hörst du den richtigen Buchstaben.",
+      "misconception": "Man hört Hunt, deshalb schreiben viele t. Das Ohr hilft am Wortende nicht."
+    },
+    "tags": ["verlaengern", "auslaut", "d-t"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle das richtig geschriebene Wort. Mach das Wort im Kopf länger.",
+    "payload": {
+      "template": "Der {1} ist sehr hoch.",
+      "gaps": [
+        { "key": "1", "options": ["Berg", "Berk", "Bergk"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "Berg" } },
+    "feedback": {
+      "correct": "Richtig! Berge: Du hörst das g, also Berg.",
+      "incorrect": "Am Wortende klingen g und k gleich. Verlängere: Berge. Was hörst du jetzt?",
+      "misconception": "Bergk schreiben manche, weil sie beides hören wollen. Es steht immer nur ein Buchstabe."
+    },
+    "tags": ["verlaengern", "auslaut", "g-k"],
+    "estimatedSeconds": 35,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Das gesuchte Wort gehört zu Hand." },
+    "prompt": "Welches Wort ist richtig geschrieben?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Hände" },
+        { "id": "b", "text": "Hende" },
+        { "id": "c", "text": "Hänte" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Hände kommt von Hand. Aus a wird ä.",
+      "incorrect": "Suche das verwandte Wort: Hand. Dort steht ein a, deshalb schreibst du ä.",
+      "misconception": "Hende klingt genauso wie Hände. Das Ohr kann e und ä nicht unterscheiden."
+    },
+    "tags": ["ableiten", "a-ae"],
+    "estimatedSeconds": 30,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Ordne jedem Wort das Wort zu, von dem es kommt. Ein Wort bleibt übrig.",
+    "payload": {
+      "left": [
+        { "id": "l1", "text": "Bälle" },
+        { "id": "l2", "text": "Träume" },
+        { "id": "l3", "text": "Wände" }
+      ],
+      "right": [
+        { "id": "r1", "text": "Ball" },
+        { "id": "r2", "text": "Traum" },
+        { "id": "r3", "text": "Wand" },
+        { "id": "r4", "text": "Wald" }
+      ]
+    },
+    "solution": { "pairs": [["l1", "r1"], ["l2", "r2"], ["l3", "r3"]] },
+    "feedback": {
+      "correct": "Richtig! Ball, Traum und Wand. Aus a wird ä, aus au wird äu.",
+      "incorrect": "Nimm das ä oder äu weg und sprich das Wort. Welches kurze Wort hörst du dann?",
+      "misconception": "Wald und Wand sehen ähnlich aus. Zu Wände gehört aber Wand."
+    },
+    "tags": ["ableiten", "a-ae", "au-aeu", "wortfamilie"],
+    "estimatedSeconds": 45,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "prompt": "Tippe alle Wörter mit der Vorsilbe ver an.",
+    "payload": {
+      "text": "Ben versteckt das Buch vor Mia und verliert den Stift",
+      "unit": "word",
+      "maxSelect": 2
+    },
+    "solution": { "indices": [1, 7] },
+    "feedback": {
+      "correct": "Richtig! versteckt und verliert beginnen mit der Vorsilbe ver.",
+      "incorrect": "Eine Vorsilbe steht vorn am Wort. Sprich jedes Wort: Beginnt es mit ver?",
+      "misconception": "vor ist hier ein eigenes Wort, keine Vorsilbe."
+    },
+    "tags": ["wortbausteine", "vorsilbe", "ver"],
+    "estimatedSeconds": 40,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-1-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Alle Wörter sind absichtlich klein geschrieben." },
+    "prompt": "Welches Wort ist ein Nomen?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "schule" },
+        { "id": "b", "text": "laufen" },
+        { "id": "c", "text": "schnell" },
+        { "id": "d", "text": "und" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Die Schule: Du kannst einen Artikel davorsetzen. Nomen schreibt man groß.",
+      "incorrect": "Probiere bei jedem Wort der, die oder das davor. Wo das passt, ist ein Nomen.",
+      "misconception": "laufen kann man tun. Das ist ein Tunwort, kein Nomen."
+    },
+    "tags": ["grossschreibung", "nomen", "artikelprobe"],
+    "estimatedSeconds": 30,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle in beiden Lücken das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Der {1} rennt durch den {2}.",
+      "gaps": [
+        { "key": "1", "options": ["Hund", "Hunt", "Hundt"] },
+        { "key": "2", "options": ["Wald", "Walt", "Waldt"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "Hund", "2": "Wald" } },
+    "feedback": {
+      "correct": "Richtig! Hunde und Wälder: Verlängert hörst du bei beiden das d.",
+      "incorrect": "Prüfe jede Lücke einzeln. Verlängere das Wort: Hunde, Wälder. Dann hörst du den letzten Buchstaben.",
+      "misconception": "Hundt und Waldt wählen Kinder, die an Stadt denken. Dort ist dt eine Ausnahme."
+    },
+    "tags": ["verlaengern", "auslaut", "d-t"],
+    "estimatedSeconds": 55,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz sind zwei Wörter falsch geschrieben. Tippe beide an.",
+    "payload": {
+      "words": [
+        { "id": "w1", "text": "Im" }, { "id": "w2", "text": "Walt" }, { "id": "w3", "text": "liegt" },
+        { "id": "w4", "text": "ein" }, { "id": "w5", "text": "altes" }, { "id": "w6", "text": "Rat" },
+        { "id": "w7", "text": "im" }, { "id": "w8", "text": "Gras." }
+      ],
+      "errorCount": 2
+    },
+    "solution": { "errorIds": ["w2", "w6"], "corrections": { "w2": "Wald", "w6": "Rad" } },
+    "feedback": {
+      "correct": "Richtig: Wald und Rad. Wälder und Räder zeigen das d.",
+      "incorrect": "Verlängere jedes Nomen im Kopf. Wälder, Räder: Welchen Buchstaben hörst du jetzt am Ende?",
+      "misconception": "Rat gibt es als Wort: der Rat. Hier liegt aber ein Rad im Gras."
+    },
+    "tags": ["verlaengern", "auslaut", "d-t"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Nur ein Wort schreibt man mit äu. Welches ist richtig geschrieben?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Räuber" },
+        { "id": "b", "text": "Läute" },
+        { "id": "c", "text": "häute" },
+        { "id": "d", "text": "Äule" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Räuber kommt von Raub. Leute, heute und Eule haben kein verwandtes Wort mit au.",
+      "incorrect": "äu schreibst du nur, wenn ein verwandtes Wort mit au existiert. Suche zu jedem Wort so ein Wort.",
+      "misconception": "Läute wählen viele wegen läuten. Leute (die Menschen) hat aber kein verwandtes Wort mit au."
+    },
+    "tags": ["ableiten", "au-aeu", "gegenbeispiel"],
+    "estimatedSeconds": 50,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": { "text": "Alle Wörter sind absichtlich klein geschrieben." },
+    "prompt": "Welche Wörter sind Nomen? Tippe alle an.",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "montag" },
+        { "id": "b", "text": "morgens" },
+        { "id": "c", "text": "abend" },
+        { "id": "d", "text": "heute" },
+        { "id": "e", "text": "wochenende" }
+      ],
+      "minSelect": 3
+    },
+    "solution": { "optionIds": ["a", "c", "e"] },
+    "feedback": {
+      "correct": "Richtig! Der Montag, der Abend, das Wochenende. Die anderen sagen nur, wann etwas passiert.",
+      "incorrect": "Mach die Artikelprobe: der, die oder das davor. morgens und heute sagen nur, wann etwas ist.",
+      "misconception": "morgens sieht aus wie Morgen. Mit dem s am Ende ist es kein Nomen mehr."
+    },
+    "tags": ["grossschreibung", "nomen", "zeitangaben", "artikelprobe"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Ordne jedem Wort das Wort zu, mit dem du den letzten Buchstaben hörst. Ein Wort bleibt übrig.",
+    "payload": {
+      "left": [
+        { "id": "l1", "text": "Korb" },
+        { "id": "l2", "text": "Berg" },
+        { "id": "l3", "text": "Wald" },
+        { "id": "l4", "text": "Rad" }
+      ],
+      "right": [
+        { "id": "r1", "text": "Körbe" },
+        { "id": "r2", "text": "Berge" },
+        { "id": "r3", "text": "Wälder" },
+        { "id": "r4", "text": "Räder" },
+        { "id": "r5", "text": "Körper" }
+      ]
+    },
+    "solution": { "pairs": [["l1", "r1"], ["l2", "r2"], ["l3", "r3"], ["l4", "r4"]] },
+    "feedback": {
+      "correct": "Richtig! Körbe, Berge, Wälder, Räder. Verlängern macht den letzten Buchstaben hörbar.",
+      "incorrect": "Suche zu jedem Wort die Mehrzahl. In der Mehrzahl hörst du b, g und d deutlich.",
+      "misconception": "Körper klingt wie Korb, ist aber ein ganz anderes Wort. Es hilft beim Prüfen nicht."
+    },
+    "tags": ["verlaengern", "auslaut", "mehrzahl"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle in beiden Lücken das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Die {1} sind weiß. Die {2} am Auto sind neu.",
+      "gaps": [
+        { "key": "1", "options": ["Wände", "Wende", "Wänte"] },
+        { "key": "2", "options": ["Räder", "Reder", "Räter"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "Wände", "2": "Räder" } },
+    "feedback": {
+      "correct": "Richtig! Wände kommt von Wand, Räder von Rad. Darum ä und d.",
+      "incorrect": "Prüfe jede Lücke mit zwei Fragen: Gibt es ein verwandtes Wort mit a? Was hörst du, wenn du verlängerst?",
+      "misconception": "Wänte und Räter haben das ä richtig, aber das Ende vergessen. Wände und Räder zeigen das d."
+    },
+    "tags": ["ableiten", "verlaengern", "a-ae", "d-t"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "mark-in-text",
+    "status": "draft",
+    "prompt": "Tippe alle Wörter aus der Wortfamilie von fahren an.",
+    "payload": {
+      "text": "Elias fährt mit dem Fahrrad zum Bahnhof und kauft eine Fahrkarte",
+      "unit": "word",
+      "maxSelect": 3
+    },
+    "solution": { "indices": [1, 4, 10] },
+    "feedback": {
+      "correct": "Richtig! fährt, Fahrrad und Fahrkarte haben den Wortstamm fahr. Darum schreibt man alle mit h.",
+      "incorrect": "Suche den Wortstamm fahr in jedem Wort. Er kann vorn oder in der Mitte stecken.",
+      "misconception": "Bahnhof hat auch ein h, gehört aber zu Bahn. Das ist eine andere Wortfamilie."
+    },
+    "tags": ["wortbausteine", "wortstamm", "wortfamilie"],
+    "estimatedSeconds": 55,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-2-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 2,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz sind zwei Wörter falsch geschrieben. Tippe beide an.",
+    "payload": {
+      "words": [
+        { "id": "w1", "text": "Am" }, { "id": "w2", "text": "Sonntag" }, { "id": "w3", "text": "besucht" },
+        { "id": "w4", "text": "uns" }, { "id": "w5", "text": "tante" }, { "id": "w6", "text": "Mia" },
+        { "id": "w7", "text": "mit" }, { "id": "w8", "text": "ihrem" }, { "id": "w9", "text": "hund" },
+        { "id": "w10", "text": "im" }, { "id": "w11", "text": "Garten." }
+      ],
+      "errorCount": 2
+    },
+    "solution": { "errorIds": ["w5", "w9"], "corrections": { "w5": "Tante", "w9": "Hund" } },
+    "feedback": {
+      "correct": "Richtig: Tante und Hund. Beide sind Nomen: die Tante, der Hund.",
+      "incorrect": "Mach bei jedem kleinen Wort die Artikelprobe. Passt der, die oder das davor, ist es ein Nomen.",
+      "misconception": "tante wird oft übersehen, weil gleich danach der Name Mia groß dasteht."
+    },
+    "tags": ["grossschreibung", "nomen", "artikelprobe"],
+    "estimatedSeconds": 55,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-3-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": { "text": "Leyla schreibt: Der Hunt bellt." },
+    "prompt": "Erkläre Leyla, wie sie das Wort prüfen kann. Schreibe es richtig auf.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Mach das Wort länger."
+    },
+    "solution": {
+      "model": "Verlängere das Wort: Hunde. Dann hörst du das d. Richtig ist Hund.",
+      "keyPoints": [
+        "Verlängern: Hunde, dann hört man das d",
+        "Richtig: Hund"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Verlängern macht den letzten Buchstaben hörbar.",
+      "incorrect": "Am Wortende klingen d und t gleich. Sag Leyla, dass sie das Wort länger machen soll: Hunde.",
+      "misconception": "Viele schreiben nur das richtige Wort hin. Leyla braucht aber den Trick, nicht nur das Ergebnis."
+    },
+    "tags": ["verlaengern", "auslaut", "begruenden"],
+    "estimatedSeconds": 80,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-3-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": { "text": "Ben sagt: Ich schreibe Bäume mit ä, weil es sich so anhört." },
+    "prompt": "Welche Erklärung ist richtig?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Bäume kommt von Baum. Deshalb schreibt man ä." },
+        { "id": "b", "text": "Man hört ä, deshalb schreibt man ä." },
+        { "id": "c", "text": "Wörter mit au bekommen in der Mehrzahl immer eu." }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau: Das verwandte Wort entscheidet, nicht das Ohr.",
+      "incorrect": "e und ä klingen gleich, eu und äu auch. Hören reicht nicht. Suche ein verwandtes Wort mit a oder au.",
+      "misconception": "Ben hat das richtige Wort, aber die falsche Begründung. Mit seiner Regel würde er auch Hende schreiben."
+    },
+    "tags": ["ableiten", "au-aeu", "begruenden"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-3-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 3,
+    "format": "order",
+    "status": "draft",
+    "stimulus": { "text": "Jonas weiß nicht, ob man Berg mit g oder k schreibt." },
+    "prompt": "Bringe seine Schritte in die richtige Reihenfolge.",
+    "payload": {
+      "items": [
+        { "id": "a", "text": "Er hört jetzt das g." },
+        { "id": "b", "text": "Er schreibt: Berg." },
+        { "id": "c", "text": "Er spricht das Wort: Berg oder Berk?" },
+        { "id": "d", "text": "Er macht das Wort länger: Berge." }
+      ]
+    },
+    "solution": { "orderedIds": ["c", "d", "a", "b"] },
+    "feedback": {
+      "correct": "Richtig! Erst sprechen, dann verlängern, dann hören, dann schreiben.",
+      "incorrect": "Womit fängt Jonas an? Mit dem Problem beim Sprechen. Das Schreiben kommt zuletzt.",
+      "misconception": "Viele setzen das Hören vor das Verlängern. Das g hört man aber erst in Berge."
+    },
+    "tags": ["verlaengern", "auslaut", "strategie-schritte"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
+  },
+  {
+    "id": "d-rss-3-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-strategien",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": { "text": "Am Morgen singt ein Vogel. Oma kommt morgen." },
+    "prompt": "Warum schreibt man Morgen einmal groß und einmal klein? Erkläre.",
+    "payload": {
+      "maxChars": 140,
+      "hint": "Probiere der, die oder das davor."
+    },
+    "solution": {
+      "model": "Im ersten Satz ist Morgen ein Nomen: der Morgen. Im zweiten Satz sagt morgen nur, wann Oma kommt.",
+      "keyPoints": [
+        "Erster Satz: Nomen, Artikelprobe der Morgen klappt",
+        "Zweiter Satz: sagt wann, Artikelprobe klappt nicht"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Das gleiche Wort kann Nomen sein oder nicht. Die Artikelprobe zeigt es.",
+      "incorrect": "Mach die Artikelprobe in beiden Sätzen. Der Morgen geht. Der morgen kommt Oma geht nicht.",
+      "misconception": "Viele erklären nur, dass Morgen eine Tageszeit ist. Wichtig ist, dass das Wort zweimal etwas anderes tut."
+    },
+    "tags": ["grossschreibung", "nomen", "artikelprobe", "begruenden"],
+    "estimatedSeconds": 90,
+    "meta": { "author": "claude", "createdAt": "2026-10-18", "calibration": "vera3" }
   }
 ]

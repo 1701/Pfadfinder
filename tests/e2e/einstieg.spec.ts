@@ -1,5 +1,5 @@
 // Smoke flow of the Einstieg (ARCHITECTURE.md §8, E2E 1): Karte → "Los" → questions without
-// feedback → result → the map shows the starting niveaus and offers nothing more. Plus pause,
+// feedback → result → the map shows the starting niveaus and offers Mathe no more. Plus pause,
 // "Später", the hint on a second visit and offline use. Runs on the production build (Chromium and
 // WebKit).
 
@@ -80,10 +80,17 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   expect(await page.locator('main').innerText()).not.toMatch(/\d|%/);
 
   await page.getByRole('link', { name: 'Zur Karte' }).click();
+  // Mathe is not offered a second time: the offer moves on to Deutsch. "Später" sets it aside.
+  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
+    'href',
+    '/einstieg/deutsch',
+  );
+  await page.getByRole('button', { name: 'Später' }).click();
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 3' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Formen und Raum, Niveau 1' })).toBeVisible();
-  // The check is no Fundstück, and it is not offered a second time.
+  // The check is no Fundstück.
   await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
   await expect(page.getByRole('heading', { name: OFFER })).toHaveCount(0);
   await page.reload();

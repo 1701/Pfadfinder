@@ -11,6 +11,8 @@ import { CheckStoreContext } from '../../../src/ui/check-context';
 import { EinstiegScreen } from '../../../src/ui/screens/EinstiegScreen';
 import { answerFor, testDeps } from '../../data/helpers';
 import { preloadFormats } from '../../../src/ui/formats/registry';
+import { createContentLoader } from '../../../src/content-runtime/loader';
+import { makePool } from '../../fixtures/pool';
 
 function renderEinstieg(store: CheckStore, fach = 'mathe') {
   return render(
@@ -139,8 +141,14 @@ describe('EinstiegScreen', () => {
     expect(screen.queryByRole('heading', { name: 'Deine Reise beginnt hier' })).toBeNull();
   });
 
-  it('has no Einstieg where too few Gebiete are open (Deutsch for now)', async () => {
-    renderEinstieg(createCheckStore(testDeps()), 'deutsch');
+  it('has no Einstieg where too few Gebiete are open', async () => {
+    const rs = makePool('deutsch', 4, ['rs-strategien']);
+    const content = createContentLoader({
+      items: { 'fixtures/deutsch/rs-strategien.json': async () => structuredClone(rs) },
+      texts: {},
+      probetests: {},
+    });
+    renderEinstieg(createCheckStore({ ...testDeps(), content }), 'deutsch');
     expect(
       await screen.findByRole('heading', { name: 'Hier gibt es noch nicht genug Aufgaben.' }),
     ).toBeTruthy();
