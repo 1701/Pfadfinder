@@ -18,7 +18,7 @@
     "feedback": {
       "correct": "Richtig! Morgen, Leyla und Schwester sind Nomen. Nomen schreibt man groß.",
       "incorrect": "Nomen erkennst du so: Du kannst der, die oder das davorsetzen. Namen schreibt man auch groß.",
-      "misconception": "Morgen ist hier ein Nomen: der Morgen. Viele halten es für ein Zeitwort wie heute oder gestern."
+      "misconception": "Morgen ist hier ein Nomen: der Morgen. Viele halten es für eine Zeitangabe wie heute oder gestern."
     },
     "tags": ["grossschreibung", "nomen", "artikelprobe"],
     "estimatedSeconds": 50,
@@ -278,13 +278,13 @@
       "options": [
         { "id": "a", "text": "Räuber" },
         { "id": "b", "text": "Läute" },
-        { "id": "c", "text": "häute" },
+        { "id": "c", "text": "Fräund" },
         { "id": "d", "text": "Äule" }
       ]
     },
     "solution": { "optionId": "a" },
     "feedback": {
-      "correct": "Richtig! Räuber kommt von Raub. Leute, heute und Eule haben kein verwandtes Wort mit au.",
+      "correct": "Richtig! Räuber kommt von Raub. Leute, Freund und Eule haben kein verwandtes Wort mit au.",
       "incorrect": "äu schreibst du nur, wenn ein verwandtes Wort mit au existiert. Suche zu jedem Wort so ein Wort.",
       "misconception": "Läute wählen viele wegen läuten. Leute (die Menschen) hat aber kein verwandtes Wort mit au."
     },
@@ -542,7 +542,7 @@
     },
     "feedback": {
       "correct": "Genau: Das gleiche Wort kann Nomen sein oder nicht. Die Artikelprobe zeigt es.",
-      "incorrect": "Mach die Artikelprobe in beiden Sätzen. Der Morgen geht. Der morgen kommt Oma geht nicht.",
+      "incorrect": "Mach die Artikelprobe in beiden Sätzen. Bei der Morgen klappt sie. Bei Oma kommt morgen passt kein Artikel davor.",
       "misconception": "Viele erklären nur, dass Morgen eine Tageszeit ist. Wichtig ist, dass das Wort zweimal etwas anderes tut."
     },
     "tags": ["grossschreibung", "nomen", "artikelprobe", "begruenden"],
