@@ -102,3 +102,13 @@ describe('design tokens', () => {
     }
   });
 });
+
+describe('the static shell in index.html', () => {
+  it('uses the paper and ink of the tokens until the JS runs', () => {
+    const html = readFileSync('index.html', 'utf8');
+    const style = html.match(/<style>([\s\S]*?)<\/style>/)![1]!;
+    expect(style).toContain(`background: ${colors.paper};`);
+    expect(style).toContain(`color: ${colors.ink};`);
+    expect(html).toContain('<div id="root"><p class="shell">Pfadfinder</p></div>');
+  });
+});

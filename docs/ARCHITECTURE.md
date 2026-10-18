@@ -135,6 +135,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - Jeder interaktive Bereich ≥ 48 × 48 px; Fokus-Ringe sichtbar; jedes Bild mit `alt`
 - Eine Aufgabe = ein Screen, keine vertikale Scrollnotwendigkeit auf 1024 × 768 (iPad quer) und 768 × 1024 (hoch)
 - Animationen ≤ 300 ms, `prefers-reduced-motion` respektieren
+- Statische Hülle (seit Aufgabe 10): `index.html` zeigt vor dem JS „Pfadfinder“ in Andika Bold auf Papier (Inline-Style mit den Farben aus `tokens.css`, Schrift per Preload, geprüft in `tokens.test` und `pwa.spec` ohne JS). React ersetzt den Inhalt von `#root` beim ersten Rendern
 - Kein Toast, kein Modal im Üben-Flow; Feedback inline unter der Aufgabe
 - Eltern-Bereich `/eltern` hinter einer Rechenfrage (Summe zweier zweistelliger Zahlen, `domain/parents.gateQuestion`, Eingabe über den Ziffernblock), kein Passwort (seit 2026-10-14, vorher 6 × 7 … 9 × 9). Die Rechenfrage ist **kein Schutz**, sondern ein Schild „für Eltern“: Weder Einmaleins noch zweistellige Addition ist für ein Kind der 4. Klasse eine Hürde. Der Schutz ist allein, dass kein Link in der App zu `/eltern` führt (geprüft in `eltern.spec`). Wer hier mehr Schutz braucht, muss etwas anderes bauen, nicht die Rechenfrage schwerer machen
 
