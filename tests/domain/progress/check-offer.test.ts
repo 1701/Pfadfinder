@@ -44,6 +44,15 @@ describe('"Später" on the offer', () => {
     expect(postponedFaecher([offer], '2026-10-16T06:00:00.000Z')).toEqual([]);
   });
 
+  it('holds past midnight while a round of that day still runs (day = practiceDay)', () => {
+    // 00:30 on the 15th, the round began at 23:40 on the 14th.
+    const roundStart = '2026-10-14T21:40:00.000Z';
+    expect(postponedFaecher([offer], '2026-10-14T22:30:00.000Z', roundStart)).toEqual(['mathe']);
+    // "Später" tapped after midnight holds too, whatever the round.
+    const late = { fach: 'mathe', at: '2026-10-14T22:10:00.000Z' } as const;
+    expect(postponedFaecher([late], '2026-10-14T22:30:00.000Z', roundStart)).toEqual(['mathe']);
+  });
+
   it('keeps each Fach on its own', () => {
     const deutsch = { fach: 'deutsch', at: '2026-10-13T06:00:00.000Z' } as const;
     expect(postponedFaecher([offer, deutsch], '2026-10-14T08:00:00.000Z')).toEqual(['mathe']);

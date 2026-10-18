@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { SESSION_GOAL } from '../../src/domain/practice';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
+import { loadMapProgress, postponeOffer } from '../../src/data/map-progress';
 import { loadTodayProgress } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
 import { thinMatheBereich } from '../fixtures/content-state';
-import { FORMATS, answerFor, testDeps, tickingClock } from './helpers';
+import { FORMATS, answerFor, settableClock, testDeps, tickingClock } from './helpers';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -94,24 +95,67 @@ describe('practice session (store + in-memory repositories + real content)', () 
     ]);
   });
 
-  it('counts the Abschluss like the map: only answers of today', async () => {
+  it('counts a round past midnight for the day it began, on the Abschluss and on the map', async () => {
     const repos = createMemoryRepositories();
-    // 23:59:30 Berlin (UTC+2): the session runs past midnight.
-    const store = createSessionStore({
-      ...testDeps(repos),
-      now: tickingClock('2026-10-11T21:59:30.000Z'),
-    });
+    // Fake clock, ticking one second per call: 23:50 Berlin (UTC+2) on the 11th.
+    const clock = settableClock('2026-10-11T21:50:00.000Z');
+    const deps = { ...testDeps(repos), now: clock.now };
+    // "Später" on the map, then a round of 10: six answers before midnight, one after.
+    await postponeOffer(repos, 'mathe', clock.now());
+    const store = createSessionStore(deps);
     await store.getState().startPractice('mathe', 'zahlen-operationen');
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 6; i++) {
+      await answer(store, true);
+      await store.getState().next();
+    }
+    clock.set('2026-10-11T22:01:00.000Z');
+    await answer(store, true);
+    await store.getState().next();
+    store.getState().leave();
+
+    // 00:02 on the 12th: back on the map, the round still runs. Its day is the 11th.
+    expect(await loadMapProgress(repos, clock.now())).toMatchObject({
+      today: { count: 7, reached: false },
+      postponed: ['mathe'],
+    });
+
+    // The round goes on after midnight and ends with 10 Fundstücke of the 11th.
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    expect(store.getState().status).toBe('choosing');
+    await store.getState().resume();
+    for (let i = 0; i < 3; i++) {
       await answer(store, true);
       await store.getState().next();
     }
     expect(store.getState().status).toBe('finished');
     const attempts = await repos.attempts.listByLearner(store.getState().learner!.id);
-    const afterMidnight = attempts.filter((a) => a.at >= '2026-10-11T22:00:00.000Z').length;
-    expect(afterMidnight).toBeGreaterThan(0);
-    expect(afterMidnight).toBeLessThan(10);
-    expect(store.getState().today).toEqual({ count: afterMidnight, goal: 10, reached: false });
+    expect(attempts.filter((a) => a.at >= '2026-10-11T22:00:00.000Z')).toHaveLength(4);
+    expect(attempts.filter((a) => a.at < '2026-10-11T22:00:00.000Z')).toHaveLength(6);
+    expect(store.getState().today).toEqual({ count: 10, goal: 10, reached: true });
+    // The round is over: the map shows the 12th, where nothing has been done yet.
+    expect(await loadMapProgress(repos, clock.now())).toMatchObject({
+      today: { count: 0, reached: false },
+      postponed: [],
+    });
+  });
+
+  it('keeps nothing of a round paused before midnight: the map shows the new day', async () => {
+    const repos = createMemoryRepositories();
+    const clock = settableClock('2026-10-11T21:50:00.000Z');
+    await postponeOffer(repos, 'mathe', clock.now());
+    const store = createSessionStore({ ...testDeps(repos), now: clock.now });
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    for (let i = 0; i < 3; i++) {
+      await answer(store, true);
+      await store.getState().next();
+    }
+    store.getState().leave();
+    // 00:05: the round is not continued (planSessionStart), so it is not running either.
+    clock.set('2026-10-11T22:05:00.000Z');
+    expect(await loadMapProgress(repos, clock.now())).toMatchObject({
+      today: { count: 0 },
+      postponed: [],
+    });
   });
 
   it('continues an unfinished session after "Pause"', async () => {
@@ -182,11 +226,15 @@ describe('practice session (store + in-memory repositories + real content)', () 
     expect(await repos.collectibles.get(learnerId)).toEqual(collectibles);
     expect(await repos.reviews.listByLearner(learnerId)).toEqual(reviews);
     expect(await repos.attempts.listByLearner(learnerId)).toHaveLength(6);
-    expect((await loadTodayProgress(deps, learnerId)).count).toBe(6);
+    expect(
+      (await loadTodayProgress(deps, learnerId, second.getState().practice!.session)).count,
+    ).toBe(6);
 
     // The new round has 10 items of its own and ends with the Abschluss.
     await answer(second, true);
-    expect((await loadTodayProgress(deps, learnerId)).count).toBe(7);
+    expect(
+      (await loadTodayProgress(deps, learnerId, second.getState().practice!.session)).count,
+    ).toBe(7);
     await second.getState().next();
     for (let i = 1; i < SESSION_GOAL; i++) {
       await answer(second, true);

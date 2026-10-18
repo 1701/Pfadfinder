@@ -184,12 +184,20 @@ export async function addDiscovery(
   await repos.collectibles.put({ ...collectibles, unlocked: [...collectibles.unlocked, id] });
 }
 
-/** Tagesziel of the learner (todayProgress), for the Abschluss screen. */
+/**
+ * Tagesziel for the Abschluss screen of `session`: the day the round began, even when it ended
+ * after midnight (task 10); the map counts the same way.
+ */
 export async function loadTodayProgress(
-  deps: Pick<PracticeDeps, 'repos' | 'now'>,
+  deps: Pick<PracticeDeps, 'repos'>,
   learnerId: string,
+  session: Pick<Session, 'startedAt'>,
 ): Promise<TodayProgress> {
-  return todayProgress(await deps.repos.attempts.listByLearner(learnerId), deps.now());
+  const [attempts, sessions] = await Promise.all([
+    deps.repos.attempts.listByLearner(learnerId),
+    deps.repos.sessions.listByLearner(learnerId),
+  ]);
+  return todayProgress(attempts, session.startedAt, sessions);
 }
 
 export interface SubmitResult {

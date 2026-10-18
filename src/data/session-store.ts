@@ -181,7 +181,7 @@ export function createSessionStore(deps: PracticeDeps): SessionStore {
         if (status !== 'feedback' || !practice) return;
         const token = run;
         if (practice.session.goalReached) {
-          const today = await loadTodayProgress(deps, practice.learnerId);
+          const today = await loadTodayProgress(deps, practice.learnerId, practice.session);
           if (token === run) set({ status: 'finished', current: null, today });
           return;
         }

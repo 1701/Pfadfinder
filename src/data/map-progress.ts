@@ -4,7 +4,12 @@
 
 import type { Fach } from '../domain/content/taxonomy';
 import type { MasteryState } from '../domain/mastery/mastery';
-import { postponedFaecher, todayProgress, type TodayProgress } from '../domain/progress';
+import {
+  postponedFaecher,
+  practiceDay,
+  todayProgress,
+  type TodayProgress,
+} from '../domain/progress';
 import type { Repositories } from './repos';
 
 export interface MapProgress {
@@ -12,24 +17,34 @@ export interface MapProgress {
   /** Entdeckungen (Collectibles.unlocked). */
   unlocked: string[];
   today: TodayProgress;
-  /** Fächer whose Einstieg offer was postponed today. */
+  /** Fächer whose Einstieg offer was postponed today (or on the day of a round still running). */
   postponed: Fach[];
 }
 
 export async function loadMapProgress(repos: Repositories, now: string): Promise<MapProgress> {
-  const postponed = postponedFaecher(await repos.postponedOffers.list(), now);
+  const offers = await repos.postponedOffers.list();
   const [learner] = await repos.learners.list();
-  if (!learner) return { mastery: [], unlocked: [], today: todayProgress([], now), postponed };
-  const [mastery, collectibles, attempts] = await Promise.all([
+  if (!learner) {
+    return {
+      mastery: [],
+      unlocked: [],
+      today: todayProgress([], now),
+      postponed: postponedFaecher(offers, now),
+    };
+  }
+  const [mastery, collectibles, attempts, sessions] = await Promise.all([
     repos.mastery.listByLearner(learner.id),
     repos.collectibles.get(learner.id),
     repos.attempts.listByLearner(learner.id),
+    repos.sessions.listByLearner(learner.id),
   ]);
+  // A round from before midnight that still goes on keeps its day (practiceDay).
+  const day = practiceDay(sessions, new Map(attempts.map((a) => [a.id, a])), now);
   return {
     mastery,
     unlocked: collectibles?.unlocked ?? [],
-    today: todayProgress(attempts, now),
-    postponed,
+    today: todayProgress(attempts, day, sessions),
+    postponed: postponedFaecher(offers, now, day),
   };
 }
 

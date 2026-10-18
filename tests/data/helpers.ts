@@ -21,6 +21,21 @@ export function tickingClock(start = '2026-10-11T08:00:00.000Z') {
   };
 }
 
+/** A fake clock like tickingClock that a test can move to another time (over midnight). */
+export function settableClock(start: string) {
+  let t = Date.parse(start);
+  return {
+    now() {
+      const iso = new Date(t).toISOString();
+      t += 1000;
+      return iso;
+    },
+    set(iso: string) {
+      t = Date.parse(iso);
+    },
+  };
+}
+
 // Module-wide, so two stores on the same repositories never hand out the same id.
 let lastId = 0;
 

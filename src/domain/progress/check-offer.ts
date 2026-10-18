@@ -37,8 +37,15 @@ export interface PostponedOffer {
 
 /**
  * "Später" holds until the end of the local calendar day, the same day boundary as continuing a
- * practice session (planSessionStart): the next day the offer is back.
+ * practice session (planSessionStart): the next day the offer is back. While a round that began
+ * before midnight goes on, its day counts too (`day` = practiceDay, task 10).
  */
-export function postponedFaecher(offers: readonly PostponedOffer[], now: string): Fach[] {
-  return offers.filter((o) => isSameLocalDay(o.at, now)).map((o) => o.fach);
+export function postponedFaecher(
+  offers: readonly PostponedOffer[],
+  now: string,
+  day: string = now,
+): Fach[] {
+  return offers
+    .filter((o) => isSameLocalDay(o.at, now) || isSameLocalDay(o.at, day))
+    .map((o) => o.fach);
 }

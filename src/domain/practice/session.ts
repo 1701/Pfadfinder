@@ -5,11 +5,11 @@ import type { Bereich, Item } from '../content';
 import { evaluate, parseAnswer, type EvaluationResult } from '../evaluation';
 import type { Attempt, ReviewEntry, Session } from '../learner';
 import { updateMastery, type MasteryState, type MasteryTransition } from '../mastery';
-import { completedEtappe, DAILY_GOAL, etappeId } from '../progress';
+import { completedEtappe, DAILY_GOAL, etappeId, lastActivity } from '../progress';
 import { enqueueReview, onReviewResult } from '../scheduler';
 import { isSameLocalDay } from '../time';
 
-export { isSameLocalDay };
+export { isSameLocalDay, lastActivity };
 
 /** A session ends with the Tagesziel: 10 Fundstücke = 10 answered items (PRODUCT.md §6). */
 export const SESSION_GOAL = DAILY_GOAL;
@@ -43,17 +43,6 @@ export interface SessionStartPlan {
   resume: Session | null;
   /** Open sessions from an earlier day, already closed (endedAt = now, goal not reached). */
   close: Session[];
-}
-
-/** Time of the session's newest stored answer; startedAt when none is known. */
-export function lastActivity(
-  session: Session,
-  attempts: ReadonlyMap<string, Pick<Attempt, 'at'>>,
-): string {
-  return session.attemptIds.reduce((latest, id) => {
-    const at = attempts.get(id)?.at;
-    return at !== undefined && at > latest ? at : latest;
-  }, session.startedAt);
 }
 
 /**
