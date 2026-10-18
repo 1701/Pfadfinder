@@ -2,6 +2,8 @@
 //  - developer pages (/dev/*) must not be in the bundle
 //  - test fixtures (reading text t-sach-900) only reach the dev pages, never the bundle
 //  - self-hosted fonts and reading texts must be precached for offline use
+//  - updates wait for "Neu laden" (task 11): sw.js only skips waiting on request, never on its own,
+//    and the app registers the worker itself (no registerSW.js); the build id is filled in
 //  - the start page's JS (entry + modulepreloads) stays below the budget and contains neither
 //    Zod nor Dexie: both belong to the lazy practice chunk (ARCHITECTURE.md §5)
 
@@ -51,6 +53,22 @@ for (const file of readdirSync(textsDir).filter((f) => f.endsWith('.json'))) {
   if (!chunk) errors.push(`assets: kein Chunk für content/texts/deutsch/${file}`);
   else if (!sw.includes(`assets/${chunk}`)) errors.push(`sw.js: Lesetext ${id} fehlt im Precache`);
 }
+// Updates (src/app/pwa-update.ts): a new worker waits until the app sends SKIP_WAITING.
+if (!/"SKIP_WAITING"===\w+\.data\.type&&self\.skipWaiting\(\)/.test(sw)) {
+  errors.push('sw.js: kein SKIP_WAITING-Listener');
+}
+if ((sw.match(/skipWaiting\(\)/g) ?? []).length !== 1 || sw.includes('clientsClaim')) {
+  errors.push(
+    'sw.js: übernimmt von selbst (skipWaiting/clientsClaim), ein Update käme mitten in eine Runde',
+  );
+}
+for (const file of files) {
+  const text = readFileSync(path.join(dist, file), 'utf8');
+  if (text.includes('registerSW'))
+    errors.push(`${file}: lädt registerSW.js, die App registriert selbst`);
+  if (text.includes('__BUILD_ID__')) errors.push(`${file}: Build-Kennung nicht eingesetzt`);
+}
+
 // App icons: listed in the manifest, linked for iOS, precached for offline start.
 const manifest = readFileSync(path.join(dist, 'manifest.webmanifest'), 'utf8');
 for (const icon of ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png']) {

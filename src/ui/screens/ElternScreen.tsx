@@ -3,11 +3,14 @@
 // deletes everything on this device after asking back. Import and an overview come later
 // (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
 // Impressum and Datenschutz are linked here only, top right, already before the sum (task 10).
+// Bottom left, quietly: the build ("Version a1b2c3d · 18.10.2026") and, once a new version
+// waits, "Neue Version – Neu laden" (task 11), also before the sum.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { gateQuestion, isGateAnswer, type GateQuestion } from '../../domain/parents';
 import { Button } from '../components/Button';
+import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { ZiffernBlock } from '../components/ZiffernBlock';
 import { focusQuietly } from '../focus';
 import { TO_MAP } from '../text/einstieg';
@@ -26,6 +29,7 @@ import {
   GATE_SUBMIT,
   gateTitle,
 } from '../text/eltern';
+import { versionLine } from '../text/update';
 import { Blatt } from './Blatt';
 import { QUIET_ACTION_CLASS } from './ItemScreen';
 
@@ -38,6 +42,9 @@ export interface ElternScreenProps {
   onDeleted(): void;
   /** Tests pass a fixed question. */
   newQuestion?: () => GateQuestion;
+  /** Short commit hash and build day. */
+  buildId: string;
+  update?: AppUpdate;
 }
 
 type Step = 'frage' | 'offen' | 'rueckfrage' | 'loeschen';
@@ -47,6 +54,15 @@ const zurKarte = (
     {TO_MAP}
   </Link>
 );
+
+function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-sm text-ink-muted">
+      <p className="px-sm">{versionLine(buildId)}</p>
+      <UpdateHinweis update={update} />
+    </div>
+  );
+}
 
 const rechtliches = (
   <nav aria-label="Rechtliches" className="flex gap-xs">
@@ -64,12 +80,17 @@ export function ElternScreen({
   deleteAll,
   onDeleted,
   newQuestion = gateQuestion,
+  buildId,
+  update = null,
 }: ElternScreenProps) {
+  const version = <Version buildId={buildId} update={update} />;
   const [step, setStep] = useState<Step>('frage');
   const [failed, setFailed] = useState<'backup' | 'delete' | null>(null);
   const [saving, setSaving] = useState(false);
 
-  if (step === 'frage') return <Frage newQuestion={newQuestion} onPass={() => setStep('offen')} />;
+  if (step === 'frage') {
+    return <Frage newQuestion={newQuestion} version={version} onPass={() => setStep('offen')} />;
+  }
   if (step === 'offen') {
     const backup = async () => {
       setSaving(true);
@@ -92,7 +113,7 @@ export function ElternScreen({
         readAloud={false}
         actions={
           <>
-            <span />
+            {version}
             {/* Not yellow: neither is a next step on the way (task 6b). */}
             <div className="flex flex-col items-stretch gap-sm">
               <Button size="large" disabled={saving} onClick={() => void backup()}>
@@ -123,7 +144,15 @@ export function ElternScreen({
   );
 }
 
-function Frage({ newQuestion, onPass }: { newQuestion: () => GateQuestion; onPass(): void }) {
+function Frage({
+  newQuestion,
+  version,
+  onPass,
+}: {
+  newQuestion: () => GateQuestion;
+  version: ReactNode;
+  onPass(): void;
+}) {
   const [question, setQuestion] = useState(newQuestion);
   const [draft, setDraft] = useState('');
   const [retry, setRetry] = useState(false);
@@ -142,7 +171,7 @@ function Frage({ newQuestion, onPass }: { newQuestion: () => GateQuestion; onPas
       readAloud={false}
       actions={
         <>
-          <span />
+          {version}
           <Button variant="primary" disabled={draft === ''} onClick={submit}>
             {GATE_SUBMIT}
           </Button>

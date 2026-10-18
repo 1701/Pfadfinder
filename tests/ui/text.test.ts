@@ -7,6 +7,7 @@ import { ELTERN_TEXTS } from '../../src/ui/text/eltern';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
 import { PROBETEST_TEXTS } from '../../src/ui/text/probetest';
 import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
+import { UPDATE_TEXTS } from '../../src/ui/text/update';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
 
 const NB = '\u00a0';
@@ -48,10 +49,13 @@ describe('the choice before practice goes on', () => {
 });
 
 describe('the Eltern page', () => {
-  it.each(ELTERN_TEXTS)('"%s" is at most 2 sentences, no exclamation', (text) => {
-    expect(text).not.toContain('!');
-    expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
-  });
+  it.each([...ELTERN_TEXTS, ...UPDATE_TEXTS])(
+    '"%s" is at most 2 sentences, no exclamation',
+    (text) => {
+      expect(text).not.toContain('!');
+      expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
+    },
+  );
 });
 
 describe('the tip in the feedback band', () => {

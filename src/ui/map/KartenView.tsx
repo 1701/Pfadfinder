@@ -13,6 +13,7 @@ import { BEREICHE } from '../../domain/content/taxonomy';
 import type { RegionState, TodayProgress } from '../../domain/progress';
 import { Button, buttonClass } from '../components/Button';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
+import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 import { OFFER_GO, OFFER_LATER, OFFER_TITLE } from '../text/einstieg';
@@ -30,6 +31,8 @@ export interface KartenViewProps {
   /** The Probetest each Fach offers (the first in the manifest); none for a Fach without one. */
   probetests?: readonly { fach: Fach; id: string }[];
   readAloud?: boolean;
+  /** "Neue Version – Neu laden" in the legend line, for adults (task 11). */
+  update?: AppUpdate;
 }
 
 function speech(progress: NonNullable<KartenViewProps['progress']>, offered: boolean): string {
@@ -52,6 +55,7 @@ export function KartenView({
   offer = null,
   probetests = [],
   readAloud = true,
+  update = null,
 }: KartenViewProps) {
   const unexplored =
     progress !== null && BEREICHE.some((b) => progress.states[b].kind === 'unerforscht');
@@ -91,7 +95,10 @@ export function KartenView({
             Probetest {FACH_NAME[fach]}
           </Link>
         ))}
-        <p className="text-ink-muted">{unexplored && LEGEND}</p>
+        <div className="flex flex-wrap items-center gap-x-lg">
+          <p className="text-ink-muted">{unexplored && LEGEND}</p>
+          <UpdateHinweis update={update} />
+        </div>
       </div>
     </main>
   );

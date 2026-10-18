@@ -26,7 +26,8 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium-landscape',
-      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
+      // update.spec builds a second version; it runs here only (service workers, one run).
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest|update)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: PREVIEW },
     },
     {

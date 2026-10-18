@@ -47,7 +47,7 @@ Lokal lässt sich dieselbe Auslieferung mit `npm run build && npx wrangler dev` 
 
 - `/` und `/ueben/mathe/zahlen-operationen` liefern `index.html` (200).
 - `/sw.js` und `/registerSW.js` kommen als JavaScript, `/manifest.webmanifest` als `application/manifest+json`, die Schriften als `font/woff2`.
-- Alle Antworten tragen `Cache-Control: public, max-age=0, must-revalidate`. Der Browser fragt also jedes Mal nach, und ein neuer Service Worker wird sofort gefunden.
+- Alle Antworten tragen `Cache-Control: public, max-age=0, must-revalidate`. Der Browser fragt also jedes Mal nach; ein neuer Service Worker wird gefunden, sobald die App nachfragt (Abschnitt 8).
 - Der Service Worker registriert sich mit Scope `/` und steuert die Seite nach dem Neuladen. Der Precache hat 20 Einträge. Offline lädt eine direkt aufgerufene Unterseite (`/ueben/…`).
 
 Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem lokalen Build) dieselben Punkte: Antworten und Header wie oben. Der Service Worker hat Scope `/`, steuert die Seite und hat 20 Einträge im Precache. Offline laden `/ueben/mathe/raum-form` und die Karte.
@@ -77,5 +77,27 @@ Prüfliste vor der Veröffentlichung (Datenschutzerklärung, Aufgabe 10, Markus 
 
 ## 7. Bekanntes Verhalten
 
-- **Fehlende Dateien liefern `index.html` mit Status 200**, auch für Skripte (SPA-Fallback gilt für alle Anfragen). Normalfall: Nach einem Deploy liefert der alte Service Worker die alten Chunks aus seinem Precache, bis die neue Version übernimmt (`registerType: autoUpdate`). Nur ohne Service Worker (erster Besuch, gelöschte Website-Daten) und mitten in einem Deploy könnte ein alter Chunk als HTML ankommen; ein Neuladen behebt das. Falls das je auffällt: ein kleiner Worker mit `run_worker_first` für `/assets/*`, der bei fehlender Datei 404 liefert.
+- **Fehlende Dateien liefern `index.html` mit Status 200**, auch für Skripte (SPA-Fallback gilt für alle Anfragen). Normalfall: Nach einem Deploy liefert der alte Service Worker die alten Chunks aus seinem Precache, bis die neue Version übernimmt (auf Tipp, Abschnitt 8). Nur ohne Service Worker (erster Besuch, gelöschte Website-Daten) und mitten in einem Deploy könnte ein alter Chunk als HTML ankommen; ein Neuladen behebt das. Falls das je auffällt: ein kleiner Worker mit `run_worker_first` für `/assets/*`, der bei fehlender Datei 404 liefert.
+- **Zwei Fenster:** Tippt jemand in einem Browser-Tab „Neu laden“, übernimmt der neue Service Worker auch für einen zweiten offenen Tab. Der lädt nicht neu (so gewollt), läuft aber mit dem alten Code weiter; braucht er danach einen Chunk, den er noch nicht geladen hatte, kommt der als HTML an, und ein Neuladen behebt das. Die App auf dem Home-Bildschirm hat nur ein Fenster.
+- **Cache-Header von `sw.js` prüfen:** `curl -I https://pfadfinder.accounts-ea5.workers.dev/sw.js` muss `max-age=0, must-revalidate` zeigen (Stand 2026-10-18: `public, max-age=0, must-revalidate`, `cf-cache-status: HIT`, mit ETag). Ein `max-age` über 0 ohne `must-revalidate` würde neue Versionen verzögern.
 - **Keine Laufzeit-Netzwerkaufrufe:** Die App lädt nur ihre eigenen Assets (CLAUDE.md); der Worker hat keine Bindings.
+
+## 8. Updates der installierten App
+
+Bis Aufgabe 11 stand `registerType: 'autoUpdate'` in `vite.config.ts`, hatte aber keine Wirkung: Mit `injectRegister: 'script'` setzt vite-plugin-pwa weder `skipWaiting` noch `clientsClaim`. Eine neue Version wartete, bis kein Fenster der App mehr offen war. Die App auf dem iPad-Home-Bildschirm wird meist nur angehalten, also kam eine neue Version erst nach mehreren echten Neustarts.
+
+Seit Aufgabe 11 (`src/app/pwa-update.ts`):
+- Die App registriert `/sw.js` selbst und ruft `registration.update()` beim Start und bei jeder Rückkehr in den Vordergrund (`visibilitychange`) auf.
+- Ein neuer Service Worker installiert sich und wartet. Auf `/eltern` (unten links, neben der Kennung) und in der Legendenzeile der Karte steht dann leise „Neue Version – Neu laden“. Ein Tipp aktiviert ihn (`SKIP_WAITING`) und lädt neu, sobald er die Seite steuert.
+- Von selbst lädt die App nie neu, also nie mitten in einer Runde oder einem Probetest. Ohne Tipp übernimmt die neue Version wie bisher, wenn die App ganz geschlossen war.
+- `/eltern` zeigt die Build-Kennung, z. B. `Version d7f1924 · 18.10.2026` (kurzer Git-Hash, bei Cloudflare notfalls aus `WORKERS_CI_COMMIT_SHA`, und der Build-Tag in Europe/Berlin).
+- `check-bundle.ts` prüft nach jedem Build: `sw.js` übernimmt nicht von selbst, kein `registerSW.js`, Kennung eingesetzt. `update.spec` (nur Chromium) baut eine zweite Version und spielt den Ablauf durch.
+
+**Einmaliger Übergang:** Die Version vor Aufgabe 11 hat keine Update-Logik. Auf ein Gerät mit dieser alten Version kommt die neue nur auf die alte Art: App im App-Umschalter ganz schließen und neu öffnen (bei Bedarf zweimal). Danach gilt der Ablauf oben.
+
+**Prüfschritt am iPad** (nach einem Deploy, wenn auf dem iPad schon eine Version ab Aufgabe 11 läuft):
+1. Die App auf dem Home-Bildschirm öffnen und auf der Karte bleiben. Sie hat keine Adresszeile, `/eltern` ist dort also nicht erreichbar. Safari hat auf dem iPad einen eigenen Speicher und einen eigenen Service Worker, `/eltern` in Safari zeigt deshalb die Version von Safari.
+2. Einen neuen Stand auf `main` pushen und warten, bis Workers Builds grün ist.
+3. Die App in den Hintergrund schicken und wieder holen (nicht neu starten). Nach wenigen Sekunden steht in der Legendenzeile der Karte „Neue Version – Neu laden“.
+4. Eine Runde beginnen, die App in den Hintergrund und zurück: kein Hinweis, kein Neuladen, die Runde läuft weiter.
+5. Zur Karte, „Neue Version – Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg. Gegenprobe in Safari: `/eltern` zeigt nach demselben Ablauf die neue Kennung.

@@ -5,6 +5,7 @@ import { appRepositories } from '../data/dexie/instance';
 import { ensureLearner } from '../data/practice';
 import { downloadTextFile } from '../ui/download';
 import { ElternScreen } from '../ui/screens/ElternScreen';
+import { applyUpdate, useUpdateReady } from './pwa-update';
 
 async function downloadBackup() {
   const repos = appRepositories();
@@ -20,8 +21,11 @@ async function downloadBackup() {
 }
 
 export function ElternRoute() {
+  const updateReady = useUpdateReady();
   return (
     <ElternScreen
+      buildId={__BUILD_ID__}
+      update={updateReady ? { onReload: applyUpdate } : null}
       downloadBackup={downloadBackup}
       deleteAll={() => appRepositories().clear()}
       // A full load of the start page: the stores of this run still hold the deleted learner.

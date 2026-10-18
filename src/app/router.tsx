@@ -10,6 +10,7 @@ import { practiceableBereicheFromManifest } from '../domain/scheduler/practiceab
 import { SUPPORTED_FORMATS } from '../ui/formats/supported';
 import { KartenScreen } from '../ui/map/KartenScreen';
 import { ListenScreen } from '../ui/screens/ListenScreen';
+import { applyUpdate, useUpdateReady } from './pwa-update';
 
 // The start page reads the manifest; items load when a Bereich is opened. Progress (IndexedDB)
 // comes from a lazy chunk, so Dexie stays out of the start bundle.
@@ -22,6 +23,7 @@ const postponeOffer = (fach: Fach) =>
 /** The map; /?liste shows the plain list instead (fallback for tests). */
 function StartRoute() {
   const [search] = useSearchParams();
+  const updateReady = useUpdateReady();
   if (search.has('liste')) return <ListenScreen bereiche={START_BEREICHE} />;
   return (
     <KartenScreen
@@ -29,6 +31,7 @@ function StartRoute() {
       formats={SUPPORTED_FORMATS}
       loadProgress={loadMapProgress}
       postponeOffer={postponeOffer}
+      update={updateReady ? { onReload: applyUpdate } : null}
     />
   );
 }

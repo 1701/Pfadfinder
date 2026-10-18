@@ -14,6 +14,7 @@ import {
   type TodayProgress,
 } from '../../domain/progress';
 import { practiceableBereicheFromManifest } from '../../domain/scheduler/practiceable';
+import type { AppUpdate } from '../components/UpdateHinweis';
 import { KartenView, type KartenViewProps } from './KartenView';
 
 export interface MapProgressSource {
@@ -30,6 +31,8 @@ export interface KartenScreenProps {
   loadProgress(): Promise<MapProgressSource>;
   /** Stores "Später" for the Fach; the offer hides at once, whether or not storing works. */
   postponeOffer(fach: Fach): Promise<void>;
+  /** A waiting new version (task 11); null otherwise. */
+  update?: AppUpdate;
 }
 
 /** The first Probetest of each Fach that has one. */
@@ -51,6 +54,7 @@ export function KartenScreen({
   formats,
   loadProgress,
   postponeOffer,
+  update = null,
 }: KartenScreenProps) {
   const [progress, setProgress] = useState<KartenViewProps['progress']>(null);
   // The Fach whose Einstiegscheck the map offers, before "Später".
@@ -91,5 +95,12 @@ export function KartenScreen({
           },
         }
       : null;
-  return <KartenView progress={progress} offer={offer} probetests={probetestLines(manifest)} />;
+  return (
+    <KartenView
+      progress={progress}
+      offer={offer}
+      probetests={probetestLines(manifest)}
+      update={update}
+    />
+  );
 }

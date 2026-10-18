@@ -11,7 +11,10 @@ import { OPEN_BEREICHE } from '../../fixtures/content-state';
 import { BEREICH_NAME } from '../../../src/ui/text/bereiche';
 import { masteryFor } from '../../fixtures/pool';
 
-function renderScreen(loadProgress: () => Promise<MapProgressSource>) {
+function renderScreen(
+  loadProgress: () => Promise<MapProgressSource>,
+  update: { onReload(): void } | null = null,
+) {
   render(
     <MemoryRouter>
       <KartenScreen
@@ -19,6 +22,7 @@ function renderScreen(loadProgress: () => Promise<MapProgressSource>) {
         formats={SUPPORTED_FORMATS}
         loadProgress={loadProgress}
         postponeOffer={() => Promise.resolve()}
+        update={update}
       />
     </MemoryRouter>,
   );
@@ -47,6 +51,21 @@ describe('KartenScreen', () => {
     );
     expect(OPEN_BEREICHE).toContain('zahlen-operationen');
     expect(screen.getByText('Heute: 3 von 10 Fundstücken')).toBeTruthy();
+  });
+
+  it('offers a waiting version in the legend line, only when there is one', async () => {
+    const failing = () => Promise.reject(new Error('blocked'));
+    renderScreen(failing);
+    await screen.findAllByRole('group', { name: 'Karte' });
+    expect(screen.queryByRole('button', { name: 'Neue Version – Neu laden' })).toBeNull();
+  });
+
+  it('reloads for a waiting version on a tap', async () => {
+    const onReload = vi.fn();
+    renderScreen(() => Promise.reject(new Error('blocked')), { onReload });
+    await screen.findAllByRole('group', { name: 'Karte' });
+    screen.getByRole('button', { name: 'Neue Version – Neu laden' }).click();
+    expect(onReload).toHaveBeenCalledOnce();
   });
 
   it('still shows the map when the storage cannot be read', async () => {

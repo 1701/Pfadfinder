@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { startPwaUpdates } from './pwa-update';
 import { AppRouter } from './router';
 import './index.css';
 
@@ -11,3 +12,5 @@ createRoot(root).render(
     <AppRouter />
   </StrictMode>,
 );
+
+startPwaUpdates();

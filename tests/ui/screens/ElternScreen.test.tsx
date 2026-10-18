@@ -14,6 +14,7 @@ function renderScreen(
   deleteAll: () => Promise<void> = vi.fn().mockResolvedValue(undefined),
   onDeleted = vi.fn(),
   downloadBackup: () => Promise<void> = vi.fn().mockResolvedValue(undefined),
+  update: { onReload(): void } | null = null,
 ) {
   const questions = [
     { a: 47, b: 38 },
@@ -26,6 +27,8 @@ function renderScreen(
         deleteAll={deleteAll}
         onDeleted={onDeleted}
         newQuestion={() => questions.shift()!}
+        buildId="a1b2c3d · 18.10.2026"
+        update={update}
       />
     </MemoryRouter>,
   );
@@ -68,6 +71,23 @@ describe('ElternScreen', () => {
     expect(links()).toEqual(expected);
     await passGate();
     expect(links()).toEqual(expected);
+  });
+
+  it('shows the build quietly, before the sum and after it, and no update without one', async () => {
+    renderScreen();
+    expect(screen.getByText('Version a1b2c3d · 18.10.2026')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Neue Version – Neu laden' })).toBeNull();
+    await passGate();
+    expect(screen.getByText('Version a1b2c3d · 18.10.2026')).toBeTruthy();
+  });
+
+  it('offers a waiting version as a quiet reload, not yellow', async () => {
+    const onReload = vi.fn();
+    renderScreen(undefined, undefined, undefined, { onReload });
+    const reload = screen.getByRole('button', { name: 'Neue Version – Neu laden' });
+    expect(reload.className).not.toContain('bg-signal');
+    await userEvent.click(reload);
+    expect(onReload).toHaveBeenCalledOnce();
   });
 
   it('gives a new sum after a wrong answer', async () => {
