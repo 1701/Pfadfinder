@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Aufgabe 12, Nachtrag: Apostroph, Messung der Lesetexte
+- **Entschieden (Markus):** typografischer Apostroph in „Wo geht’s in Mathe los?“, „Wo geht’s in Deutsch los?“ und „Wohin geht’s heute?“ (Code, Tests, PRODUCT §5.4, Karten-Screenshots). Das Intro bleibt zweizeilig. Zeilenende hoch jetzt Mathe 706 / Deutsch 731 px (37 px bis zum Rand). „so geht’s auch“ in PRODUCT §5.6 und CONTENT_SCHEMA (Anleitung für Content, keine UI) nicht geändert.
+- **Gebaut:** `text-layout.spec` wartet in `open()`, bis der Suspense-Platzhalter (`aria-busy`) im Antwortbereich weg ist. Ursache der Schwankung: Bei match/order wurde der 48-px-Platzhalter statt der Aufgabe gemessen, so dass order 168 px zu viel Luft zeigte (iPad hoch 200 px: 492 statt 324; Safari quer und hoch: die ganze Zeile „richtig“, z. B. 46 %: 189 statt −49 px). Die Dateien werden weiter nur geschrieben, nicht verglichen.
+- **Gemessen:** zwei Läufe nach dem Fix, `text-budget-*.json` in allen vier Viewports byte-gleich (0 Abweichungen). Korrigierte Werte committet.
+- **CI:** [CI #39150432417](https://github.com/1701/Pfadfinder/actions/runs/39150432417) grün (6818839…d645790), Workers Builds grün; 935 Tests, e2e 98 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout `einstieg-layout`/`karte` 9/9, `text-layout` 4/4 (zweimal).
+
 ## 2026-10-18 – Aufgabe 12: Content-Patch rs-strategien, ein Angebot pro Tag, Fach im Angebot
 - **Gebaut:** (0) d-rss-1-001 misconception („Zeitangabe“), d-rss-2-003 Option c „Fräund“ und correct, d-rss-3-004 incorrect; `content:validate` 0/0. (1) `mapOffer` + `offerSpentToday` (domain/progress): Angebot nur bei 0 Fundstücken heute; „Später“ (egal welches Fach) und ein beendeter Einstieg (Session `check` mit `endedAt` heute) verbrauchen den Tag, das nächste Fach kommt am nächsten Morgen. `MapProgress.postponed[]` → `offerSpent`; Repo-Format `{ fach, at }` und Dexie bleiben. (2) „Wo geht's in Mathe/Deutsch los?“, Intro „Wir schauen, wo deine Reise in Mathe/Deutsch losgeht.“, beide Fächer in `EINSTIEG_TEXTS`.
 - **Entschieden (Markus):** Angebot nur bei 0 Fundstücken; jedes gezeigte Angebot zählt, auch nach „Los“. Begründung in PRODUCT §5.4: Ein Angebot ist eine neue Sache pro Tag, ein Einstieg ist eine ganze Sitzung. Passt der lange Titel hoch nicht, gilt die kurze Frage für beide Fächer.
