@@ -10,7 +10,7 @@ describe('loadMapProgress', () => {
       mastery: [],
       unlocked: [],
       today: { count: 0, goal: 10, reached: false },
-      postponed: [],
+      offerSpent: false,
     });
     expect(await repos.learners.list()).toEqual([]);
   });
@@ -45,7 +45,7 @@ describe('loadMapProgress', () => {
       mastery: [zo],
       unlocked: ['zahlen-operationen:1'],
       today: { count: 1, goal: 10, reached: false },
-      postponed: [],
+      offerSpent: false,
     });
   });
 
@@ -53,10 +53,34 @@ describe('loadMapProgress', () => {
     const repos = createMemoryRepositories();
     // 10:00 in Berlin (UTC+2).
     await postponeOffer(repos, 'mathe', '2026-10-14T08:00:00.000Z');
-    const at = async (now: string) => (await loadMapProgress(repos, now)).postponed;
-    expect(await at('2026-10-14T08:00:01.000Z')).toEqual(['mathe']);
-    expect(await at('2026-10-14T21:59:00.000Z')).toEqual(['mathe']);
-    expect(await at('2026-10-14T22:00:00.000Z')).toEqual([]);
+    const at = async (now: string) => (await loadMapProgress(repos, now)).offerSpent;
+    expect(await at('2026-10-14T08:00:01.000Z')).toBe(true);
+    expect(await at('2026-10-14T21:59:00.000Z')).toBe(true);
+    expect(await at('2026-10-14T22:00:00.000Z')).toBe(false);
     expect(await repos.learners.list()).toEqual([]);
+  });
+
+  it('spends the day with a finished Einstieg: the next Fach comes the next day', async () => {
+    const repos = createMemoryRepositories();
+    await repos.learners.put({
+      id: 'learner-1',
+      createdAt: '2026-10-14T07:00:00.000Z',
+      settings: { readAloud: true, bundesland: 'BW' },
+    });
+    await repos.mastery.put(masteryFor('zahlen-operationen', 2));
+    // The Mathe Einstieg ended at 09:40 in Berlin (UTC+2).
+    await repos.sessions.put({
+      id: 'check-1',
+      learnerId: 'learner-1',
+      mode: 'check',
+      startedAt: '2026-10-14T07:30:00.000Z',
+      endedAt: '2026-10-14T07:40:00.000Z',
+      attemptIds: [],
+      goalReached: false,
+    });
+    const at = async (now: string) => (await loadMapProgress(repos, now)).offerSpent;
+    expect(await at('2026-10-14T07:41:00.000Z')).toBe(true);
+    expect(await at('2026-10-14T21:59:00.000Z')).toBe(true);
+    expect(await at('2026-10-15T06:00:00.000Z')).toBe(false);
   });
 });

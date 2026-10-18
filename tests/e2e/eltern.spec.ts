@@ -4,7 +4,7 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
 import { EXPORT_VERSION, parseImport } from '../../src/domain/learner';
-import { answer, check, currentItem, postponeDeutschOffer } from './helpers';
+import { answer, check, currentItem } from './helpers';
 
 const OFFER = 'Wo geht deine Reise los?';
 
@@ -32,7 +32,6 @@ test('Üben → /eltern → alles löschen → Karte mit Angebot', async ({ page
     await page.getByRole('button', { name: 'Weiter' }).click();
   }
   await page.getByRole('link', { name: 'Pause' }).click();
-  await postponeDeutschOffer(page);
   await expect(page.getByText('Heute: 2 von 10 Fundstücken')).toBeVisible();
 
   await page.goto('/eltern');

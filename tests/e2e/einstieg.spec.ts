@@ -1,7 +1,7 @@
 // Smoke flow of the Einstieg (ARCHITECTURE.md §8, E2E 1): Karte → "Los" → questions without
-// feedback → result → the map shows the starting niveaus and offers Mathe no more. Plus pause,
-// "Später", the hint on a second visit and offline use. Runs on the production build (Chromium and
-// WebKit).
+// feedback → result → the map shows the starting niveaus and offers nothing more that day
+// (Deutsch the next morning). Plus pause, "Später", the hint on a second visit and offline use.
+// Runs on the production build (Chromium and WebKit).
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
@@ -44,6 +44,8 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   page,
 }) => {
   expect(MATHE_OPEN).toContain('zahlen-operationen');
+  // Fixed clock (local time of the browser): the finished Einstieg spends the day's offer.
+  await page.clock.setFixedTime(new Date('2026-10-14T10:00:00'));
   await page.goto('/');
   // While offered, the question is the title and the Tagesziel steps aside.
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
@@ -80,13 +82,7 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   expect(await page.locator('main').innerText()).not.toMatch(/\d|%/);
 
   await page.getByRole('link', { name: 'Zur Karte' }).click();
-  // Mathe is not offered a second time: the offer moves on to Deutsch. "Später" sets it aside.
-  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
-    'href',
-    '/einstieg/deutsch',
-  );
-  await page.getByRole('button', { name: 'Später' }).click();
+  // One offer a day: Mathe is not offered again, and Deutsch waits for the next day.
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 3' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Formen und Raum, Niveau 1' })).toBeVisible();
@@ -103,6 +99,15 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   ).toBeVisible();
   await page.getByRole('link', { name: 'Zur Karte' }).click();
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
+
+  // The next morning the map offers Deutsch.
+  await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));
+  await page.reload();
+  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
+    'href',
+    '/einstieg/deutsch',
+  );
 });
 
 test('Pause fragt nach: Weitermachen bleibt dabei, Zur Karte fängt von vorn an', async ({

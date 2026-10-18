@@ -116,7 +116,7 @@ describe('practice session (store + in-memory repositories + real content)', () 
     // 00:02 on the 12th: back on the map, the round still runs. Its day is the 11th.
     expect(await loadMapProgress(repos, clock.now())).toMatchObject({
       today: { count: 7, reached: false },
-      postponed: ['mathe'],
+      offerSpent: true,
     });
 
     // The round goes on after midnight and ends with 10 Fundstücke of the 11th.
@@ -135,7 +135,7 @@ describe('practice session (store + in-memory repositories + real content)', () 
     // The round is over: the map shows the 12th, where nothing has been done yet.
     expect(await loadMapProgress(repos, clock.now())).toMatchObject({
       today: { count: 0, reached: false },
-      postponed: [],
+      offerSpent: false,
     });
   });
 
@@ -154,7 +154,7 @@ describe('practice session (store + in-memory repositories + real content)', () 
     clock.set('2026-10-11T22:05:00.000Z');
     expect(await loadMapProgress(repos, clock.now())).toMatchObject({
       today: { count: 0 },
-      postponed: [],
+      offerSpent: false,
     });
   });
 

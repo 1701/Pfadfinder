@@ -1,18 +1,14 @@
 // Start page with the map. The manifest is part of the start bundle; progress comes from a lazy
 // loader (IndexedDB), read again every time the page opens, e.g. after a practice session.
-// "Später" is stored the same way, so it holds across reloads until the end of the day.
+// "Später" is stored the same way, so it holds across reloads until the end of the day. The offer
+// shows only before the day's first Fundstück and at most once a day (mapOffer).
 
 import { useEffect, useState } from 'react';
 import type { ContentManifest } from '../../domain/content/manifest';
 import type { Fach } from '../../domain/content/taxonomy';
 import type { Format } from '../../domain/content/types';
 import type { MasteryState } from '../../domain/mastery/mastery';
-import {
-  DAILY_GOAL,
-  checkOfferFach,
-  mapRegionState,
-  type TodayProgress,
-} from '../../domain/progress';
+import { DAILY_GOAL, mapOffer, mapRegionState, type TodayProgress } from '../../domain/progress';
 import { practiceableBereicheFromManifest } from '../../domain/scheduler/practiceable';
 import type { AppUpdate } from '../components/UpdateHinweis';
 import { KartenView, type KartenViewProps } from './KartenView';
@@ -21,8 +17,8 @@ export interface MapProgressSource {
   mastery: MasteryState[];
   unlocked: string[];
   today: TodayProgress;
-  /** Fächer whose Einstieg offer rests today ("Später"). */
-  postponed: Fach[];
+  /** Today's Einstieg offer is spent ("Später" or a finished Einstieg). */
+  offerSpent: boolean;
 }
 
 export interface KartenScreenProps {
@@ -46,7 +42,7 @@ const EMPTY: MapProgressSource = {
   mastery: [],
   unlocked: [],
   today: { count: 0, goal: DAILY_GOAL, reached: false },
-  postponed: [],
+  offerSpent: false,
 };
 
 export function KartenScreen({
@@ -59,18 +55,23 @@ export function KartenScreen({
   const [progress, setProgress] = useState<KartenViewProps['progress']>(null);
   // The Fach whose Einstiegscheck the map offers, before "Später".
   const [offerFach, setOfferFach] = useState<Fach | null>(null);
-  const [postponed, setPostponed] = useState<readonly Fach[]>([]);
+  const [resting, setResting] = useState(false);
 
   useEffect(() => {
     let active = true;
     // Without readable storage the Einstieg could not be kept, so it is not offered.
-    const show = ({ mastery, unlocked, today, postponed }: MapProgressSource, stored = true) => {
+    const show = ({ mastery, unlocked, today, offerSpent }: MapProgressSource, stored = true) => {
       if (!active) return;
       setProgress({ states: mapRegionState(manifest, mastery, unlocked, formats), today });
-      setPostponed(postponed);
+      setResting(offerSpent);
       setOfferFach(
         stored
-          ? checkOfferFach(practiceableBereicheFromManifest(manifest, formats), mastery)
+          ? mapOffer({
+              practiceable: practiceableBereicheFromManifest(manifest, formats),
+              mastery,
+              todayCount: today.count,
+              spent: offerSpent,
+            })
           : null,
       );
     };
@@ -85,11 +86,11 @@ export function KartenScreen({
   }, [manifest, formats, loadProgress]);
 
   const offer =
-    offerFach && !postponed.includes(offerFach)
+    offerFach && !resting
       ? {
           fach: offerFach,
           onLater: () => {
-            setPostponed((list) => [...list, offerFach]);
+            setResting(true);
             // Not stored (blocked storage): it still rests until the map opens again.
             postponeOffer(offerFach).catch(() => undefined);
           },

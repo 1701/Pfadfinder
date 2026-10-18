@@ -274,15 +274,3 @@ export function verdictOf(item: ContentItem, correct: boolean): string | null {
   if (item.format === 'short-answer') return null;
   return correct ? 'Richtig.' : 'Noch nicht ganz.';
 }
-
-/**
- * Back on the map after the first Mathe answers: Mathe has begun, so the map offers the Einstieg
- * of the next Fach, Deutsch (PRODUCT.md §5.4). "Später" sets it aside and brings back the Tagesziel.
- */
-export async function postponeDeutschOffer(page: Page) {
-  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
-    'href',
-    '/einstieg/deutsch',
-  );
-  await button(page, 'Später').click();
-}

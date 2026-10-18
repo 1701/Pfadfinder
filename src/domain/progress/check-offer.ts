@@ -1,8 +1,10 @@
 // When the map offers the Einstiegscheck (PRODUCT.md §5.4): once per Fach, voluntary, only
-// while the Fach has no mastery state at all and at least two practiceable Bereiche.
+// while the Fach has no mastery state at all and at least two practiceable Bereiche; at most one
+// offer a day, and only before the day's first Fundstück.
 // Zod-free on purpose: the start page computes this.
 
 import { FAECHER, fachOfBereich, type Bereich, type Fach } from '../content/taxonomy';
+import type { Session } from '../learner/model';
 import type { MasteryState } from '../mastery/mastery';
 import { isSameLocalDay } from '../time';
 
@@ -28,24 +30,56 @@ export function checkOfferFach(
   return FAECHER.find((fach) => isCheckOffered(fach, practiceable, mastery)) ?? null;
 }
 
-/** "Später" on the offer: the Fach rests on this device (no learner exists before an answer). */
+/** "Später" on the offer: stored on this device (no learner exists before an answer). */
 export interface PostponedOffer {
   fach: Fach;
   /** When "Später" was tapped. */
   at: string;
 }
 
+type CheckSession = Pick<Session, 'mode' | 'endedAt'>;
+
 /**
- * "Später" holds until the end of the local calendar day, the same day boundary as continuing a
- * practice session (planSessionStart): the next day the offer is back. While a round that began
- * before midnight goes on, its day counts too (`day` = practiceDay, task 10).
+ * One offer a day (PRODUCT.md §5.4, 2026-10-18): an offer is one new thing a day, an Einstieg a
+ * whole session. So "Später" for any Fach and a finished Einstieg both spend the day's offer; the
+ * next Fach comes the next day. A left Einstieg stores nothing and spends nothing. The day ends
+ * at local midnight, the same boundary as continuing a practice session (planSessionStart).
+ * While a round that began before midnight goes on, its day counts too (`day` = practiceDay).
  */
-export function postponedFaecher(
-  offers: readonly PostponedOffer[],
-  now: string,
-  day: string = now,
-): Fach[] {
-  return offers
-    .filter((o) => isSameLocalDay(o.at, now) || isSameLocalDay(o.at, day))
-    .map((o) => o.fach);
+export function offerSpentToday({
+  offers,
+  sessions = [],
+  now,
+  day = now,
+}: {
+  offers: readonly Pick<PostponedOffer, 'at'>[];
+  sessions?: readonly CheckSession[];
+  now: string;
+  day?: string;
+}): boolean {
+  const today = (at: string) => isSameLocalDay(at, now) || isSameLocalDay(at, day);
+  return (
+    offers.some((o) => today(o.at)) ||
+    sessions.some((s) => s.mode === 'check' && s.endedAt !== undefined && today(s.endedAt))
+  );
+}
+
+/**
+ * The Fach the map offers now, or null. Only while today has no Fundstück: the Tagesziel line is
+ * never replaced by an offer (it could only say "0 von 10"), and a reached goal rests the offer
+ * until the next day.
+ */
+export function mapOffer({
+  practiceable,
+  mastery,
+  todayCount,
+  spent,
+}: {
+  practiceable: readonly Bereich[];
+  mastery: readonly Pick<MasteryState, 'fach'>[];
+  todayCount: number;
+  spent: boolean;
+}): Fach | null {
+  if (spent || todayCount > 0) return null;
+  return checkOfferFach(practiceable, mastery);
 }

@@ -17,7 +17,7 @@ const NEW: MapProgressSource = {
   mastery: [],
   unlocked: [],
   today: { count: 0, goal: 10, reached: false },
-  postponed: [],
+  offerSpent: false,
 };
 
 function renderScreen(progress: MapProgressSource = NEW) {
@@ -78,6 +78,52 @@ describe('Einstieg offer on the map', () => {
     now = '2026-10-15T06:00:00.000Z';
     renderStored(repos, () => now);
     expect(await screen.findByRole('heading', { name: 'Wo geht deine Reise los?' })).toBeTruthy();
+  });
+
+  it('"Später" rests the day for every Fach: Deutsch only comes the next morning', async () => {
+    const repos = createMemoryRepositories();
+    // 08:00 in Berlin (UTC+2): "Später" for Mathe.
+    let now = '2026-10-14T06:00:00.000Z';
+    const first = renderStored(repos, () => now);
+    await userEvent.click(await screen.findByRole('button', { name: 'Später' }));
+    first.unmount();
+
+    // Later that day Mathe has a mastery state (practice): Deutsch would be next, but not today.
+    await repos.learners.put({
+      id: 'learner-1',
+      createdAt: now,
+      settings: { readAloud: true, bundesland: 'BW' },
+    });
+    await repos.mastery.put(masteryFor('daten-zufall', 1));
+    now = '2026-10-14T16:00:00.000Z';
+    const second = renderStored(repos, () => now);
+    expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    second.unmount();
+
+    now = '2026-10-15T06:00:00.000Z';
+    renderStored(repos, () => now);
+    expect(await screen.findByRole('heading', { name: 'Wo geht deine Reise los?' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
+      '/einstieg/deutsch',
+    );
+  });
+
+  it('never replaces the Tagesziel line: no offer once today has a Fundstück', async () => {
+    const first = renderScreen({ ...NEW, today: { count: 3, goal: 10, reached: false } });
+    expect(await screen.findByText('Heute: 3 von 10 Fundstücken')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    first.unmount();
+
+    renderScreen({ ...NEW, today: { count: 10, goal: 10, reached: true } });
+    expect(await screen.findByText(/10 von 10/)).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+  });
+
+  it('offers nothing on a day whose offer is spent (a finished Einstieg)', async () => {
+    renderScreen({ ...NEW, mastery: [masteryFor('daten-zufall', 1)], offerSpent: true });
+    expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
   });
 
   it('hides the offer at once even when "Später" cannot be stored', async () => {

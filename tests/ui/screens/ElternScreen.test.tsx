@@ -161,7 +161,7 @@ describe('ElternScreen', () => {
       mastery: [],
       unlocked: [],
       today: { count: 0, goal: 10, reached: false },
-      postponed: [],
+      offerSpent: false,
     });
   });
 

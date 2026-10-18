@@ -39,7 +39,7 @@ describe('KartenScreen', () => {
       mastery: [masteryFor('zahlen-operationen', 2), masteryFor('rs-strategien', 1, 'deutsch')],
       unlocked: ['zahlen-operationen:1'],
       today: { count: 3, goal: 10, reached: false },
-      postponed: [],
+      offerSpent: false,
     });
     const map = (await screen.findAllByRole('group', { name: 'Karte' }))[0]!;
     // Real content: every open Gebiet is a link, the stored mastery shows on Zahlen und Rechnen.
@@ -97,7 +97,7 @@ describe('KartenScreen', () => {
         mastery: [],
         unlocked: [],
         today: { count: 0, goal: 10, reached: false },
-        postponed: [],
+        offerSpent: false,
       }),
     );
     await screen.findAllByRole('group', { name: 'Karte' });
@@ -118,7 +118,7 @@ describe('KartenScreen', () => {
               mastery: [],
               unlocked: [],
               today: { count: 0, goal: 10, reached: false },
-              postponed: [],
+              offerSpent: false,
             })
           }
           postponeOffer={() => Promise.resolve()}

@@ -1,11 +1,11 @@
 // What the map needs from the device's storage: mastery per Gebiet, Entdeckungen, today's
-// Fundstücke and the Fächer whose Einstieg offer rests ("Später"). Reading creates nothing;
-// "Später" is the only thing the map writes.
+// Fundstücke and whether today's Einstieg offer is spent ("Später" or a finished Einstieg).
+// Reading creates nothing; "Später" is the only thing the map writes.
 
 import type { Fach } from '../domain/content/taxonomy';
 import type { MasteryState } from '../domain/mastery/mastery';
 import {
-  postponedFaecher,
+  offerSpentToday,
   practiceDay,
   todayProgress,
   type TodayProgress,
@@ -17,8 +17,8 @@ export interface MapProgress {
   /** Entdeckungen (Collectibles.unlocked). */
   unlocked: string[];
   today: TodayProgress;
-  /** Fächer whose Einstieg offer was postponed today (or on the day of a round still running). */
-  postponed: Fach[];
+  /** Today's offer is spent (or on the day of a round still running): no other Fach today. */
+  offerSpent: boolean;
 }
 
 export async function loadMapProgress(repos: Repositories, now: string): Promise<MapProgress> {
@@ -29,7 +29,7 @@ export async function loadMapProgress(repos: Repositories, now: string): Promise
       mastery: [],
       unlocked: [],
       today: todayProgress([], now),
-      postponed: postponedFaecher(offers, now),
+      offerSpent: offerSpentToday({ offers, now }),
     };
   }
   const [mastery, collectibles, attempts, sessions] = await Promise.all([
@@ -44,11 +44,11 @@ export async function loadMapProgress(repos: Repositories, now: string): Promise
     mastery,
     unlocked: collectibles?.unlocked ?? [],
     today: todayProgress(attempts, day, sessions),
-    postponed: postponedFaecher(offers, now, day),
+    offerSpent: offerSpentToday({ offers, sessions, now, day }),
   };
 }
 
-/** "Später": the offer of this Fach rests until the end of the day (postponedFaecher). */
+/** "Später": the offer rests until the end of the day, for every Fach (offerSpentToday). */
 export async function postponeOffer(repos: Repositories, fach: Fach, now: string): Promise<void> {
   await repos.postponedOffers.put({ fach, at: now });
 }
