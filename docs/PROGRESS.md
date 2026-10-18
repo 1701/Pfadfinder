@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Aufgabe 11, Nachtrag: Legende ins Meer der Karte
+- **Gebaut:** „Gestrichelt: noch unerforscht.“ steht mit gestricheltem Beispielstrich im Meer, in Namensgröße (24 Einheiten), `ink-muted`, ohne Rahmen; nur auf der ganzen Karte, nicht auf der Einzelinsel im Einstieg. Hoch: Kanal zwischen den Inseln rechts von „Deutsch“, einzeilig (viewBox x 190, Box 374 × 38). Quer: oben rechts neben „Deutsch“ über der Küste, zweizeilig nach dem Doppelpunkt (x 750, Box 242 × 66). Die Zeile unter der Karte hat links „Probetest Mathe“, rechts „Neu laden“ und Rechtliches.
+- **Verworfen (gemessen):** quer der Streifen unter der Deutsch-Insel (40 Einheiten hoch, eine Zeile braucht 38): 0,3 bzw. 0,9 px zur Küste.
+- **Messung** (`karte-budget-*.json`, Abstand zur Küste / zu Namen): Safari quer 19,1 px Schrift, 8,1 / 13,6 px; iPad quer 23,4 px, 9,5 / 16; Safari hoch 18,2 px, 12,2 / 39,6; iPad hoch 21,5 px, 14,4 / 45,6. Die Zeile bleibt überall einreihig; „Neu laden“ passt in Safari hoch mit 18,2 px Namen, die Regel „erst ab 1024 px Höhe“ entfällt.
+- **Tests:** `karte.spec` prüft Legende im viewBox, ≥ 18 px, ≥ 4 px zu Küste, Gebieten und Namen, Zeile einreihig, „Neu laden“ überall; Screenshots `karte-legende-*`. Budget als Objekte, damit Prettier die Datei annimmt.
+- **Entschieden (Markus):** Einschätzung im Durchsehen bleibt, wie sie ist; ob sie änderbar sein muss, zeigt die iPad-Sitzung (dann Knöpfe mit Markierung).
+- **CI:** [CI #39137078588](https://github.com/1701/Pfadfinder/actions/runs/39137078588) grün (49fad92), Workers Builds grün; 921 Tests, e2e 98 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout `karte`/`einstieg-layout`/`probetest-layout` 14/14.
+
 ## 2026-10-18 – Aufgabe 11, Punkt 3 und Nachtrag: Antworten vergleichen, „Für Eltern“
 - **Gebaut:** (Nachtrag) „Für Eltern“ leise am Ende von Impressum und Datenschutz, weil die installierte App `/eltern` sonst nicht erreicht; ARCHITECTURE §7 und PRODUCT angepasst (kein Kinder-Screen verlinkt `/eltern`). (3) Auswertung: Legende „gestrichelt: noch nicht verglichen“ und Knopf „1 Antwort vergleichen“ (nicht gelb) → Durchsehen nur der wartenden Kurzantworten („1 von 1“, kein „Zurück“), nach der Einschätzung „Zur Auswertung“ (gelb). Im Durchsehen oben rechts „Übersicht“: alle 24 Striche, Legende nur „gelöst“ und „gestrichelt …“, ein Tipp springt und beendet den Filter, „Weiter durchsehen“ zurück. Store: `reviewOnly`, Status `reviewOverview`.
 - **Entschieden:** Wireframe freigegeben mit vier Änderungen (Markus). Der gestrichelte Strich (16 × 8, `3 2`) wirkte am iPad gepunktet; jetzt `4 3`, gemeinsames Bauteil `ProbetestStrich` für Auswertung, beide Übersichten und Legenden.
