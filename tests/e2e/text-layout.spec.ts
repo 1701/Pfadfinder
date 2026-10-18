@@ -43,6 +43,10 @@ async function open(page: Page, query: string) {
     await page.goto(url);
     await band.waitFor();
   }
+  // Match and order are lazy chunks: until they arrive, the answer area holds the Suspense
+  // fallback (aria-busy), and every measurement would see its 48 px instead of the task. The
+  // answer area comes with the band; the reading screen has none.
+  await expect(page.locator('[data-region="answer"] [aria-busy="true"]')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
 }
 
