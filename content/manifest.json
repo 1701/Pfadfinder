@@ -184,8 +184,49 @@
     },
     "rs-laut-buchstabe": {
       "fach": "deutsch",
-      "items": 0,
-      "byFormat": {},
+      "items": 20,
+      "byFormat": {
+        "cloze-select": {
+          "1": 3,
+          "2": 2,
+          "3": 0
+        },
+        "find-error": {
+          "1": 2,
+          "2": 1,
+          "3": 0
+        },
+        "mark-in-text": {
+          "1": 1,
+          "2": 1,
+          "3": 0
+        },
+        "match": {
+          "1": 0,
+          "2": 1,
+          "3": 0
+        },
+        "multi-choice": {
+          "1": 0,
+          "2": 1,
+          "3": 0
+        },
+        "order": {
+          "1": 0,
+          "2": 1,
+          "3": 1
+        },
+        "short-answer": {
+          "1": 0,
+          "2": 0,
+          "3": 2
+        },
+        "single-choice": {
+          "1": 2,
+          "2": 1,
+          "3": 1
+        }
+      },
       "textIds": []
     },
     "rs-strategien": {

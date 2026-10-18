@@ -1,1 +1,1009 @@
-[]
+[
+  {
+    "id": "d-rsl-1-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Die {1} scheint heute warm.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Sonne",
+            "Sone",
+            "Sohne"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Sonne"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Das o in Son-ne ist kurz. Nach kurzem Selbstlaut steht der Mitlaut doppelt.",
+      "incorrect": "Sprich das Wort in Silben: Son-ne. Das o ist kurz, deshalb kommen zwei n.",
+      "misconception": "Viele schreiben nur ein n, weil man das zweite n nicht extra hört."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "mitlaut-verdoppelt",
+      "silben"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Welches Wort ist richtig geschrieben?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Spiel"
+        },
+        {
+          "id": "b",
+          "text": "Schpiel"
+        },
+        {
+          "id": "c",
+          "text": "Spil"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Am Wortanfang schreibt man sp, auch wenn man schp hört. Das lange i schreibt man ie.",
+      "incorrect": "Hör genau hin: Man spricht schp, aber am Wortanfang schreibt man sp. Das lange i wird ie.",
+      "misconception": "Schpiel kommt vom Hören. Die Regel am Wortanfang ist stärker als das Ohr."
+    },
+    "tags": [
+      "sp-st-wortanfang",
+      "ie"
+    ],
+    "estimatedSeconds": 30,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz ist ein Wort falsch geschrieben. Tippe es an.",
+    "payload": {
+      "words": [
+        {
+          "id": "w1",
+          "text": "Die"
+        },
+        {
+          "id": "w2",
+          "text": "Kinder"
+        },
+        {
+          "id": "w3",
+          "text": "spilen"
+        },
+        {
+          "id": "w4",
+          "text": "im"
+        },
+        {
+          "id": "w5",
+          "text": "Garten."
+        }
+      ],
+      "errorCount": 1
+    },
+    "solution": {
+      "errorIds": [
+        "w3"
+      ],
+      "corrections": {
+        "w3": "spielen"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig: spielen. Das i ist lang, deshalb schreibt man ie.",
+      "incorrect": "Sprich die Wörter langsam. In einem Wort hörst du ein langes i. Langes i schreibt man meistens ie.",
+      "misconception": "Viele lesen über das kurze i hinweg, weil man das Wort kennt."
+    },
+    "tags": [
+      "ie",
+      "langer-selbstlaut"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "prompt": "Tippe alle Wörter mit ie an.",
+    "payload": {
+      "text": "Die Biene fliegt zu den vielen Blumen im Wind",
+      "unit": "word",
+      "maxSelect": 4
+    },
+    "solution": {
+      "indices": [
+        0,
+        1,
+        2,
+        5
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Die, Biene, fliegt und vielen haben ein langes i. Das schreibt man ie.",
+      "incorrect": "Sprich jedes Wort langsam. Wo das i lang klingt, steht ie. Bei Wind ist das i kurz.",
+      "misconception": "Das kleine Wort Die wird oft vergessen. Es hat auch ein ie."
+    },
+    "tags": [
+      "ie",
+      "langer-selbstlaut"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Wie viele Silben hat das Wort Schmetterling? Klatsche mit.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "zwei"
+        },
+        {
+          "id": "b",
+          "text": "drei"
+        },
+        {
+          "id": "c",
+          "text": "vier"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! Schmet-ter-ling hat drei Silben.",
+      "incorrect": "Sprich das Wort langsam und klatsche bei jeder Silbe: Schmet-ter-ling.",
+      "misconception": "Wer zu schnell spricht, zieht Schmet und ter zusammen."
+    },
+    "tags": [
+      "silben",
+      "silben-klatschen"
+    ],
+    "estimatedSeconds": 30,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Elias will heute einen Kuchen {1}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "backen",
+            "baken",
+            "bakken"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "backen"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Das a in ba-cken ist kurz. Nach kurzem Selbstlaut schreibt man ck statt kk.",
+      "incorrect": "Sprich das Wort in Silben: ba-cken. Das a ist kurz. Statt zwei k schreibt man ck.",
+      "misconception": "Bakken folgt der Regel mit dem doppelten Mitlaut. Bei k ist es aber immer ck."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "ck"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Die {1} schläft auf dem Sofa.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Katze",
+            "Kaze",
+            "Kazze"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Katze"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Das a in Kat-ze ist kurz. Nach kurzem Selbstlaut schreibt man tz statt zz.",
+      "incorrect": "Sprich das Wort in Silben: Kat-ze. Das a ist kurz. Statt zwei z schreibt man tz.",
+      "misconception": "Kazze folgt der Regel mit dem doppelten Mitlaut. Bei z ist es aber immer tz."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "tz"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-1-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz ist ein Wort falsch geschrieben. Tippe es an.",
+    "payload": {
+      "words": [
+        {
+          "id": "w1",
+          "text": "Jonas"
+        },
+        {
+          "id": "w2",
+          "text": "froit"
+        },
+        {
+          "id": "w3",
+          "text": "sich"
+        },
+        {
+          "id": "w4",
+          "text": "auf"
+        },
+        {
+          "id": "w5",
+          "text": "den"
+        },
+        {
+          "id": "w6",
+          "text": "Sommer."
+        }
+      ],
+      "errorCount": 1
+    },
+    "solution": {
+      "errorIds": [
+        "w2"
+      ],
+      "corrections": {
+        "w2": "freut"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig: freut. Man hört oi, schreibt aber eu.",
+      "incorrect": "Ein Wort klingt wie oi. Diesen Laut schreibt man im Deutschen eu.",
+      "misconception": "Sommer sieht ungewohnt aus, ist aber richtig: kurzes o, doppeltes m."
+    },
+    "tags": [
+      "zwielaut",
+      "eu"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Hör auf den Selbstlaut. Welche Wörter schreibt man mit ss?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Flu_"
+        },
+        {
+          "id": "b",
+          "text": "Fu_"
+        },
+        {
+          "id": "c",
+          "text": "Ku_"
+        },
+        {
+          "id": "d",
+          "text": "Stra_e"
+        },
+        {
+          "id": "e",
+          "text": "Nu_"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Bei Fluss, Kuss und Nuss ist der Selbstlaut kurz. Nach kurzem Selbstlaut steht ss.",
+      "incorrect": "Sprich jedes Wort und hör auf den Selbstlaut. Kurz wie in Fluss: ss. Lang wie in Fuß: ß.",
+      "misconception": "Fuß und Fluss klingen ähnlich. Der Unterschied ist die Länge des u."
+    },
+    "tags": [
+      "ss-ß",
+      "kurzer-selbstlaut",
+      "langer-selbstlaut"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle in beiden Lücken das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Nach dem {1} zieht Amira ihre {2} an.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Regen",
+            "Reggen",
+            "Reegen"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "Stiefel",
+            "Schtiefel",
+            "Stifel"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Regen",
+        "2": "Stiefel"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Bei Re-gen ist das e lang, also nur ein g. Stiefel: st am Anfang, langes i als ie.",
+      "incorrect": "Prüfe jede Lücke einzeln. Ist der Selbstlaut lang, bleibt der Mitlaut einfach. Am Wortanfang schreibt man st.",
+      "misconception": "Reggen entsteht, wenn man die Regel für kurze Selbstlaute auf ein langes e anwendet."
+    },
+    "tags": [
+      "langer-selbstlaut",
+      "sp-st-wortanfang",
+      "ie"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "find-error",
+    "status": "draft",
+    "prompt": "In diesem Satz sind zwei Wörter falsch geschrieben. Tippe beide an.",
+    "payload": {
+      "words": [
+        {
+          "id": "w1",
+          "text": "Die"
+        },
+        {
+          "id": "w2",
+          "text": "Kazze"
+        },
+        {
+          "id": "w3",
+          "text": "schläft"
+        },
+        {
+          "id": "w4",
+          "text": "auf"
+        },
+        {
+          "id": "w5",
+          "text": "der"
+        },
+        {
+          "id": "w6",
+          "text": "Deke"
+        },
+        {
+          "id": "w7",
+          "text": "im"
+        },
+        {
+          "id": "w8",
+          "text": "Flur."
+        }
+      ],
+      "errorCount": 2
+    },
+    "solution": {
+      "errorIds": [
+        "w2",
+        "w6"
+      ],
+      "corrections": {
+        "w2": "Katze",
+        "w6": "Decke"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig: Katze und Decke. Nach kurzem Selbstlaut steht tz und ck.",
+      "incorrect": "Sprich jedes Wort in Silben. Kat-ze und De-cke haben einen kurzen Selbstlaut. Dann schreibt man tz und ck.",
+      "misconception": "Deke ist leicht zu übersehen, weil nichts Falsches dasteht, sondern etwas fehlt."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "tz",
+      "ck"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Bringe die Silben in die richtige Reihenfolge. Es entsteht ein Tier.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "ri"
+        },
+        {
+          "id": "b",
+          "text": "Ma"
+        },
+        {
+          "id": "c",
+          "text": "fer"
+        },
+        {
+          "id": "d",
+          "text": "en"
+        },
+        {
+          "id": "e",
+          "text": "kä"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "a",
+        "d",
+        "e",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Ma-ri-en-kä-fer. Fünf Silben, jede mit einem Selbstlaut.",
+      "incorrect": "Fang mit der Silbe an, die groß geschrieben ist. Sprich dann Stück für Stück und klatsche mit.",
+      "misconception": "Viele kleben ri und en zu rien zusammen. Jede Silbe hat genau einen Selbstlaut."
+    },
+    "tags": [
+      "silben",
+      "silben-bauen"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Nach l, n und r steht nie tz. Welches Wort ist richtig geschrieben?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Holz"
+        },
+        {
+          "id": "b",
+          "text": "Holtz"
+        },
+        {
+          "id": "c",
+          "text": "Hollz"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Vor dem z steht ein l. Nach l, n und r schreibt man nur z.",
+      "incorrect": "Schau, welcher Buchstabe vor dem z steht. Steht dort l, n oder r, bleibt es ein einfaches z.",
+      "misconception": "Das o in Holz ist kurz. Trotzdem gibt es kein tz, weil das l dazwischen steht."
+    },
+    "tags": [
+      "tz",
+      "nach-l-n-r"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Ordne jedem Wort die Anzahl seiner Silben zu. Eine Zahl bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Hund"
+        },
+        {
+          "id": "l2",
+          "text": "Garten"
+        },
+        {
+          "id": "l3",
+          "text": "Schmetterling"
+        },
+        {
+          "id": "l4",
+          "text": "Marienkäfer"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "1 Silbe"
+        },
+        {
+          "id": "r2",
+          "text": "2 Silben"
+        },
+        {
+          "id": "r3",
+          "text": "3 Silben"
+        },
+        {
+          "id": "r4",
+          "text": "4 Silben"
+        },
+        {
+          "id": "r5",
+          "text": "5 Silben"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ],
+        [
+          "l4",
+          "r5"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Hund, Gar-ten, Schmet-ter-ling, Ma-ri-en-kä-fer.",
+      "incorrect": "Klatsche jedes Wort in Silben. Jede Silbe hat genau einen Selbstlaut oder Zwielaut.",
+      "misconception": "Marienkäfer wird oft mit vier Silben geklatscht. Ma-ri-en hat aber schon drei."
+    },
+    "tags": [
+      "silben",
+      "silben-klatschen"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "mark-in-text",
+    "status": "draft",
+    "prompt": "Tippe alle Wörter an, in denen nach einem kurzen Selbstlaut ein doppelter Mitlaut steht.",
+    "payload": {
+      "text": "Im Sommer rennen wir zum See und schwimmen lange",
+      "unit": "word",
+      "maxSelect": 3
+    },
+    "solution": {
+      "indices": [
+        1,
+        2,
+        7
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Som-mer, ren-nen, schwim-men. Kurzer Selbstlaut, doppelter Mitlaut.",
+      "incorrect": "Sprich die Wörter in Silben. Hat ein Wort zwei Silben und der erste Selbstlaut ist kurz? Dann steht der Mitlaut doppelt.",
+      "misconception": "See hat einen doppelten Buchstaben, aber es ist ein Selbstlaut. Das ist eine andere Regel."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "mitlaut-verdoppelt",
+      "silben"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-2-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Hör auf das a. Wähle das richtig geschriebene Wort.",
+    "payload": {
+      "template": "Die {1} ist nach dem Regen nass.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Straße",
+            "Strasse",
+            "Strase"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Straße"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Das a in Stra-ße ist lang. Nach langem Selbstlaut schreibt man ß.",
+      "incorrect": "Sprich Stra-ße langsam. Das a ist lang. Nach langem Selbstlaut steht ß, nach kurzem ss.",
+      "misconception": "Strasse wäre richtig, wenn das a kurz wäre. Vergleiche mit Fluss: dort ist das u kurz."
+    },
+    "tags": [
+      "ss-ß",
+      "langer-selbstlaut"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-3-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla schreibt: Schtuhl."
+    },
+    "prompt": "Erkläre Leyla, warum das Wort mit St beginnt. Schreibe es richtig auf.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Denk an den Wortanfang."
+    },
+    "solution": {
+      "model": "Man hört scht, aber am Wortanfang schreibt man st. Richtig ist Stuhl.",
+      "keyPoints": [
+        "Am Wortanfang schreibt man st, auch wenn man scht hört",
+        "Richtig: Stuhl"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Das Ohr hört scht, die Regel sagt st.",
+      "incorrect": "Sprich Stuhl laut. Du hörst scht. Am Wortanfang schreibt man diesen Laut trotzdem st.",
+      "misconception": "Viele erklären nur, dass es falsch ist. Wichtig ist die Regel für den Wortanfang."
+    },
+    "tags": [
+      "sp-st-wortanfang",
+      "begruenden"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-3-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben sagt: Ich schreibe Bett mit zwei t, weil das Wort so kurz ist."
+    },
+    "prompt": "Welche Erklärung ist richtig?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Das e in Bett ist kurz, deshalb zwei t."
+        },
+        {
+          "id": "b",
+          "text": "Das Wort ist kurz, deshalb zwei t."
+        },
+        {
+          "id": "c",
+          "text": "Bett schreibt man mit einem t."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Es geht um den kurzen Selbstlaut, nicht um die Länge des Wortes.",
+      "incorrect": "Die Regel fragt nach dem Selbstlaut: Ist das e kurz oder lang? Bei Bett ist es kurz.",
+      "misconception": "Ben verwechselt ein kurzes Wort mit einem kurzen Selbstlaut. Auch Mutter hat zwei t, obwohl das Wort länger ist."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "mitlaut-verdoppelt",
+      "begruenden"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-3-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "prompt": "Warum schreibt man Fuß mit ß, aber Fluss mit ss? Erkläre mit dem Selbstlaut.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Sprich beide Wörter laut."
+    },
+    "solution": {
+      "model": "Bei Fuß ist das u lang, bei Fluss ist das u kurz. Nach langem Selbstlaut steht ß, nach kurzem ss.",
+      "keyPoints": [
+        "Fuß: langes u, deshalb ß",
+        "Fluss: kurzes u, deshalb ss"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Die Länge des Selbstlauts entscheidet.",
+      "incorrect": "Sprich Fuß und Fluss langsam. Hör auf das u. Lang bedeutet ß, kurz bedeutet ss.",
+      "misconception": "Viele sagen nur, dass die Wörter verschieden klingen. Die Erklärung braucht die Länge des u."
+    },
+    "tags": [
+      "ss-ß",
+      "begruenden"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-rsl-3-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 3,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Mia prüft, ob Sonne mit zwei n geschrieben wird. Bringe ihre Schritte in die richtige Reihenfolge.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Hör auf das o: Es ist kurz."
+        },
+        {
+          "id": "b",
+          "text": "Sprich das Wort in Silben: Son-ne."
+        },
+        {
+          "id": "c",
+          "text": "Schreibe: Sonne."
+        },
+        {
+          "id": "d",
+          "text": "Kurzer Selbstlaut, also doppelter Mitlaut."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "a",
+        "d",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Erst Silben, dann den Selbstlaut hören, dann die Regel, dann schreiben.",
+      "incorrect": "Womit fängt man an, wenn man ein Wort noch nicht kennt? Mit dem Sprechen in Silben. Das Schreiben kommt zuletzt.",
+      "misconception": "Viele setzen das Hören vor das Silbensprechen. Den Selbstlaut hört man aber erst in der Silbe richtig."
+    },
+    "tags": [
+      "kurzer-selbstlaut",
+      "silben",
+      "regel-anwenden"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-17",
+      "calibration": "vera3"
+    }
+  }
+]
