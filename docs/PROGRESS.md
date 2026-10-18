@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Content: Rechtschreibung „Strategien“ (20 Items), Einstieg Deutsch
+- **Eingespielt:** Batch vom 2026-10-18 ersetzt `rs-strategien.json` (vorher 2 Items): d-rss-1-001 … d-rss-3-004, draft, Niveau 8/8/4. 1-001 absichtlich geändert (Prompt „Tippe alle Nomen an.“, neue misconception), 1-002 unverändert. `content:validate`: 0 Fehler, 0 Warnungen. `pilot-rss.md` nicht im Repo.
+- **Layout:** `layout.spec` lokal 4/4 (alle 139 Items, vier Viewports), übriges Layout-Projekt 33/33, Chromium-Projekte 37/37.
+- **Einstieg Deutsch:** Deutsch hat jetzt zwei übbare Bereiche, der Einstieg ist verfügbar. Die Karte bietet ihn an, sobald Mathe einen Mastery-Stand hat (immer nur ein Fach, Mathe zuerst). Neuer Test spielt den Deutsch-Check mit echtem Content durch (beide Bereiche, keine Kurzantwort). PRODUCT §5.4 nachgezogen.
+- **Tests angepasst:** „zu wenige Bereiche“ jetzt mit einem Ein-Bereich-Fixture statt Deutsch. E2E (`einstieg`, `ueben`, `eltern`): Nach der ersten Mathe-Runde erscheint auf der Karte das Deutsch-Angebot; der Test erwartet es und tippt „Später“ (Helper `postponeDeutschOffer`).
+- **Zur Entscheidung:** (1) Nach „Später“ für Mathe und einer Mathe-Runde steht beim Zurückkehren sofort das Deutsch-Angebot da, das Tagesziel („10 von 10. Geschafft.“) tritt zurück. (2) Nach dem Mathe-Einstieg fragt die Karte gleich wieder „Wo geht deine Reise los?“, ohne das Fach zu nennen; das Intro nennt es auch nicht. (3) „Später“ für Mathe lässt Deutsch an diesem Tag ebenfalls ruhen.
+- **Content-Befunde (nicht behoben):** 1-001 misconception nennt „morgen“ ein „Zeitwort“ (in der Grundschule = Verb, 1-008 sagt „Tunwort“). 2-003 Option „häute“ ist als Verbform (ich häute, von Haut) richtig geschrieben. 3-004 incorrect „Der morgen kommt Oma geht nicht.“ ist schwer lesbar.
+- **Befund:** `text-budget-*.json` schwankt zwischen Läufen im ersten Schritt (order, 200 px: 492 statt 324 px); Messung vor dem Einschwingen? Dateien nicht übernommen.
+- **CI:** [CI #39143230227](https://github.com/1701/Pfadfinder/actions/runs/39143230227) grün (0f4784e), Workers Builds grün; 924 Tests, e2e 98 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`.
+
 ## 2026-10-18 – Aufgabe 11, Nachtrag: Kartenlegende gestrichen
 - **Entschieden (Markus):** „Gestrichelt: noch unerforscht.“ entfällt hoch und quer, samt Beispielstrich und `text/karte.ts`. Begründung (Markus): Der gestrichelte Zustand ist vorübergehend, der Einstieg wird von der App selbst angeboten und macht die Gebiete durchgezogen; ein Zustand, der ohne Zutun des Kindes verschwindet, braucht keine Legende. Die Probetest-Legende „gestrichelt: noch nicht verglichen“ bleibt. Gestrichelte Gebiete bleiben Bilder ohne Link.
 - **Gebaut:** Gestrichelte Gebiete heißen für Screenreader „…, noch unerforscht“ (gab es schon, jetzt mit Test auf der ganzen Karte, Gegenprobe rot). Zeile unter der Karte: links „Probetest Mathe“, rechts „Neu laden“ und „Impressum · Datenschutz“, einreihig in vier Viewports; kleinster Name Safari hoch 18,2 / `/` 19,1 px, Safari quer 19,1, iPad hoch 21,5, iPad quer 23,4. `karte.spec` ohne Legendenprüfungen, `karte-legende-*` gelöscht, `karte-rechtliches-*` neu.
