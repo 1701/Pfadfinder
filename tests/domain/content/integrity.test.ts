@@ -209,6 +209,73 @@ describe('validateContent – mark-in-text beside a reading text (1.0.11)', () =
   });
 });
 
+describe('validateContent – other formats beside a reading text (1.0.13)', () => {
+  /** The item in lesen-sachtext beside t-sach-901 (or without a text); returns the issues. */
+  function besideText(item: Item, textRef = true) {
+    const text = structuredClone(sachtext);
+    const items = text.itemIds.map((id) => {
+      const [, , niveau, n] = id.split('-');
+      return cloneItem(findError, 'lesen-sachtext', Number(niveau) as 1 | 2 | 3, Number(n), { stimulus: { textRef: text.id } });
+    });
+    const probe = cloneItem(item, 'lesen-sachtext', 3, 903, {
+      stimulus: { ...item.stimulus, ...(textRef && { textRef: text.id }) },
+    });
+    if (textRef) text.itemIds = [...text.itemIds, probe.id];
+    return run(toFiles({ items: [...items, probe], texts: [text] })).issues;
+  }
+  const chars = (n: number) => 'x'.repeat(n);
+
+  it('order: accepts 4 elements of 30 characters', () => {
+    const probe = structuredClone(order);
+    probe.payload.items = probe.payload.items.map((e) => ({ ...e, text: chars(30) }));
+    expect(probe.payload.items).toHaveLength(4);
+    expect(besideText(probe)).toEqual([]);
+  });
+
+  it('order: warns at a fifth element and at an element above 30 characters', () => {
+    const probe = structuredClone(order);
+    probe.payload.items = [...probe.payload.items, { id: 'e', text: 'Fünf' }];
+    probe.solution.orderedIds = [...probe.solution.orderedIds, 'e'];
+    probe.payload.items[1] = { ...probe.payload.items[1]!, text: chars(31) };
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.items', message: expect.stringContaining('hier 5') }),
+      expect.objectContaining({ severity: 'warning', path: 'payload.items[1].text', message: expect.stringContaining('hier 31') }),
+    ]);
+    expect(besideText(probe, false)).toEqual([]);
+  });
+
+  it('short-answer: accepts a model of 93 characters with 2 keyPoints', () => {
+    const probe = structuredClone(shortAnswer);
+    probe.solution.model = chars(93);
+    expect(probe.solution.keyPoints).toHaveLength(2);
+    expect(besideText(probe)).toEqual([]);
+  });
+
+  it('short-answer: warns above 93 characters and at a third keyPoint', () => {
+    const probe = structuredClone(shortAnswer);
+    probe.solution.model = chars(94);
+    probe.solution.keyPoints = [...probe.solution.keyPoints, 'Drei.'];
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'solution.model', message: expect.stringContaining('hier 94') }),
+      expect.objectContaining({ severity: 'warning', path: 'solution.keyPoints', message: expect.stringContaining('hier 3') }),
+    ]);
+    expect(besideText(probe, false)).toEqual([]);
+  });
+
+  it('single-choice: 4 options are fine, with a stimulus text only 3', () => {
+    const probe = structuredClone(singleChoice);
+    expect(probe.payload.options).toHaveLength(4);
+    probe.stimulus = {};
+    expect(besideText(probe)).toEqual([]);
+    probe.stimulus = { text: 'Im 2. Absatz steht: „Sie sind Bäcker.“' };
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.options', message: expect.stringContaining('hier 4') }),
+    ]);
+    probe.payload.options = probe.payload.options.filter((o) => o.id !== 'd' || probe.solution.optionId === 'd').slice(0, 3);
+    expect(besideText(probe)).toEqual([]);
+  });
+});
+
 describe('validateContent – soft checks', () => {
   it('warns when an order item is delivered already sorted', () => {
     const sorted = structuredClone(order);

@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.13 – 2026-10-18
+- §4.1/§4.5/§4.9/§7 Deutsch: Grenzen für Items mit `stimulus.textRef`, abgeleitet aus `text-inhalt-*.json` (`text-layout.spec`, Batch lesen-sachtext und Patches 1–2, vier Viewports) und der Fixture t-sach-900: `order` höchstens 4 Elemente zu je 30 Zeichen; `short-answer` `model` höchstens 93 Zeichen und höchstens 2 `keyPoints`; `single-choice` mit zusätzlichem `stimulus.text` höchstens 3 Optionen. Jede Grenze ist der größte Wert, der überall 18 px Luft über dem Band ließ. Befunde davor: d-lsa-2-004 mit 5 Elementen −14 px (hoch), d-lsa-3-001 mit 111 Zeichen und 3 Kernpunkten −8 px (hoch, vergleichen), d-lsa-2-003 mit 4 Optionen und Zitat 2 px. Für `multi-choice` keine Grenze: 5 Optionen passten zweimal (Fixture, d-lsa-2-006) und fehlten einmal um 1 px. Der Validator warnt (`WITH_TEXT`). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.12 – 2026-10-18
 - §4.1/§4.2: Optionen von `single-choice` und `multi-choice` haben ein optionales Feld `readAloud` (nicht leer). Vorlesen liest es statt `text`, ohne es zu verändern; angezeigt und gedruckt wird weiter `text`. Befund d-rsl-2-001: „Flu_“, „Ku_“, „Nu_“ klingen vorgelesen wie offene Silben mit langem u und führen beim Hinhören zum ß. Der Validator lehnt `readAloud` an anderen Stellen (match, order, find-error) und leere Werte ab. Optionales Feld, jedes bisherige Item bleibt gültig, `schemaVersion` bleibt `"1.0"`.
 

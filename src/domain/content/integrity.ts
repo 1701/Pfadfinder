@@ -69,6 +69,16 @@ const WORD_COUNT_TOLERANCE = 10;
  * tightest screen in landscape.
  */
 export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
+/**
+ * Other formats beside a reading text (1.0.13): the largest values that kept 18 px air above the
+ * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches, 2026-10-18;
+ * fixture t-sach-900). Beyond them nothing has been measured.
+ */
+export const WITH_TEXT = {
+  order: { maxItems: 4, maxItemChars: 30 },
+  shortAnswer: { maxModelChars: 93, maxKeyPoints: 2 },
+  singleChoice: { maxOptionsWithStimulusText: 3 },
+} as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
 
@@ -233,6 +243,10 @@ export function validateContent(
       }
     }
 
+    if (textRef !== undefined) {
+      for (const [message, path] of withTextFindings(item)) warn(file, message, item.id, path);
+    }
+
     if (item.format === 'order') {
       const delivered = item.payload.items.map((o) => o.id).join(',');
       if (delivered === item.solution.orderedIds.join(',')) {
@@ -361,4 +375,48 @@ function checkDeutschOrder(items: readonly Item[], report: (message: string, pat
       report(`Lese-Item "${item.id}" steht nach Rechtschreibung`, `itemIds[${i}]`);
     }
   });
+}
+
+/** Limits for items beside a reading text (WITH_TEXT): message and path per finding. */
+function withTextFindings(item: Item): [string, string][] {
+  const findings: [string, string][] = [];
+  if (item.format === 'order') {
+    const { maxItems, maxItemChars } = WITH_TEXT.order;
+    const { items } = item.payload;
+    if (items.length > maxItems) {
+      findings.push([`order mit Lesetext: höchstens ${maxItems} Elemente, hier ${items.length}`, 'payload.items']);
+    }
+    items.forEach((element, i) => {
+      if (element.text.length > maxItemChars) {
+        findings.push([
+          `order mit Lesetext: Element höchstens ${maxItemChars} Zeichen, hier ${element.text.length}`,
+          `payload.items[${i}].text`,
+        ]);
+      }
+    });
+  }
+  if (item.format === 'short-answer') {
+    const { maxModelChars, maxKeyPoints } = WITH_TEXT.shortAnswer;
+    const { model, keyPoints } = item.solution;
+    if (model.length > maxModelChars) {
+      findings.push([`short-answer mit Lesetext: model höchstens ${maxModelChars} Zeichen, hier ${model.length}`, 'solution.model']);
+    }
+    if (keyPoints.length > maxKeyPoints) {
+      findings.push([
+        `short-answer mit Lesetext: höchstens ${maxKeyPoints} keyPoints, hier ${keyPoints.length}`,
+        'solution.keyPoints',
+      ]);
+    }
+  }
+  if (item.format === 'single-choice' && item.stimulus?.text !== undefined) {
+    const { maxOptionsWithStimulusText: max } = WITH_TEXT.singleChoice;
+    const count = item.payload.options.length;
+    if (count > max) {
+      findings.push([
+        `single-choice mit Lesetext und stimulus.text: höchstens ${max} Optionen, hier ${count}`,
+        'payload.options',
+      ]);
+    }
+  }
+  return findings;
 }

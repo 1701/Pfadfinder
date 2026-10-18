@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.12 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.13 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -104,6 +104,8 @@ solution: { optionId: string }
 `keepOrder` (seit 1.0.4): `true`, wenn die Optionen Beschriftungen im Bild benennen („A“ bis „D“); dann bleibt die Reihenfolge wie geschrieben. Sonst werden Optionen gemischt. Der Validator warnt, wenn alle Optionen nur Bildbeschriftungen sind und `keepOrder` fehlt.
 
 `readAloud` an einer Option (seit 1.0.12): Vorlesen liest diesen Text statt `text`, unverändert. Gedacht für Optionen, die man nicht vorlesen kann, ohne die Aufgabe zu verändern, z. B. Lückenwörter („Ki_en“ → „Kissen“). Nur an Optionen von `single-choice` und `multi-choice` erlaubt, nicht leer.
+
+Mit `stimulus.textRef` und zusätzlichem `stimulus.text` (seit 1.0.13): höchstens 3 Optionen. Der zitierte Satz kostet hoch die Zeile, die eine vierte Option braucht (d-lsa-2-003 mit 4 Optionen: 2 px Luft, mit 3: 58 px). Der Validator warnt.
 ```ts
 ```
 
@@ -130,6 +132,7 @@ solution: { pairs: [leftId: string, rightId: string][] }
 payload:  { items: { id: string; text: string }[] }                        // 3–5 Elemente, gemischt geliefert
 solution: { orderedIds: string[] }
 ```
+Mit `stimulus.textRef` (seit 1.0.13): höchstens 4 Elemente, jedes höchstens 30 Zeichen (Stichworte statt Sätze). Bei „noch nicht“ steht unter der Liste die Zeile „Richtig ist: …“; ein fünftes Element lief hoch 14 px und Safari quer 7 px unter das Band (d-lsa-2-004), Sätze ab etwa 40 Zeichen brechen quer um. Der Validator warnt.
 
 ### 4.6 `cloze-select`
 ```ts
@@ -158,6 +161,8 @@ solution: { model: string; keyPoints: string[] }                           // Mu
 // kein Auto-Check: Kind vergleicht und wählt "getroffen / teils / nein"; Selbsteinschätzung zählt 1 / 0.5 / 0
 ```
 `model` hat höchstens `maxChars` Zeichen (seit 1.0.8): Das Kind vergleicht mit einer Antwort, die es selbst hätte schreiben können. Der Validator prüft das.
+
+Mit `stimulus.textRef` (seit 1.0.13): `model` höchstens 93 Zeichen, höchstens 2 `keyPoints`. Beim Vergleichen stehen Musterlösung und Kernpunkte neben dem Kasten; mit 111 Zeichen und 3 Kernpunkten lief der Screen hoch 8 px unter das Band (d-lsa-3-001). Das Antwortfeld hat immer 3 Zeilen, `maxChars` ändert die Höhe nicht. Der Validator warnt.
 
 ## 5. ReadingText
 
@@ -206,7 +211,7 @@ Regeln:
 
 **Deutsch**
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
-- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7)
+- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 93 Zeichen und höchstens 2 `keyPoints` (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1). Die Grenzen sind die größten Werte, die in allen vier Viewports 18 px Luft über dem Band ließen; darüber ist nichts gemessen
 - Rechtschreibung nur mit Grundschul-Regelwissen lösbar (Verlängern, Ableiten, Silben, Wortbausteine, Groß-/Kleinschreibung); keine Ausnahmewörter als Fehlerquelle
 - `find-error` enthält pro Satz nur Fehlertypen eines Bereichs
 
