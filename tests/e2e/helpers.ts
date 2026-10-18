@@ -144,6 +144,8 @@ async function arrange(page: Page, item: ContentItem, wanted: string[]) {
     (await page.locator('[data-region="answer"] li').allTextContents()).map((t) =>
       t.replace(/ /g, ' ').trim(),
     );
+  // The order renderer is a lazy chunk: the prompt can be on screen before the list.
+  await expect(page.locator('[data-region="answer"] li')).toHaveCount(text.size);
   let moved = false;
   for (const [target, id] of wanted.entries()) {
     const name = text.get(id)!;
