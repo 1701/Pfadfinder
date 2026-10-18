@@ -1,4 +1,4 @@
-// Routes /impressum and /datenschutz: static text for adults, linked only from /eltern. Unlike a
+// Routes /impressum and /datenschutz: static text for adults, linked from the map and /eltern. Unlike a
 // task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in the history, or to the
 // map when the page was opened directly.
 

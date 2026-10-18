@@ -88,18 +88,26 @@ test('Üben → /eltern → Sicherung herunterladen: eine gültige Datei, die si
   await expect(page.getByRole('button', { name: 'Alles löschen' })).toBeVisible();
 });
 
-test('Impressum und Datenschutz: nur von /eltern verlinkt, schon vor der Rechenfrage', async ({
+const LEGAL = [
+  ['Impressum', 'Angaben nach §\u00a05\u00a0DDG'],
+  ['Datenschutz', 'Hosting bei Cloudflare'],
+] as const;
+
+test('Impressum und Datenschutz: von der Karte (seit Aufgabe 11, DDG) und von /eltern vor der Rechenfrage', async ({
   page,
 }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
-  await expect(page.locator('a[href*="impressum"], a[href*="datenschutz"]')).toHaveCount(0);
+  for (const [link, section] of LEGAL) {
+    await page.getByRole('link', { name: link }).click();
+    await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
+    await page.getByRole('button', { name: 'Zurück' }).click();
+    await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  }
 
   await page.goto('/eltern');
-  for (const [link, section] of [
-    ['Impressum', 'Angaben nach §\u00a05\u00a0DDG'],
-    ['Datenschutz', 'Hosting bei Cloudflare'],
-  ] as const) {
+  for (const [link, section] of LEGAL) {
     await page.getByRole('link', { name: link }).click();
     await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();

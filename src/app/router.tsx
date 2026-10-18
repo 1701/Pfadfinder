@@ -53,7 +53,7 @@ const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.
 // The Eltern page (only by URL, no link in the app) in its own chunk.
 const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
 
-// Impressum and Datenschutz (linked only from /eltern) share one small chunk.
+// Impressum and Datenschutz (linked from the map and /eltern) share one small chunk.
 const RechtlichesScreen = lazy(() =>
   import('../ui/screens/RechtlichesScreen').then((m) => ({ default: m.RechtlichesScreen })),
 );

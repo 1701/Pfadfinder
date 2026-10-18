@@ -1,4 +1,4 @@
-// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked only from /eltern. Written for
+// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map and /eltern. Written for
 // adults and in Du like the Eltern page; legal text may be longer than two sentences. The markers
 // [NAME], [ADRESSE] and [E-MAIL] are replaced before Pfadfinder goes public (docs/DEPLOY.md §6).
 
