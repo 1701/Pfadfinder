@@ -6,6 +6,8 @@
 //   abgeben | verlassen             the questions before ending
 //   auswertung | auswertung-offen   result, without / with a short answer waiting
 //   durchsehen | fehlt | vergleichen  looking through: wrong answer, no answer, short answer
+//   nur-wartende                    "1 Antwort vergleichen": the short answer, 1 von 1, no Zurück
+//   durchsehen-uebersicht           the overview while looking through, ring on the short answer
 // Same components as the route, fed with fixed data instead of the store.
 
 import { useEffect, useState } from 'react';
@@ -19,6 +21,7 @@ import { ProbetestAufgabe } from '../screens/ProbetestAufgabe';
 import { ProbetestAuswertung } from '../screens/ProbetestAuswertung';
 import { AbgebenFrage, ProbetestIntro, VerlassenFrage } from '../screens/ProbetestBlaetter';
 import { ProbetestDurchsehen } from '../screens/ProbetestDurchsehen';
+import { ProbetestDurchsehenUebersicht } from '../screens/ProbetestDurchsehenUebersicht';
 import { ProbetestUebersicht } from '../screens/ProbetestUebersicht';
 import { previewAnswer } from './preview-answers';
 
@@ -26,6 +29,8 @@ const content = createContentLoader();
 const noop = () => undefined;
 /** Answered in the overview preview: 1–6, 9 and 10; the ring on 7. */
 const ANSWERED = new Set([0, 1, 2, 3, 4, 5, 8, 9]);
+/** Solved in the review overview preview (15 of 24, like sampleResult). */
+const SOLVED = new Set([0, 1, 2, 4, 5, 6, 8, 9, 12, 13, 15, 17, 18, 20, 22]);
 
 /** A sample result in the shape of mathe-01; one short answer may be waiting. */
 function sampleResult(bereiche: Bereich[], items: Item[], pending: boolean): ProbetestResult {
@@ -124,6 +129,7 @@ export function ProbetestPage() {
           timeUp={search.has('zeit-um')}
           readAloud
           onReview={noop}
+          onCompare={noop}
         />
       );
     }
@@ -147,8 +153,44 @@ export function ProbetestPage() {
           onBack={noop}
           onNext={noop}
           onResult={noop}
+          onOverview={noop}
           onRate={noop}
           previewComparing={comparing}
+        />
+      );
+    }
+    case 'nur-wartende': {
+      const short = items.find((i) => i.format === 'short-answer') ?? item;
+      return (
+        <ProbetestDurchsehen
+          key={`${short.id}-${zustand}`}
+          item={short}
+          attemptIndex={0}
+          answer={filled(short)}
+          outcome="pending"
+          current={1}
+          total={1}
+          readAloud
+          onBack={noop}
+          onNext={noop}
+          onResult={noop}
+          onOverview={noop}
+          onRate={noop}
+        />
+      );
+    }
+    case 'durchsehen-uebersicht': {
+      const short = items.findIndex((i) => i.format === 'short-answer');
+      return (
+        <ProbetestDurchsehenUebersicht
+          outcomes={items.map((_, i) =>
+            i === short ? 'pending' : SOLVED.has(i) ? 'solved' : 'notSolved',
+          )}
+          current={Math.max(short, 0)}
+          readAloud
+          onJump={noop}
+          onContinue={noop}
+          onResult={noop}
         />
       );
     }

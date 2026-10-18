@@ -3,7 +3,6 @@
 // "Abgeben" is only here. Yellow marks the one next step: "Weitermachen" while items are open,
 // "Abgeben" once every item is answered (decision 2026-10-15).
 
-import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { Button } from '../components/Button';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
@@ -19,6 +18,7 @@ import {
   TO_MAP,
 } from '../text/probetest';
 import { ProbetestKopf, Zeit, type ProbetestZeit } from './ProbetestKopf';
+import { Strich, StrichRaster } from './ProbetestStrich';
 
 export interface ProbetestUebersichtProps {
   /** Per item in test order. */
@@ -31,18 +31,6 @@ export interface ProbetestUebersichtProps {
   onContinue(): void;
   onSubmit(): void;
   onLeave(): void;
-}
-
-function Strich({ on }: { on: boolean }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={clsx(
-        'block h-xs w-lg rounded-round border-2',
-        on ? 'border-ink bg-ink' : 'border-line-strong bg-surface',
-      )}
-    />
-  );
 }
 
 export function ProbetestUebersicht(props: ProbetestUebersichtProps) {
@@ -69,32 +57,19 @@ export function ProbetestUebersicht(props: ProbetestUebersichtProps) {
       </section>
       <div data-region="answer" className="flex min-h-0 items-start justify-center pt-xs">
         <div className="grid gap-md">
-          <ol className="grid grid-cols-12 gap-xs">
-            {props.answered.map((done, i) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  aria-label={`Aufgabe ${i + 1}, ${done ? ANSWERED : OPEN}`}
-                  aria-current={i === props.current ? 'step' : undefined}
-                  onClick={() => props.onJump(i)}
-                  className={clsx(
-                    'grid min-h-primary min-w-touch place-items-center gap-2xs rounded-control px-2xs py-xs',
-                    i === props.current && 'outline-2 outline-offset-2 outline-ink',
-                  )}
-                >
-                  <span aria-hidden="true">{i + 1}</span>
-                  <Strich on={done} />
-                </button>
-              </li>
-            ))}
-          </ol>
+          <StrichRaster
+            arts={props.answered.map((done) => (done ? 'filled' : 'empty'))}
+            labels={props.answered.map((done, i) => `Aufgabe ${i + 1}, ${done ? ANSWERED : OPEN}`)}
+            current={props.current}
+            onJump={props.onJump}
+          />
           <p className="flex items-center gap-lg text-ink-muted">
             <span className="flex items-center gap-xs">
-              <Strich on />
+              <Strich art="filled" wide />
               {ANSWERED}
             </span>
             <span className="flex items-center gap-xs">
-              <Strich on={false} />
+              <Strich art="empty" wide />
               {OPEN}
             </span>
           </p>

@@ -44,7 +44,7 @@ async function storedIndex(page: Page): Promise<number | null> {
 }
 const band = (page: Page) => page.locator('[data-region="band"]');
 
-test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertung → Durchsehen → Karte', async ({
+test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertung → vergleichen → Durchsehen → Karte', async ({
   page,
 }) => {
   await startProbetest(page);
@@ -77,27 +77,40 @@ test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertun
   await expect(page.getByRole('heading', { name: 'Geschafft.' })).toBeVisible();
   const total = page.locator('[data-bereich="zusammen"]');
   await expect(total).toContainText('3 von 24');
-  await expect(page.getByText('1 Aufgabe schaust du dir beim Durchsehen an.')).toBeVisible();
+  await expect(page.getByText('gestrichelt: noch nicht verglichen')).toBeVisible();
   await expect(page.locator('main')).not.toContainText('%');
 
+  // "1 Antwort vergleichen": only the waiting short answer, then back to the result.
+  await page.getByRole('button', { name: '1 Antwort vergleichen' }).click();
+  await expect(header(page)).toContainText('1 von 1');
+  await expect(band(page).getByRole('button', { name: 'Zurück' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Vergleichen' }).click();
+  await page.getByRole('button', { name: 'Getroffen' }).click();
+  await band(page).getByRole('button', { name: 'Zur Auswertung' }).click();
+  await expect(total).toContainText('4 von 24');
+  await expect(page.getByText(/noch nicht verglichen/)).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /vergleichen/ })).toHaveCount(0);
+
+  // Looking through everything; the overview jumps to any item.
   await page.getByRole('button', { name: 'Durchsehen' }).click();
   await expect(header(page)).toContainText('1 von 24');
   await expect(band(page).getByRole('heading')).toHaveText('Richtig.');
-  for (let n = 2; n <= 12; n++) {
+  for (let n = 2; n <= 4; n++) {
     await band(page).getByRole('button', { name: 'Weiter' }).click();
     await expect(header(page)).toContainText(`${n} von 24`);
-    if (n === 4) {
-      await expect(band(page).getByRole('heading')).toHaveText('Hier fehlt deine Antwort.');
-      await expect(band(page).getByRole('button', { name: 'Falle zeigen' })).toHaveCount(0);
-    }
   }
-  await page.getByRole('button', { name: 'Vergleichen' }).click();
-  await page.getByRole('button', { name: 'Getroffen' }).click();
-  await expect(band(page).getByRole('button', { name: 'Weiter' })).toBeVisible();
+  await expect(band(page).getByRole('heading')).toHaveText('Hier fehlt deine Antwort.');
+  await expect(band(page).getByRole('button', { name: 'Falle zeigen' })).toHaveCount(0);
+  await header(page).getByRole('button', { name: 'Übersicht' }).click();
+  await expect(page.getByRole('button', { name: 'Aufgabe 4', exact: true })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+  await page.getByRole('button', { name: 'Aufgabe 12, gelöst' }).click();
+  await expect(header(page)).toContainText('12 von 24');
 
   await header(page).getByRole('button', { name: 'Zur Auswertung' }).click();
   await expect(total).toContainText('4 von 24');
-  await expect(page.getByText(/beim Durchsehen an/)).toHaveCount(0);
 
   await page.getByRole('link', { name: 'Zur Karte' }).click();
   await expect(page.getByRole('link', { name: 'Probetest Mathe' })).toBeVisible();

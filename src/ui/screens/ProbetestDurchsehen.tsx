@@ -3,13 +3,15 @@
 // after the last item "Weiter" says "Zur Auswertung". An entered short answer is compared here
 // and rated by the child; the rating is stored and changes the result. An item without an
 // answer gets the heading "Hier fehlt deine Antwort." and the explanation, without "Falle".
+// Top right "Übersicht" as in the test (task 11). On the first item there is no "Zurück", also
+// in the list of only the waiting short answers ("1 von 1").
 
 import type { Item } from '../../domain/content';
 import type { Correctness, SelfRating } from '../../domain/evaluation';
 import type { ItemOutcome } from '../../domain/probetest';
 import { Button } from '../components/Button';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
-import { BACK, MISSING, NEXT, TO_RESULT } from '../text/probetest';
+import { BACK, MISSING, NEXT, OVERVIEW, TO_RESULT } from '../text/probetest';
 import { ItemScreen } from './ItemScreen';
 import { ProbetestKopf } from './ProbetestKopf';
 
@@ -28,6 +30,7 @@ export interface ProbetestDurchsehenProps {
   onBack(): void;
   onNext(): void;
   onResult(): void;
+  onOverview(): void;
   onRate(rating: SelfRating): void;
   /** Dev preview only: open a waiting short answer directly in the comparing step. */
   previewComparing?: boolean;
@@ -66,12 +69,17 @@ export function ProbetestDurchsehen(props: ProbetestDurchsehenProps) {
           }
           current={props.current}
           total={props.total}
+          right={
+            <button type="button" className={QUIET_ACTION_CLASS} onClick={props.onOverview}>
+              {OVERVIEW}
+            </button>
+          }
         />
       }
       locked
       bandStart={
-        waiting ? (
-          <Button size="large" disabled={first} onClick={props.onBack}>
+        waiting && !first ? (
+          <Button size="large" onClick={props.onBack}>
             {BACK}
           </Button>
         ) : undefined

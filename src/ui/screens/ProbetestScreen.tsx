@@ -1,5 +1,6 @@
 // Route /probetest/:id – the Probetest (PRODUCT.md §5.4): intro, items with "Zurück"/"Weiter"
-// and the time, the overview, the questions before ending, the result and looking through.
+// and the time, the overview, the questions before ending, the result and looking through
+// (all items, or only the waiting short answers, with its own overview).
 // Everything is stored as it happens; a reload continues at the same item with the time the
 // wall clock has left.
 
@@ -20,6 +21,7 @@ import { ProbetestAufgabe } from './ProbetestAufgabe';
 import { ProbetestAuswertung } from './ProbetestAuswertung';
 import { AbgebenFrage, ProbetestFehlt, ProbetestIntro, VerlassenFrage } from './ProbetestBlaetter';
 import { ProbetestDurchsehen } from './ProbetestDurchsehen';
+import { ProbetestDurchsehenUebersicht } from './ProbetestDurchsehenUebersicht';
 import { ProbetestUebersicht } from './ProbetestUebersicht';
 
 export function ProbetestScreen() {
@@ -29,7 +31,7 @@ export function ProbetestScreen() {
 
 function Probetest({ id }: { id: string }) {
   const s = useProbetest((state) => state);
-  const { status, context, run, index, intro } = s;
+  const { status, context, run, index, intro, reviewOnly } = s;
   const learnerReadAloud = s.learner?.settings.readAloud ?? true;
   const open = s.open;
 
@@ -138,12 +140,27 @@ function Probetest({ id }: { id: string }) {
           timeUp={run.endReason === 'time'}
           readAloud={learnerReadAloud}
           onReview={() => s.review(0)}
+          onCompare={() => s.review(0, 'pending')}
+        />
+      );
+    }
+    if (status === 'reviewOverview') {
+      return (
+        <ProbetestDurchsehenUebersicht
+          outcomes={items.map((item) => itemOutcome(item, run))}
+          current={index}
+          readAloud={learnerReadAloud}
+          onJump={(i) => s.review(i)}
+          onContinue={s.continueReview}
+          onResult={s.showResult}
         />
       );
     }
     if (status === 'review') {
       const item = items[index];
       if (!item) return null;
+      // Only the waiting short answers: "1 von 1" counts in that list.
+      const position = reviewOnly ? reviewOnly.indexOf(index) : index;
       return (
         <ProbetestDurchsehen
           key={item.id}
@@ -152,12 +169,13 @@ function Probetest({ id }: { id: string }) {
           answer={run.answers[item.id] ?? null}
           outcome={itemOutcome(item, run)}
           rating={run.ratings[item.id]}
-          current={index + 1}
-          total={total}
+          current={position + 1}
+          total={reviewOnly ? reviewOnly.length : total}
           readAloud={learnerReadAloud && probetestReadAloud(probetest.fach, item)}
           onBack={s.back}
           onNext={s.next}
           onResult={s.showResult}
+          onOverview={s.showReviewOverview}
           onRate={(rating) => void s.rate(rating)}
         />
       );

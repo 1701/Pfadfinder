@@ -1,9 +1,10 @@
 // The result of a submitted Probetest (PRODUCT.md §5.4): per Bereich "solved of total" as
 // Wegstriche and number, then the sum. Numbers are allowed here, unlike in the Einstieg; no
 // percent, no grade, no comparison. A short answer waiting for the child's own rating is a
-// dashed Wegstrich, the map's sign for "not explored yet" (decision 2026-10-15).
+// dashed Wegstrich, the map's sign for "not explored yet" (decision 2026-10-15). Below the
+// Wegstriche the legend "gestrichelt: noch nicht verglichen" and a quiet button "1 Antwort
+// vergleichen" that looks through only the waiting short answers (task 11).
 
-import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import type { Bereich } from '../../domain/content';
@@ -17,13 +18,15 @@ import {
   RESULT_DONE,
   RESULT_TEXT,
   RESULT_TIME_UP,
+  PENDING_LEGEND,
   REVIEW,
   TO_MAP,
   TOTAL,
-  pendingLine,
+  compareLabel,
   solvedOf,
 } from '../text/probetest';
 import { ProbetestKopf } from './ProbetestKopf';
+import { Strich } from './ProbetestStrich';
 
 /** Solved first (filled), then the waiting short answers (dashed), then the rest (empty). */
 export function ErgebnisStriche(props: { solved: number; pending: number; total: number }) {
@@ -32,34 +35,10 @@ export function ErgebnisStriche(props: { solved: number; pending: number; total:
       {Array.from({ length: props.total }, (_, i) => {
         const kind =
           i < props.solved ? 'solved' : i < props.solved + props.pending ? 'pending' : 'open';
-        if (kind === 'pending') {
-          // CSS dashes break apart at this size; a drawn outline keeps an even dash.
-          return (
-            <li key={i} data-strich={kind} className="block h-xs w-md">
-              <svg viewBox="0 0 16 8" className="size-full overflow-visible">
-                <rect
-                  x="1"
-                  y="1"
-                  width="14"
-                  height="6"
-                  rx="3"
-                  className="fill-none stroke-ink"
-                  strokeWidth="2"
-                  strokeDasharray="3 2"
-                />
-              </svg>
-            </li>
-          );
-        }
         return (
-          <li
-            key={i}
-            data-strich={kind}
-            className={clsx(
-              'block h-xs w-md rounded-round border-2',
-              kind === 'solved' ? 'border-ink bg-ink' : 'border-line-strong bg-surface',
-            )}
-          />
+          <li key={i} data-strich={kind}>
+            <Strich art={kind === 'solved' ? 'filled' : kind === 'pending' ? 'dashed' : 'empty'} />
+          </li>
         );
       })}
     </ol>
@@ -73,6 +52,8 @@ export interface ProbetestAuswertungProps {
   timeUp: boolean;
   readAloud: boolean;
   onReview(): void;
+  /** "N Antworten vergleichen": only the waiting short answers. */
+  onCompare(): void;
 }
 
 export function ProbetestAuswertung(props: ProbetestAuswertungProps) {
@@ -88,7 +69,7 @@ export function ProbetestAuswertung(props: ProbetestAuswertungProps) {
     RESULT_TEXT,
     ...rows.map((r) => `${BEREICH_NAME[r.bereich]}: ${solvedOf(r.solved, r.total)}.`),
     `${TOTAL}: ${solvedOf(result.total.solved, result.total.total)}.`,
-    pending > 0 ? pendingLine(pending) : '',
+    pending > 0 ? `${PENDING_LEGEND}.` : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -131,7 +112,18 @@ export function ProbetestAuswertung(props: ProbetestAuswertungProps) {
               </dd>
             </div>
           </dl>
-          {pending > 0 && <p className="text-center text-ink-muted">{pendingLine(pending)}</p>}
+          {pending > 0 && (
+            <>
+              <p className="flex items-center justify-self-center gap-xs text-ink-muted">
+                <Strich art="dashed" />
+                {PENDING_LEGEND}
+              </p>
+              {/* Not yellow: "Durchsehen" stays the one next step. */}
+              <Button size="large" className="justify-self-center" onClick={props.onCompare}>
+                {compareLabel(pending)}
+              </Button>
+            </>
+          )}
         </div>
       </div>
       <div data-region="band" className="flex items-end justify-between gap-md">

@@ -34,6 +34,12 @@ export const REVIEW = 'Durchsehen';
 
 export const MISSING = 'Hier fehlt deine Antwort.';
 
+// Comparing the waiting short answers (task 11): a quiet button on the result, a legend under the
+// Wegstriche, and the overview while looking through.
+export const PENDING_LEGEND = 'gestrichelt: noch nicht verglichen';
+export const SOLVED = 'gelöst';
+export const REVIEW_ON = 'Weiter durchsehen';
+
 // The printed sheet (parents print it; no link on a child's screen).
 export const PRINT = 'Drucken';
 export const PRINT_NAME = 'Name';
@@ -49,9 +55,9 @@ export function openTitle(open: number): string {
   return open === 1 ? 'Noch 1 Aufgabe ist offen.' : `Noch ${open} Aufgaben sind offen.`;
 }
 
-/** "1 Aufgabe schaust du dir beim Durchsehen an." */
-export function pendingLine(pending: number): string {
-  return `${pending} ${pending === 1 ? 'Aufgabe' : 'Aufgaben'} schaust du dir beim Durchsehen an.`;
+/** "1 Antwort vergleichen", "2 Antworten vergleichen". */
+export function compareLabel(pending: number): string {
+  return `${pending} ${pending === 1 ? 'Antwort' : 'Antworten'} vergleichen`;
 }
 
 /** "4 von 6" */
@@ -93,14 +99,17 @@ export const PROBETEST_TEXTS = [
   TOTAL,
   REVIEW,
   MISSING,
+  PENDING_LEGEND,
+  SOLVED,
+  REVIEW_ON,
   PRINT,
   PRINT_NAME,
   PRINT_SOLUTIONS,
   printTitle('Mathe', 'mathe-01'),
   openTitle(1),
   openTitle(16),
-  pendingLine(1),
-  pendingLine(2),
+  compareLabel(1),
+  compareLabel(2),
   timeText(45, false),
   timeText(5, true),
   timeText(1, true),

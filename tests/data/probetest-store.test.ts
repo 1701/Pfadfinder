@@ -345,6 +345,48 @@ describe('probetest store: the self-rating while looking through', () => {
     expect(s.store.getState().status).toBe('result');
   });
 
+  it('"1 Antwort vergleichen": only the waiting short answer, then back to the result', async () => {
+    const s = await submittedWithShortAnswer();
+    s.store.getState().review(0, 'pending');
+    expect(s.store.getState()).toMatchObject({
+      status: 'review',
+      index: SHORT,
+      reviewOnly: [SHORT],
+    });
+    s.store.getState().back();
+    expect(s.store.getState().index).toBe(SHORT);
+    await s.store.getState().rate(1);
+    // The rated item stays on screen; "Zur Auswertung" (next) ends the filtered look.
+    expect(s.store.getState()).toMatchObject({ status: 'review', index: SHORT });
+    s.store.getState().next();
+    expect(s.store.getState()).toMatchObject({ status: 'result', reviewOnly: null });
+    expect(s.store.getState().run?.result?.total.pending).toBe(0);
+    // Nothing waits any more: the filter has nothing to show.
+    s.store.getState().review(0, 'pending');
+    expect(s.store.getState().status).toBe('result');
+  });
+
+  it('the overview while looking through: a Wegstrich jumps and ends the filter', async () => {
+    const s = await submittedWithShortAnswer();
+    s.store.getState().review(0, 'pending');
+    s.store.getState().showReviewOverview();
+    expect(s.store.getState().status).toBe('reviewOverview');
+    s.store.getState().continueReview();
+    expect(s.store.getState()).toMatchObject({
+      status: 'review',
+      index: SHORT,
+      reviewOnly: [SHORT],
+    });
+    s.store.getState().showReviewOverview();
+    s.store.getState().review(3);
+    expect(s.store.getState()).toMatchObject({ status: 'review', index: 3, reviewOnly: null });
+    s.store.getState().next();
+    expect(s.store.getState().index).toBe(4);
+    s.store.getState().showReviewOverview();
+    s.store.getState().showResult();
+    expect(s.store.getState()).toMatchObject({ status: 'result', reviewOnly: null });
+  });
+
   it('an unknown Probetest is unavailable', async () => {
     const s = setup();
     await s.store.getState().open('mathe-99');

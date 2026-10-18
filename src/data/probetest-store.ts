@@ -9,6 +9,7 @@ import type { SelfRating } from '../domain/evaluation';
 import type { Learner, ProbetestRun } from '../domain/learner';
 import {
   isAnswered,
+  itemOutcome,
   onDeadline,
   onOpen,
   withDraft,
@@ -45,7 +46,9 @@ export type ProbetestStatus =
   /** Left via "Zur Karte": the UI goes to the map. */
   | 'left'
   | 'result'
-  | 'review';
+  | 'review'
+  /** The overview while looking through: every item's Wegstrich, a tap jumps there. */
+  | 'reviewOverview';
 
 export interface ProbetestState {
   learner: Learner | null;
@@ -56,6 +59,11 @@ export interface ProbetestState {
   run: ProbetestRun | null;
   /** Item on screen while answering or reviewing. */
   index: number;
+  /**
+   * Looking through only these items (indices in test order): the short answers that waited for
+   * a rating when "N Antworten vergleichen" was tapped. Null: every item.
+   */
+  reviewOnly: readonly number[] | null;
 
   open(probetestId: string): Promise<void>;
   /** "Starten": a new run, or the running one. */
@@ -80,8 +88,15 @@ export interface ProbetestState {
   checkTime(): Promise<void>;
   /** "Auswertung ansehen" on the intro, or back from looking through. */
   showResult(): void;
-  /** "Durchsehen". */
-  review(index?: number): void;
+  /**
+   * "Durchsehen" (every item), "N Antworten vergleichen" (`only` = 'pending': the waiting short
+   * answers), or a Wegstrich in the review overview (every item again, from that one).
+   */
+  review(index?: number, only?: 'pending'): void;
+  /** "Übersicht" while looking through. */
+  showReviewOverview(): void;
+  /** "Weiter durchsehen": back to the item, the filter stays. */
+  continueReview(): void;
   rate(rating: SelfRating): Promise<void>;
   /** Resolves when every pending save is written. */
   flush(): Promise<void>;
@@ -164,10 +179,18 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       intro: null,
       run: null,
       index: 0,
+      reviewOnly: null,
 
       async open(probetestId) {
         const mine = ++token;
-        set({ status: 'loading', context: null, intro: null, run: null, index: 0 });
+        set({
+          status: 'loading',
+          context: null,
+          intro: null,
+          run: null,
+          index: 0,
+          reviewOnly: null,
+        });
         const learner = get().learner ?? (await ensureLearner(deps));
         const context = await loadProbetestContext(deps, probetestId);
         if (mine !== token) return;
@@ -219,11 +242,13 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       },
 
       next() {
-        const { status, index, context } = get();
+        const { status, index, context, reviewOnly } = get();
         if (!context) return;
         if (status === 'review') {
-          if (index + 1 < context.items.length) set({ index: index + 1 });
-          else set({ status: 'result' });
+          const order = reviewOnly ?? context.items.map((_, i) => i);
+          const following = order[order.indexOf(index) + 1];
+          if (following !== undefined) set({ index: following });
+          else set({ status: 'result', reviewOnly: null });
         } else if (status === 'answering') {
           if (index + 1 < context.items.length) show(index + 1);
           else get().showOverview();
@@ -231,7 +256,12 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       },
 
       back() {
-        const { status, index } = get();
+        const { status, index, reviewOnly } = get();
+        if (status === 'review' && reviewOnly) {
+          const previous = reviewOnly[reviewOnly.indexOf(index) - 1];
+          if (previous !== undefined) set({ index: previous });
+          return;
+        }
         if (index === 0) return;
         if (status === 'review') set({ index: index - 1 });
         else if (status === 'answering') show(index - 1);
@@ -295,16 +325,35 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
         const { status, intro, run } = get();
         if (status === 'intro' && intro?.lastSubmitted) {
           set({ status: 'result', run: intro.lastSubmitted, index: 0 });
-        } else if (status === 'review' && run) {
-          set({ status: 'result' });
+        } else if ((status === 'review' || status === 'reviewOverview') && run) {
+          set({ status: 'result', reviewOnly: null });
         }
       },
 
-      review(index = 0) {
+      review(index = 0, only) {
         const { status, run, context } = get();
-        if ((status === 'result' || status === 'review') && run && context) {
-          set({ status: 'review', index: Math.min(Math.max(index, 0), context.items.length - 1) });
+        if (!run || !context) return;
+        if (status !== 'result' && status !== 'review' && status !== 'reviewOverview') return;
+        if (only === 'pending') {
+          const waiting = context.items.flatMap((item, i) =>
+            itemOutcome(item, run) === 'pending' ? [i] : [],
+          );
+          if (waiting.length > 0) set({ status: 'review', index: waiting[0], reviewOnly: waiting });
+          return;
         }
+        set({
+          status: 'review',
+          index: Math.min(Math.max(index, 0), context.items.length - 1),
+          reviewOnly: null,
+        });
+      },
+
+      showReviewOverview() {
+        if (get().status === 'review') set({ status: 'reviewOverview' });
+      },
+
+      continueReview() {
+        if (get().status === 'reviewOverview') set({ status: 'review' });
       },
 
       async rate(rating) {

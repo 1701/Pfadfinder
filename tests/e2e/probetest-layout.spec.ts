@@ -26,6 +26,7 @@ const SCREENS = [
   'verlassen',
   'auswertung',
   'auswertung-offen',
+  'durchsehen-uebersicht',
 ] as const;
 
 const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('safari')) : VIEWPORTS;
@@ -122,12 +123,19 @@ for (const viewport of MEASURED) {
       await page.close();
     }
     page = await context.newPage();
+    // "1 Antwort vergleichen": the short answer, "1 von 1", without "Zurück".
+    await open(page, 'zustand=nur-wartende');
+    for (const p of await fitProblems(page)) red.push(`nur-wartende: ${p}`);
+    keep('nur-wartende', SHORT_ANSWER, (await fitMetrics(page))!.slack);
+    await page.screenshot({ path: `${SCREENSHOTS}/probetest-nur-wartende-${viewport.name}.png` });
     await open(page, `zustand=vergleichen&item=${SHORT_ANSWER}`);
     for (const p of await fitProblems(page)) red.push(`vergleichen: ${p}`);
     keep('vergleichen', SHORT_ANSWER, (await fitMetrics(page))!.slack);
     await page.screenshot({ path: `${SCREENSHOTS}/probetest-vergleichen-${viewport.name}.png` });
     report.slack = slack;
-    for (const [state, { id }] of Object.entries(slack).filter(([s]) => s !== 'vergleichen')) {
+    for (const [state, { id }] of Object.entries(slack).filter(
+      ([s]) => s !== 'vergleichen' && s !== 'nur-wartende',
+    )) {
       await open(page, `zustand=${state}&item=${id}`);
       await page.screenshot({
         path: `${SCREENSHOTS}/probetest-${state}-knappstes-${viewport.name}.png`,

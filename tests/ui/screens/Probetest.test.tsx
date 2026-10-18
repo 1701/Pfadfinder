@@ -9,6 +9,7 @@ import { ProbetestAufgabe } from '../../../src/ui/screens/ProbetestAufgabe';
 import { ProbetestAuswertung } from '../../../src/ui/screens/ProbetestAuswertung';
 import { AbgebenFrage, ProbetestIntro } from '../../../src/ui/screens/ProbetestBlaetter';
 import { ProbetestDurchsehen } from '../../../src/ui/screens/ProbetestDurchsehen';
+import { ProbetestDurchsehenUebersicht } from '../../../src/ui/screens/ProbetestDurchsehenUebersicht';
 import { Zeit } from '../../../src/ui/screens/ProbetestKopf';
 import { ProbetestUebersicht } from '../../../src/ui/screens/ProbetestUebersicht';
 import { FALLE_LABEL } from '../../../src/ui/text/feedback';
@@ -164,8 +165,49 @@ describe('ProbetestDurchsehen', () => {
     onBack: () => {},
     onNext: () => {},
     onResult: () => {},
+    onOverview: () => {},
     onRate: () => {},
   };
+
+  it('"Übersicht" top right, as in the test', async () => {
+    const onOverview = vi.fn();
+    render(
+      <MemoryRouter>
+        <ProbetestDurchsehen
+          {...base}
+          onOverview={onOverview}
+          item={singleChoice}
+          answer={{ optionId: 'a' }}
+          outcome="solved"
+        />
+      </MemoryRouter>,
+    );
+    const head = screen.getByRole('banner');
+    expect([...head.querySelectorAll('button')].map((b) => b.textContent)).toEqual([
+      'Zur Auswertung',
+      'Übersicht',
+    ]);
+    await userEvent.click(within(head).getByRole('button', { name: 'Übersicht' }));
+    expect(onOverview).toHaveBeenCalledOnce();
+  });
+
+  it('the first waiting short answer of "1 Antwort vergleichen": "1 von 1", no "Zurück"', () => {
+    render(
+      <MemoryRouter>
+        <ProbetestDurchsehen
+          {...base}
+          current={1}
+          total={1}
+          item={contentItem('m-gm-3-002', 'short-answer')}
+          answer={{ text: 'Es gibt keine 75 Minuten.' }}
+          outcome="pending"
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('1 von 1')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Zurück' })).toBeNull();
+    expect(isPrimary(screen.getByRole('button', { name: 'Vergleichen' }))).toBe(true);
+  });
 
   it('an item without an answer: "Hier fehlt deine Antwort.", the explanation, no "Falle"', () => {
     const { container } = render(
@@ -259,10 +301,12 @@ describe('ProbetestAuswertung', () => {
           timeUp={timeUp}
           readAloud={false}
           onReview={() => {}}
+          onCompare={onCompare}
         />
       </MemoryRouter>,
     );
   }
+  const onCompare = vi.fn();
 
   it('solved of total per Bereich and together, no percent; a waiting short answer is dashed', () => {
     const { container } = renderResult(result);
@@ -276,7 +320,7 @@ describe('ProbetestAuswertung', () => {
     expect(gm.querySelectorAll('[data-strich="solved"]')).toHaveLength(4);
     expect(gm.querySelectorAll('[data-strich="pending"]')).toHaveLength(1);
     expect(gm.querySelectorAll('[data-strich="open"]')).toHaveLength(1);
-    expect(screen.getByText('1 Aufgabe schaust du dir beim Durchsehen an.')).toBeTruthy();
+    expect(screen.getByText('gestrichelt: noch nicht verglichen')).toBeTruthy();
     expect(container.textContent).not.toMatch(/%|Prozent|Note/);
     expect(screen.getByRole('heading').textContent).toBe('Geschafft.');
   });
@@ -287,8 +331,84 @@ describe('ProbetestAuswertung', () => {
       total: { solved: 9, total: 12, pending: 0 },
     };
     renderResult(rated, true);
-    expect(screen.queryByText(/beim Durchsehen an/)).toBeNull();
+    expect(screen.queryByText(/noch nicht verglichen/)).toBeNull();
+    expect(screen.queryByRole('button', { name: /vergleichen/ })).toBeNull();
     expect(screen.getByRole('heading').textContent).toBe('Die Zeit ist um.');
     expect(screen.getByText('9 von 12')).toBeTruthy();
+  });
+
+  it('"1 Antwort vergleichen": a quiet button below the legend, "Durchsehen" stays yellow', async () => {
+    renderResult(result);
+    const compare = screen.getByRole('button', { name: '1 Antwort vergleichen' });
+    expect(isPrimary(compare)).toBe(false);
+    expect(isPrimary(screen.getByRole('button', { name: 'Durchsehen' }))).toBe(true);
+    await userEvent.click(compare);
+    expect(onCompare).toHaveBeenCalledOnce();
+  });
+});
+
+describe('ProbetestDurchsehenUebersicht', () => {
+  const outcomes = [
+    'solved',
+    'pending',
+    'notSolved',
+    'open',
+    ...Array.from({ length: 20 }, () => 'solved' as const),
+  ] as const;
+
+  function renderOverview(
+    handlers: Partial<Record<'onJump' | 'onContinue' | 'onResult', () => void>> = {},
+  ) {
+    const { container } = render(
+      <ProbetestDurchsehenUebersicht
+        outcomes={outcomes}
+        current={1}
+        readAloud={false}
+        onJump={handlers.onJump ?? vi.fn()}
+        onContinue={handlers.onContinue ?? vi.fn()}
+        onResult={handlers.onResult ?? vi.fn()}
+      />,
+    );
+    return container;
+  }
+
+  it('every Wegstrich: solved filled, waiting dashed, the rest empty, never "falsch"', () => {
+    const container = renderOverview();
+    const items = screen.getAllByRole('button', { name: /^Aufgabe / });
+    expect(items).toHaveLength(24);
+    expect(items.slice(0, 4).map((b) => b.getAttribute('aria-label'))).toEqual([
+      'Aufgabe 1, gelöst',
+      'Aufgabe 2, noch nicht verglichen',
+      'Aufgabe 3',
+      'Aufgabe 4',
+    ]);
+    expect(
+      items
+        .slice(0, 4)
+        .map((b) => b.querySelector('[data-strich-art]')!.getAttribute('data-strich-art')),
+    ).toEqual(['filled', 'dashed', 'empty', 'empty']);
+    expect(items[1]!.getAttribute('aria-current')).toBe('step');
+    expect(container.textContent).not.toMatch(/falsch|nicht gelöst/);
+  });
+
+  it('two legend entries only, "gelöst" and "gestrichelt: noch nicht verglichen"', () => {
+    const container = renderOverview();
+    const legend = container.querySelector('[data-region="answer"] p')!;
+    expect(legend.textContent).toBe('gelöstgestrichelt: noch nicht verglichen');
+  });
+
+  it('a tap jumps; "Weiter durchsehen" is the yellow step back; "Zur Auswertung" top left', async () => {
+    const onJump = vi.fn();
+    const onContinue = vi.fn();
+    const onResult = vi.fn();
+    renderOverview({ onJump, onContinue, onResult });
+    await userEvent.click(screen.getByRole('button', { name: 'Aufgabe 3' }));
+    expect(onJump).toHaveBeenCalledWith(2);
+    const next = screen.getByRole('button', { name: 'Weiter durchsehen' });
+    expect(isPrimary(next)).toBe(true);
+    await userEvent.click(next);
+    expect(onContinue).toHaveBeenCalledOnce();
+    await userEvent.click(screen.getByRole('button', { name: 'Zur Auswertung' }));
+    expect(onResult).toHaveBeenCalledOnce();
   });
 });
