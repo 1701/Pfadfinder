@@ -218,13 +218,23 @@ describe('Einstiegscheck with a reading text (fixture t-sach-900/901 and a synth
     return { ...testDeps(createMemoryRepositories()), content: createContentLoader(modules) };
   }
 
-  it('reads the text first, then asks its items as a block with the text beside them', async () => {
+  it('asks the rounds first, then reads the text and asks its items as a block beside it', async () => {
     const store = createCheckStore(lesenCheckDeps());
     await store.getState().start('deutsch');
     expect(store.getState().status).toBe('intro');
     store.getState().begin();
 
-    // The Lesen block comes first: the reading screen before its first item.
+    // The rounds come first, without a text; the Lesen block comes last.
+    const before: (string | undefined)[] = [];
+    while (store.getState().status === 'answering') {
+      const { item, text: shown } = store.getState().current!;
+      before.push(shown?.id);
+      store.getState().setAnswer(answerFor(item, true));
+      await store.getState().next();
+    }
+    expect(before.length).toBeGreaterThanOrEqual(2);
+    expect(before.every((t) => t === undefined)).toBe(true);
+    // The reading screen before the first item of the block.
     expect(store.getState().status).toBe('reading');
     const text = store.getState().current!.text!;
     expect(text).toBeDefined();
@@ -245,8 +255,7 @@ describe('Einstiegscheck with a reading text (fixture t-sach-900/901 and a synth
       await store.getState().next();
     }
     expect(statuses.every((s) => s === 'answering')).toBe(true);
-    expect(texts.slice(0, 3)).toEqual([text.id, text.id, text.id]);
-    expect(texts.slice(3).every((t) => t === undefined)).toBe(true);
+    expect(texts).toEqual([text.id, text.id, text.id]);
     expect(store.getState().status).toBe('finished');
   });
 });

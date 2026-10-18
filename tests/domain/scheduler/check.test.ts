@@ -284,22 +284,22 @@ describe('buildCheck – a Lesen-Bereich takes its items from one text', () => {
     expect(chosen).toEqual(new Set(LESEN_TEXTS.map((t) => t.id)));
   });
 
-  it('asks the items of a Lesen-Bereich as one block, before the rounds of the others', () => {
+  it('asks the items of a Lesen-Bereich as one block, after the rounds of the others', () => {
     const plan = buildCheck('deutsch', makePool('deutsch'), opts(DEUTSCH));
     const order = runCheck(plan, () => true).map((a) => a.bereich);
     expect(order).toEqual([
-      'lesen-sachtext',
-      'lesen-sachtext',
-      'lesen-sachtext',
-      'lesen-literarisch',
-      'lesen-literarisch',
-      'lesen-literarisch',
       'rs-laut-buchstabe',
       'rs-strategien',
       'rs-laut-buchstabe',
       'rs-strategien',
       'rs-laut-buchstabe',
       'rs-strategien',
+      'lesen-sachtext',
+      'lesen-sachtext',
+      'lesen-sachtext',
+      'lesen-literarisch',
+      'lesen-literarisch',
+      'lesen-literarisch',
     ]);
   });
 
@@ -309,7 +309,7 @@ describe('buildCheck – a Lesen-Bereich takes its items from one text', () => {
       const plan = buildCheck('deutsch', pool, opts([LSA, 'rs-strategien'], 'b'));
       const answers = runCheck(plan, () => correct);
       const lesen = answers.map((a, i) => (a.bereich === LSA ? i : -1)).filter((i) => i >= 0);
-      expect(lesen).toEqual([0, 1, 2]);
+      expect(lesen).toEqual([answers.length - 3, answers.length - 2, answers.length - 1]);
       const texts = new Set(
         lesen.map((i) => LESEN_ITEMS.find((it) => it.id === answers[i]!.itemId)!.stimulus?.textRef),
       );

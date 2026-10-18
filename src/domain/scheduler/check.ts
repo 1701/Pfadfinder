@@ -3,8 +3,10 @@
 // plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
 // rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
 // first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
-// A Lesen-Bereich takes all its items from one reading text and asks them as one block, before
-// the rounds, so the items of the text follow each other (2026-10-16).
+// A Lesen-Bereich takes all its items from one reading text and asks them as one block, so the
+// items of the text follow each other (2026-10-16). The blocks come after the rounds (task 10):
+// the check starts with short items, the long reading comes last; the cut to 12 never hits a
+// block.
 
 import { isLesenBereich, type Bereich, type Fach, type Item, type Niveau } from '../content';
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
@@ -14,7 +16,7 @@ export const CHECK_ITEM_COUNT = 12;
 
 export interface CheckPlan {
   fach: Fach;
-  /** Bereiche in the given order; Lesen-Bereiche are asked as blocks, the others in rounds. */
+  /** Bereiche in the given order; the others in rounds, then the Lesen-Bereiche as blocks. */
   bereiche: Bereich[];
   /** Number of questions; fixed before the first answer, so the progress never jumps. */
   total: number;
@@ -129,14 +131,14 @@ function slotBereich(
   slotIndex: number,
 ): Bereich | undefined {
   if (slotIndex >= plan.total) return undefined;
-  const block = blockSlots(plan);
-  if (slotIndex < block.length) return block[slotIndex];
   const first = firstRounds(plan);
-  const round = slotIndex - block.length;
-  if (round < first.length) return first[round];
-  const asked = block.length + first.length;
-  const third = thirdRound(plan, answers.slice(0, asked), plan.total - asked);
-  return third[round - first.length];
+  if (slotIndex < first.length) return first[slotIndex];
+  const block = blockSlots(plan);
+  const thirdPlaces = Math.max(0, plan.total - first.length - block.length);
+  const later = slotIndex - first.length;
+  if (later < thirdPlaces)
+    return thirdRound(plan, answers.slice(0, first.length), thirdPlaces)[later];
+  return block[later - thirdPlaces];
 }
 
 /**
