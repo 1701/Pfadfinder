@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-18 – Aufgabe 11, Punkt 3 und Nachtrag: Antworten vergleichen, „Für Eltern“
+- **Gebaut:** (Nachtrag) „Für Eltern“ leise am Ende von Impressum und Datenschutz, weil die installierte App `/eltern` sonst nicht erreicht; ARCHITECTURE §7 und PRODUCT angepasst (kein Kinder-Screen verlinkt `/eltern`). (3) Auswertung: Legende „gestrichelt: noch nicht verglichen“ und Knopf „1 Antwort vergleichen“ (nicht gelb) → Durchsehen nur der wartenden Kurzantworten („1 von 1“, kein „Zurück“), nach der Einschätzung „Zur Auswertung“ (gelb). Im Durchsehen oben rechts „Übersicht“: alle 24 Striche, Legende nur „gelöst“ und „gestrichelt …“, ein Tipp springt und beendet den Filter, „Weiter durchsehen“ zurück. Store: `reviewOnly`, Status `reviewOverview`.
+- **Entschieden:** Wireframe freigegeben mit vier Änderungen (Markus). Der gestrichelte Strich (16 × 8, `3 2`) wirkte am iPad gepunktet; jetzt `4 3`, gemeinsames Bauteil `ProbetestStrich` für Auswertung, beide Übersichten und Legenden.
+- **Befund:** Das bisherige Durchsehen markiert die gewählte Einschätzung nach dem Tipp nicht (das Band ersetzt die drei Knöpfe); unverändert gelassen, zur Entscheidung.
+- **Messung:** Luft unverändert (Safari quer: Aufgabe 33, Durchsehen 52, fehlt 44, vergleichen 94 px), „nur wartende“ 163 px, Übersicht im Durchsehen ohne Scrollen in vier Viewports.
+- **Tests:** Store (Filter, Rückkehr, Sprung; Gegenprobe ohne Filter → 2 rot), Testing Library, `probetest.spec` (vergleichen → Auswertung, Übersicht → Sprung), `probetest-layout` mit zwei neuen Zuständen. CLAUDE.md: Nach UI-Änderungen auch die Chromium-Smoke-Projekte lokal.
+- **Offen:** DEPLOY §8 Schritt 6 am iPad: Liefert iOS die Sicherung in der installierten App als Datei?
+- **CI:** [CI #39133484467](https://github.com/1701/Pfadfinder/actions/runs/39133484467) grün (f4aabad…c2920e9), Workers Builds grün; 920 Tests, e2e 98 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, `probetest-layout` in vier Viewports.
+
 ## 2026-10-18 – Aufgabe 11, Punkte 0–2: Schema 1.0.12, App-Updates, Rechtliches auf der Karte (Punkt 3 wartet auf Freigabe des Wireframes)
 - **Gebaut:** (0) Optionen von single-/multi-choice haben `readAloud` (Schema 1.0.12, Validator lehnt es anderswo und leer ab); d-rsl-2-001 liest „Fluss, Fuß, Kissen, Straße, Nuss“ statt „Flu_ … Nu_“, Option c ist jetzt „Ki_en“. (1) Die App registriert den Service Worker selbst (`prompt`), fragt beim Start und bei `visibilitychange` nach; eine neue Version wartet auf „Neue Version – Neu laden“ (`/eltern`) bzw. „Neu laden“ (Karte), nie automatisch. `/eltern` zeigt `Version <hash> · <Tag>`. (2) „Impressum · Datenschutz“ rechts in der Legendenzeile, in jedem Viewport.
 - **Ist-Stand vorher:** `autoUpdate` ohne Wirkung, weil vite-plugin-pwa `skipWaiting`/`clientsClaim` nur bei `injectRegister: 'auto'` setzt; keine eigene Update-Prüfung. Live-`sw.js`: `max-age=0, must-revalidate`.
