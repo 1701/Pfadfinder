@@ -1,11 +1,15 @@
 // Everything a child reads in the Einstiegscheck (PRODUCT.md §5.4). Never "Test" and never
-// "Check": the words are about the journey.
+// "Check": the words are about the journey. Offer and intro always name the Fach (task 12).
 
-export const OFFER_TITLE = 'Wo geht deine Reise los?';
+import { FAECHER, type Fach } from '../../domain/content/taxonomy';
+import { FACH_NAME } from './bereiche';
+
+export const offerTitle = (fach: Fach) => `Wo geht's in ${FACH_NAME[fach]} los?`;
 export const OFFER_GO = 'Los';
 export const OFFER_LATER = 'Später';
 
-export const INTRO_TITLE = 'Wir schauen, wo deine Reise losgeht.';
+export const introTitle = (fach: Fach) =>
+  `Wir schauen, wo deine Reise in ${FACH_NAME[fach]} losgeht.`;
 export const INTRO_TEXT = 'Das dauert etwa 10 Minuten.';
 export const START = 'Starten';
 
@@ -20,12 +24,12 @@ export const EMPTY_TEXT = 'Hier gibt es noch nicht genug Aufgaben.';
 
 export const TO_MAP = 'Zur Karte';
 
-/** Every text above, for the language checks in tests/ui/text.test.ts. */
+/** Every text above, for each Fach, for the language checks in tests/ui/text.test.ts. */
 export const EINSTIEG_TEXTS = [
-  OFFER_TITLE,
+  ...FAECHER.map(offerTitle),
   OFFER_GO,
   OFFER_LATER,
-  INTRO_TITLE,
+  ...FAECHER.map(introTitle),
   INTRO_TEXT,
   START,
   PAUSE_TEXT,
@@ -35,4 +39,4 @@ export const EINSTIEG_TEXTS = [
   STARTED_TEXT,
   EMPTY_TEXT,
   TO_MAP,
-] as const;
+];

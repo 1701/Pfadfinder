@@ -22,7 +22,7 @@ import { RechtlichesLinks } from '../components/RechtlichesLinks';
 import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { VorlesenButton } from '../components/VorlesenButton';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
-import { OFFER_GO, OFFER_LATER, OFFER_TITLE } from '../text/einstieg';
+import { OFFER_GO, OFFER_LATER, offerTitle } from '../text/einstieg';
 import { Karte } from './Karte';
 import { Tagesziel, tageszielText } from './Tagesziel';
 
@@ -40,11 +40,11 @@ export interface KartenViewProps {
   update?: AppUpdate;
 }
 
-function speech(progress: NonNullable<KartenViewProps['progress']>, offered: boolean): string {
+function speech(progress: NonNullable<KartenViewProps['progress']>, offered: Fach | null): string {
   const open = BEREICHE.filter((b) => progress.states[b].kind !== 'unerforscht');
   const names = open.map((b) => BEREICH_NAME[b]).join(', ');
   if (offered) {
-    return `${OFFER_TITLE} Tippe auf ${OFFER_GO}, oder wähle gleich ein Gebiet: ${names}.`;
+    return `${offerTitle(offered)} Tippe auf ${OFFER_GO}, oder wähle gleich ein Gebiet: ${names}.`;
   }
   return [
     KARTEN_TITLE,
@@ -70,8 +70,8 @@ export function KartenView({
       <header className="flex flex-wrap items-center justify-between gap-x-lg gap-y-xs">
         {offer ? (
           <div className="flex items-center gap-md">
-            {readAloud && progress && <VorlesenButton text={speech(progress, true)} />}
-            <h1 className="text-heading font-bold whitespace-nowrap">{OFFER_TITLE}</h1>
+            {readAloud && progress && <VorlesenButton text={speech(progress, offer.fach)} />}
+            <h1 className="text-heading font-bold whitespace-nowrap">{offerTitle(offer.fach)}</h1>
             <Link
               to={`/einstieg/${offer.fach}`}
               className={clsx(buttonClass('primary', 'small'), 'flex items-center')}
@@ -83,7 +83,7 @@ export function KartenView({
         ) : (
           <div className="flex items-center gap-lg">
             {readAloud && (
-              <VorlesenButton text={progress ? speech(progress, false) : KARTEN_TITLE} />
+              <VorlesenButton text={progress ? speech(progress, null) : KARTEN_TITLE} />
             )}
             <h1 className="text-display font-bold">{KARTEN_TITLE}</h1>
           </div>

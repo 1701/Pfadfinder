@@ -22,7 +22,7 @@ import {
   CONTINUE,
   EMPTY_TEXT,
   INTRO_TEXT,
-  INTRO_TITLE,
+  introTitle,
   PAUSE_TEXT,
   START,
   STARTED_TEXT,
@@ -63,7 +63,12 @@ export function Hinweis({ text, readAloud }: { text: string; readAloud: boolean 
   );
 }
 
-export function EinstiegIntro(props: { total: number; readAloud: boolean; onStart(): void }) {
+export function EinstiegIntro(props: {
+  fach: Fach;
+  total: number;
+  readAloud: boolean;
+  onStart(): void;
+}) {
   return (
     <Blatt
       left={
@@ -73,7 +78,7 @@ export function EinstiegIntro(props: { total: number; readAloud: boolean; onStar
       }
       // The empty way ahead, without a number: how long it is, before it begins.
       right={<Wegstriche total={props.total} done={0} />}
-      title={INTRO_TITLE}
+      title={introTitle(props.fach)}
       text={INTRO_TEXT}
       readAloud={props.readAloud}
       actions={
@@ -152,7 +157,9 @@ function Einstieg({ fach }: { fach: Fach }) {
     );
   }
   if (status === 'intro' && check) {
-    return <EinstiegIntro total={check.plan.total} readAloud={readAloud} onStart={begin} />;
+    return (
+      <EinstiegIntro fach={fach} total={check.plan.total} readAloud={readAloud} onStart={begin} />
+    );
   }
   if (status === 'paused' && current) {
     return (

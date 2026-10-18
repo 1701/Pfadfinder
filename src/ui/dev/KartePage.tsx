@@ -1,8 +1,9 @@
 // Developer preview of the map with every state at once (dev build only): /dev/karte.
 // Used by tests/e2e/karte.spec.ts for the layout check and the screenshots; ?neu fills the
-// legend line (Probetest, legend, new version, Impressum · Datenschutz).
+// legend line (Probetest, legend, new version, Impressum · Datenschutz); ?angebot=deutsch shows
+// the Einstieg offer of Deutsch (the longer title) with no Fundstück yet.
 
-import { BEREICHE, type Bereich } from '../../domain/content/taxonomy';
+import { BEREICHE, type Bereich, type Fach } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
 import { KartenView } from '../map/KartenView';
 
@@ -24,14 +25,17 @@ export function KartePage() {
   const search = new URLSearchParams(window.location.search);
   const reached = search.has('geschafft');
   const full = search.has('neu');
+  const angebot = search.get('angebot');
+  const offerFach: Fach | null = angebot === 'deutsch' || angebot === 'mathe' ? angebot : null;
   return (
     <KartenView
       progress={{
         states: Object.fromEntries(BEREICHE.map((b) => [b, DEMO[b]])) as typeof DEMO,
         today: reached
           ? { count: 10, goal: 10, reached: true }
-          : { count: 4, goal: 10, reached: false },
+          : { count: offerFach ? 0 : 4, goal: 10, reached: false },
       }}
+      offer={offerFach && { fach: offerFach, onLater: () => undefined }}
       probetests={full ? [{ fach: 'mathe', id: 'mathe-01' }] : []}
       update={full ? { onReload: () => undefined } : null}
     />

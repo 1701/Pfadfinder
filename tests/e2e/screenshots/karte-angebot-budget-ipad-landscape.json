@@ -1,0 +1,12 @@
+{
+  "Mathe": {
+    "smallestName": 23.4,
+    "headerRight": 704,
+    "headerSpare": 320
+  },
+  "Deutsch": {
+    "smallestName": 23.4,
+    "headerRight": 729,
+    "headerSpare": 295
+  }
+}

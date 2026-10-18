@@ -7,7 +7,10 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { answer, currentItem } from './helpers';
 
-const OFFER = 'Wo geht deine Reise los?';
+const OFFER = "Wo geht's in Mathe los?";
+const OFFER_DEUTSCH = "Wo geht's in Deutsch los?";
+/** Any offer, whatever the Fach. */
+const ANY_OFFER = /^Wo geht's in /;
 const MAP_TITLE = "Wohin geht's heute?";
 
 // Practiceable Mathe Bereiche from the manifest: 3 questions each, at most 12.
@@ -34,7 +37,7 @@ async function startEinstieg(page: Page) {
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
   await page.getByRole('link', { name: 'Los', exact: true }).click();
   await expect(
-    page.getByRole('heading', { name: 'Wir schauen, wo deine Reise losgeht.' }),
+    page.getByRole('heading', { name: 'Wir schauen, wo deine Reise in Mathe losgeht.' }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Starten' }).click();
   await expect(page.getByText(`1 von ${TOTAL}`)).toBeVisible();
@@ -88,10 +91,10 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   await expect(page.getByRole('link', { name: 'Formen und Raum, Niveau 1' })).toBeVisible();
   // The check is no Fundstück.
   await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
-  await expect(page.getByRole('heading', { name: OFFER })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: ANY_OFFER })).toHaveCount(0);
   await page.reload();
   await expect(page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 3' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: OFFER })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: ANY_OFFER })).toHaveCount(0);
 
   await page.goto('/einstieg/mathe');
   await expect(
@@ -103,7 +106,7 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   // The next morning the map offers Deutsch.
   await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));
   await page.reload();
-  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  await expect(page.getByRole('heading', { name: OFFER_DEUTSCH })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
     'href',
     '/einstieg/deutsch',

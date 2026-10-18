@@ -47,7 +47,7 @@ describe('EinstiegScreen', () => {
     const store = createCheckStore(testDeps());
     const { container } = renderEinstieg(store);
     expect(
-      await screen.findByRole('heading', { name: 'Wir schauen, wo deine Reise losgeht.' }),
+      await screen.findByRole('heading', { name: 'Wir schauen, wo deine Reise in Mathe losgeht.' }),
     ).toBeTruthy();
     expect(screen.getByText('Das dauert etwa 10 Minuten.')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');

@@ -6,7 +6,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { EXPORT_VERSION, parseImport } from '../../src/domain/learner';
 import { answer, check, currentItem } from './helpers';
 
-const OFFER = 'Wo geht deine Reise los?';
+const OFFER = "Wo geht's in Mathe los?";
 
 async function passGate(page: Page) {
   await page.goto('/eltern');

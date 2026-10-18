@@ -1,5 +1,6 @@
 // Developer preview of the Einstieg screens (dev build only): /dev/einstieg?zustand=
-// intro | aufgabe | pause | ergebnis | hinweis. Used by tests/e2e/einstieg-layout.spec.ts for the
+// intro | intro-deutsch | aufgabe | pause | ergebnis | hinweis (intro-deutsch: the longer Fach
+// name in the intro title). Used by tests/e2e/einstieg-layout.spec.ts for the
 // layout check and the screenshots in four viewports.
 
 import { useEffect, useState } from 'react';
@@ -37,7 +38,10 @@ export function EinstiegPage() {
     });
   }, [search]);
 
-  if (zustand === 'intro') return <EinstiegIntro total={TOTAL} readAloud onStart={() => {}} />;
+  if (zustand === 'intro' || zustand === 'intro-deutsch') {
+    const fach = zustand === 'intro' ? 'mathe' : 'deutsch';
+    return <EinstiegIntro fach={fach} total={TOTAL} readAloud onStart={() => {}} />;
+  }
   if (zustand === 'pause') {
     return <EinstiegPause index={3} total={TOTAL} readAloud onContinue={() => {}} />;
   }
