@@ -139,7 +139,7 @@
     "stimulus": {
       "textRef": "t-sach-900"
     },
-    "prompt": "Lies die Absätze 3 und 5. Was stimmt? Tippe zwei Antworten an.",
+    "prompt": "Lies die Absätze 3 und 5. Was stimmt? Tippe zwei an.",
     "payload": {
       "options": [
         {
@@ -198,7 +198,7 @@
       "hint": "Denk an die Teiche der Biber."
     },
     "solution": {
-      "model": "Seine Teiche sind ein Zuhause für viele Tiere, zum Beispiel für Frösche, Fische und Libellen.",
+      "model": "Seine Teiche sind ein Zuhause für viele Tiere, zum Beispiel Frösche, Fische und Libellen.",
       "keyPoints": [
         "Biber machen mit Dämmen Teiche.",
         "In den Teichen finden andere Tiere ein Zuhause."

@@ -70,14 +70,16 @@ const WORD_COUNT_TOLERANCE = 10;
  */
 export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
 /**
- * Other formats beside a reading text (1.0.13): the largest values that kept 18 px air above the
- * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches, 2026-10-18;
- * fixture t-sach-900). Beyond them nothing has been measured.
+ * Other formats beside a reading text (1.0.13): limits set on 2026-10-18 from the air above the
+ * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches; fixture
+ * t-sach-900). Beyond them nothing has been measured.
  */
 export const WITH_TEXT = {
   order: { maxItems: 4, maxItemChars: 30 },
-  shortAnswer: { maxModelChars: 93, maxKeyPoints: 2 },
+  shortAnswer: { maxModelChars: 90, maxKeyPoints: 2, maxFeedbackChars: 150 },
   singleChoice: { maxOptionsWithStimulusText: 3 },
+  /** 5 options only with a short prompt (multi-choice has 4–5 options). */
+  multiChoice: { maxPromptCharsWithFiveOptions: 60 },
 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
@@ -396,7 +398,7 @@ function withTextFindings(item: Item): [string, string][] {
     });
   }
   if (item.format === 'short-answer') {
-    const { maxModelChars, maxKeyPoints } = WITH_TEXT.shortAnswer;
+    const { maxModelChars, maxKeyPoints, maxFeedbackChars } = WITH_TEXT.shortAnswer;
     const { model, keyPoints } = item.solution;
     if (model.length > maxModelChars) {
       findings.push([`short-answer mit Lesetext: model höchstens ${maxModelChars} Zeichen, hier ${model.length}`, 'solution.model']);
@@ -405,6 +407,23 @@ function withTextFindings(item: Item): [string, string][] {
       findings.push([
         `short-answer mit Lesetext: höchstens ${maxKeyPoints} keyPoints, hier ${keyPoints.length}`,
         'solution.keyPoints',
+      ]);
+    }
+    const { incorrect, misconception = '' } = item.feedback;
+    const feedback = incorrect.length + misconception.length;
+    if (feedback > maxFeedbackChars) {
+      findings.push([
+        `short-answer mit Lesetext: incorrect und misconception zusammen höchstens ${maxFeedbackChars} Zeichen, hier ${feedback}`,
+        'feedback',
+      ]);
+    }
+  }
+  if (item.format === 'multi-choice' && item.payload.options.length >= 5) {
+    const { maxPromptCharsWithFiveOptions: max } = WITH_TEXT.multiChoice;
+    if (item.prompt.length > max) {
+      findings.push([
+        `multi-choice mit Lesetext und 5 Optionen: prompt höchstens ${max} Zeichen, hier ${item.prompt.length}`,
+        'prompt',
       ]);
     }
   }

@@ -114,6 +114,7 @@ Mit `stimulus.textRef` und zusätzlichem `stimulus.text` (seit 1.0.13): höchste
 payload:  { options: { id: string; text: string; readAloud?: string }[]; minSelect: number; keepOrder?: boolean }  // 4–5 Optionen, 2–3 richtig; minSelect = exakt Anzahl richtiger Optionen (seit 1.0.1); keepOrder und readAloud wie 4.1
 solution: { optionIds: string[] }                                         // exakt diese Menge
 ```
+Mit `stimulus.textRef` (seit 1.0.13): 5 Optionen nur mit einem `prompt` von höchstens 60 Zeichen, sonst 4. Die Optionsanzahl allein entscheidet nicht: 5 Optionen passten mit 60 und 62 Zeichen Prompt, mit 99 Zeichen fehlte Safari quer 1 px zu 18 px Luft (d-lsa-2-001 vor Patch 1). Der Validator warnt.
 
 ### 4.3 `number-input`
 ```ts
@@ -162,7 +163,7 @@ solution: { model: string; keyPoints: string[] }                           // Mu
 ```
 `model` hat höchstens `maxChars` Zeichen (seit 1.0.8): Das Kind vergleicht mit einer Antwort, die es selbst hätte schreiben können. Der Validator prüft das.
 
-Mit `stimulus.textRef` (seit 1.0.13): `model` höchstens 93 Zeichen, höchstens 2 `keyPoints`. Beim Vergleichen stehen Musterlösung und Kernpunkte neben dem Kasten; mit 111 Zeichen und 3 Kernpunkten lief der Screen hoch 8 px unter das Band (d-lsa-3-001). Das Antwortfeld hat immer 3 Zeilen, `maxChars` ändert die Höhe nicht. Der Validator warnt.
+Mit `stimulus.textRef` (seit 1.0.13): `model` höchstens 90 Zeichen, höchstens 2 `keyPoints`, `feedback.incorrect` und `feedback.misconception` zusammen höchstens 150 Zeichen. Beim Vergleichen stehen Musterlösung und Kernpunkte neben dem Kasten; mit 111 Zeichen und 3 Kernpunkten lief der Screen hoch 8 px unter das Band (d-lsa-3-001). Bei „noch nicht“ zählt die Rückmeldung: mit 176 Zeichen lief d-lsa-3-002 Safari quer 20 px unter das Band, mit 158 blieben 22 px. Das Antwortfeld hat immer 3 Zeilen, `maxChars` ändert die Höhe nicht. Der Validator warnt.
 
 ## 5. ReadingText
 
@@ -211,7 +212,7 @@ Regeln:
 
 **Deutsch**
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
-- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 93 Zeichen und höchstens 2 `keyPoints` (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1). Die Grenzen sind die größten Werte, die in allen vier Viewports 18 px Luft über dem Band ließen; darüber ist nichts gemessen
+- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 90 Zeichen, höchstens 2 `keyPoints` und Rückmeldung (incorrect + misconception) bis 150 Zeichen (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1), `multi-choice` mit 5 Optionen nur bei `prompt` bis 60 Zeichen (§4.2). Grundlage ist die Luft über dem Band in allen vier Viewports (mindestens 18 px); darüber ist nichts gemessen. Der Validator warnt nur
 - Rechtschreibung nur mit Grundschul-Regelwissen lösbar (Verlängern, Ableiten, Silben, Wortbausteine, Groß-/Kleinschreibung); keine Ausnahmewörter als Fehlerquelle
 - `find-error` enthält pro Satz nur Fehlertypen eines Bereichs
 

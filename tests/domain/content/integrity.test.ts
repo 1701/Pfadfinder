@@ -6,7 +6,17 @@ import {
   type Item,
   type ValidateContentOptions,
 } from '../../../src/domain/content';
-import { findError, markInText, numberInput, order, sachtext, shortAnswer, singleChoice, validItemsByFormat } from '../../fixtures/items';
+import {
+  findError,
+  markInText,
+  multiChoice,
+  numberInput,
+  order,
+  sachtext,
+  shortAnswer,
+  singleChoice,
+  validItemsByFormat,
+} from '../../fixtures/items';
 import { buildDeutschProbetest, buildMatheProbetest, cloneItem, toFiles } from '../../fixtures/builders';
 
 const noAssets: ValidateContentOptions = { assetExists: () => false };
@@ -244,22 +254,48 @@ describe('validateContent – other formats beside a reading text (1.0.13)', () 
     expect(besideText(probe, false)).toEqual([]);
   });
 
-  it('short-answer: accepts a model of 93 characters with 2 keyPoints', () => {
+  it('short-answer: accepts a model of 90 characters with 2 keyPoints', () => {
     const probe = structuredClone(shortAnswer);
-    probe.solution.model = chars(93);
+    probe.solution.model = chars(90);
     expect(probe.solution.keyPoints).toHaveLength(2);
     expect(besideText(probe)).toEqual([]);
   });
 
-  it('short-answer: warns above 93 characters and at a third keyPoint', () => {
+  it('short-answer: warns above 90 characters and at a third keyPoint', () => {
     const probe = structuredClone(shortAnswer);
-    probe.solution.model = chars(94);
+    probe.solution.model = chars(91);
     probe.solution.keyPoints = [...probe.solution.keyPoints, 'Drei.'];
     expect(besideText(probe)).toEqual([
-      expect.objectContaining({ severity: 'warning', path: 'solution.model', message: expect.stringContaining('hier 94') }),
+      expect.objectContaining({ severity: 'warning', path: 'solution.model', message: expect.stringContaining('hier 91') }),
       expect.objectContaining({ severity: 'warning', path: 'solution.keyPoints', message: expect.stringContaining('hier 3') }),
     ]);
     expect(besideText(probe, false)).toEqual([]);
+  });
+
+  it('short-answer: incorrect and misconception together at most 150 characters', () => {
+    const probe = structuredClone(shortAnswer);
+    probe.feedback = { ...probe.feedback, incorrect: chars(100), misconception: chars(50) };
+    expect(besideText(probe)).toEqual([]);
+    probe.feedback.misconception = chars(51);
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'feedback', message: expect.stringContaining('hier 151') }),
+    ]);
+    expect(besideText(probe, false)).toEqual([]);
+  });
+
+  it('multi-choice: 5 options only with a prompt of at most 60 characters', () => {
+    const probe = structuredClone(multiChoice);
+    expect(probe.payload.options).toHaveLength(5);
+    probe.prompt = chars(60);
+    expect(besideText(probe)).toEqual([]);
+    probe.prompt = chars(61);
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'prompt', message: expect.stringContaining('hier 61') }),
+    ]);
+    expect(besideText(probe, false)).toEqual([]);
+    // With 4 options a long prompt is fine.
+    probe.payload.options = probe.payload.options.filter((o) => o.id !== 'e');
+    expect(besideText(probe)).toEqual([]);
   });
 
   it('single-choice: 4 options are fine, with a stimulus text only 3', () => {
