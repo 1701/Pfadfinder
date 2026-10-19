@@ -1,6 +1,7 @@
 // Digit pad (PRODUCT.md §5.3): no system keyboard. Phone layout, a comma only when the item
 // allows decimals, never a dot. A hardware keyboard works too (laptop).
 
+import clsx from 'clsx';
 import { useEffect } from 'react';
 
 export const DELETE_KEY = 'Löschen';
@@ -40,7 +41,18 @@ const ROWS: Key[][] = [
 ];
 
 const keyClass =
-  'min-h-touch min-w-key rounded-control border-2 border-line-strong bg-surface font-bold transition-transform duration-(--duration-press) enabled:active:translate-y-px disabled:border-line disabled:text-ink-muted';
+  'min-h-touch rounded-control border-2 border-line-strong bg-surface font-bold transition-transform duration-(--duration-press) enabled:active:translate-y-px disabled:border-line disabled:text-ink-muted';
+
+/**
+ * Without a comma "Löschen" takes two columns of the last row (0 | Löschen): in one 72 px key it
+ * ran 10 px out (iPad landscape beside a reading text, finding 2026-10-19). The columns are 72 px
+ * and may shrink to the touch minimum when the answer area is narrow, so keys never overlap.
+ * With a comma the row stays , | 0 | Löschen: three equal columns as wide as "Löschen" needs.
+ */
+const GRID_CLASS = {
+  digits: 'grid-cols-[repeat(3,minmax(var(--spacing-touch),var(--spacing-key)))]',
+  decimal: 'grid-cols-3 [&>button]:min-w-key',
+};
 
 export function ZiffernBlock({ value, onChange, disabled = false, ...options }: ZiffernBlockProps) {
   const { allowDecimal, maxDigits } = options;
@@ -70,7 +82,11 @@ export function ZiffernBlock({ value, onChange, disabled = false, ...options }: 
   }, [disabled, value, onChange, allowDecimal, maxDigits]);
 
   return (
-    <div className="grid grid-cols-3 gap-xs" role="group" aria-label="Ziffernblock">
+    <div
+      className={clsx('grid gap-xs', allowDecimal ? GRID_CLASS.decimal : GRID_CLASS.digits)}
+      role="group"
+      aria-label="Ziffernblock"
+    >
       {ROWS.flat().map((key) => (
         <button
           key={key}
@@ -82,7 +98,7 @@ export function ZiffernBlock({ value, onChange, disabled = false, ...options }: 
           {key}
         </button>
       ))}
-      {allowDecimal ? (
+      {allowDecimal && (
         <button
           type="button"
           className={`${keyClass} text-option`}
@@ -92,8 +108,6 @@ export function ZiffernBlock({ value, onChange, disabled = false, ...options }: 
         >
           ,
         </button>
-      ) : (
-        <span aria-hidden="true" />
       )}
       <button
         type="button"
@@ -105,7 +119,7 @@ export function ZiffernBlock({ value, onChange, disabled = false, ...options }: 
       </button>
       <button
         type="button"
-        className={`${keyClass} px-xs text-body`}
+        className={clsx(keyClass, 'px-xs text-body', !allowDecimal && 'col-span-2')}
         disabled={disabled}
         onClick={() => press(DELETE_KEY)}
       >

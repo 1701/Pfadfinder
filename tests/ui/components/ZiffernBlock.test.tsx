@@ -51,6 +51,23 @@ describe('ZiffernBlock', () => {
     expect(screen.getAllByRole('button')).toHaveLength(11);
   });
 
+  it('last row without comma: 0 | Löschen over two columns (it ran out of one key)', () => {
+    render(<Harness allowDecimal={false} />);
+    const pad = screen.getByRole('group', { name: 'Ziffernblock' });
+    const keys = [...pad.children].map((k) => k.textContent);
+    expect(keys.slice(-2)).toEqual(['0', 'Löschen']);
+    expect(screen.getByRole('button', { name: 'Löschen' }).className).toContain('col-span-2');
+    // No placeholder in front of 0: the row is exactly the two keys.
+    expect(pad.children).toHaveLength(11);
+  });
+
+  it('last row with comma: , | 0 | Löschen, one column each', () => {
+    render(<Harness allowDecimal />);
+    const pad = screen.getByRole('group', { name: 'Ziffernblock' });
+    expect([...pad.children].slice(-3).map((k) => k.textContent)).toEqual([',', '0', 'Löschen']);
+    expect(screen.getByRole('button', { name: 'Löschen' }).className).not.toContain('col-span');
+  });
+
   it('offers a comma with allowDecimal, still no dot', async () => {
     render(<Harness allowDecimal />);
     await userEvent.click(screen.getByRole('button', { name: '3' }));
