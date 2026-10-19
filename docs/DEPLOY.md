@@ -102,3 +102,7 @@ Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 4. Eine Runde beginnen, die App in den Hintergrund und zurück: kein Hinweis, kein Neuladen, die Runde läuft weiter.
 5. Zur Karte, „Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg, `/eltern` (über „Impressum“ → „Für Eltern“) zeigt die neue Kennung.
 6. In der installierten App auf `/eltern` „Sicherung herunterladen“ tippen: Liefert iOS eine Datei (Teilen-Menü oder „In Dateien sichern“)? Ergebnis hier eintragen; ohne Datei braucht die Sicherung in der installierten App einen anderen Weg.
+
+## 9. GitHub-CI und Screenshots
+
+Die GitHub-CI (`.github/workflows/ci.yml`) läuft neben Workers Builds und liefert nichts aus. Der Job `e2e` lädt Screenshots und Budget-JSON aller Specs als Artefakt `e2e-output` hoch (Ordner `tests/e2e/output/`, gitignored), auch wenn ein Test rot ist. In CI ist `PFADFINDER_UPDATE_SCREENSHOTS` nie gesetzt: Die versionierten Bilder in `tests/e2e/screenshots/` ändern sich nur lokal, bei einer bewussten UI-Änderung (CLAUDE.md, Abschnitt „Screenshots“).

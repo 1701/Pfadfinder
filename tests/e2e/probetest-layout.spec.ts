@@ -6,7 +6,7 @@
 //                no answer), the short answer while comparing: fitProblems, the least room kept
 //   map          the line "Probetest Mathe" in the legend line: ≥ 48 px, map names still ≥ 18 px
 //   print        /probetest/mathe-01/print as A4 PDF and as a print-media screenshot (Chromium)
-// Numbers go to tests/e2e/screenshots/probetest-budget-<viewport>.json, screenshots beside them.
+// Numbers go to probetest-budget-<viewport>.json in SCREENSHOTS (output-dir.ts), screenshots beside them.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';

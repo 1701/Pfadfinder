@@ -42,7 +42,7 @@ export const ITEMS: ContentItem[] = readdirSync('content/items', { recursive: tr
   .flatMap((file) => JSON.parse(readFileSync(`content/items/${file}`, 'utf8')) as ContentItem[])
   .filter((i) => i.status !== 'retired');
 
-export const SCREENSHOTS = 'tests/e2e/screenshots';
+export { SCREENSHOTS } from './output-dir';
 
 /** The four viewports: iPad, and the same iPad in Safari with its bars (the tightest). */
 export const VIEWPORTS = [

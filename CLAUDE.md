@@ -27,6 +27,11 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Renderer für mark-in-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
 - Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex). Ausnahme: `payload.keepOrder: true` (Optionen benennen Bildbeschriftungen A–D), dann bleibt die Reihenfolge wie im Content.
 
+## Screenshots
+- Ein normaler Lauf (`npm run e2e`, einzelne Specs, `npm run screenshots`) schreibt Screenshots und Budget-JSON nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Danach ist `git status` sauber.
+- `PFADFINDER_UPDATE_SCREENSHOTS=1` nur bei einer bewussten UI-Änderung (sichtbare Oberfläche, Texte oder Layout-Budget): Dann schreiben die Specs ins versionierte `tests/e2e/screenshots/`. Committet werden nur die Dateien, die zur Änderung gehören, und der Abschlussbericht nennt sie. In CI wird der Schalter nie gesetzt
+- Beispiel: `PFADFINDER_UPDATE_SCREENSHOTS=1 npx playwright test --project=layout einstieg-layout`
+
 ## Kinder-UX-Checkliste (vor jedem UI-Commit)
 - [ ] Touch-Ziele ≥ 48 px, eine Aufgabe pro Screen, kein Scrollen innerhalb der Aufgabe (iPad quer und hoch)
 - [ ] Kein rotes X, kein "Falsch", kein Countdown außerhalb des Probetests
@@ -57,7 +62,7 @@ npm run content:validate scripts/validate-content.ts
 npm run test             Vitest
 npm run e2e              Playwright
 npm run build            Produktions-Build inkl. PWA und Bundle-Prüfung
-npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/screenshots
+npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/output (mit PFADFINDER_UPDATE_SCREENSHOTS=1 → tests/e2e/screenshots)
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
 npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
 npm run icons            public/icon.svg → PNG-Icons in public/icons (RGB, ohne Alpha)

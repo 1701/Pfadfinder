@@ -1,9 +1,10 @@
 // Captures dev pages in both iPad formats (pfadfinder-ui skill: check every UI change on
-// 1024×768 and 768×1024). Usage: npm run screenshots  → tests/e2e/screenshots/*.png
+// 1024×768 and 768×1024). Usage: npm run screenshots  → tests/e2e/output/*.png, with
+// PFADFINDER_UPDATE_SCREENSHOTS=1 → tests/e2e/screenshots/*.png (tests/e2e/output-dir.ts).
 
-import { mkdirSync } from 'node:fs';
 import { chromium, devices } from '@playwright/test';
 import { createServer } from 'vite';
+import { SCREENSHOTS as OUT } from '../tests/e2e/output-dir';
 
 const PAGES = [
   { name: 'tokens', path: '/dev/tokens' },
@@ -35,12 +36,10 @@ const VIEWPORTS = [
     device: { ...devices['iPad (gen 7)'], viewport: { width: 768, height: 1024 } },
   },
 ];
-const OUT = 'tests/e2e/screenshots';
 
 const server = await createServer({ server: { port: 5199, strictPort: true }, logLevel: 'error' });
 await server.listen();
 const browser = await chromium.launch();
-mkdirSync(OUT, { recursive: true });
 
 try {
   for (const { name: viewport, device } of VIEWPORTS) {

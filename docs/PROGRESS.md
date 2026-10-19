@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – Klein-Paket Screenshots: normale Läufe schreiben nach tests/e2e/output/
+- **Entschieden (Markus):** Specs und `npm run screenshots` schreiben Screenshots, Budget-JSON und das Druck-PDF nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Nur mit `PFADFINDER_UPDATE_SCREENSHOTS=1` geht es ins versionierte `tests/e2e/screenshots/`, und zwar nur bei einer bewussten UI-Änderung, die im Abschlussbericht genannt wird. Abnahme: `git status` ist nach einem normalen Lauf sauber.
+- **Gebaut:** `tests/e2e/output-dir.ts` (Ordner nach Schalter, legt ihn an). `helpers.ts` und `scripts/screenshots.ts` nutzen es, `.gitignore` und `ci.yml` sind angepasst. Dazu Regeln in CLAUDE.md („Screenshots“, Befehle), DEPLOY.md §9 und `tests/e2e/README.md`.
+- **Abnahme lokal:** `npm run check` grün. Danach liefen `npm run e2e` (Chromium und Layout 78/78; WebKit startet lokal nicht, weil Systembibliotheken fehlen) und `npm run screenshots`. 332 Dateien landeten in `output/`, `git status` zeigte nur die Quelländerungen. Gegenprobe mit Schalter: `karte.spec` schreibt nach `screenshots/` (byte-gleich).
+- **Aufgeräumt:** die von früheren Läufen geänderten versionierten Screenshots auf den Commit-Stand zurückgesetzt. Ein Teil davon (start, eltern, impressum, datenschutz, feedback, item-*) weicht vom aktuellen Stand ab und braucht einmal einen bewussten Lauf mit Schalter.
+
 ## 2026-10-19 – Nachtrag Einstiegsangebot: „noch keine Aufgaben“, gap-md zurück
 - **Entschieden (Markus):** Gestrichelte Gebiete heißen für Screenreader „…, noch keine Aufgaben“. „Unerforscht“ bleibt für das Angebot. Vorlesen ohne offene Gebiete bleibt, wie es ist. Der Angebots-Header bekommt wieder `gap-md`.
 - **Gebaut:** `regionLabel` in `Karte.tsx` (nur aria-label, sichtbar ändert sich nichts), `Karte.test` angepasst, Kommentar `KartenView` und PRODUCT §5.4 nachgezogen.
