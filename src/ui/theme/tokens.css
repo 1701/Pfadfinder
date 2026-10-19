@@ -86,6 +86,10 @@
   --container-rating-beside: 34rem;
   /* … and from this one all of it is one row (72 + 16 + 230 + 3 × 180 + 3 × 12 = 894px). */
   --container-rating-row: 50rem;
+  /* match: rows and cards side by side from this width of the answer area (landscape 976px);
+     beside a reading text (554–632px) and in portrait the cards go below the rows, so a row
+     keeps the full width (d-lli-2-003, iPad finding 2026-10-19). */
+  --container-match-beside: 48rem;
 
   /* Radii carry meaning: sheets are square like a map, controls are round to the touch. */
   --radius-*: initial;

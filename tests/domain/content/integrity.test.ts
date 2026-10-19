@@ -220,7 +220,7 @@ describe('validateContent – mark-in-text beside a reading text (1.0.11)', () =
   });
 });
 
-describe('validateContent – other formats beside a reading text (1.0.13, match 1.0.14)', () => {
+describe('validateContent – other formats beside a reading text (1.0.13, match 1.0.15)', () => {
   /** The item in lesen-sachtext beside t-sach-901 (or without a text); returns the issues. */
   function besideText(item: Item, textRef = true) {
     const text = structuredClone(sachtext);
@@ -299,16 +299,16 @@ describe('validateContent – other formats beside a reading text (1.0.13, match
     expect(besideText(probe)).toEqual([]);
   });
 
-  it('match (1.0.14): left at most 27, right at most 43 characters', () => {
+  it('match (1.0.15): left at most 35, right at most 52 characters', () => {
     const probe = structuredClone(match);
-    probe.payload.left[0] = { ...probe.payload.left[0]!, text: chars(27) };
-    probe.payload.right[3] = { ...probe.payload.right[3]!, text: chars(43) };
+    probe.payload.left[0] = { ...probe.payload.left[0]!, text: chars(35) };
+    probe.payload.right[3] = { ...probe.payload.right[3]!, text: chars(52) };
     expect(besideText(probe)).toEqual([]);
-    probe.payload.left[2] = { ...probe.payload.left[2]!, text: chars(28) };
-    probe.payload.right[1] = { ...probe.payload.right[1]!, text: chars(44) };
+    probe.payload.left[2] = { ...probe.payload.left[2]!, text: chars(36) };
+    probe.payload.right[1] = { ...probe.payload.right[1]!, text: chars(53) };
     expect(besideText(probe)).toEqual([
-      expect.objectContaining({ severity: 'warning', path: 'payload.left[2].text', message: expect.stringContaining('hier 28') }),
-      expect.objectContaining({ severity: 'warning', path: 'payload.right[1].text', message: expect.stringContaining('hier 44') }),
+      expect.objectContaining({ severity: 'warning', path: 'payload.left[2].text', message: expect.stringContaining('hier 36') }),
+      expect.objectContaining({ severity: 'warning', path: 'payload.right[1].text', message: expect.stringContaining('hier 53') }),
     ]);
     expect(besideText(probe, false)).toEqual([]);
   });

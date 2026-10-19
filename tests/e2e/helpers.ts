@@ -94,23 +94,33 @@ export async function fitProblems(page: Page): Promise<string[]> {
 }
 
 /**
- * match: a row's label takes at most 40 % of the row (it wraps instead), and no text or check mark
- * leaves its label or tile. Before, a long label squeezed the card to one word per line and the
- * check mark ran over the tile's edge (d-lli-2-003, Safari landscape, 2026-10-19).
+ * match: the slot (card column) takes at most 60 % of the row, the label the rest; no text or check
+ * mark leaves its label or tile; a label has at most two lines, and from four words on no line
+ * holds a single word (labels wrap balanced). Before, a long label squeezed the card to one word
+ * per line and the check mark ran over the tile's edge (d-lli-2-003, Safari landscape,
+ * 2026-10-19); then sentences broke into three lines beside short cards (iPad, 2026-10-19).
+ * The invisible card sizer ([data-sizer], inside the first slot) does not count.
  */
 export async function matchProblems(page: Page): Promise<string[]> {
   return page.evaluate(() => {
-    const layout = document.querySelector('[data-region="answer"]')?.firstElementChild;
-    const rows = layout?.firstElementChild;
+    const rows = document.querySelector('[data-region="answer"] [data-match-rows]');
     if (!rows) return ['match rows missing'];
     const width = rows.getBoundingClientRect().width;
+    const textNodes = (box: Element) => {
+      const nodes: Text[] = [];
+      const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        if (n.parentElement?.closest('.sr-only, [data-sizer]') || !(n.textContent ?? '').trim())
+          continue;
+        nodes.push(n as Text);
+      }
+      return nodes;
+    };
     const parts = (box: Element) => {
       const rects: DOMRect[] = [...box.querySelectorAll('svg')].map((e) =>
         e.getBoundingClientRect(),
       );
-      const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
-      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-        if (n.parentElement?.closest('.sr-only') || !(n.textContent ?? '').trim()) continue;
+      for (const n of textNodes(box)) {
         const range = document.createRange();
         range.selectNodeContents(n);
         rects.push(...[...range.getClientRects()].filter((r) => r.width > 0));
@@ -121,15 +131,39 @@ export async function matchProblems(page: Page): Promise<string[]> {
       const b = box.getBoundingClientRect();
       return parts(box).some((r) => r.right > b.right + 0.5 || r.left < b.left - 0.5);
     };
+    /** Words per line of a label, top to bottom (a word belongs to the line of its first box). */
+    const lines = (box: Element) => {
+      const byTop = new Map<number, number>();
+      for (const n of textNodes(box)) {
+        for (const m of (n.textContent ?? '').matchAll(/\S+/g)) {
+          const range = document.createRange();
+          range.setStart(n, m.index);
+          range.setEnd(n, m.index + m[0].length);
+          const first = [...range.getClientRects()].find((r) => r.width > 0);
+          if (!first) continue;
+          const top = Math.round(first.top);
+          const line = [...byTop.keys()].find((t) => Math.abs(t - top) < 4) ?? top;
+          byTop.set(line, (byTop.get(line) ?? 0) + 1);
+        }
+      }
+      return [...byTop.entries()].sort((a, b) => a[0] - b[0]).map(([, words]) => words);
+    };
     return [...rows.children].flatMap((row, i) => {
       const [label, slot] = [...row.children];
       if (!label || !slot) return [`row ${i + 1}: label or slot missing`];
       const tile = slot.querySelector('button') ?? slot;
-      const share = label.getBoundingClientRect().width / width;
+      const share = slot.getBoundingClientRect().width / width;
+      const words = lines(label);
+      const total = words.reduce((a, b) => a + b, 0);
       return [
-        share > 0.405 && `row ${i + 1}: label takes ${Math.round(share * 100)} % of the row`,
+        share > 0.605 && `row ${i + 1}: slot takes ${Math.round(share * 100)} % of the row`,
         sticksOut(label) && `row ${i + 1}: label text leaves the label`,
         sticksOut(tile) && `row ${i + 1}: card text or check mark leaves the tile`,
+        words.length > 2 && `row ${i + 1}: label has ${words.length} lines`,
+        total >= 4 &&
+          words.length > 1 &&
+          words.includes(1) &&
+          `row ${i + 1}: a label line holds one word (${words.join('/')})`,
       ].filter((p): p is string => typeof p === 'string');
     });
   });

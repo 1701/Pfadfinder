@@ -29,6 +29,24 @@ describe('Match (m-rf-1-004)', () => {
     ).toEqual(right.map((r) => r.text));
   });
 
+  it('sizes the slot column by every card, invisibly, inside the first slot only', async () => {
+    setup();
+    const rows = document.querySelector('[data-match-rows]')!;
+    const sizers = rows.querySelectorAll('[data-sizer]');
+    expect(sizers).toHaveLength(1);
+    const sizer = sizers[0]!;
+    expect(sizer.getAttribute('aria-hidden')).toBe('true');
+    expect(sizer.className).toContain('invisible');
+    // Every card (distractor included), not only those still in the pool.
+    expect([...sizer.children].map((c) => c.textContent)).toEqual(
+      presentedMatch(item, 0).right.map((r) => r.text),
+    );
+    // Not a grid cell of its own: it sits in the first row's slot.
+    expect(sizer.parentElement?.parentElement?.parentElement).toBe(rows);
+    await userEvent.click(row('Würfel'));
+    expect(rows.querySelectorAll('[data-sizer]')).toHaveLength(1);
+  });
+
   it('pairs by tapping a row and then a card, or a card and then a row', async () => {
     const onChange = setup();
     await userEvent.click(row('Würfel'));

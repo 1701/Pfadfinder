@@ -70,7 +70,7 @@ const WORD_COUNT_TOLERANCE = 10;
  */
 export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
 /**
- * Other formats beside a reading text (1.0.13, match 1.0.14): limits set from the air above the
+ * Other formats beside a reading text (1.0.13, match 1.0.15): limits set from the air above the
  * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches, 2026-10-18;
  * fixture t-sach-900). Beyond them nothing has been measured.
  */
@@ -81,10 +81,12 @@ export const WITH_TEXT = {
   /** 5 options only with a short prompt (multi-choice has 4–5 options). */
   multiChoice: { maxPromptCharsWithFiveOptions: 60 },
   /**
-   * 1.0.14, measured after the label column was capped at 40 % (2026-10-19, sweep on
-   * d-lli-2-003): a longer label wraps to more lines, a longer card makes the slot taller.
+   * 1.0.15, measured after the slot became as wide as the longest card (at most 60 %) and the
+   * cards moved below the rows beside a reading text (2026-10-19, sweep on d-lli-2-003): left 39
+   * wraps a sentence into three lines (iPad landscape), right 59 leaves 10 px air (Safari
+   * landscape); up to 35/52 at least 39 px in all four viewports.
    */
-  match: { maxLeftChars: 27, maxRightChars: 43 },
+  match: { maxLeftChars: 35, maxRightChars: 52 },
 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;

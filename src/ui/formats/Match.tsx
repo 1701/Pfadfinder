@@ -32,15 +32,17 @@ const POOL = 'pool';
  * The same layout before and after checking, so nothing moves: the rows (label | slot) and beside
  * them in landscape, below them in portrait, the pool – after checking, in the same place, the
  * "Richtig ist" list. The rows never grow, whatever that side holds.
- * In a row the label takes at most 40 % (its text wraps), the slot the rest, at least 60 %: a long
- * label must not squeeze the card to one word per line (d-lli-2-003 beside a reading text).
+ * In a row the slot is as wide as the longest card with its check mark and padding, at most 60 %;
+ * the label takes the rest and wraps in balanced lines. The cards are measured once, invisibly
+ * (CardSizer), so the slot is as wide before checking as after: nothing moves. Before, the label
+ * got at most 40 % and short cards left wide empty slots while long sentences broke into three
+ * lines (d-lli-2-003 beside a reading text, iPad finding 2026-10-19).
  */
 const LAYOUT_CLASS =
-  'grid w-full items-start gap-x-md gap-y-sm landscape:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]';
-const ROWS_CLASS =
-  'grid grid-cols-[fit-content(calc(40%_-_var(--spacing-sm)))_minmax(0,1fr)] items-center gap-x-sm gap-y-xs';
+  'grid w-full items-start gap-x-md gap-y-sm @match-beside:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]';
+const ROWS_CLASS = 'grid grid-cols-[minmax(0,1fr)_fit-content(60%)] items-center gap-x-sm gap-y-xs';
 const LABEL_CLASS =
-  'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option';
+  'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option text-balance';
 const rowId = (leftId: string) => `row:${leftId}`;
 
 function Card({
@@ -49,6 +51,7 @@ function Card({
   onTap,
   disabled,
   label,
+  markRoom = false,
   children,
 }: {
   id: string;
@@ -57,6 +60,8 @@ function Card({
   disabled: boolean;
   /** Accessible name when it says more than the text (it starts with the visible text). */
   label?: string;
+  /** In a slot: keep the check mark's room, so the text wraps as it will after checking. */
+  markRoom?: boolean;
   children: ReactNode;
 }) {
   const { setNodeRef, listeners, isDragging } = useDraggable({ id, disabled });
@@ -74,9 +79,15 @@ function Card({
         clsx('w-full touch-none px-md text-left', isDragging && 'opacity-50'),
       )}
     >
+      {markRoom && <MarkRoom />}
       {children}
     </button>
   );
+}
+
+/** Empty room of the check mark's size: text in a slot starts at the same place in every state. */
+function MarkRoom() {
+  return <span aria-hidden="true" className="size-lg shrink-0" />;
 }
 
 function Slot({
@@ -99,6 +110,24 @@ function Slot({
   );
 }
 
+/**
+ * Gives the slot column its width: every card as a tile with room for the check mark, invisible and
+ * without height, inside the first row's slot (not a grid cell of its own, which would push the
+ * rows out of place). Hidden from screen readers.
+ */
+function CardSizer({ texts }: { texts: string[] }) {
+  return (
+    <div aria-hidden="true" data-sizer className="invisible h-0 overflow-hidden">
+      {texts.map((text) => (
+        <div key={text} className={tileClass('plain', false, 'px-md')}>
+          <MarkRoom />
+          <span>{nb(text)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Pool({ children }: { children: ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id: POOL });
   return (
@@ -107,7 +136,7 @@ function Pool({ children }: { children: ReactNode }) {
       role="group"
       aria-label={T.answers.replace(':', '')}
       className={clsx(
-        'flex min-h-touch flex-wrap content-start gap-xs rounded-control landscape:flex-col',
+        'flex min-h-touch flex-wrap content-start gap-xs rounded-control @match-beside:flex-col',
         isOver && 'bg-signal-soft',
       )}
     >
@@ -133,6 +162,7 @@ export function Match({
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   const cardText = new Map(right.map((r) => [r.id, r.text]));
+  const sizer = <CardSizer texts={right.map((r) => r.text)} />;
   const leftText = new Map(left.map((l) => [l.id, l.text]));
   const placed = new Set(Object.values(pairs));
 
@@ -186,35 +216,40 @@ export function Match({
     const solution = new Map(revealed.solution.pairs);
     const wrong = left.filter((l) => pairs[l.id] !== solution.get(l.id));
     return (
-      <div className={LAYOUT_CLASS}>
-        <div className={ROWS_CLASS}>
-          {left.map((l) => {
-            const card = pairs[l.id];
-            const state = tileState(true, card === solution.get(l.id), card !== undefined);
-            return (
-              <div key={l.id} className="contents">
-                <span className={clsx(LABEL_CLASS, 'border-transparent')}>{nb(l.text)}</span>
-                <div className={tileClass(state, false, 'px-md')}>
-                  <SolutionMark state={state} />
-                  <span>
-                    {nb(cardText.get(card ?? '') ?? '')}
-                    <StateWords state={state} />
-                  </span>
+      <div className="w-full @container">
+        <div className={LAYOUT_CLASS}>
+          <div className={ROWS_CLASS} data-match-rows>
+            {left.map((l, i) => {
+              const card = pairs[l.id];
+              const state = tileState(true, card === solution.get(l.id), card !== undefined);
+              return (
+                <div key={l.id} className="contents">
+                  <span className={clsx(LABEL_CLASS, 'border-transparent')}>{nb(l.text)}</span>
+                  <div>
+                    <div className={tileClass(state, false, 'px-md')}>
+                      {state === 'solution' ? <SolutionMark state={state} /> : <MarkRoom />}
+                      <span>
+                        {nb(cardText.get(card ?? '') ?? '')}
+                        <StateWords state={state} />
+                      </span>
+                    </div>
+                    {i === 0 && sizer}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-        {wrong.length > 0 && (
-          <div className="grid content-start gap-2xs text-option text-correct">
-            <p>{T.rightIs}</p>
-            {wrong.map((l) => (
-              <p key={l.id}>
-                {nb(l.text)}: {nb(cardText.get(solution.get(l.id) ?? '') ?? '')}
-              </p>
-            ))}
+              );
+            })}
           </div>
-        )}
+          {wrong.length > 0 && (
+            <div className="grid content-start gap-2xs text-option text-correct">
+              <p>{T.rightIs}</p>
+              {wrong.map((l) => (
+                <p key={l.id}>
+                  {nb(l.text)}: {nb(cardText.get(solution.get(l.id) ?? '') ?? '')}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -227,71 +262,77 @@ export function Match({
       onDragEnd={onDragEnd}
       onDragCancel={() => setDragging(null)}
     >
-      <div className={LAYOUT_CLASS}>
-        <div className={ROWS_CLASS}>
-          {left.map((l) => {
-            const card = pairs[l.id];
-            const active = selected?.side === 'left' && selected.id === l.id;
-            return (
-              <div key={l.id} className="contents">
-                <button
-                  type="button"
-                  aria-pressed={active}
-                  disabled={disabled}
-                  onClick={() => tapRow(l.id)}
-                  className={clsx(
-                    LABEL_CLASS,
-                    active ? 'border-signal-edge bg-signal-soft' : 'border-transparent',
-                  )}
-                >
-                  {nb(l.text)}
-                </button>
-                <Slot leftId={l.id} active={active}>
-                  {card === undefined ? (
-                    <button
-                      type="button"
-                      aria-label={`Feld für ${l.text}`}
-                      disabled={disabled}
-                      onClick={() => tapRow(l.id)}
-                      className={clsx(
-                        'block min-h-touch w-full rounded-control border-2 bg-paper',
-                        active || selected?.side === 'right'
-                          ? 'border-signal-edge'
-                          : 'border-dashed border-line-strong',
-                      )}
-                    />
-                  ) : (
-                    <Card
-                      id={card}
-                      state="plain"
-                      disabled={disabled}
-                      label={`${cardText.get(card) ?? ''}, bei ${l.text}`}
-                      onTap={() => tapRow(l.id)}
-                    >
-                      {nb(cardText.get(card) ?? '')}
-                    </Card>
-                  )}
-                </Slot>
-              </div>
-            );
-          })}
+      <div className="w-full @container">
+        <div className={LAYOUT_CLASS}>
+          <div className={ROWS_CLASS} data-match-rows>
+            {left.map((l, i) => {
+              const card = pairs[l.id];
+              const active = selected?.side === 'left' && selected.id === l.id;
+              return (
+                <div key={l.id} className="contents">
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    disabled={disabled}
+                    onClick={() => tapRow(l.id)}
+                    className={clsx(
+                      LABEL_CLASS,
+                      active ? 'border-signal-edge bg-signal-soft' : 'border-transparent',
+                    )}
+                  >
+                    {nb(l.text)}
+                  </button>
+                  <Slot leftId={l.id} active={active}>
+                    {card === undefined ? (
+                      <button
+                        type="button"
+                        aria-label={`Feld für ${l.text}`}
+                        disabled={disabled}
+                        onClick={() => tapRow(l.id)}
+                        className={clsx(
+                          'block min-h-touch w-full rounded-control border-2 bg-paper',
+                          active || selected?.side === 'right'
+                            ? 'border-signal-edge'
+                            : 'border-dashed border-line-strong',
+                        )}
+                      />
+                    ) : (
+                      <Card
+                        id={card}
+                        state="plain"
+                        disabled={disabled}
+                        label={`${cardText.get(card) ?? ''}, bei ${l.text}`}
+                        markRoom
+                        onTap={() => tapRow(l.id)}
+                      >
+                        {nb(cardText.get(card) ?? '')}
+                      </Card>
+                    )}
+                    {i === 0 && sizer}
+                  </Slot>
+                </div>
+              );
+            })}
+          </div>
+          <Pool>
+            {right
+              .filter((r) => !placed.has(r.id))
+              .map((r) => (
+                <div key={r.id} className="@match-beside:w-full">
+                  <Card
+                    id={r.id}
+                    disabled={disabled}
+                    state={
+                      selected?.side === 'right' && selected.id === r.id ? 'selected' : 'plain'
+                    }
+                    onTap={() => tapCard(r.id)}
+                  >
+                    {nb(r.text)}
+                  </Card>
+                </div>
+              ))}
+          </Pool>
         </div>
-        <Pool>
-          {right
-            .filter((r) => !placed.has(r.id))
-            .map((r) => (
-              <div key={r.id} className="landscape:w-full">
-                <Card
-                  id={r.id}
-                  disabled={disabled}
-                  state={selected?.side === 'right' && selected.id === r.id ? 'selected' : 'plain'}
-                  onTap={() => tapCard(r.id)}
-                >
-                  {nb(r.text)}
-                </Card>
-              </div>
-            ))}
-        </Pool>
       </div>
       <DragOverlay dropAnimation={null}>
         {dragging && (

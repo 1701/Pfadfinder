@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.15 – 2026-10-19
+- §4.4/§7 Deutsch: `match` mit `stimulus.textRef`: jeder Text in `left` höchstens 35 Zeichen (vorher 27), in `right` höchstens 52 (vorher 43). Grund ist der Umbau des match-Renderers nach dem iPad-Befund vom 19.10.: Das Zielfeld ist so breit wie die längste Karte mit Haken und Innenabstand, höchstens 60 %; die Zeile links bekommt den Rest und bricht ausgeglichen um (`text-wrap: balance`, ohne balance gleich gemessen). Ist der Antwortbereich schmaler als 48rem (neben dem Textkasten, im Hochformat), stehen die Karten unter den Zeilen. Sweep über d-lli-2-003 neben t-lit-002 in vier Viewports (links 9–53, rechts 18–59 Zeichen): links 39 dreizeilig auf dem iPad quer, rechts 59 nur 10 px Luft in Safari quer; bis 35/52 mindestens 39 px und keine Ein-Wort-Zeile. Der Validator warnt nur (`WITH_TEXT.match`). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.14 – 2026-10-19
 - §4.4/§7 Deutsch: `match` mit `stimulus.textRef`: jeder Text in `left` höchstens 27 Zeichen, in `right` höchstens 43. Gemessen nach dem Umbau des match-Renderers (Zeile links höchstens 40 %, Zielfeld mindestens 60 %, mit und ohne Textkasten) mit einem Sweep über d-lli-2-003 neben t-lit-002 in vier Viewports: links 35 Zeichen −1 px (Safari quer), rechts 52 Zeichen bei 23 links −3 px (iPad quer); bis 27/43 mindestens 21 px. Vor dem Umbau band die rechte Seite (rechts 23 Zeichen bei langen Sätzen links schon −17 px). Der Validator warnt nur (`WITH_TEXT.match`). Der jetzige Content ergibt keine Warnung. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 
