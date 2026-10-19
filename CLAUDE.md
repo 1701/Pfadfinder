@@ -44,9 +44,9 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 ## Definition of Done (je Aufgabe)
 1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`), nicht nur das Layout-Projekt
 2. Betroffene Tests ergänzt/aktualisiert
-3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, CI-Status (max. 10 Zeilen). CI-Status wird nach dem Push mit `gh run list --limit 1` gelesen und als Link eingetragen, nie aus einem früheren Eintrag übernommen. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
+3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --limit 1` lesen und als Link nennen, nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)
-5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
+5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), CI-Link, geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 
 ## Dependencies (Laufzeit, genehmigt)
 react, react-dom, react-router (Library-Modus), zustand, dexie, zod, @dnd-kit/core, @dnd-kit/sortable, clsx

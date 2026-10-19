@@ -1,6 +1,6 @@
 # PROGRESS
 
-Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
+Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
 ## 2026-10-19 – Klein-Paket Screenshots: normale Läufe schreiben nach tests/e2e/output/
 - **Entschieden (Markus):** Specs und `npm run screenshots` schreiben Screenshots, Budget-JSON und das Druck-PDF nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Nur mit `PFADFINDER_UPDATE_SCREENSHOTS=1` geht es ins versionierte `tests/e2e/screenshots/`, und zwar nur bei einer bewussten UI-Änderung, die im Abschlussbericht genannt wird. Abnahme: `git status` ist nach einem normalen Lauf sauber.

@@ -1,15 +1,45 @@
 name: CI
 
+# CI budget: docs, Markdown and versioned screenshots start no run at all. The check job always
+# runs; the e2e job runs fully for app, test and build-config changes, only the layout project
+# for content-only changes, and not at all otherwise (step "scope").
 on:
   push:
     branches: [main, master]
+    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**']
   pull_request:
+    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**']
+  # A manual run is always a full run.
+  workflow_dispatch:
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    outputs:
+      e2e: ${{ steps.scope.outputs.e2e }}
     steps:
       - uses: actions/checkout@v4
+      - name: Scope of e2e (full, layout or none)
+        id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          scope=full
+          if [ "$EVENT" != workflow_dispatch ] && [ -n "$BASE" ] && [ "$BASE" != 0000000000000000000000000000000000000000 ] \
+            && git fetch --quiet --depth=1 origin "$BASE"; then
+            changed=$(git diff --name-only "$BASE" HEAD | grep -v '^tests/e2e/screenshots/' || true)
+            echo "$changed"
+            if echo "$changed" | grep -qE '^(src/|tests/|vite\.config\.ts$|playwright\.config\.ts$|package(-lock)?\.json$)'; then
+              scope=full
+            elif echo "$changed" | grep -q '^content/'; then
+              scope=layout
+            else
+              scope=none
+            fi
+          fi
+          echo "e2e: $scope"
+          echo "e2e=$scope" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -28,16 +58,28 @@ jobs:
     # Playwright ships WebKit's system libraries only for Ubuntu/Debian; the iPad target needs it.
     runs-on: ubuntu-latest
     needs: check
+    if: needs.check.outputs.e2e != 'none'
+    env:
+      SCOPE: ${{ needs.check.outputs.e2e }}
     steps:
+      - name: Screenshot switch is never set in CI
+        run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium webkit
-      - name: E2E (Chromium + WebKit, iPad landscape/portrait, layout)
-        run: npm run e2e
+      - name: Install browsers
+        run: |
+          if [ "$SCOPE" = layout ]; then npx playwright install --with-deps chromium
+          else npx playwright install --with-deps chromium webkit; fi
+      - name: E2E (full; content only → layout project, Safari viewports)
+        run: |
+          if [ "$SCOPE" = layout ]; then npx playwright test --project=layout
+          else npm run e2e; fi
+      - name: Versioned screenshots untouched
+        run: git diff --exit-code --stat -- tests/e2e/screenshots
       - uses: actions/upload-artifact@v4
         if: always()
         with:
