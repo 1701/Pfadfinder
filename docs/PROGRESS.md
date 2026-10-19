@@ -9,6 +9,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Tests:** Zwei Vorlese-Tests in `Angebot`. Die Gegenprobe mit dem alten Satz war 2/2 rot. Dazu Intro Deutsch (15 Minuten) und die neuen Texte in Unit- und E2E-Tests. Screenshots `karte-angebot-*` und `einstieg-intro(-deutsch)-*` sind neu und angesehen.
 - **Zur Entscheidung:** „Unerforscht“ heißt auf der Karte bisher „noch keine Aufgaben“ (gestrichelt, z. B. Muster und Zahlenfolgen). Die Überschrift nutzt das Wort jetzt für „noch nicht erkundet“, während die Gebiete darunter schon wählbar sind.
 - **Nicht committet:** die übrigen von den Läufen neu geschriebenen Screenshots (start, eltern, impressum, item-*, …).
+- **CI:** [CI #39262500692](https://github.com/1701/Pfadfinder/actions/runs/39262500692) grün (fa9a705…c555cd9), Workers Builds grün; 955 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout `einstieg-layout`/`karte`/`blatt-layout` 13/13 (zweimal).
 
 ## 2026-10-19 – formate.spec und probetest-layout.spec warten auf den lazy Renderer
 - **Entschieden (Markus):** m-gm-1-004 (−15 bis −31 px) und das Wort-für-Wort-Label bei d-lli-2-003 bleiben so.
