@@ -351,12 +351,12 @@
     "stimulus": {
       "textRef": "t-lit-002"
     },
-    "prompt": "Ordne jedem Satz zu, was er über Lina zeigt. Eine Erklärung bleibt übrig.",
+    "prompt": "Was zeigt jeder Satz über Lina? Eine Erklärung bleibt übrig.",
     "payload": {
       "left": [
         {
           "id": "l1",
-          "text": "„Nein“, sagt Lina. Das stimmt fast."
+          "text": "Das stimmt fast."
         },
         {
           "id": "l2",
@@ -370,19 +370,19 @@
       "right": [
         {
           "id": "r1",
-          "text": "Sie hat ein bisschen Angst."
+          "text": "ein bisschen Angst"
         },
         {
           "id": "r2",
-          "text": "Sie hat große Angst."
+          "text": "große Angst"
         },
         {
           "id": "r3",
-          "text": "Sie ist nicht mehr ängstlich."
+          "text": "keine Angst mehr"
         },
         {
           "id": "r4",
-          "text": "Sie friert."
+          "text": "sie friert"
         }
       ]
     },
@@ -404,7 +404,7 @@
     },
     "feedback": {
       "correct": "Richtig! Die Angst wächst und verschwindet am Ende.",
-      "incorrect": "Lies jeden Satz mit dem Satz davor. Was fühlt Lina in dem Moment?",
+      "incorrect": "Lies jeden Satz mit dem Satz davor. Was fühlt Lina gerade?",
       "misconception": "Die Hand zittert vor Angst, nicht vor Kälte."
     },
     "tags": [
