@@ -7,6 +7,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Gebaut:** `regionLabel` in `Karte.tsx` (nur aria-label, sichtbar ändert sich nichts), `Karte.test` angepasst, Kommentar `KartenView` und PRODUCT §5.4 nachgezogen.
 - **Gemessen (hoch, 768 px, Zeilenende Mathe/Deutsch):** mit `gap-md` 698/723 px, 45 px Rand bei Deutsch (vorher 37 mit „Wo geht’s …“). Quer 326/301 px Rand. Kleinste Namen unverändert. `karte-angebot-budget-*.json` und `karte-angebot-*` neu.
 - **Nicht committet:** die übrigen von den Läufen neu geschriebenen Screenshots.
+- **CI:** [CI #39269459191](https://github.com/1701/Pfadfinder/actions/runs/39269459191) grün (be7cd4f), Workers Builds grün; 955 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Chromium-Projekte 37/37, Layout `einstieg-layout`/`karte`/`blatt-layout` 13/13.
 
 ## 2026-10-19 – Klein-Paket Einstiegsangebot: „Unerforscht: Mathe“, „Erkunden“, „Wir erkunden …“
 - **Entschieden (Markus):** Messstufen hoch: 1 „… ist noch unerforscht.“, 2 `gap-md` → `gap-sm`, 3 „Noch unerforscht: …“, 4 „Unerforscht: …“, 5 Stopp. Intro „Wir erkunden Mathe.“ / „… Deutsch.“ mit „Ein paar Aufgaben zeigen, wo du startest.“ plus 10 Minuten (Mathe) bzw. 15 Minuten (Deutsch: zwölf Aufgaben, zwei Texte). Vorlesen wie bisher, mit „Tippe auf Erkunden“; ohne offene Gebiete fällt der Nebensatz weg. CLAUDE.md: Rückfragen und Berichte auf Deutsch.
