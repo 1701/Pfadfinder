@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.14 – 2026-10-19
+- §4.4/§7 Deutsch: `match` mit `stimulus.textRef`: jeder Text in `left` höchstens 27 Zeichen, in `right` höchstens 43. Gemessen nach dem Umbau des match-Renderers (Zeile links höchstens 40 %, Zielfeld mindestens 60 %, mit und ohne Textkasten) mit einem Sweep über d-lli-2-003 neben t-lit-002 in vier Viewports: links 35 Zeichen −1 px (Safari quer), rechts 52 Zeichen bei 23 links −3 px (iPad quer); bis 27/43 mindestens 21 px. Vor dem Umbau band die rechte Seite (rechts 23 Zeichen bei langen Sätzen links schon −17 px). Der Validator warnt nur (`WITH_TEXT.match`). Der jetzige Content ergibt keine Warnung. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.13 – 2026-10-18
 - §4.1/§4.2/§4.5/§4.9/§7 Deutsch: Grenzen für Items mit `stimulus.textRef`, festgelegt von Markus nach `text-inhalt-*.json` (`text-layout.spec`, Batch lesen-sachtext und Patches 1–2, vier Viewports) und der Fixture t-sach-900: `order` höchstens 4 Elemente zu je 30 Zeichen; `short-answer` `model` höchstens 90 Zeichen, höchstens 2 `keyPoints`, `feedback.incorrect` und `feedback.misconception` zusammen höchstens 150 Zeichen; `single-choice` mit zusätzlichem `stimulus.text` höchstens 3 Optionen; `multi-choice` mit 5 Optionen nur bei `prompt` bis 60 Zeichen. Befunde davor: d-lsa-2-004 mit 5 Elementen −14 px (hoch), d-lsa-3-001 mit 111 Zeichen und 3 Kernpunkten −8 px (hoch, vergleichen), d-lsa-3-002 mit 176 Zeichen Rückmeldung −20 px (Safari quer, noch nicht), d-lsa-2-003 mit 4 Optionen und Zitat 2 px, d-lsa-2-001 mit 5 Optionen und 99 Zeichen Prompt 17 px. Der Validator warnt nur (`WITH_TEXT`). Fixture t-sach-900 dafür gekürzt (d-lsa-2-951 Prompt 62 → 52, d-lsa-3-950 `model` 93 → 89 Zeichen). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 

@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.13 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.14 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -127,6 +127,7 @@ solution: { value: number; tolerance?: number }                           // tol
 payload:  { left: { id: string; text: string }[]; right: { id: string; text: string }[] }  // 3–5 Paare, right darf 1 Distraktor enthalten
 solution: { pairs: [leftId: string, rightId: string][] }
 ```
+Mit `stimulus.textRef` (seit 1.0.14): jeder Text in `left` höchstens 27 Zeichen, jeder in `right` höchstens 43. Die App gibt der Zeile links höchstens 40 % und dem Zielfeld den Rest; ein längerer Satz links bricht in mehr Zeilen um, eine längere Erklärung rechts macht das Feld höher. Gemessen an d-lli-2-003 neben t-lit-002: links 35 Zeichen ließen Safari quer −1 px Luft, rechts 52 Zeichen bei 23 links iPad quer −3 px; bis 27/43 blieben in allen vier Viewports mindestens 21 px. Der Validator warnt.
 
 ### 4.5 `order`
 ```ts
@@ -212,7 +213,7 @@ Regeln:
 
 **Deutsch**
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
-- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 90 Zeichen, höchstens 2 `keyPoints` und Rückmeldung (incorrect + misconception) bis 150 Zeichen (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1), `multi-choice` mit 5 Optionen nur bei `prompt` bis 60 Zeichen (§4.2). Grundlage ist die Luft über dem Band in allen vier Viewports (mindestens 18 px); darüber ist nichts gemessen. Der Validator warnt nur
+- Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 90 Zeichen, höchstens 2 `keyPoints` und Rückmeldung (incorrect + misconception) bis 150 Zeichen (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1), `multi-choice` mit 5 Optionen nur bei `prompt` bis 60 Zeichen (§4.2), `match` mit höchstens 27 Zeichen links und 43 rechts (§4.4). Grundlage ist die Luft über dem Band in allen vier Viewports (mindestens 18 px); darüber ist nichts gemessen. Der Validator warnt nur
 - Rechtschreibung nur mit Grundschul-Regelwissen lösbar (Verlängern, Ableiten, Silben, Wortbausteine, Groß-/Kleinschreibung); keine Ausnahmewörter als Fehlerquelle
 - `find-error` enthält pro Satz nur Fehlertypen eines Bereichs
 

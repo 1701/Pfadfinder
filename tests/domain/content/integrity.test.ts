@@ -9,6 +9,7 @@ import {
 import {
   findError,
   markInText,
+  match,
   multiChoice,
   numberInput,
   order,
@@ -219,7 +220,7 @@ describe('validateContent – mark-in-text beside a reading text (1.0.11)', () =
   });
 });
 
-describe('validateContent – other formats beside a reading text (1.0.13)', () => {
+describe('validateContent – other formats beside a reading text (1.0.13, match 1.0.14)', () => {
   /** The item in lesen-sachtext beside t-sach-901 (or without a text); returns the issues. */
   function besideText(item: Item, textRef = true) {
     const text = structuredClone(sachtext);
@@ -296,6 +297,20 @@ describe('validateContent – other formats beside a reading text (1.0.13)', () 
     // With 4 options a long prompt is fine.
     probe.payload.options = probe.payload.options.filter((o) => o.id !== 'e');
     expect(besideText(probe)).toEqual([]);
+  });
+
+  it('match (1.0.14): left at most 27, right at most 43 characters', () => {
+    const probe = structuredClone(match);
+    probe.payload.left[0] = { ...probe.payload.left[0]!, text: chars(27) };
+    probe.payload.right[3] = { ...probe.payload.right[3]!, text: chars(43) };
+    expect(besideText(probe)).toEqual([]);
+    probe.payload.left[2] = { ...probe.payload.left[2]!, text: chars(28) };
+    probe.payload.right[1] = { ...probe.payload.right[1]!, text: chars(44) };
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.left[2].text', message: expect.stringContaining('hier 28') }),
+      expect.objectContaining({ severity: 'warning', path: 'payload.right[1].text', message: expect.stringContaining('hier 44') }),
+    ]);
+    expect(besideText(probe, false)).toEqual([]);
   });
 
   it('single-choice: 4 options are fine, with a stimulus text only 3', () => {

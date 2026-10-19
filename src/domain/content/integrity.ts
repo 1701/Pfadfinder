@@ -70,9 +70,9 @@ const WORD_COUNT_TOLERANCE = 10;
  */
 export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
 /**
- * Other formats beside a reading text (1.0.13): limits set on 2026-10-18 from the air above the
- * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches; fixture
- * t-sach-900). Beyond them nothing has been measured.
+ * Other formats beside a reading text (1.0.13, match 1.0.14): limits set from the air above the
+ * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches, 2026-10-18;
+ * fixture t-sach-900). Beyond them nothing has been measured.
  */
 export const WITH_TEXT = {
   order: { maxItems: 4, maxItemChars: 30 },
@@ -80,6 +80,11 @@ export const WITH_TEXT = {
   singleChoice: { maxOptionsWithStimulusText: 3 },
   /** 5 options only with a short prompt (multi-choice has 4–5 options). */
   multiChoice: { maxPromptCharsWithFiveOptions: 60 },
+  /**
+   * 1.0.14, measured after the label column was capped at 40 % (2026-10-19, sweep on
+   * d-lli-2-003): a longer label wraps to more lines, a longer card makes the slot taller.
+   */
+  match: { maxLeftChars: 27, maxRightChars: 43 },
 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
@@ -425,6 +430,22 @@ function withTextFindings(item: Item): [string, string][] {
         `multi-choice mit Lesetext und 5 Optionen: prompt höchstens ${max} Zeichen, hier ${item.prompt.length}`,
         'prompt',
       ]);
+    }
+  }
+  if (item.format === 'match') {
+    const { maxLeftChars, maxRightChars } = WITH_TEXT.match;
+    for (const [side, max] of [
+      ['left', maxLeftChars],
+      ['right', maxRightChars],
+    ] as const) {
+      item.payload[side].forEach((entry, i) => {
+        if (entry.text.length > max) {
+          findings.push([
+            `match mit Lesetext: ${side} höchstens ${max} Zeichen, hier ${entry.text.length}`,
+            `payload.${side}[${i}].text`,
+          ]);
+        }
+      });
     }
   }
   if (item.format === 'single-choice' && item.stimulus?.text !== undefined) {
