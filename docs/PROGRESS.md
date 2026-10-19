@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – formate.spec und probetest-layout.spec warten auf den lazy Renderer
+- **Entschieden (Markus):** m-gm-1-004 (−15 bis −31 px) und das Wort-für-Wort-Label bei d-lli-2-003 bleiben so.
+- **Gebaut:** Beide Specs maßen, sobald Überschrift bzw. Band stand; jetzt warten sie wie `layout.spec`/`text-layout.spec`, bis kein Suspense-Platzhalter (`aria-busy`) im Antwortbereich steht.
+- **Gemessen:** zwei Läufe, `probetest-budget-*.json` byte-gleich. Safari quer unverändert 33 / 52 / 44 / 94 px (Aufgabe, Durchsehen, fehlt, vergleichen), auch iPad quer. Hoch ist „fehlt“ jetzt m-gm-1-004 (Safari hoch 155 → 140, iPad hoch 279 → 264 px): Folge der match-Spalte (9ffe452), nicht der Wartebedingung. Budgets und die zwei `probetest-fehlt-knappstes-*`-Screenshots hoch committet.
+- **CI:** [CI #39253831163](https://github.com/1701/Pfadfinder/actions/runs/39253831163) grün (f0efd31), Workers Builds grün; 947 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, `formate` + `probetest-layout` 14/14 (zweimal).
+
 ## 2026-10-19 – match-Renderer: Zeile links ≤ 40 %, Schema 1.0.14
 - **Gebaut:** `Match.tsx` Zeilen `fit-content(40 % − Abstand)` + Rest (≥ 60 %), mit und ohne Textkasten; kurze Labels bleiben schmal, lange brechen um. `matchProblems` (helpers) in `layout.spec` (alle Items) und `text-layout.spec` (Lesetexte): Label ≤ 40 %, kein Text und kein Haken außerhalb von Label oder Feld. Gegenprobe mit alter Spalte: beide rot (d-lli-2-003, m-dz-2-008, m-gm-1-004). Schema 1.0.14: match mit `textRef` links ≤ 27, rechts ≤ 43 Zeichen (Validator-Warnung, Test mit Gegenprobe, CONTENT_SCHEMA §4.4/§7, CHANGELOG).
 - **Abnahme:** d-lli-2-003 Safari quer 42 → 58 px (richtig 44 → 68), Feld 28 → 60 %, rechts 2 Zeilen statt 3, nichts ragt heraus. d-lsa-2-005, d-rsl-2-006, d-rss-1-006, d-rss-2-005, m-rf-1-004, m-zo-1-009 in vier Viewports unverändert; m-dz-2-008 quer +8 px, hoch −15. **Abweichung:** m-gm-1-004 verliert 15–31 px (Safari quer 116 → 85), weil seine Labels (25 Zeichen) jetzt zweizeilig sind; folgt aus „Label ≤ 40 %“.
