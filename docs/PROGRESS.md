@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – Nachtrag Einstiegsangebot: „noch keine Aufgaben“, gap-md zurück
+- **Entschieden (Markus):** Gestrichelte Gebiete heißen für Screenreader „…, noch keine Aufgaben“. „Unerforscht“ bleibt für das Angebot. Vorlesen ohne offene Gebiete bleibt, wie es ist. Der Angebots-Header bekommt wieder `gap-md`.
+- **Gebaut:** `regionLabel` in `Karte.tsx` (nur aria-label, sichtbar ändert sich nichts), `Karte.test` angepasst, Kommentar `KartenView` und PRODUCT §5.4 nachgezogen.
+- **Gemessen (hoch, 768 px, Zeilenende Mathe/Deutsch):** mit `gap-md` 698/723 px, 45 px Rand bei Deutsch (vorher 37 mit „Wo geht’s …“). Quer 326/301 px Rand. Kleinste Namen unverändert. `karte-angebot-budget-*.json` und `karte-angebot-*` neu.
+- **Nicht committet:** die übrigen von den Läufen neu geschriebenen Screenshots.
+
 ## 2026-10-19 – Klein-Paket Einstiegsangebot: „Unerforscht: Mathe“, „Erkunden“, „Wir erkunden …“
 - **Entschieden (Markus):** Messstufen hoch: 1 „… ist noch unerforscht.“, 2 `gap-md` → `gap-sm`, 3 „Noch unerforscht: …“, 4 „Unerforscht: …“, 5 Stopp. Intro „Wir erkunden Mathe.“ / „… Deutsch.“ mit „Ein paar Aufgaben zeigen, wo du startest.“ plus 10 Minuten (Mathe) bzw. 15 Minuten (Deutsch: zwölf Aufgaben, zwei Texte). Vorlesen wie bisher, mit „Tippe auf Erkunden“; ohne offene Gebiete fällt der Nebensatz weg. CLAUDE.md: Rückfragen und Berichte auf Deutsch.
 - **Gemessen (iPad hoch, 768 px, Zeilenende Mathe/Deutsch):** Stufe 1 824/849, Stufe 2 812/837, Stufe 3 768/793, Stufe 4 686/711 px. Gebaut ist Stufe 4 mit `gap-sm`, für beide Fächer und alle Viewports, 57 px Rand bei Deutsch (vorher 37). Kleinste Namen unverändert (23,4 / 22,5 / 19,1 px). `karte-angebot-budget-*.json` war in zwei Läufen byte-gleich.

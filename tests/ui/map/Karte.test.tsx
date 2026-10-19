@@ -77,7 +77,9 @@ describe('Karte', () => {
 
   it('shows unexplored Gebiete without a link and without a tab stop', () => {
     renderMap();
-    const blank = within(wide()).getByRole('img', { name: 'Daten und Zufall, noch unerforscht' });
+    const blank = within(wide()).getByRole('img', {
+      name: 'Daten und Zufall, noch keine Aufgaben',
+    });
     expect(blank.closest('a')).toBeNull();
     expect(blank.querySelector('[tabindex]')).toBeNull();
     expect(within(wide()).getAllByRole('img')).toHaveLength(5);
@@ -116,7 +118,9 @@ describe('Karte', () => {
     const rf = within(wide()).getByRole('link', { name: 'Formen und Raum, Niveau 3, gemeistert' });
     expect(rf.querySelector('[data-plate]')!.getAttribute('class')).toBe('fill-land');
     // Blank spots have no contour lines, so their names need no sign.
-    const blank = within(wide()).getByRole('img', { name: 'Daten und Zufall, noch unerforscht' });
+    const blank = within(wide()).getByRole('img', {
+      name: 'Daten und Zufall, noch keine Aufgaben',
+    });
     expect(blank.querySelector('[data-plate]')).toBeNull();
     for (const text of wide().querySelectorAll('text')) {
       expect(text.getAttribute('paint-order')).toBeNull();
@@ -148,7 +152,7 @@ describe('Karte', () => {
     expect(screen.getByTestId('where').textContent).toBe('/ueben/mathe/raum-form');
   });
 
-  it('names a dashed Gebiet "noch unerforscht"; no legend on the map (task 11)', () => {
+  it('names a dashed Gebiet "noch keine Aufgaben"; no legend on the map (task 11)', () => {
     renderMap();
     const map = wide();
     expect(
@@ -156,11 +160,11 @@ describe('Karte', () => {
         .getAllByRole('img')
         .map((g) => g.getAttribute('aria-label')),
     ).toEqual([
-      'Daten und Zufall, noch unerforscht',
-      'Muster und Zahlenfolgen, noch unerforscht',
-      'Sachtexte lesen, noch unerforscht',
-      'Geschichten lesen, noch unerforscht',
-      'Laute und Buchstaben, noch unerforscht',
+      'Daten und Zufall, noch keine Aufgaben',
+      'Muster und Zahlenfolgen, noch keine Aufgaben',
+      'Sachtexte lesen, noch keine Aufgaben',
+      'Geschichten lesen, noch keine Aufgaben',
+      'Laute und Buchstaben, noch keine Aufgaben',
     ]);
     expect(screen.queryByText(/Gestrichelt/)).toBeNull();
   });
@@ -184,8 +188,8 @@ describe('one island as a picture (Einstieg result)', () => {
       'Zahlen und Rechnen, Niveau 2',
       'Formen und Raum, Niveau 3, gemeistert',
       'Größen und Messen, Niveau 1',
-      'Daten und Zufall, noch unerforscht',
-      'Muster und Zahlenfolgen, noch unerforscht',
+      'Daten und Zufall, noch keine Aufgaben',
+      'Muster und Zahlenfolgen, noch keine Aufgaben',
     ]);
     expect(map.textContent).toContain('Mathe');
     expect(map.textContent).not.toContain('Deutsch');

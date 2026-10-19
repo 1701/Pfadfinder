@@ -1,11 +1,12 @@
 // The start page: title with Vorlesen, Tagesziel, the map filling the rest of the screen, and one
 // line below it. No scrolling on any iPad viewport. There is no legend of the blank spots (task
-// 11): a dashed Gebiet says "noch unerforscht" in its name for screen readers (Karte).
+// 11): a dashed Gebiet says "noch keine Aufgaben" in its name for screen readers (Karte);
+// "Unerforscht" belongs to the offer.
 // While the Einstieg is offered, "Unerforscht: Mathe" is the title, with "Erkunden" and "Später"
 // beside it, and the Tagesziel steps aside (it could only say "0 von 10"): the map keeps its full
 // size. Measured in portrait (768 px, 2026-10-19), end of the row Mathe/Deutsch: "… ist noch
 // unerforscht." 824/849, with gap-sm 812/837, "Noch unerforscht: …" 768/793, "Unerforscht: …"
-// 686/711. Hence the short title and gap-sm.
+// 686/711 with gap-sm and 698/723 with gap-md. Hence the short title, with gap-md.
 // A Fach with a Probetest gets a quiet line "Probetest Mathe" at the left of the legend line,
 // right below the Mathe island in landscape; in portrait the water between the islands is too
 // narrow for a 48 px target (measured 2026-10-15), so it stays in the same line.
@@ -70,7 +71,7 @@ export function KartenView({
     >
       <header className="flex flex-wrap items-center justify-between gap-x-lg gap-y-xs">
         {offer ? (
-          <div className="flex items-center gap-sm">
+          <div className="flex items-center gap-md">
             {readAloud && progress && <VorlesenButton text={speech(progress, offer.fach)} />}
             <h1 className="text-heading font-bold whitespace-nowrap">{offerTitle(offer.fach)}</h1>
             <Link

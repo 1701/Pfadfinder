@@ -44,7 +44,7 @@ export interface KarteProps {
 /** Name for screen readers: "Zahlen und Rechnen, Niveau 2". */
 export function regionLabel(bereich: Bereich, state: RegionState): string {
   const name = BEREICH_NAME[bereich];
-  if (state.kind === 'unerforscht') return `${name}, noch unerforscht`;
+  if (state.kind === 'unerforscht') return `${name}, noch keine Aufgaben`;
   return `${name}, Niveau ${state.niveau}${state.kind === 'gemeistert' ? ', gemeistert' : ''}`;
 }
 
