@@ -54,6 +54,9 @@ async function openItem(page: Page, url: string) {
     await page.goto(url);
     await band.waitFor();
   }
+  // The lazy renderers (match, order, …) show a Suspense fallback (aria-busy) first; measuring it
+  // would see its 48 px instead of the task (CI run 39239177965: "match rows missing").
+  await expect(page.locator('[data-region="answer"] [aria-busy="true"]')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
 }
 
