@@ -1,5 +1,5 @@
 // Primary = the yellow trail-mark button for the next step on the way: Prüfen and Weiter, and in
-// the Einstieg Los, Starten, Weitermachen and Zur Karte after the result (wireframes approved
+// the Einstieg Erkunden, Starten, Weitermachen and Zur Karte after the result (wireframes approved
 // 2026-10-14). Secondary = quiet outline for everything else.
 
 import clsx from 'clsx';

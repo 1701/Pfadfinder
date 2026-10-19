@@ -1,16 +1,26 @@
 // Everything a child reads in the Einstiegscheck (PRODUCT.md §5.4). Never "Test" and never
-// "Check": the words are about the journey. Offer and intro always name the Fach (task 12).
+// "Check": the words are about exploring. Offer and intro always name the Fach (task 12).
 
 import { FAECHER, type Fach } from '../../domain/content/taxonomy';
-import { FACH_NAME } from './bereiche';
+import { BEREICH_NAME, FACH_NAME } from './bereiche';
 
-export const offerTitle = (fach: Fach) => `Wo geht’s in ${FACH_NAME[fach]} los?`;
-export const OFFER_GO = 'Los';
+// The title stays short: "Mathe ist noch unerforscht." and "Noch unerforscht: Deutsch" did not
+// fit beside Erkunden and Später in portrait (measured 2026-10-19, see KartenView).
+export const offerTitle = (fach: Fach) => `Unerforscht: ${FACH_NAME[fach]}`;
+export const OFFER_GO = 'Erkunden';
 export const OFFER_LATER = 'Später';
+/** Vorlesen on the map: the title (with a full stop for the pause), the yellow button, then the
+ * open Gebiete, if any. */
+export const offerSpeech = (fach: Fach, openGebiete: readonly string[]) =>
+  openGebiete.length > 0
+    ? `${offerTitle(fach)}. Tippe auf ${OFFER_GO}, oder wähle gleich ein Gebiet: ${openGebiete.join(', ')}.`
+    : `${offerTitle(fach)}. Tippe auf ${OFFER_GO}.`;
 
-export const introTitle = (fach: Fach) =>
-  `Wir schauen, wo deine Reise in ${FACH_NAME[fach]} losgeht.`;
-export const INTRO_TEXT = 'Das dauert etwa 10 Minuten.';
+export const introTitle = (fach: Fach) => `Wir erkunden ${FACH_NAME[fach]}.`;
+/** Deutsch takes longer: twelve questions plus two reading texts. */
+const INTRO_MINUTES: Record<Fach, number> = { mathe: 10, deutsch: 15 };
+export const introText = (fach: Fach) =>
+  `Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa ${INTRO_MINUTES[fach]} Minuten.`;
 export const START = 'Starten';
 
 export const PAUSE_TEXT = 'Wenn du jetzt gehst, fangen wir nächstes Mal von vorn an.';
@@ -29,8 +39,10 @@ export const EINSTIEG_TEXTS = [
   ...FAECHER.map(offerTitle),
   OFFER_GO,
   OFFER_LATER,
+  ...FAECHER.map((fach) => offerSpeech(fach, [])),
+  ...FAECHER.map((fach) => offerSpeech(fach, Object.values(BEREICH_NAME))),
   ...FAECHER.map(introTitle),
-  INTRO_TEXT,
+  ...FAECHER.map(introText),
   START,
   PAUSE_TEXT,
   CONTINUE,

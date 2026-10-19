@@ -21,7 +21,7 @@ import { SUPPORTED_FORMATS } from '../formats/supported';
 import {
   CONTINUE,
   EMPTY_TEXT,
-  INTRO_TEXT,
+  introText,
   introTitle,
   PAUSE_TEXT,
   START,
@@ -79,7 +79,7 @@ export function EinstiegIntro(props: {
       // The empty way ahead, without a number: how long it is, before it begins.
       right={<Wegstriche total={props.total} done={0} />}
       title={introTitle(props.fach)}
-      text={INTRO_TEXT}
+      text={introText(props.fach)}
       readAloud={props.readAloud}
       actions={
         <>

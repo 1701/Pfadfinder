@@ -15,8 +15,8 @@ const VIEWPORTS = [
   { name: 'safari-portrait', width: 768, height: 900 },
 ];
 const ZUSTAENDE = ['intro', 'intro-deutsch', 'aufgabe', 'pause', 'ergebnis', 'hinweis'] as const;
-/** What the offer asks, per Fach (src/ui/text/einstieg.ts). */
-const OFFER_TITLE = (fach: string) => `Wo geht’s in ${fach} los?`;
+/** The offer's title, per Fach (src/ui/text/einstieg.ts). */
+const OFFER_TITLE = (fach: string) => `Unerforscht: ${fach}`;
 
 async function measure(page: Page) {
   await page.evaluate(() => document.fonts.ready);
@@ -97,7 +97,7 @@ for (const viewport of VIEWPORTS) {
         (await page.getByRole(role, { name, exact: true }).boundingBox())!;
       const boxes = await Promise.all([
         box(title, 'heading'),
-        box('Los', 'link'),
+        box('Erkunden', 'link'),
         box('Später', 'button'),
       ]);
       const row = boxes.map((b) => b.y + b.height / 2);
@@ -107,7 +107,7 @@ for (const viewport of VIEWPORTS) {
       expect(m.overflowX, `${label}: page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.smallestName, `${label}: names below 18 px`).toBeGreaterThanOrEqual(18);
       expect(m.smallestTarget, `${label}: target below 48 px`).toBeGreaterThanOrEqual(48);
-      // One header row: question, Los and Später side by side, no Tagesziel, inside the page.
+      // One header row: title, Erkunden and Später side by side, no Tagesziel, inside the page.
       expect(Math.max(...row) - Math.min(...row), `${label}: header wraps`).toBeLessThan(12);
       expect(right, `${label}: header leaves the page`).toBeLessThanOrEqual(viewport.width);
       await expect(page.getByText(/Fundstücken/)).toHaveCount(0);

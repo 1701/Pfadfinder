@@ -3,13 +3,16 @@ import '../dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import manifest from '../../../content/manifest.json';
 import type { ContentManifest } from '../../../src/domain/content/manifest';
 import { loadMapProgress, postponeOffer } from '../../../src/data/map-progress';
 import { createMemoryRepositories } from '../../../src/data/memory/repos';
 import type { Repositories } from '../../../src/data/repos';
+import { BEREICHE, type Bereich } from '../../../src/domain/content/taxonomy';
+import type { RegionState } from '../../../src/domain/progress';
 import { KartenScreen, type MapProgressSource } from '../../../src/ui/map/KartenScreen';
+import { KartenView } from '../../../src/ui/map/KartenView';
 import { SUPPORTED_FORMATS } from '../../../src/ui/formats/supported';
 import { masteryFor } from '../../fixtures/pool';
 
@@ -48,10 +51,12 @@ function renderStored(repos: Repositories, now: () => string) {
 }
 
 describe('Einstieg offer on the map', () => {
-  it('makes the question the title, with Los and Später, and sets the Tagesziel aside', async () => {
+  it('makes the Fach the title, with Erkunden and Später, and sets the Tagesziel aside', async () => {
     renderScreen();
-    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Mathe los?' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe('/einstieg/mathe');
+    expect(await screen.findByRole('heading', { name: 'Unerforscht: Mathe' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Erkunden' }).getAttribute('href')).toBe(
+      '/einstieg/mathe',
+    );
     expect(screen.getByRole('button', { name: 'Später' })).toBeTruthy();
     expect(screen.queryByText(/Fundstücken/)).toBeNull();
     expect(screen.queryByRole('heading', { name: 'Wohin geht’s heute?' })).toBeNull();
@@ -71,13 +76,13 @@ describe('Einstieg offer on the map', () => {
     now = '2026-10-14T21:59:00.000Z';
     const second = renderStored(repos, () => now);
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: /^Wo geht’s in / })).toBeNull();
+    expect(screen.queryByRole('heading', { name: /^Unerforscht: / })).toBeNull();
     second.unmount();
 
     // The next morning it is back.
     now = '2026-10-15T06:00:00.000Z';
     renderStored(repos, () => now);
-    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Mathe los?' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Unerforscht: Mathe' })).toBeTruthy();
   });
 
   it('"Später" rests the day for every Fach: Deutsch only comes the next morning', async () => {
@@ -98,13 +103,13 @@ describe('Einstieg offer on the map', () => {
     now = '2026-10-14T16:00:00.000Z';
     const second = renderStored(repos, () => now);
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
     second.unmount();
 
     now = '2026-10-15T06:00:00.000Z';
     renderStored(repos, () => now);
-    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Deutsch los?' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
+    expect(await screen.findByRole('heading', { name: 'Unerforscht: Deutsch' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Erkunden' }).getAttribute('href')).toBe(
       '/einstieg/deutsch',
     );
   });
@@ -112,18 +117,18 @@ describe('Einstieg offer on the map', () => {
   it('never replaces the Tagesziel line: no offer once today has a Fundstück', async () => {
     const first = renderScreen({ ...NEW, today: { count: 3, goal: 10, reached: false } });
     expect(await screen.findByText('Heute: 3 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
     first.unmount();
 
     renderScreen({ ...NEW, today: { count: 10, goal: 10, reached: true } });
     expect(await screen.findByText(/10 von 10/)).toBeTruthy();
-    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
   });
 
   it('offers nothing on a day whose offer is spent (a finished Einstieg)', async () => {
     renderScreen({ ...NEW, mastery: [masteryFor('daten-zufall', 1)], offerSpent: true });
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('link', { name: 'Los' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
   });
 
   it('hides the offer at once even when "Später" cannot be stored', async () => {
@@ -143,8 +148,8 @@ describe('Einstieg offer on the map', () => {
 
   it('moves on to Deutsch once Mathe has a mastery state (after the check or after practice)', async () => {
     renderScreen({ ...NEW, mastery: [masteryFor('daten-zufall', 1)] });
-    expect(await screen.findByRole('heading', { name: 'Wo geht’s in Deutsch los?' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Los' }).getAttribute('href')).toBe(
+    expect(await screen.findByRole('heading', { name: 'Unerforscht: Deutsch' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Erkunden' }).getAttribute('href')).toBe(
       '/einstieg/deutsch',
     );
   });
@@ -155,6 +160,54 @@ describe('Einstieg offer on the map', () => {
       mastery: [masteryFor('daten-zufall', 1), masteryFor('rs-strategien', 1, 'deutsch')],
     });
     expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: /^Wo geht’s in / })).toBeNull();
+    expect(screen.queryByRole('heading', { name: /^Unerforscht: / })).toBeNull();
+  });
+
+  describe('Vorlesen', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    function installSpeech() {
+      const synth = { speak: vi.fn(), cancel: vi.fn(), getVoices: () => [] };
+      vi.stubGlobal('speechSynthesis', synth);
+      vi.stubGlobal(
+        'SpeechSynthesisUtterance',
+        class {
+          lang = '';
+          rate = 1;
+          constructor(public text: string) {}
+        },
+      );
+      return synth;
+    }
+
+    async function spoken(synth: ReturnType<typeof installSpeech>) {
+      await userEvent.click(await screen.findByRole('button', { name: 'Vorlesen' }));
+      return (synth.speak.mock.calls[0]![0] as { text: string }).text;
+    }
+
+    it('reads the title and Erkunden, then the Gebiete a new learner can choose', async () => {
+      const synth = installSpeech();
+      renderScreen();
+      await screen.findByRole('heading', { name: 'Unerforscht: Mathe' });
+      expect(await spoken(synth)).toMatch(
+        /^Unerforscht: Mathe\. Tippe auf Erkunden, oder wähle gleich ein Gebiet: Zahlen und Rechnen, .*Schreibtricks\.$/,
+      );
+    });
+
+    it('leaves out the Gebiete when none is open', async () => {
+      const synth = installSpeech();
+      const states = Object.fromEntries(
+        BEREICHE.map((b) => [b, { kind: 'unerforscht' }]),
+      ) as Record<Bereich, RegionState>;
+      render(
+        <MemoryRouter>
+          <KartenView
+            progress={{ states, today: NEW.today }}
+            offer={{ fach: 'deutsch', onLater: () => {} }}
+          />
+        </MemoryRouter>,
+      );
+      expect(await spoken(synth)).toBe('Unerforscht: Deutsch. Tippe auf Erkunden.');
+    });
   });
 });

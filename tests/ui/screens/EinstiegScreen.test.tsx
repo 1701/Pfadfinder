@@ -8,7 +8,7 @@ import { createCheckStore, type CheckStore } from '../../../src/data/check-store
 import { ensureLearner } from '../../../src/data/practice';
 import { initialMastery } from '../../../src/domain/mastery';
 import { CheckStoreContext } from '../../../src/ui/check-context';
-import { EinstiegScreen } from '../../../src/ui/screens/EinstiegScreen';
+import { EinstiegIntro, EinstiegScreen } from '../../../src/ui/screens/EinstiegScreen';
 import { answerFor, testDeps } from '../../data/helpers';
 import { preloadFormats } from '../../../src/ui/formats/registry';
 import { createContentLoader } from '../../../src/content-runtime/loader';
@@ -46,16 +46,28 @@ describe('EinstiegScreen', () => {
   it('opens with the intro: two sentences, the empty way ahead, Starten', async () => {
     const store = createCheckStore(testDeps());
     const { container } = renderEinstieg(store);
+    expect(await screen.findByRole('heading', { name: 'Wir erkunden Mathe.' })).toBeTruthy();
     expect(
-      await screen.findByRole('heading', { name: 'Wir schauen, wo deine Reise in Mathe losgeht.' }),
+      screen.getByText('Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa 10 Minuten.'),
     ).toBeTruthy();
-    expect(screen.getByText('Das dauert etwa 10 Minuten.')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
     const total = store.getState().check!.plan.total;
     expect(container.querySelectorAll('ol[aria-hidden] li')).toHaveLength(total);
     // The way ahead has no number: no "x von y" before the first question.
     expect(container.textContent).not.toMatch(/\d+ von \d+/);
     expect(container.textContent).not.toMatch(/Check|Test/);
+  });
+
+  it('names Deutsch in the intro, with the longer time (twelve questions and two texts)', () => {
+    render(
+      <MemoryRouter>
+        <EinstiegIntro fach="deutsch" total={14} readAloud={false} onStart={() => {}} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('heading', { name: 'Wir erkunden Deutsch.' })).toBeTruthy();
+    expect(
+      screen.getByText('Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa 15 Minuten.'),
+    ).toBeTruthy();
   });
 
   it('asks without judging: "Weiter" instead of "Prüfen", no feedback after an answer', async () => {

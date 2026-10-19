@@ -83,7 +83,7 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
   // "Später" rests the whole day: no Deutsch offer, the Tagesziel line stays.
   await expect(page.getByText('Heute: 10 von 10 Fundstücken. Geschafft.')).toBeVisible();
   await expect(page.getByRole('link', { name: /^Zahlen und Rechnen, Niveau \d/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Erkunden', exact: true })).toHaveCount(0);
   await shot(page, 'start-geschafft');
 });
 

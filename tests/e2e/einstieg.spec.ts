@@ -7,10 +7,10 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { answer, currentItem } from './helpers';
 
-const OFFER = 'Wo geht’s in Mathe los?';
-const OFFER_DEUTSCH = 'Wo geht’s in Deutsch los?';
+const OFFER = 'Unerforscht: Mathe';
+const OFFER_DEUTSCH = 'Unerforscht: Deutsch';
 /** Any offer, whatever the Fach. */
-const ANY_OFFER = /^Wo geht’s in /;
+const ANY_OFFER = /^Unerforscht: /;
 const MAP_TITLE = 'Wohin geht’s heute?';
 
 // Practiceable Mathe Bereiche from the manifest: 3 questions each, at most 12.
@@ -35,10 +35,8 @@ const TOTAL = Math.min(12, 3 * MATHE_OPEN.length);
 async function startEinstieg(page: Page) {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
-  await page.getByRole('link', { name: 'Los', exact: true }).click();
-  await expect(
-    page.getByRole('heading', { name: 'Wir schauen, wo deine Reise in Mathe losgeht.' }),
-  ).toBeVisible();
+  await page.getByRole('link', { name: 'Erkunden', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Wir erkunden Mathe.' })).toBeVisible();
   await page.getByRole('button', { name: 'Starten' }).click();
   await expect(page.getByText(`1 von ${TOTAL}`)).toBeVisible();
 }
@@ -107,7 +105,7 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));
   await page.reload();
   await expect(page.getByRole('heading', { name: OFFER_DEUTSCH })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Los', exact: true })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Erkunden', exact: true })).toHaveAttribute(
     'href',
     '/einstieg/deutsch',
   );
@@ -137,7 +135,7 @@ test('Pause fragt nach: Weitermachen bleibt dabei, Zur Karte fängt von vorn an'
   await page.getByRole('link', { name: 'Zur Karte' }).click();
   // Nothing was kept: the offer is back, and the Einstieg starts at 1.
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
-  await page.getByRole('link', { name: 'Los', exact: true }).click();
+  await page.getByRole('link', { name: 'Erkunden', exact: true }).click();
   await page.getByRole('button', { name: 'Starten' }).click();
   await expect(page.getByText(`1 von ${TOTAL}`)).toBeVisible();
 });
