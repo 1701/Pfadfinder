@@ -1,1 +1,761 @@
-[]
+[
+  {
+    "id": "d-lli-1-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-001"
+    },
+    "prompt": "Warum ist der Platz neben Jonas leer? Lies im 1. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Amir ist weggezogen."
+        },
+        {
+          "id": "b",
+          "text": "Amir ist krank."
+        },
+        {
+          "id": "c",
+          "text": "Nele sitzt noch nicht dort."
+        },
+        {
+          "id": "d",
+          "text": "Jonas will allein sitzen."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Amir ist in eine Stadt am Meer gezogen.",
+      "incorrect": "Lies den 1. Absatz. Der zweite Satz sagt, was mit Amir ist.",
+      "misconception": "Jonas will nicht allein sitzen. Er vermisst Amir."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-1"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-001"
+    },
+    "prompt": "Tippe den Satz an, der sagt, was Jonas wirklich will.",
+    "payload": {
+      "text": "Jonas sieht es und schaut schnell weg. Er will keinen neuen Freund. Er will Amir.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        2
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Er will Amir, nicht einen neuen Freund.",
+      "incorrect": "Zwei Sätze beginnen mit Er will. Einer sagt, was er nicht will, einer, was er will.",
+      "misconception": "Keinen neuen Freund sagt, was er nicht will."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-3",
+      "markieren"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-001",
+      "text": "Im 4. Absatz steht: „Sie schiebt ihr Heft ein Stück zu ihm.“"
+    },
+    "prompt": "Wer ist mit „Sie“ gemeint?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nele"
+        },
+        {
+          "id": "b",
+          "text": "Frau Berg"
+        },
+        {
+          "id": "c",
+          "text": "Amirs Mutter"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Nele ist gerade fertig geworden und schiebt ihr Heft zu Jonas.",
+      "incorrect": "Lies den Satz davor. Wer ist fertig, bevor Jonas die Hälfte hat?",
+      "misconception": "Frau Berg kommt im 4. Absatz nicht vor."
+    },
+    "tags": [
+      "pronomen",
+      "verknuepfen",
+      "absatz-4"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-001"
+    },
+    "prompt": "Bringe in die richtige Reihenfolge, was Jonas macht.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Er grinst über Neles Heft."
+        },
+        {
+          "id": "b",
+          "text": "Er schaut in der Pause weg."
+        },
+        {
+          "id": "c",
+          "text": "Er schreibt Amir „nett“."
+        },
+        {
+          "id": "d",
+          "text": "Er nimmt den Rucksack weg."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "d",
+        "b",
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Rucksack, Pause, Heft, Nachricht. Schritt für Schritt wird Jonas freundlicher.",
+      "incorrect": "Geh die Absätze 2 bis 5 der Reihe nach durch.",
+      "misconception": "Das Grinsen kommt erst nach der Pause, im 4. Absatz."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 65,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-3-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-001"
+    },
+    "prompt": "Warum ändert Jonas „ganz okay“ in „nett“? Erkläre mit dem Text.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Was ist in der Rechenstunde passiert?"
+    },
+    "solution": {
+      "model": "Nele hat ihm geholfen wie Amir. Jonas mag sie mehr, als er zugeben wollte.",
+      "keyPoints": [
+        "Nele hat ihm beim Rechnen geholfen",
+        "Er mag sie mehr, als er zugeben wollte"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Nele war wie Amir, und Jonas merkt, dass er sie mag.",
+      "incorrect": "Lies den 4. Absatz. Was tut Nele, und woran denkt Jonas dabei?",
+      "misconception": "Nur „nett ist besser“ reicht nicht. Warum findet Jonas sie jetzt nett?"
+    },
+    "tags": [
+      "begruenden",
+      "figur"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-002"
+    },
+    "prompt": "Wähle, was im 5. Absatz steht.",
+    "payload": {
+      "template": "Das Geräusch kam von {1}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Mogli, dem Kater",
+            "Paul, dem Bruder",
+            "einem Igel"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Mogli, dem Kater"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Mogli, der Kater von nebenan, mit der Pfote im Müslipaket.",
+      "incorrect": "Im 5. Absatz steht, wem die grünen Augen gehören.",
+      "misconception": "Paul schläft die ganze Zeit. Das steht im 3. Absatz."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-5"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-002"
+    },
+    "prompt": "Was hört Lina im Dunkeln? Tippe alles an, was im Text steht.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "ein Rascheln"
+        },
+        {
+          "id": "b",
+          "text": "ein Schnaufen"
+        },
+        {
+          "id": "c",
+          "text": "Pauls Atem"
+        },
+        {
+          "id": "d",
+          "text": "ein Miauen"
+        },
+        {
+          "id": "e",
+          "text": "ein Bellen"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Rascheln, Schnaufen und Pauls Atem stehen im 2. und 3. Absatz.",
+      "incorrect": "Lies den 2. und 3. Absatz. Drei Geräusche stehen dort.",
+      "misconception": "Mogli miaut im Text nicht. Lina erkennt ihn an den Augen."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-2",
+      "absatz-3"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-002"
+    },
+    "prompt": "Ordne jedem Satz zu, was er über Lina zeigt. Eine Erklärung bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "„Nein“, sagt Lina. Das stimmt fast."
+        },
+        {
+          "id": "l2",
+          "text": "Ihre Hand zittert."
+        },
+        {
+          "id": "l3",
+          "text": "Diesmal zittert nichts."
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Sie hat ein bisschen Angst."
+        },
+        {
+          "id": "r2",
+          "text": "Sie hat große Angst."
+        },
+        {
+          "id": "r3",
+          "text": "Sie ist nicht mehr ängstlich."
+        },
+        {
+          "id": "r4",
+          "text": "Sie friert."
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Die Angst wächst und verschwindet am Ende.",
+      "incorrect": "Lies jeden Satz mit dem Satz davor. Was fühlt Lina in dem Moment?",
+      "misconception": "Die Hand zittert vor Angst, nicht vor Kälte."
+    },
+    "tags": [
+      "verknuepfen",
+      "figur",
+      "gefuehle"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-002",
+      "text": "Im 6. Absatz steht: „Nichts“, sagt Lina."
+    },
+    "prompt": "Warum sagt Lina zu Paul „Nichts“?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Sie will nicht zugeben, dass sie Angst hatte."
+        },
+        {
+          "id": "b",
+          "text": "Sie hat wirklich nichts gesehen."
+        },
+        {
+          "id": "c",
+          "text": "Sie will Mogli nicht verraten."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Schon im 1. Absatz will sie keine Angst zeigen.",
+      "incorrect": "Lies den 1. und den 6. Absatz zusammen. Was sagt Lina über ihre Angst?",
+      "misconception": "Lina hat Mogli ja gesehen. Sie lacht sogar über ihn."
+    },
+    "tags": [
+      "verknuepfen",
+      "absatz-1",
+      "absatz-6",
+      "figur"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-3-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-002"
+    },
+    "prompt": "Was bedeutet der letzte Satz „Diesmal zittert nichts“? Erkläre.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Wann hat vorher etwas gezittert?"
+    },
+    "solution": {
+      "model": "Vorher zitterte Linas Hand vor Angst. Jetzt hat sie keine Angst mehr.",
+      "keyPoints": [
+        "Vorher hat ihre Hand vor Angst gezittert",
+        "Jetzt hat sie keine Angst mehr"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Der Satz zeigt, dass die Angst weg ist.",
+      "incorrect": "Suche im 4. Absatz, was gezittert hat. Was heißt es, wenn es jetzt nicht zittert?",
+      "misconception": "Es geht nicht ums Zelt. Es geht um Linas Hand und ihre Angst."
+    },
+    "tags": [
+      "deuten",
+      "begruenden"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-003"
+    },
+    "prompt": "Was darf Ben mit der Uhr? Lies im 1. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nur anschauen"
+        },
+        {
+          "id": "b",
+          "text": "Anschauen und anfassen"
+        },
+        {
+          "id": "c",
+          "text": "Den Zeiger drehen"
+        },
+        {
+          "id": "d",
+          "text": "Nichts davon"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Anschauen ja, anfassen nein.",
+      "incorrect": "Der zweite Satz im 1. Absatz sagt es genau.",
+      "misconception": "Den Zeiger drehen will Ben, darf er aber nicht."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-1"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-003"
+    },
+    "prompt": "Tippe den Satz an, der zeigt, dass Ben ein schlechtes Gewissen hat.",
+    "payload": {
+      "text": "Dann setzt er sich aufs Sofa und schaut fern. Er sieht nichts von dem Film.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        1
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Er schaut fern, aber seine Gedanken sind bei der Uhr.",
+      "incorrect": "Welcher Satz zeigt, dass Ben mit dem Kopf woanders ist?",
+      "misconception": "Fernsehen allein zeigt kein schlechtes Gewissen. Nichts zu sehen schon."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-3",
+      "markieren"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-003"
+    },
+    "prompt": "Bringe in die richtige Reihenfolge, was Ben tut.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Er gesteht es Oma."
+        },
+        {
+          "id": "b",
+          "text": "Er dreht die Uhr zur Wand."
+        },
+        {
+          "id": "c",
+          "text": "Er nickt beim Kuchen."
+        },
+        {
+          "id": "d",
+          "text": "Er lässt die Uhr fallen."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "d",
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Fallen, verstecken, schweigen, gestehen.",
+      "incorrect": "Geh die Absätze 2 bis 5 der Reihe nach durch.",
+      "misconception": "Das Nicken beim Kuchen kommt vor dem Geständnis am Abend."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 65,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-003"
+    },
+    "prompt": "Woran merkt Oma, dass etwas nicht stimmt? Tippe alles an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Ben nickt nur."
+        },
+        {
+          "id": "b",
+          "text": "Oma schaut ihn lange an."
+        },
+        {
+          "id": "c",
+          "text": "Ben spielt im Garten."
+        },
+        {
+          "id": "d",
+          "text": "Die Uhr steht verkehrt herum."
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Bens knappes Nicken und die verdrehte Uhr verraten ihn.",
+      "incorrect": "Was tut Ben beim Kuchen? Wie steht die Uhr auf der Kommode?",
+      "misconception": "Dass Oma ihn lange anschaut, ist ihre Reaktion, kein Hinweis."
+    },
+    "tags": [
+      "verknuepfen",
+      "absatz-3",
+      "absatz-4"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-3-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-003"
+    },
+    "prompt": "Warum sagt Oma beim Kuchen nichts, obwohl sie es schon weiß?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Sie will, dass Ben von selbst kommt."
+        },
+        {
+          "id": "b",
+          "text": "Sie ist zu müde zum Reden."
+        },
+        {
+          "id": "c",
+          "text": "Sie findet die Uhr nicht wichtig."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau: Oma wartet, bis Ben den Mut findet. Das sagt sie im 6. Absatz selbst.",
+      "incorrect": "Lies den 6. Absatz. Oma erklärt dort, warum sie gewartet hat.",
+      "misconception": "Die Uhr ist Oma wichtig, sie holt ja den Kleber."
+    },
+    "tags": [
+      "absicht",
+      "verknuepfen",
+      "absatz-6"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-18",
+      "calibration": "vera3"
+    }
+  }
+]

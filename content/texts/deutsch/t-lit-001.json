@@ -1,0 +1,21 @@
+{
+  "id": "t-lit-001",
+  "kind": "literarisch",
+  "title": "Der leere Platz",
+  "wordCount": 189,
+  "paragraphs": [
+    "Seit Montag ist der Platz neben Jonas leer. Amir ist weggezogen, in eine Stadt am Meer. Vier Jahre lang haben sie nebeneinander gesessen. Jetzt hat Jonas den Stuhl mit seinem Rucksack belegt. So sieht es wenigstens nicht so leer aus.",
+    "Am Mittwoch kommt Frau Berg mit einem Mädchen herein. „Das ist Nele. Sie ist neu und setzt sich zu dir, Jonas.“ Jonas nimmt den Rucksack vom Stuhl. Er sagt nichts. Nele sagt auch nichts.",
+    "In der Pause steht Nele allein am Zaun. Sie hat eine Brotdose in der Hand und macht sie nicht auf. Jonas sieht es und schaut schnell weg. Er will keinen neuen Freund. Er will Amir.",
+    "Nach der Pause rechnen sie Aufgaben mit Geld. Jonas kommt nicht voran, die Zahlen verrutschen ihm. Nele ist fertig, bevor Jonas die Hälfte hat. Sie schiebt ihr Heft ein Stück zu ihm. „Du kannst abschreiben“, flüstert sie. Jonas grinst. Das hätte Amir auch gesagt.",
+    "Am Nachmittag sitzt Jonas auf seinem Bett. Er schreibt Amir eine Nachricht. „Neben mir sitzt jetzt Nele. Sie ist ganz okay.“ Dann löscht er „ganz okay“ und schreibt „nett“. Amir antwortet mit einem Bild vom Meer."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lli-1-001",
+    "d-lli-1-002",
+    "d-lli-2-001",
+    "d-lli-2-002",
+    "d-lli-3-001"
+  ]
+}

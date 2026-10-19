@@ -223,9 +223,49 @@
     },
     "lesen-literarisch": {
       "fach": "deutsch",
-      "items": 0,
-      "byFormat": {},
-      "textIds": []
+      "items": 15,
+      "byFormat": {
+        "cloze-select": {
+          "1": 1,
+          "2": 0,
+          "3": 0
+        },
+        "mark-in-text": {
+          "1": 2,
+          "2": 0,
+          "3": 0
+        },
+        "match": {
+          "1": 0,
+          "2": 1,
+          "3": 0
+        },
+        "multi-choice": {
+          "1": 1,
+          "2": 1,
+          "3": 0
+        },
+        "order": {
+          "1": 0,
+          "2": 2,
+          "3": 0
+        },
+        "short-answer": {
+          "1": 0,
+          "2": 0,
+          "3": 2
+        },
+        "single-choice": {
+          "1": 2,
+          "2": 2,
+          "3": 1
+        }
+      },
+      "textIds": [
+        "t-lit-001",
+        "t-lit-002",
+        "t-lit-003"
+      ]
     },
     "rs-laut-buchstabe": {
       "fach": "deutsch",

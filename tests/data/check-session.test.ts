@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { BEREICHE_BY_FACH, type Bereich, type Item } from '../../src/domain/content';
+import {
+  BEREICHE_BY_FACH,
+  isLesenBereich,
+  type Bereich,
+  type Item,
+} from '../../src/domain/content';
 import { CHECK_ITEM_COUNT } from '../../src/domain/scheduler';
 import { createCheckStore, type CheckStore } from '../../src/data/check-store';
 import { loadMapProgress } from '../../src/data/map-progress';
@@ -213,25 +218,27 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     expect(store.getState().status).toBe('intro');
     store.getState().begin();
     const shown = await play(store, () => true);
-    // With lesen-sachtext practiceable, the check ends with its block: one reading screen, then
-    // the items of one real text (task 10).
-    const readings: string[] = [];
+    // The check ends with one block per practiceable Lesen-Bereich: a reading screen, then the
+    // items of one real text of that Bereich (task 10).
+    const readings: { textId: string; start: number }[] = [];
     while (store.getState().status === 'reading') {
-      readings.push(store.getState().current!.text!.id);
+      readings.push({ textId: store.getState().current!.text!.id, start: shown.length });
       store.getState().doneReading();
       shown.push(...(await play(store, () => true)));
     }
     expect(store.getState().status).toBe('finished');
     expect(new Set(shown.map((i) => i.bereich))).toEqual(new Set(deutschOpen));
     expect(shown.some((i) => i.format === 'short-answer')).toBe(false);
-    if (deutschOpen.includes('lesen-sachtext')) {
-      expect(readings).toHaveLength(1);
-      expect(['t-sach-001', 't-sach-002', 't-sach-003']).toContain(readings[0]);
-      const first = shown.findIndex((i) => i.bereich === 'lesen-sachtext');
-      const block = shown.slice(first);
+    const lesen = deutschOpen.filter(isLesenBereich);
+    expect(readings).toHaveLength(lesen.length);
+    expect(shown.slice(0, readings[0]?.start).some((i) => isLesenBereich(i.bereich))).toBe(false);
+    readings.forEach(({ textId, start }, n) => {
+      const block = shown.slice(start, readings[n + 1]?.start);
       expect(block.length).toBeGreaterThanOrEqual(2);
-      expect(block.every((i) => i.stimulus?.textRef === readings[0])).toBe(true);
-    }
+      expect(block.every((i) => i.stimulus?.textRef === textId)).toBe(true);
+      expect(new Set(block.map((i) => i.bereich)).size).toBe(1);
+    });
+    expect(new Set(readings.map((r) => shown[r.start]!.bereich))).toEqual(new Set(lesen));
   });
 
   it('is not available with fewer than two practiceable Bereiche', async () => {
