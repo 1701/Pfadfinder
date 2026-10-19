@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – Klein-Paket Einstiegsangebot: „Unerforscht: Mathe“, „Erkunden“, „Wir erkunden …“
+- **Entschieden (Markus):** Messstufen hoch: 1 „… ist noch unerforscht.“, 2 `gap-md` → `gap-sm`, 3 „Noch unerforscht: …“, 4 „Unerforscht: …“, 5 Stopp. Intro „Wir erkunden Mathe.“ / „… Deutsch.“ mit „Ein paar Aufgaben zeigen, wo du startest.“ plus 10 Minuten (Mathe) bzw. 15 Minuten (Deutsch: zwölf Aufgaben, zwei Texte). Vorlesen wie bisher, mit „Tippe auf Erkunden“; ohne offene Gebiete fällt der Nebensatz weg. CLAUDE.md: Rückfragen und Berichte auf Deutsch.
+- **Gemessen (iPad hoch, 768 px, Zeilenende Mathe/Deutsch):** Stufe 1 824/849, Stufe 2 812/837, Stufe 3 768/793, Stufe 4 686/711 px. Gebaut ist Stufe 4 mit `gap-sm`, für beide Fächer und alle Viewports, 57 px Rand bei Deutsch (vorher 37). Kleinste Namen unverändert (23,4 / 22,5 / 19,1 px). `karte-angebot-budget-*.json` war in zwei Läufen byte-gleich.
+- **Gebaut:** In `einstieg.ts` gibt es `offerSpeech` (bisher fest in `KartenView`) und `introText(fach)`. Beide stehen in `EINSTIEG_TEXTS` und werden damit sprachgeprüft. Der Vorlese-Text setzt einen Punkt hinter die Überschrift, weil diese keinen eigenen Punkt hat.
+- **Tests:** Zwei Vorlese-Tests in `Angebot`. Die Gegenprobe mit dem alten Satz war 2/2 rot. Dazu Intro Deutsch (15 Minuten) und die neuen Texte in Unit- und E2E-Tests. Screenshots `karte-angebot-*` und `einstieg-intro(-deutsch)-*` sind neu und angesehen.
+- **Zur Entscheidung:** „Unerforscht“ heißt auf der Karte bisher „noch keine Aufgaben“ (gestrichelt, z. B. Muster und Zahlenfolgen). Die Überschrift nutzt das Wort jetzt für „noch nicht erkundet“, während die Gebiete darunter schon wählbar sind.
+- **Nicht committet:** die übrigen von den Läufen neu geschriebenen Screenshots (start, eltern, impressum, item-*, …).
+
 ## 2026-10-19 – formate.spec und probetest-layout.spec warten auf den lazy Renderer
 - **Entschieden (Markus):** m-gm-1-004 (−15 bis −31 px) und das Wort-für-Wort-Label bei d-lli-2-003 bleiben so.
 - **Gebaut:** Beide Specs maßen, sobald Überschrift bzw. Band stand; jetzt warten sie wie `layout.spec`/`text-layout.spec`, bis kein Suspense-Platzhalter (`aria-busy`) im Antwortbereich steht.

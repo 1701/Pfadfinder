@@ -14,6 +14,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Code, Kommentare, Commits, Dateinamen: Englisch
 - Alles, was ein Kind oder Elternteil sieht: Deutsch, Du-Form, kindgerecht (siehe PRODUCT.md Abschnitt 7). Keine Anglizismen in der UI ("Weiter", nicht "Next"; "Entdeckungen", nicht "Badges")
 - Content-Dateien: Deutsch
+- Rückfragen und Berichte an Markus (Chat, Abschlussbericht): Deutsch
 
 ## Arbeitsweise
 - Lies erst, dann plane in 3–6 Stichpunkten, dann baue. Bei Aufgaben > 1 Stunde: Plan zuerst zeigen, auf Freigabe warten
