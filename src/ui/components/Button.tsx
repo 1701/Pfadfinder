@@ -12,8 +12,11 @@ export interface ButtonProps extends ComponentProps<'button'> {
   size?: ButtonSize;
 }
 
-/** Large: the band button (56 px, fixed width). Small: a touch target in running UI. */
-export type ButtonSize = 'large' | 'small';
+/**
+ * Large: the band button (56 px, fixed width). Fill: 56 px high, as wide as its grid cell (the three
+ * rating buttons share the band). Small: a touch target in running UI.
+ */
+export type ButtonSize = 'large' | 'fill' | 'small';
 
 /** The button look, also for links that act like a button ("Los", "Zur Karte"). */
 export function buttonClass(
@@ -25,7 +28,9 @@ export function buttonClass(
     variant === 'primary'
       ? 'border-signal-edge bg-signal disabled:border-line-strong disabled:bg-surface disabled:text-ink-muted'
       : 'border-line-strong bg-surface',
-    size === 'large' ? 'min-h-primary min-w-action text-option' : 'min-h-touch text-body',
+    size === 'large' && 'min-h-primary min-w-action text-option',
+    size === 'fill' && 'min-h-primary text-option',
+    size === 'small' && 'min-h-touch text-body',
   );
 }
 

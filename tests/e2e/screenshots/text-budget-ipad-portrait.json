@@ -50,60 +50,60 @@
         "width": 720,
         "height": 320
       },
-      "slack": 18,
-      "at": "vergleichen",
-      "reserve": 704
+      "slack": 56,
+      "at": "noch-nicht",
+      "reserve": 666
     }
   },
   "token": "--reading-box",
   "sweep": {
     "200px": {
-      "slack": 138,
-      "at": "short-answer vergleichen"
+      "slack": 176,
+      "at": "short-answer noch-nicht"
     },
     "220px": {
-      "slack": 118,
-      "at": "short-answer vergleichen"
+      "slack": 156,
+      "at": "short-answer noch-nicht"
     },
     "240px": {
-      "slack": 98,
-      "at": "short-answer vergleichen"
+      "slack": 136,
+      "at": "short-answer noch-nicht"
     },
     "260px": {
-      "slack": 78,
-      "at": "short-answer vergleichen"
+      "slack": 116,
+      "at": "short-answer noch-nicht"
     },
     "280px": {
-      "slack": 58,
-      "at": "short-answer vergleichen"
+      "slack": 96,
+      "at": "short-answer noch-nicht"
     },
     "300px": {
-      "slack": 38,
-      "at": "short-answer vergleichen"
+      "slack": 76,
+      "at": "short-answer noch-nicht"
     },
     "320px": {
-      "slack": 18,
-      "at": "short-answer vergleichen"
+      "slack": 56,
+      "at": "short-answer noch-nicht"
     },
     "340px": {
-      "slack": -2,
-      "at": "short-answer vergleichen"
+      "slack": 36,
+      "at": "short-answer noch-nicht"
     },
     "360px": {
-      "slack": -22,
-      "at": "short-answer vergleichen"
+      "slack": 16,
+      "at": "short-answer noch-nicht"
     },
     "380px": {
-      "slack": -42,
-      "at": "short-answer vergleichen"
+      "slack": -4,
+      "at": "short-answer noch-nicht"
     },
     "400px": {
-      "slack": -62,
-      "at": "short-answer vergleichen"
+      "slack": -24,
+      "at": "short-answer noch-nicht"
     },
     "420px": {
-      "slack": -82,
-      "at": "short-answer vergleichen"
+      "slack": -44,
+      "at": "short-answer noch-nicht"
     }
   },
   "byFormat": {
@@ -327,18 +327,18 @@
         "420px": -44
       },
       "vergleichen": {
-        "200px": 138,
-        "220px": 118,
-        "240px": 98,
-        "260px": 78,
-        "280px": 58,
-        "300px": 38,
-        "320px": 18,
-        "340px": -2,
-        "360px": -22,
-        "380px": -42,
-        "400px": -62,
-        "420px": -82
+        "200px": 194,
+        "220px": 174,
+        "240px": 154,
+        "260px": 134,
+        "280px": 114,
+        "300px": 94,
+        "320px": 74,
+        "340px": 54,
+        "360px": 34,
+        "380px": 14,
+        "400px": -6,
+        "420px": -26
       }
     }
   }

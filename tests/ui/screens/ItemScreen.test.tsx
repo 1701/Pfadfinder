@@ -174,6 +174,15 @@ describe('ItemScreen', () => {
       ]);
     });
 
+    it('the band lays out by its own width (size container), the focus waits on the question', async () => {
+      const { band } = await compare();
+      // Beside a reading text the band is narrow in landscape too (iPad finding 2026-10-19).
+      expect(band.parentElement?.className).toContain('@container');
+      expect(document.activeElement).toBe(
+        within(band).getByRole('heading', { name: 'Hast du es getroffen?' }),
+      );
+    });
+
     it('"Teils" submits 0.5; the band explains without a verdict and offers the Falle', async () => {
       const { onSubmit, band } = await compare();
       await userEvent.click(within(band).getByRole('button', { name: 'Teils' }));

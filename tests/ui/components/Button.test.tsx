@@ -30,4 +30,11 @@ describe('Button', () => {
     await userEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
   });
+
+  it('fill: 56 px high, width from its grid cell (no fixed width)', () => {
+    render(<Button size="fill">Noch nicht</Button>);
+    const button = screen.getByRole('button', { name: 'Noch nicht' });
+    expect(button.className).toContain('min-h-primary');
+    expect(button.className).not.toContain('min-w-action');
+  });
 });

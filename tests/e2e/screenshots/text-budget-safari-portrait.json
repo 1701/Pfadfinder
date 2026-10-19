@@ -50,60 +50,60 @@
         "width": 720,
         "height": 196
       },
-      "slack": 18,
-      "at": "vergleichen",
-      "reserve": 704
+      "slack": 56,
+      "at": "noch-nicht",
+      "reserve": 666
     }
   },
   "token": "--reading-box",
   "sweep": {
     "200px": {
-      "slack": 14,
-      "at": "short-answer vergleichen"
+      "slack": 52,
+      "at": "short-answer noch-nicht"
     },
     "220px": {
-      "slack": -6,
-      "at": "short-answer vergleichen"
+      "slack": 32,
+      "at": "short-answer noch-nicht"
     },
     "240px": {
-      "slack": -26,
-      "at": "short-answer vergleichen"
+      "slack": 12,
+      "at": "short-answer noch-nicht"
     },
     "260px": {
-      "slack": -46,
-      "at": "short-answer vergleichen"
+      "slack": -8,
+      "at": "short-answer noch-nicht"
     },
     "280px": {
-      "slack": -66,
-      "at": "short-answer vergleichen"
+      "slack": -28,
+      "at": "short-answer noch-nicht"
     },
     "300px": {
-      "slack": -86,
-      "at": "short-answer vergleichen"
+      "slack": -48,
+      "at": "short-answer noch-nicht"
     },
     "320px": {
-      "slack": -106,
-      "at": "short-answer vergleichen"
+      "slack": -68,
+      "at": "short-answer noch-nicht"
     },
     "340px": {
-      "slack": -126,
-      "at": "short-answer vergleichen"
+      "slack": -88,
+      "at": "short-answer noch-nicht"
     },
     "360px": {
-      "slack": -146,
-      "at": "short-answer vergleichen"
+      "slack": -108,
+      "at": "short-answer noch-nicht"
     },
     "380px": {
-      "slack": -166,
-      "at": "short-answer vergleichen"
+      "slack": -128,
+      "at": "short-answer noch-nicht"
     },
     "400px": {
-      "slack": -186,
-      "at": "short-answer vergleichen"
+      "slack": -148,
+      "at": "short-answer noch-nicht"
     },
     "420px": {
-      "slack": -206,
-      "at": "short-answer vergleichen"
+      "slack": -168,
+      "at": "short-answer noch-nicht"
     }
   },
   "byFormat": {
@@ -327,18 +327,18 @@
         "420px": -168
       },
       "vergleichen": {
-        "200px": 14,
-        "220px": -6,
-        "240px": -26,
-        "260px": -46,
-        "280px": -66,
-        "300px": -86,
-        "320px": -106,
-        "340px": -126,
-        "360px": -146,
-        "380px": -166,
-        "400px": -186,
-        "420px": -206
+        "200px": 70,
+        "220px": 50,
+        "240px": 30,
+        "260px": 10,
+        "280px": -10,
+        "300px": -30,
+        "320px": -50,
+        "340px": -70,
+        "360px": -90,
+        "380px": -110,
+        "400px": -130,
+        "420px": -150
       }
     }
   }

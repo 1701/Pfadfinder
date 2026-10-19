@@ -107,7 +107,8 @@
   .item-with-text > [data-region='answer'] {
     grid-area: answer;
   }
-  .item-with-text > [data-region='band'] {
+  .item-with-text > [data-region='band'],
+  .item-with-text > .rating-frame {
     grid-area: band;
   }
   @media (orientation: portrait) {

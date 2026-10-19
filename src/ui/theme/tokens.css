@@ -80,6 +80,12 @@
   --container-page: 60rem;
   /* The reading screen: about 60 characters per line. */
   --container-reading: 44rem;
+  /* Rating band (short-answer, "Hast du es getroffen?"), measured 2026-10-19 with Andika:
+     Vorlesen 72px, question 230px, "Noch nicht" 165px at least. From this band width Vorlesen
+     stands left of question and buttons (72 + 3 × 12 + 3 × 165 = 603px) … */
+  --container-rating-beside: 34rem;
+  /* … and from this one all of it is one row (72 + 16 + 230 + 3 × 180 + 3 × 12 = 894px). */
+  --container-rating-row: 50rem;
 
   /* Radii carry meaning: sheets are square like a map, controls are round to the touch. */
   --radius-*: initial;
