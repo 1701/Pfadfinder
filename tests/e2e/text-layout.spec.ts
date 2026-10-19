@@ -11,12 +11,19 @@
 // Screenshots text-*.png. In CI only the two Safari sizes run.
 // The texts of content/ get the same checks at the token values: the reading screen of every
 // text (a short text may fit without scrolling, then without a fade) and every item of it in
-// every state; the air per item and state goes to text-inhalt-*.json, a screenshot only to the
-// screens with a finding.
+// every state (match also with matchProblems); the air per item and state goes to
+// text-inhalt-*.json, a screenshot only to the screens with a finding.
 
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { ITEMS, SCREENSHOTS, VIEWPORTS as ALL_VIEWPORTS, fitMetrics, fitProblems } from './helpers';
+import {
+  ITEMS,
+  SCREENSHOTS,
+  VIEWPORTS as ALL_VIEWPORTS,
+  fitMetrics,
+  fitProblems,
+  matchProblems,
+} from './helpers';
 
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
@@ -305,6 +312,7 @@ for (const viewport of VIEWPORTS) {
           const problems = [
             ...(await fitProblems(page)),
             ...contentBoxProblems(await boxMetrics(page), 'start'),
+            ...(item.format === 'match' ? await matchProblems(page) : []),
           ];
           const at = Math.round((await fitMetrics(page))?.slack ?? -Infinity);
           (air[item.id] ??= {})[state] = at;

@@ -32,10 +32,13 @@ const POOL = 'pool';
  * The same layout before and after checking, so nothing moves: the rows (label | slot) and beside
  * them in landscape, below them in portrait, the pool – after checking, in the same place, the
  * "Richtig ist" list. The rows never grow, whatever that side holds.
+ * In a row the label takes at most 40 % (its text wraps), the slot the rest, at least 60 %: a long
+ * label must not squeeze the card to one word per line (d-lli-2-003 beside a reading text).
  */
 const LAYOUT_CLASS =
   'grid w-full items-start gap-x-md gap-y-sm landscape:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]';
-const ROWS_CLASS = 'grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-sm gap-y-xs';
+const ROWS_CLASS =
+  'grid grid-cols-[fit-content(calc(40%_-_var(--spacing-sm)))_minmax(0,1fr)] items-center gap-x-sm gap-y-xs';
 const LABEL_CLASS =
   'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option';
 const rowId = (leftId: string) => `row:${leftId}`;

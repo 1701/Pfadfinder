@@ -3,10 +3,16 @@
 // In CI only the two Safari sizes run (ARCHITECTURE.md §8): they are the tightest, and an item
 // that fits there also fits on the full iPad screens. Locally all four run.
 // A viewport does not stop at the first red item: it measures all of them and fails once, with
-// the complete list. Runs against /dev/item (dev build only).
+// the complete list. Runs against /dev/item (dev build only). match also gets matchProblems.
 
 import { expect, test, type Page } from '@playwright/test';
-import { ITEMS, SCREENSHOTS, VIEWPORTS as ALL_VIEWPORTS, fitProblems } from './helpers';
+import {
+  ITEMS,
+  SCREENSHOTS,
+  VIEWPORTS as ALL_VIEWPORTS,
+  fitProblems,
+  matchProblems,
+} from './helpers';
 
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
@@ -67,6 +73,9 @@ for (const viewport of VIEWPORTS) {
       for (const state of statesOf(item)) {
         await openItem(tab, `/dev/item/${item.id}?state=${state}`);
         for (const problem of await fitProblems(tab)) red.push(`${item.id} ${state}: ${problem}`);
+        if (item.format === 'match')
+          for (const problem of await matchProblems(tab))
+            red.push(`${item.id} ${state}: ${problem}`);
       }
       await tab.close();
     }

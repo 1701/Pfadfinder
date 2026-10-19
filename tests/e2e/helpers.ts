@@ -93,6 +93,48 @@ export async function fitProblems(page: Page): Promise<string[]> {
   ].filter((p): p is string => typeof p === 'string');
 }
 
+/**
+ * match: a row's label takes at most 40 % of the row (it wraps instead), and no text or check mark
+ * leaves its label or tile. Before, a long label squeezed the card to one word per line and the
+ * check mark ran over the tile's edge (d-lli-2-003, Safari landscape, 2026-10-19).
+ */
+export async function matchProblems(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const layout = document.querySelector('[data-region="answer"]')?.firstElementChild;
+    const rows = layout?.firstElementChild;
+    if (!rows) return ['match rows missing'];
+    const width = rows.getBoundingClientRect().width;
+    const parts = (box: Element) => {
+      const rects: DOMRect[] = [...box.querySelectorAll('svg')].map((e) =>
+        e.getBoundingClientRect(),
+      );
+      const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        if (n.parentElement?.closest('.sr-only') || !(n.textContent ?? '').trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(n);
+        rects.push(...[...range.getClientRects()].filter((r) => r.width > 0));
+      }
+      return rects;
+    };
+    const sticksOut = (box: Element) => {
+      const b = box.getBoundingClientRect();
+      return parts(box).some((r) => r.right > b.right + 0.5 || r.left < b.left - 0.5);
+    };
+    return [...rows.children].flatMap((row, i) => {
+      const [label, slot] = [...row.children];
+      if (!label || !slot) return [`row ${i + 1}: label or slot missing`];
+      const tile = slot.querySelector('button') ?? slot;
+      const share = label.getBoundingClientRect().width / width;
+      return [
+        share > 0.405 && `row ${i + 1}: label takes ${Math.round(share * 100)} % of the row`,
+        sticksOut(label) && `row ${i + 1}: label text leaves the label`,
+        sticksOut(tile) && `row ${i + 1}: card text or check mark leaves the tile`,
+      ].filter((p): p is string => typeof p === 'string');
+    });
+  });
+}
+
 /** One screen, no page scroll; answers never run under the band; the button fully visible. */
 export async function expectFitsScreen(page: Page, label: string) {
   expect(await fitProblems(page), label).toEqual([]);
