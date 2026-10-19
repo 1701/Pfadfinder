@@ -495,7 +495,7 @@
     },
     "feedback": {
       "correct": "Genau: Bäcker, Lehrerin, Mechaniker, und bei Alarm kommen sie dazu.",
-      "incorrect": "Im 2. Absatz steht, was die Feuerwehrleute arbeiten. Was heißt das für die Feuerwehr?",
+      "incorrect": "Im 2. Absatz steht, was die Feuerwehrleute sonst arbeiten.",
       "misconception": "Nur „Sie löschen freiwillig“ reicht nicht. Der andere Beruf ist der Kern."
     },
     "tags": [
