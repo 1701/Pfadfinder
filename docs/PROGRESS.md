@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – match-Renderer: Zeile links ≤ 40 %, Schema 1.0.14
+- **Gebaut:** `Match.tsx` Zeilen `fit-content(40 % − Abstand)` + Rest (≥ 60 %), mit und ohne Textkasten; kurze Labels bleiben schmal, lange brechen um. `matchProblems` (helpers) in `layout.spec` (alle Items) und `text-layout.spec` (Lesetexte): Label ≤ 40 %, kein Text und kein Haken außerhalb von Label oder Feld. Gegenprobe mit alter Spalte: beide rot (d-lli-2-003, m-dz-2-008, m-gm-1-004). Schema 1.0.14: match mit `textRef` links ≤ 27, rechts ≤ 43 Zeichen (Validator-Warnung, Test mit Gegenprobe, CONTENT_SCHEMA §4.4/§7, CHANGELOG).
+- **Abnahme:** d-lli-2-003 Safari quer 42 → 58 px (richtig 44 → 68), Feld 28 → 60 %, rechts 2 Zeilen statt 3, nichts ragt heraus. d-lsa-2-005, d-rsl-2-006, d-rss-1-006, d-rss-2-005, m-rf-1-004, m-zo-1-009 in vier Viewports unverändert; m-dz-2-008 quer +8 px, hoch −15. **Abweichung:** m-gm-1-004 verliert 15–31 px (Safari quer 116 → 85), weil seine Labels (25 Zeichen) jetzt zweizeilig sind; folgt aus „Label ≤ 40 %“.
+- **Verworfen:** `min-w-0` + Silbentrennung im Feld: trennte „zerklei-nert“ (d-lsa-2-005), iPad quer 18 → −11 px.
+- **Sweep neu:** Jetzt bindet links (Umbruch im 40-%-Label): L 35 → Safari quer −1 px unabhängig von R; R 52 bei L ≥ 23 → iPad quer −3; bis L 27 / R 43 überall ≥ 21 px; bei L ≤ 12 R bis 52. Daraus 27/43.
+- **Befund CI:** Lauf 39239177965 rot: `layout.spec` maß m-rf-1-004 im Suspense-Platzhalter („match rows missing“). `openItem` wartet jetzt auf `aria-busy` wie `text-layout`, auch für `fitProblems`.
+- **CI:** [CI #39246796040](https://github.com/1701/Pfadfinder/actions/runs/39246796040) grün (9ffe452…adcf809), Workers Builds grün; 947 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout- und Chromium-Projekte 78/78, `layout.spec` nach dem Fix 4/4. Messdaten und Vorher/Nachher-Screenshots nicht im Repo.
+
 ## 2026-10-19 – Content: lesen-literarisch auf main, Patch d-lli-2-003, Messung match neben dem Text
 - **Entschieden (Markus):** Content zuerst; zwei Lesen-Blöcke im Einstieg bleiben (PRODUCT §5.4); text-budget und Fixture-Screenshots aus 7b7ee3a als chore-Commit.
 - **Eingespielt:** `patch-lesen-literarisch.json` ersetzt d-lli-2-003 (Prompt 60 Zeichen, links ≤ 23, rechts ≤ 18). `content:validate` 0/0. `text-layout` zweimal grün, `text-inhalt-*.json` und `text-budget-*.json` byte-gleich; 2-003 jetzt ≥ 42 px (Safari quer, noch nicht), iPad quer 108, hoch 95. Batch und Patch per Rebase auf main.
