@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, CI-Status.
 
+## 2026-10-19 – Content: lesen-literarisch auf main, Patch d-lli-2-003, Messung match neben dem Text
+- **Entschieden (Markus):** Content zuerst; zwei Lesen-Blöcke im Einstieg bleiben (PRODUCT §5.4); text-budget und Fixture-Screenshots aus 7b7ee3a als chore-Commit.
+- **Eingespielt:** `patch-lesen-literarisch.json` ersetzt d-lli-2-003 (Prompt 60 Zeichen, links ≤ 23, rechts ≤ 18). `content:validate` 0/0. `text-layout` zweimal grün, `text-inhalt-*.json` und `text-budget-*.json` byte-gleich; 2-003 jetzt ≥ 42 px (Safari quer, noch nicht), iPad quer 108, hoch 95. Batch und Patch per Rebase auf main.
+- **Befund (nicht behoben, eigener Bau-Punkt):** Der match-Renderer gibt der linken Spalte `auto` ([Match.tsx:38](../src/ui/formats/Match.tsx)), das Zielfeld bekommt den Rest. In Safari quer bricht die zugeordnete Erklärung im Zielfeld weiterhin nach jedem Wort um („ein / bisschen / Angst“), „keine Angst mehr“ mit Haken ragt über den Rand.
+- **Gemessen (Sweep, nicht committet):** d-lli-2-003 mit längstem Text links L und rechts R, Luft ≥ 18 px in allen vier Viewports nur bei L ≤ 12 (R bis 38 gemessen) oder R ≤ 18 (L bis 35). Hoch immer ≥ 71 px; Safari quer bindet (L 18–35: R 23/28 → 13 px, R 34 → −17…−47). Vorschlag Warnung für match mit `textRef`: rechts höchstens 18 Zeichen, außer links alle höchstens 12. Gemessen an einem Text und einem Item, Regel = Schemaänderung (1.0.14).
+- **CI:** [CI #39227230960](https://github.com/1701/Pfadfinder/actions/runs/39227230960) grün (c82fe8c…705b56a), Workers Builds grün; 946 Tests, e2e 100 bestanden, 6 übersprungen (WebKit offline). Lokal grün: `npm run check`, Layout- und Chromium-Projekte 78/78. Nicht committet: neu geschriebene Screenshots ohne Befund, `text-inhalt-*.json`, `text-t-*-lesen-*.png`.
+
 ## 2026-10-19 – Content: d-lsa-3-002 gekürzt, Batch lesen-literarisch gemessen (nicht auf main)
 - **Gebaut:** PROGRESS-Eintrag zu 1.0.13 auf die festgelegten Grenzen korrigiert. d-lsa-3-002 incorrect „Im 2. Absatz steht, was die Feuerwehrleute sonst arbeiten.“ (Rückmeldung 131 Zeichen), `content:validate` 0/0.
 - **Batch lesen-literarisch** (t-lit-001…003, d-lli-1-001…3-003, Niveau 6/6/3): `content:validate` 0/0, `pilot-lli.md` nicht im Repo. Liegt als Commit c8ca439 auf dem lokalen Branch `content/lesen-literarisch`, nicht auf main: `text-layout` ist zweimal rot, beide Läufe in `text-inhalt-*.json` byte-gleich.
