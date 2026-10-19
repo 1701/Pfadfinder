@@ -34,6 +34,8 @@ const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('saf
 async function open(page: Page, query: string) {
   await page.goto(`/dev/probetest?${query}`);
   await page.locator('[data-region="band"] button, [data-region="band"] a').last().waitFor();
+  // The lazy renderers show a Suspense fallback (aria-busy) first, as in layout.spec.
+  await expect(page.locator('[data-region="answer"] [aria-busy="true"]')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
 }
 

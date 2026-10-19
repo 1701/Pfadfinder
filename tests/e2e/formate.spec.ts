@@ -28,6 +28,8 @@ const CASES = [
 async function open(page: Page, item: ContentItem) {
   await page.goto(`/dev/item/${item.id}?state=spielen`);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  // The lazy renderers show a Suspense fallback (aria-busy) first, as in layout.spec.
+  await expect(page.locator('[data-region="answer"] [aria-busy="true"]')).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
 }
 
