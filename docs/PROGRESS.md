@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-19 – Paket 3: Lesen-Layout, iPad-Befunde (Einschätzung, Löschen, match), Prüfung auf Überlauf und Überlappung
+- **Einschätzung:** Das Band richtet sich nach seiner Breite (Container-Query auf einem Rahmen, Knöpfe bleiben direkte Kinder): ab 50rem eine Zeile, ab 34rem Vorlesen links und die Frage über drei gleichen Knöpfen, darunter die Frage über der ganzen Knopfreihe. Neue Button-Größe `fill`. Luft vergleichen (5 Items mit Text, 4 Viewports) ≥ 40 px, hoch +56.
+- **Ziffernblock:** ohne Komma „0 | Löschen“ über zwei Spalten, Spalten 72 px, schrumpfen bis 48 px; mit Komma unverändert (m-gm-1-003/2-007: Löschen 90 px, kein Überlauf).
+- **match:** Zielfeld so breit wie die längste Karte mit Haken, höchstens 60 %; Label nimmt den Rest, `text-balance`. Unsichtbarer Messblock im ersten Feld; im Feld hält jede Karte den Platz des Hakens frei (sonst springt die Zeile beim Prüfen). **Abweichung:** Ist der Antwortbereich schmaler als 48rem (neben dem Text, hoch), stehen die Karten unter den Zeilen; nur so wird d-lli-2-003 einzeilig. Sweep: Schema 1.0.15 (links 35, rechts 52 statt 27/43).
+- **Prüfung:** `screen-checks.ts` (`overflowProblems`, `overlapProblems`) in `layout.spec` und `text-layout.spec` für jeden Zustand; SVG-Diagramme ausgenommen. `matchProblems`: Feld ≤ 60 %, Label ≤ 2 Zeilen, ab 4 Wörtern keine Ein-Wort-Zeile.
+- **Gegenprobe:** alter RatingBand und Ziffernblock, neue Prüfung: `layout.spec` iPad quer 28 Befunde, beide `text-layout`-Tests rot (Frage/Vorlesen über „Getroffen“ 56 px, „Löschen“ 10 px aus der Taste, Tasten 2 px übereinander). Mit dem neuen Code grün.
+- **Offen:** Reserve `short-answer` hoch könnte 666 statt 704 px sein (Textkasten +38 px). Kurze match-Karten lassen Leerraum zwischen Label und Feld (m-zo-1-009). „Richtig ist: Ihre Hand zittert.: große Angst“ (Satzzeichen doppelt, schon vorher).
+- **Lokal:** `npm run check` grün (960 Tests), Chromium-Projekte 37/37, Layout-Projekt 41/41 (alle vier Viewports, mit Schalter für die genannten Screenshots). WebKit läuft lokal nicht.
+
 ## 2026-10-19 – Klein-Paket Screenshots: normale Läufe schreiben nach tests/e2e/output/
 - **Entschieden (Markus):** Specs und `npm run screenshots` schreiben Screenshots, Budget-JSON und das Druck-PDF nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Nur mit `PFADFINDER_UPDATE_SCREENSHOTS=1` geht es ins versionierte `tests/e2e/screenshots/`, und zwar nur bei einer bewussten UI-Änderung, die im Abschlussbericht genannt wird. Abnahme: `git status` ist nach einem normalen Lauf sauber.
 - **Gebaut:** `tests/e2e/output-dir.ts` (Ordner nach Schalter, legt ihn an). `helpers.ts` und `scripts/screenshots.ts` nutzen es, `.gitignore` und `ci.yml` sind angepasst. Dazu Regeln in CLAUDE.md („Screenshots“, Befehle), DEPLOY.md §9 und `tests/e2e/README.md`.

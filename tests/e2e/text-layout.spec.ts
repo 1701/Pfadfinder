@@ -13,6 +13,9 @@
 // text (a short text may fit without scrolling, then without a fade) and every item of it in
 // every state (match also with matchProblems); the air per item and state goes to
 // text-inhalt-*.json, a screenshot only to the screens with a finding.
+// Every screen (reading screen and every item state) also gets the generic checks of
+// screen-checks.ts: no visible text runs out of its element, no two tap targets or text blocks
+// overlap (iPad findings 2026-10-19).
 
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -24,6 +27,7 @@ import {
   fitProblems,
   matchProblems,
 } from './helpers';
+import { overflowProblems, overlapProblems } from './screen-checks';
 
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
@@ -49,6 +53,11 @@ const contentTexts = readdirSync('content/texts', { recursive: true })
   .filter((file) => file.endsWith('.json'))
   .map((file) => JSON.parse(readFileSync(`content/texts/${file}`, 'utf8')) as { id: string })
   .map((text) => ({ ...text, items: ITEMS.filter((i) => i.stimulus?.textRef === text.id) }));
+
+/** The generic checks of every screen. */
+async function screenProblems(page: Page): Promise<string[]> {
+  return [...(await overflowProblems(page)), ...(await overlapProblems(page))];
+}
 
 async function open(page: Page, query: string, text = TEXT) {
   const band = page.locator('[data-region="band"] > button:last-of-type');
@@ -194,6 +203,7 @@ for (const viewport of VIEWPORTS) {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lies den Text.');
     await expect(page.getByRole('heading', { level: 2 })).toHaveText('Baumeister am Bach');
     for (const p of boxProblems(await boxMetrics(page), 'start')) red.push(`lesen: ${p}`);
+    for (const p of await screenProblems(page)) red.push(`lesen: ${p}`);
     await shot('lesen');
     await scrollToEnd(page);
     for (const p of boxProblems(await boxMetrics(page), 'end')) red.push(`lesen ende: ${p}`);
@@ -217,6 +227,7 @@ for (const viewport of VIEWPORTS) {
         const label = `${item.format} ${state}`;
         for (const p of await fitProblems(page)) red.push(`${label}: ${p}`);
         for (const p of boxProblems(await boxMetrics(page), 'start')) red.push(`${label}: ${p}`);
+        for (const p of await screenProblems(page)) red.push(`${label}: ${p}`);
         const at = Math.round((await fitMetrics(page))!.slack);
         if (at < AIR) red.push(`${label}: only ${at} px air (${AIR} px wanted)`);
         if (!current || at < current.slack) current = { slack: at, at: label };
@@ -256,7 +267,8 @@ for (const viewport of VIEWPORTS) {
     for (const p of boxProblems(await boxMetrics(page), 'end')) red.push(`ende: ${p}`);
     await shot('ende');
     await open(page, 'item=d-lsa-2-951&zustand=antworten&einstieg');
-    for (const p of await fitProblems(page)) red.push(`einstieg: ${p}`);
+    for (const p of [...(await fitProblems(page)), ...(await screenProblems(page))])
+      red.push(`einstieg: ${p}`);
     await shot('einstieg');
     await page.close();
 
@@ -299,7 +311,8 @@ for (const viewport of VIEWPORTS) {
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lies den Text.');
       const start = await boxMetrics(page);
       lesen[text.id] = { scrolls: start.scrolls, overflow };
-      for (const p of contentBoxProblems(start, 'start')) red.push(`${text.id} lesen: ${p}`);
+      for (const p of [...contentBoxProblems(start, 'start'), ...(await screenProblems(page))])
+        red.push(`${text.id} lesen: ${p}`);
       await page.screenshot({ path: `${SCREENSHOTS}/text-${text.id}-lesen-${viewport.name}.png` });
       await scrollToEnd(page);
       for (const p of contentBoxProblems(await boxMetrics(page), 'end'))
@@ -313,6 +326,7 @@ for (const viewport of VIEWPORTS) {
             ...(await fitProblems(page)),
             ...contentBoxProblems(await boxMetrics(page), 'start'),
             ...(item.format === 'match' ? await matchProblems(page) : []),
+            ...(await screenProblems(page)),
           ];
           const at = Math.round((await fitMetrics(page))?.slack ?? -Infinity);
           (air[item.id] ??= {})[state] = at;

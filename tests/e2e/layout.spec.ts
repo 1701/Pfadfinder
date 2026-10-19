@@ -4,6 +4,8 @@
 // that fits there also fits on the full iPad screens. Locally all four run.
 // A viewport does not stop at the first red item: it measures all of them and fails once, with
 // the complete list. Runs against /dev/item (dev build only). match also gets matchProblems.
+// Every screen also gets the generic checks (screen-checks.ts): no visible text runs out of its
+// element, no two tap targets or text blocks overlap (iPad findings 2026-10-19).
 
 import { expect, test, type Page } from '@playwright/test';
 import {
@@ -13,6 +15,7 @@ import {
   fitProblems,
   matchProblems,
 } from './helpers';
+import { overflowProblems, overlapProblems } from './screen-checks';
 
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
@@ -75,7 +78,12 @@ for (const viewport of VIEWPORTS) {
       await tab.setViewportSize(viewport);
       for (const state of statesOf(item)) {
         await openItem(tab, `/dev/item/${item.id}?state=${state}`);
-        for (const problem of await fitProblems(tab)) red.push(`${item.id} ${state}: ${problem}`);
+        for (const problem of [
+          ...(await fitProblems(tab)),
+          ...(await overflowProblems(tab)),
+          ...(await overlapProblems(tab)),
+        ])
+          red.push(`${item.id} ${state}: ${problem}`);
         if (item.format === 'match')
           for (const problem of await matchProblems(tab))
             red.push(`${item.id} ${state}: ${problem}`);
