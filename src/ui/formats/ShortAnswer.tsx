@@ -1,6 +1,7 @@
 // Kurzantwort: free text (the only format with the system keyboard, PRODUCT §5.3). No auto-check:
 // "Vergleichen" shows the model answer and the key points next to the child's own text, the child
 // rates itself in the band (ItemScreen). The tip stays visible while writing, not as placeholder.
+// The return key says "done" and closes the keyboard instead of starting a new line (task 14).
 
 import { useId, useState } from 'react';
 import { PRESENTATION_TEXTS as T } from '../../domain/presentation';
@@ -50,7 +51,13 @@ export function ShortAnswer({
           value={text}
           maxLength={maxChars}
           rows={3}
+          enterKeyHint="done"
           disabled={disabled}
+          onKeyDown={(event) => {
+            if (event.key !== 'Enter' || event.nativeEvent.isComposing) return;
+            event.preventDefault();
+            event.currentTarget.blur();
+          }}
           onChange={(event) => {
             setText(event.target.value);
             onChange(event.target.value.trim() ? { text: event.target.value } : null);

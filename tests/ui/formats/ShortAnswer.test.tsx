@@ -29,6 +29,26 @@ describe('ShortAnswer (m-dz-3-003)', () => {
     expect(screen.getByText(`8 von ${item.payload.maxChars} Zeichen`)).toBeTruthy();
   });
 
+  // iPad finding (task 14): the return key closes the keyboard, it starts no new line.
+  it('Enter says "done": no new line, the keyboard closes (the field loses focus)', async () => {
+    const onChange = vi.fn();
+    render(
+      <ShortAnswer
+        item={item}
+        attemptIndex={0}
+        answer={null}
+        onChange={onChange}
+        disabled={false}
+      />,
+    );
+    const field = screen.getByRole('textbox', { name: 'Deine Antwort' }) as HTMLTextAreaElement;
+    expect(field.getAttribute('enterkeyhint')).toBe('done');
+    await userEvent.type(field, '4 blau{Enter}');
+    expect(field.value).toBe('4 blau');
+    expect(document.activeElement).not.toBe(field);
+    expect(onChange).toHaveBeenLastCalledWith({ text: '4 blau' });
+  });
+
   it('shows the tip as a line while writing, not as a placeholder', () => {
     render(
       <ShortAnswer
