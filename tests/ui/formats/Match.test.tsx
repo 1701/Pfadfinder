@@ -115,8 +115,8 @@ describe('Match (m-rf-1-004)', () => {
     expect(screen.queryByRole('group', { name: 'Antworten' })).toBeNull();
     expect(screen.queryAllByRole('button')).toEqual([]);
     expect(screen.getAllByText(/^Richtig ist:/)).toHaveLength(1);
-    expect(screen.getByText('Würfel: 6 gleich große Quadrate')).toBeTruthy();
-    expect(screen.getByText('Kugel: rund, rollt in alle Richtungen')).toBeTruthy();
+    expect(screen.getByText('Würfel – 6 gleich große Quadrate')).toBeTruthy();
+    expect(screen.getByText('Kugel – rund, rollt in alle Richtungen')).toBeTruthy();
     expect(screen.getAllByText(/\(richtige Antwort\)/)).toHaveLength(2);
     expect(screen.getAllByText(/\(deine Wahl\)/)).toHaveLength(2);
   });

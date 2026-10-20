@@ -32,15 +32,17 @@ const POOL = 'pool';
  * The same layout before and after checking, so nothing moves: the rows (label | slot) and beside
  * them in landscape, below them in portrait, the pool – after checking, in the same place, the
  * "Richtig ist" list. The rows never grow, whatever that side holds.
- * In a row the slot is as wide as the longest card with its check mark and padding, at most 60 %;
- * the label takes the rest and wraps in balanced lines. The cards are measured once, invisibly
- * (CardSizer), so the slot is as wide before checking as after: nothing moves. Before, the label
- * got at most 40 % and short cards left wide empty slots while long sentences broke into three
- * lines (d-lli-2-003 beside a reading text, iPad finding 2026-10-19).
+ * The slot is as wide as the longest card with its check mark and padding (measured once,
+ * invisibly: CardSizer), so it is as wide before checking as after: nothing moves.
+ * Beside a reading text (.item-with-text) the cards go below the rows, the slot takes at most 60 %
+ * and the label the rest, wrapping in balanced lines: d-lli-2-003 broke into three lines of one
+ * word each (iPad finding 2026-10-19). Without a text the grid is packed: label column auto, slot
+ * fit-content, no empty space between them (m-zo-1-009), cards on one line (m-rf-1-004).
  */
 const LAYOUT_CLASS =
-  'grid w-full items-start gap-x-md gap-y-sm @match-beside:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]';
-const ROWS_CLASS = 'grid grid-cols-[minmax(0,1fr)_fit-content(60%)] items-center gap-x-sm gap-y-xs';
+  'grid w-full items-start gap-x-md gap-y-sm landscape:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] [.item-with-text_&]:grid-cols-1';
+const ROWS_CLASS =
+  'grid grid-cols-[auto_fit-content(100%)] items-center justify-start gap-x-sm gap-y-xs [.item-with-text_&]:grid-cols-[minmax(0,1fr)_fit-content(60%)]';
 const LABEL_CLASS =
   'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option text-balance';
 const rowId = (leftId: string) => `row:${leftId}`;
@@ -136,7 +138,7 @@ function Pool({ children }: { children: ReactNode }) {
       role="group"
       aria-label={T.answers.replace(':', '')}
       className={clsx(
-        'flex min-h-touch flex-wrap content-start gap-xs rounded-control @match-beside:flex-col',
+        'flex min-h-touch flex-wrap content-start gap-xs rounded-control landscape:flex-col [.item-with-text_&]:flex-row',
         isOver && 'bg-signal-soft',
       )}
     >
@@ -216,40 +218,38 @@ export function Match({
     const solution = new Map(revealed.solution.pairs);
     const wrong = left.filter((l) => pairs[l.id] !== solution.get(l.id));
     return (
-      <div className="w-full @container">
-        <div className={LAYOUT_CLASS}>
-          <div className={ROWS_CLASS} data-match-rows>
-            {left.map((l, i) => {
-              const card = pairs[l.id];
-              const state = tileState(true, card === solution.get(l.id), card !== undefined);
-              return (
-                <div key={l.id} className="contents">
-                  <span className={clsx(LABEL_CLASS, 'border-transparent')}>{nb(l.text)}</span>
-                  <div>
-                    <div className={tileClass(state, false, 'px-md')}>
-                      {state === 'solution' ? <SolutionMark state={state} /> : <MarkRoom />}
-                      <span>
-                        {nb(cardText.get(card ?? '') ?? '')}
-                        <StateWords state={state} />
-                      </span>
-                    </div>
-                    {i === 0 && sizer}
+      <div className={LAYOUT_CLASS}>
+        <div className={ROWS_CLASS} data-match-rows>
+          {left.map((l, i) => {
+            const card = pairs[l.id];
+            const state = tileState(true, card === solution.get(l.id), card !== undefined);
+            return (
+              <div key={l.id} className="contents">
+                <span className={clsx(LABEL_CLASS, 'border-transparent')}>{nb(l.text)}</span>
+                <div>
+                  <div className={tileClass(state, false, 'px-md')}>
+                    {state === 'solution' ? <SolutionMark state={state} /> : <MarkRoom />}
+                    <span>
+                      {nb(cardText.get(card ?? '') ?? '')}
+                      <StateWords state={state} />
+                    </span>
                   </div>
+                  {i === 0 && sizer}
                 </div>
-              );
-            })}
-          </div>
-          {wrong.length > 0 && (
-            <div className="grid content-start gap-2xs text-option text-correct">
-              <p>{T.rightIs}</p>
-              {wrong.map((l) => (
-                <p key={l.id}>
-                  {nb(l.text)}: {nb(cardText.get(solution.get(l.id) ?? '') ?? '')}
-                </p>
-              ))}
-            </div>
-          )}
+              </div>
+            );
+          })}
         </div>
+        {wrong.length > 0 && (
+          <div className="grid content-start gap-2xs text-option text-correct">
+            <p>{T.rightIs}</p>
+            {wrong.map((l) => (
+              <p key={l.id}>
+                {nb(l.text)} – {nb(cardText.get(solution.get(l.id) ?? '') ?? '')}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -262,77 +262,73 @@ export function Match({
       onDragEnd={onDragEnd}
       onDragCancel={() => setDragging(null)}
     >
-      <div className="w-full @container">
-        <div className={LAYOUT_CLASS}>
-          <div className={ROWS_CLASS} data-match-rows>
-            {left.map((l, i) => {
-              const card = pairs[l.id];
-              const active = selected?.side === 'left' && selected.id === l.id;
-              return (
-                <div key={l.id} className="contents">
-                  <button
-                    type="button"
-                    aria-pressed={active}
-                    disabled={disabled}
-                    onClick={() => tapRow(l.id)}
-                    className={clsx(
-                      LABEL_CLASS,
-                      active ? 'border-signal-edge bg-signal-soft' : 'border-transparent',
-                    )}
-                  >
-                    {nb(l.text)}
-                  </button>
-                  <Slot leftId={l.id} active={active}>
-                    {card === undefined ? (
-                      <button
-                        type="button"
-                        aria-label={`Feld für ${l.text}`}
-                        disabled={disabled}
-                        onClick={() => tapRow(l.id)}
-                        className={clsx(
-                          'block min-h-touch w-full rounded-control border-2 bg-paper',
-                          active || selected?.side === 'right'
-                            ? 'border-signal-edge'
-                            : 'border-dashed border-line-strong',
-                        )}
-                      />
-                    ) : (
-                      <Card
-                        id={card}
-                        state="plain"
-                        disabled={disabled}
-                        label={`${cardText.get(card) ?? ''}, bei ${l.text}`}
-                        markRoom
-                        onTap={() => tapRow(l.id)}
-                      >
-                        {nb(cardText.get(card) ?? '')}
-                      </Card>
-                    )}
-                    {i === 0 && sizer}
-                  </Slot>
-                </div>
-              );
-            })}
-          </div>
-          <Pool>
-            {right
-              .filter((r) => !placed.has(r.id))
-              .map((r) => (
-                <div key={r.id} className="@match-beside:w-full">
-                  <Card
-                    id={r.id}
-                    disabled={disabled}
-                    state={
-                      selected?.side === 'right' && selected.id === r.id ? 'selected' : 'plain'
-                    }
-                    onTap={() => tapCard(r.id)}
-                  >
-                    {nb(r.text)}
-                  </Card>
-                </div>
-              ))}
-          </Pool>
+      <div className={LAYOUT_CLASS}>
+        <div className={ROWS_CLASS} data-match-rows>
+          {left.map((l, i) => {
+            const card = pairs[l.id];
+            const active = selected?.side === 'left' && selected.id === l.id;
+            return (
+              <div key={l.id} className="contents">
+                <button
+                  type="button"
+                  aria-pressed={active}
+                  disabled={disabled}
+                  onClick={() => tapRow(l.id)}
+                  className={clsx(
+                    LABEL_CLASS,
+                    active ? 'border-signal-edge bg-signal-soft' : 'border-transparent',
+                  )}
+                >
+                  {nb(l.text)}
+                </button>
+                <Slot leftId={l.id} active={active}>
+                  {card === undefined ? (
+                    <button
+                      type="button"
+                      aria-label={`Feld für ${l.text}`}
+                      disabled={disabled}
+                      onClick={() => tapRow(l.id)}
+                      className={clsx(
+                        'block min-h-touch w-full rounded-control border-2 bg-paper',
+                        active || selected?.side === 'right'
+                          ? 'border-signal-edge'
+                          : 'border-dashed border-line-strong',
+                      )}
+                    />
+                  ) : (
+                    <Card
+                      id={card}
+                      state="plain"
+                      disabled={disabled}
+                      label={`${cardText.get(card) ?? ''}, bei ${l.text}`}
+                      markRoom
+                      onTap={() => tapRow(l.id)}
+                    >
+                      {nb(cardText.get(card) ?? '')}
+                    </Card>
+                  )}
+                  {i === 0 && sizer}
+                </Slot>
+              </div>
+            );
+          })}
         </div>
+        <Pool>
+          {right
+            .filter((r) => !placed.has(r.id))
+            .map((r) => (
+              <div key={r.id} className="landscape:w-full [.item-with-text_&]:w-auto">
+                <Card
+                  id={r.id}
+                  disabled={disabled}
+                  state={selected?.side === 'right' && selected.id === r.id ? 'selected' : 'plain'}
+                  onTap={() => tapCard(r.id)}
+                >
+                  {nb(r.text)}
+                </Card>
+              </div>
+            ))}
+        </Pool>
       </div>
       <DragOverlay dropAnimation={null}>
         {dragging && (

@@ -48,9 +48,9 @@
     "short-answer": {
       "box": {
         "width": 720,
-        "height": 196
+        "height": 234
       },
-      "slack": 56,
+      "slack": 18,
       "at": "noch-nicht",
       "reserve": 666
     }

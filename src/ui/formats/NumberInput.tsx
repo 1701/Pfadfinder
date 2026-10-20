@@ -27,7 +27,7 @@ export function NumberInput({
   };
 
   return (
-    <div className="flex flex-col items-center gap-lg landscape:flex-row landscape:gap-3xl">
+    <div className="flex flex-col items-center gap-lg landscape:flex-row landscape:gap-3xl [.item-with-text_&]:gap-lg">
       <div className="grid justify-items-center gap-xs">
         <div className="flex items-center gap-sm">
           <output

@@ -44,15 +44,11 @@ const keyClass =
   'min-h-touch rounded-control border-2 border-line-strong bg-surface font-bold transition-transform duration-(--duration-press) enabled:active:translate-y-px disabled:border-line disabled:text-ink-muted';
 
 /**
- * Without a comma "Löschen" takes two columns of the last row (0 | Löschen): in one 72 px key it
- * ran 10 px out (iPad landscape beside a reading text, finding 2026-10-19). The columns are 72 px
- * and may shrink to the touch minimum when the answer area is narrow, so keys never overlap.
- * With a comma the row stays , | 0 | Löschen: three equal columns as wide as "Löschen" needs.
+ * Keys are 90 px wide when there is room and 72 px at least. Without a comma "Löschen" takes two
+ * columns of the last row (0 | Löschen): in one 72 px key it ran 10 px out (iPad landscape beside
+ * a reading text, finding 2026-10-19). With a comma the row stays , | 0 | Löschen.
  */
-const GRID_CLASS = {
-  digits: 'grid-cols-[repeat(3,minmax(var(--spacing-touch),var(--spacing-key)))]',
-  decimal: 'grid-cols-3 [&>button]:min-w-key',
-};
+const GRID_CLASS = 'grid-cols-[repeat(3,minmax(var(--spacing-key),var(--spacing-key-max)))]';
 
 export function ZiffernBlock({ value, onChange, disabled = false, ...options }: ZiffernBlockProps) {
   const { allowDecimal, maxDigits } = options;
@@ -82,11 +78,7 @@ export function ZiffernBlock({ value, onChange, disabled = false, ...options }: 
   }, [disabled, value, onChange, allowDecimal, maxDigits]);
 
   return (
-    <div
-      className={clsx('grid gap-xs', allowDecimal ? GRID_CLASS.decimal : GRID_CLASS.digits)}
-      role="group"
-      aria-label="Ziffernblock"
-    >
+    <div className={clsx('grid gap-xs', GRID_CLASS)} role="group" aria-label="Ziffernblock">
       {ROWS.flat().map((key) => (
         <button
           key={key}

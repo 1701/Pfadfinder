@@ -2,7 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
-## 2026-10-19 – Paket 3: Lesen-Layout, iPad-Befunde (Einschätzung, Löschen, match), Prüfung auf Überlauf und Überlappung
+## 2026-10-20 – Nachtrag Paket 3: match ohne Text gepackt, Tasten 72–90 px, Reserve 666, Trenner „ – “
+- **Entschieden (Markus):** Karten unter den Zeilen neben dem Textkasten bleiben. 60-%-Kappung und Karten unter den Zeilen nur neben einem Textkasten (`.item-with-text`); ohne Text Label `auto`, Zielfeld `fit-content`, Raster gepackt. Ziffertasten `minmax(72px, 90px)` (neu `--spacing-key-max`). `--spacing-reading-reserve-short-answer` 704 → 666 px. Lösungszeile bei match „Würfel – 6 gleich große Quadrate“.
+- **Gemessen (vier Viewports):** m-rf-1-004 und m-zo-1-009 Karten einzeilig, vom Labeltext bis zum Feld 26 px (Innenabstand + Abstand). Tasten 90 px, neben dem Text iPad quer 75 px, „Löschen“ ohne Überlauf; mit Komma 90 px. short-answer mit Text hoch ≥ 18 px (d-lsa-3-002 und Fixture: noch nicht 18).
+- **Dazu:** Neben dem Text hat der Zahlenbereich `gap-lg` statt `gap-3xl` (sonst 30 px zu breit bei 72-px-Tasten). `matchProblems`: 60 % nur neben dem Text; ohne Text höchstens 28 px zwischen Labeltext und Feld, wenn kein Label umbricht. Container-Query `--container-match-beside` entfällt.
+- **Offen:** m-dz-2-008 quer ohne Text: längstes Label und längste Karte passen zusammen nicht in die Zeile, beide brechen um; das ausgeglichene Label lässt 77 px frei.
+- **Lokal:** `npm run check` grün (960 Tests), Chromium-Projekte 37/37, Layout-Projekt 41/41 (vier Viewports). Screenshots mit Schalter: `format-match-*`, `item-match-*`, `probetest-fehlt-knappstes-*`, `item-number-input-*`, `eltern-frage-*`, `probetest-aufgabe-knappstes-*`, `text-short-answer-*-portrait`, `text-budget-*-portrait.json`.
+
+, iPad-Befunde (Einschätzung, Löschen, match), Prüfung auf Überlauf und Überlappung
 - **Einschätzung:** Das Band richtet sich nach seiner Breite (Container-Query auf einem Rahmen, Knöpfe bleiben direkte Kinder): ab 50rem eine Zeile, ab 34rem Vorlesen links und die Frage über drei gleichen Knöpfen, darunter die Frage über der ganzen Knopfreihe. Neue Button-Größe `fill`. Luft vergleichen (5 Items mit Text, 4 Viewports) ≥ 40 px, hoch +56.
 - **Ziffernblock:** ohne Komma „0 | Löschen“ über zwei Spalten, Spalten 72 px, schrumpfen bis 48 px; mit Komma unverändert (m-gm-1-003/2-007: Löschen 90 px, kein Überlauf).
 - **match:** Zielfeld so breit wie die längste Karte mit Haken, höchstens 60 %; Label nimmt den Rest, `text-balance`. Unsichtbarer Messblock im ersten Feld; im Feld hält jede Karte den Platz des Hakens frei (sonst springt die Zeile beim Prüfen). **Abweichung:** Ist der Antwortbereich schmaler als 48rem (neben dem Text, hoch), stehen die Karten unter den Zeilen; nur so wird d-lli-2-003 einzeilig. Sweep: Schema 1.0.15 (links 35, rechts 52 statt 27/43).

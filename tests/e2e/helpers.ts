@@ -94,11 +94,14 @@ export async function fitProblems(page: Page): Promise<string[]> {
 }
 
 /**
- * match: the slot (card column) takes at most 60 % of the row, the label the rest; no text or check
- * mark leaves its label or tile; a label has at most two lines, and from four words on no line
- * holds a single word (labels wrap balanced). Before, a long label squeezed the card to one word
- * per line and the check mark ran over the tile's edge (d-lli-2-003, Safari landscape,
- * 2026-10-19); then sentences broke into three lines beside short cards (iPad, 2026-10-19).
+ * match: no text or check mark leaves its label or tile; a label has at most two lines, and from
+ * four words on no line holds a single word (labels wrap balanced). Beside a reading text the slot
+ * (card column) takes at most 60 % of the row and the label the rest; without a text the grid is
+ * packed: when no label wraps, from the end of the longest label's text to the slot no more than
+ * the label's padding and the gap (28 px). A wrapped label is balanced and leaves room in its
+ * column by design (m-dz-2-008 in landscape). Before, a long label squeezed the card to one word per line and the check
+ * mark ran over the tile's edge (d-lli-2-003, Safari landscape, 2026-10-19); then sentences broke
+ * into three lines beside short cards, and short cards left wide empty space (m-zo-1-009).
  * The invisible card sizer ([data-sizer], inside the first slot) does not count.
  */
 export async function matchProblems(page: Page): Promise<string[]> {
@@ -106,6 +109,7 @@ export async function matchProblems(page: Page): Promise<string[]> {
     const rows = document.querySelector('[data-region="answer"] [data-match-rows]');
     if (!rows) return ['match rows missing'];
     const width = rows.getBoundingClientRect().width;
+    const besideText = rows.closest('.item-with-text') !== null;
     const textNodes = (box: Element) => {
       const nodes: Text[] = [];
       const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
@@ -148,7 +152,7 @@ export async function matchProblems(page: Page): Promise<string[]> {
       }
       return [...byTop.entries()].sort((a, b) => a[0] - b[0]).map(([, words]) => words);
     };
-    return [...rows.children].flatMap((row, i) => {
+    const found = [...rows.children].flatMap((row, i) => {
       const [label, slot] = [...row.children];
       if (!label || !slot) return [`row ${i + 1}: label or slot missing`];
       const tile = slot.querySelector('button') ?? slot;
@@ -156,7 +160,9 @@ export async function matchProblems(page: Page): Promise<string[]> {
       const words = lines(label);
       const total = words.reduce((a, b) => a + b, 0);
       return [
-        share > 0.605 && `row ${i + 1}: slot takes ${Math.round(share * 100)} % of the row`,
+        besideText &&
+          share > 0.605 &&
+          `row ${i + 1}: slot takes ${Math.round(share * 100)} % of the row`,
         sticksOut(label) && `row ${i + 1}: label text leaves the label`,
         sticksOut(tile) && `row ${i + 1}: card text or check mark leaves the tile`,
         words.length > 2 && `row ${i + 1}: label has ${words.length} lines`,
@@ -166,6 +172,18 @@ export async function matchProblems(page: Page): Promise<string[]> {
           `row ${i + 1}: a label line holds one word (${words.join('/')})`,
       ].filter((p): p is string => typeof p === 'string');
     });
+    if (!besideText && [...rows.children].every((row) => lines(row.children[0]!).length <= 1)) {
+      const pairs = [...rows.children].map((row) => [...row.children]);
+      const textEnd = Math.max(
+        ...pairs.flatMap(([label]) => (label ? parts(label).map((r) => r.right) : [])),
+      );
+      const slotStart = Math.min(
+        ...pairs.map(([, slot]) => slot?.getBoundingClientRect().left ?? Infinity),
+      );
+      const empty = slotStart - textEnd;
+      if (empty > 28) found.push(`${Math.round(empty)} px empty between labels and slots`);
+    }
+    return found;
   });
 }
 
