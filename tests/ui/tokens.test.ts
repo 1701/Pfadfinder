@@ -34,6 +34,7 @@ const PAIRS: [string, string, number][] = [
   ['ink-muted', 'surface', 4.5],
   ['ink', 'signal', 4.5],
   ['ink', 'signal-soft', 4.5],
+  ['ink', 'touch-soft', 4.5],
   ['ink', 'correct-surface', 4.5],
   ['ink', 'notyet-surface', 4.5],
   ['correct', 'correct-surface', 4.5],

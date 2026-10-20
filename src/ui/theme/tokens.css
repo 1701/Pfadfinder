@@ -15,6 +15,7 @@
   --color-signal: #f2b83a; /* primary button only (Prüfen, Weiter) */
   --color-signal-edge: #8c5e00; /* border of primary button and of a selected option */
   --color-signal-soft: #fbe7b0; /* selected option, marked words */
+  --color-touch-soft: #dce7e2; /* touched, not chosen: an order card just moved (paper with ink, not yellow, not blue) */
   --color-correct: #1c5e78; /* "richtig": calm water blue, not green (green is the ink) */
   --color-correct-surface: #e0eef3;
   --color-notyet: #5b5449; /* "noch nicht ganz": stone grey, never red */
@@ -109,6 +110,7 @@
   /* Motion only in response to the child's action, max. 300ms. */
   --duration-press: 120ms;
   --duration-feedback: 250ms;
+  --duration-move: 180ms; /* an order card sliding to its new place after an arrow tap */
   /* Map: width of a Gebiet's focus outline, in map units (unitless SVG stroke). */
   --map-focus-width: 6;
 }
@@ -117,5 +119,6 @@
   :root {
     --duration-press: 0ms;
     --duration-feedback: 0ms;
+    --duration-move: 0ms;
   }
 }

@@ -256,6 +256,16 @@ async function arrange(page: Page, item: ContentItem, wanted: string[]) {
     await button(page, `${first} nach unten`).click();
     await button(page, `${first} nach oben`).click();
   }
+  // After an arrow tap the card slides (180 ms) and stays tinted for a second (task 14): wait
+  // until the list rests, so boxes and screenshots show the cards in place, untinted.
+  await expect(page.locator('[data-region="answer"] li[data-moved]')).toHaveCount(0);
+  await expect
+    .poll(() =>
+      page
+        .locator('[data-region="answer"] li')
+        .evaluateAll((els) => els.filter((el) => (el as HTMLElement).style.transition).length),
+    )
+    .toBe(0);
 }
 
 /**

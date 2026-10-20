@@ -13,6 +13,7 @@ const COLORS = [
   ['signal', 'Signal: nur Prüfen/Weiter'],
   ['signal-edge', 'Signal-Rand'],
   ['signal-soft', 'Gewählt / markiert'],
+  ['touch-soft', 'Gerade bewegt'],
   ['correct', 'Richtig'],
   ['correct-surface', 'Richtig: Fläche'],
   ['notyet', 'Noch nicht ganz'],

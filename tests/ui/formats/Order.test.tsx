@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import '../dom';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { presentedOrder } from '../../../src/domain/presentation';
-import { Order } from '../../../src/ui/formats/Order';
+import { ORDER_HIGHLIGHT_MS, Order } from '../../../src/ui/formats/Order';
 import { contentItem } from '../../fixtures/content-items';
 
 const item = contentItem('m-rf-2-008', 'order');
@@ -59,5 +59,86 @@ describe('Order (m-rf-2-008)', () => {
     expect(screen.getByText(/^Richtig ist:/).textContent?.replace(/\s+/g, ' ')).toBe(
       `Richtig ist: ${item.solution.orderedIds.map((id) => text.get(id)).join(', ')}`,
     );
+  });
+
+  // iPad finding (task 14): after an arrow tap the card slides and stays tinted for a moment.
+  describe('after an arrow tap', () => {
+    afterEach(() => {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+      vi.restoreAllMocks();
+    });
+
+    /** Each row reports its place in the list as its top, 60 px apart, like a real layout. */
+    function layoutRows() {
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: HTMLElement,
+      ) {
+        const li = this.closest('li');
+        const top = li ? [...li.parentElement!.children].indexOf(li) * 60 : 0;
+        return { top, bottom: top + 48, left: 0, right: 0, width: 0, height: 48 } as DOMRect;
+      });
+    }
+
+    function reduce(on: boolean) {
+      vi.stubGlobal('matchMedia', (query: string) => ({
+        matches: on && query.includes('reduce'),
+        media: query,
+        addEventListener() {},
+        removeEventListener() {},
+      }));
+    }
+
+    function moveFirstDown() {
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+      render(
+        <Order item={item} attemptIndex={0} answer={null} onChange={() => {}} disabled={false} />,
+      );
+      const [first] = presentedOrder(item, 0);
+      fireEvent.click(screen.getByRole('button', { name: `${first!.text} nach unten` }));
+      const rows = screen.getAllByRole('listitem');
+      return { moved: rows[1]!, others: rows.filter((_, i) => i !== 1), first: first! };
+    }
+
+    const tile = (li: HTMLElement) => li.querySelector('.flex-1') as HTMLElement;
+
+    it('the moved card is tinted touch-soft (not yellow, not blue), then not any more', () => {
+      reduce(false);
+      const { moved, others, first } = moveFirstDown();
+      expect(moved.textContent).toContain(first.text);
+      expect(moved.dataset.moved).toBe('true');
+      expect(tile(moved).className).toContain('bg-touch-soft');
+      expect(tile(moved).className).not.toMatch(/bg-signal|bg-correct/);
+      for (const li of others) {
+        expect(li.dataset.moved).toBeUndefined();
+        expect(tile(li).className).toContain('bg-surface');
+      }
+      act(() => vi.advanceTimersByTime(ORDER_HIGHLIGHT_MS));
+      expect(moved.dataset.moved).toBeUndefined();
+      expect(tile(moved).className).not.toContain('bg-touch-soft');
+    });
+
+    it('slides both cards from their old places over --duration-move', () => {
+      reduce(false);
+      layoutRows();
+      const { moved, others } = moveFirstDown();
+      expect(moved.style.transition).toBe('transform var(--duration-move) var(--ease-standard)');
+      expect(others[0]!.style.transition).toBe(
+        'transform var(--duration-move) var(--ease-standard)',
+      );
+      expect(others[1]!.style.transition).toBe('');
+    });
+
+    it('prefers-reduced-motion: the tint without any movement', () => {
+      reduce(true);
+      layoutRows();
+      const { moved, others } = moveFirstDown();
+      expect(moved.dataset.moved).toBe('true');
+      expect(tile(moved).className).toContain('bg-touch-soft');
+      for (const li of [moved, ...others]) {
+        expect(li.style.transition).toBe('');
+        expect(li.style.transform).toBe('');
+      }
+    });
   });
 });

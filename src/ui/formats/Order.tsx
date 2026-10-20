@@ -2,6 +2,8 @@
 // for keyboard and screen readers. The list never starts solved (presentedOrder), and Prüfen
 // waits for the first move. After checking handles and arrows go away, but their places stay, so
 // no card moves; cards in the right place get a check mark, and a line names the right order.
+// After an arrow tap the card slides to its new place (FLIP, --duration-move) and stays tinted for
+// a moment (touch-soft: touched, not chosen); with prefers-reduced-motion only the tint (task 14).
 // Own chunk (registry), like Match.
 
 import {
@@ -20,7 +22,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import clsx from 'clsx';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { presentedOrder, PRESENTATION_TEXTS as T } from '../../domain/presentation';
 import { ArrowDownGlyph, ArrowUpGlyph, GripGlyph } from '../components/glyphs';
 import { keepNumbersTogether as nb } from '../text/numbers';
@@ -28,6 +30,13 @@ import { SolutionMark, StateWords, tileClass, tileState } from './choice';
 import type { FormatProps } from './types';
 
 const ORDER_INSTRUCTIONS = 'Mit den Pfeilen nach oben und unten verschiebst du eine Karte.';
+
+/** How long a card stays tinted after an arrow tap. */
+export const ORDER_HIGHLIGHT_MS = 1000;
+
+const reducedMotion = () =>
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const ARROW_CLASS =
   'grid size-touch shrink-0 place-items-center rounded-control border-2 border-line-strong bg-surface disabled:border-line disabled:text-line';
@@ -38,16 +47,21 @@ function Row({
   index,
   count,
   disabled,
+  moved,
   onMove,
   buttonRef,
+  rowRef,
 }: {
   id: string;
   text: string;
   index: number;
   count: number;
   disabled: boolean;
+  /** Just moved by an arrow: tinted for ORDER_HIGHLIGHT_MS. */
+  moved: boolean;
   onMove(from: number, to: number, via: 'up' | 'down'): void;
   buttonRef(direction: 'up' | 'down', el: HTMLButtonElement | null): void;
+  rowRef(el: HTMLLIElement | null): void;
 }) {
   const { setNodeRef, setActivatorNodeRef, listeners, transform, transition, isDragging } =
     useSortable({ id, disabled });
@@ -56,9 +70,13 @@ function Row({
     : undefined;
   return (
     <li
-      ref={setNodeRef}
+      ref={(el) => {
+        setNodeRef(el);
+        rowRef(el);
+      }}
       style={style}
-      className={clsx('flex items-center gap-sm', isDragging && 'relative z-10')}
+      data-moved={moved || undefined}
+      className={clsx('flex items-center gap-sm', (isDragging || moved) && 'relative z-10')}
     >
       <span
         ref={setActivatorNodeRef}
@@ -68,7 +86,13 @@ function Row({
       >
         <GripGlyph className="size-lg" />
       </span>
-      <span className={tileClass(isDragging ? 'selected' : 'plain', false, 'flex-1 px-md')}>
+      <span
+        className={tileClass(
+          isDragging ? 'selected' : moved ? 'moved' : 'plain',
+          false,
+          'flex-1 px-md transition-colors duration-(--duration-feedback)',
+        )}
+      >
         {nb(text)}
       </span>
       <button
@@ -109,7 +133,11 @@ export function Order({
   );
   const [ids, setIds] = useState<string[]>(() => answer?.orderedIds ?? start);
   const [said, setSaid] = useState('');
+  const [moved, setMoved] = useState<string | null>(null);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const rows = useRef(new Map<string, HTMLLIElement>());
+  // Where each card stood before an arrow move (FLIP: first, last, invert, play).
+  const before = useRef<Map<string, number> | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
   const text = new Map(item.payload.items.map((e) => [e.id, e.text]));
 
@@ -117,6 +145,12 @@ export function Order({
     if (to < 0 || to >= ids.length || from === to) return;
     const next = arrayMove(ids, from, to);
     const id = next[to] ?? '';
+    if (via) {
+      before.current = new Map(
+        [...rows.current].map(([k, el]) => [k, el.getBoundingClientRect().top]),
+      );
+      setMoved(id);
+    }
     setIds(next);
     setSaid(`${text.get(id) ?? ''} ist jetzt an Stelle ${to + 1}.`);
     onChange({ orderedIds: next });
@@ -128,7 +162,31 @@ export function Order({
     }
   };
 
+  // Play the arrow move: each card starts where it stood and slides to its new place.
+  useLayoutEffect(() => {
+    const first = before.current;
+    before.current = null;
+    if (!first || reducedMotion()) return;
+    for (const [id, el] of rows.current) {
+      const delta = (first.get(id) ?? 0) - el.getBoundingClientRect().top;
+      if (delta === 0) continue;
+      el.style.transition = 'none';
+      el.style.transform = `translateY(${delta}px)`;
+      void el.getBoundingClientRect();
+      el.style.transition = 'transform var(--duration-move) var(--ease-standard)';
+      el.style.transform = '';
+      el.addEventListener('transitionend', () => (el.style.transition = ''), { once: true });
+    }
+  }, [ids]);
+
+  useEffect(() => {
+    if (moved === null) return;
+    const timer = setTimeout(() => setMoved(null), ORDER_HIGHLIGHT_MS);
+    return () => clearTimeout(timer);
+  }, [moved, ids]);
+
   const onDragEnd = ({ active, over }: DragEndEvent) => {
+    setMoved(null);
     if (over) move(ids.indexOf(String(active.id)), ids.indexOf(String(over.id)));
   };
 
@@ -192,10 +250,15 @@ export function Order({
               index={index}
               count={ids.length}
               disabled={disabled}
+              moved={moved === id}
               onMove={move}
               buttonRef={(direction, el) => {
                 if (el) buttons.current.set(`${id}:${direction}`, el);
                 else buttons.current.delete(`${id}:${direction}`);
+              }}
+              rowRef={(el) => {
+                if (el) rows.current.set(id, el);
+                else rows.current.delete(id);
               }}
             />
           ))}

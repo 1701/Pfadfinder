@@ -5,7 +5,7 @@
 import clsx from 'clsx';
 import { CheckGlyph } from '../components/glyphs';
 
-export type TileState = 'plain' | 'selected' | 'solution' | 'chosen' | 'blocked';
+export type TileState = 'plain' | 'selected' | 'solution' | 'chosen' | 'blocked' | 'moved';
 
 /** The tile body; formats add width and padding. */
 export const TILE_CLASS =
@@ -18,6 +18,8 @@ export const tileStateClass: Record<TileState, string> = {
   chosen: 'border-notyet bg-notyet-surface',
   /** The limit is reached: this tile waits until the child deselects another one. */
   blocked: 'border-dashed border-line-strong bg-surface text-ink-muted',
+  /** Just moved by an arrow (order): touched, not chosen, so neither yellow nor blue. */
+  moved: 'border-line-strong bg-touch-soft',
 };
 
 /** State of one tile before and after checking. */
