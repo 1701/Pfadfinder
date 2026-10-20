@@ -38,6 +38,27 @@
       "slack": 94
     }
   },
+  "text": {
+    "aufgabe": {
+      "single-choice": 188,
+      "order": 188,
+      "match": 184,
+      "short-answer": 231
+    },
+    "durchsehen": {
+      "single-choice": 132,
+      "order": 1,
+      "match": 15,
+      "short-answer": 19
+    },
+    "vergleichen": {
+      "short-answer": 101
+    },
+    "lesen": {
+      "d-lsa-1-950": 12,
+      "d-lli-1-900": 12
+    }
+  },
   "map": {
     "smallestName": 19.11625,
     "overflow": 0,

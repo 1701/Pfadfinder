@@ -16,19 +16,23 @@ import { Button } from './Button';
 import { VorlesenButton } from './VorlesenButton';
 import { CheckGlyph, SignpostGlyph } from './glyphs';
 
-/** Grid places with "Zurück": landscape [message | Zurück | Weiter], portrait stacked. */
+/**
+ * Grid places with "Zurück": landscape [message | Zurück | Weiter], portrait stacked, and stacked
+ * beside a reading text in landscape too (`in-[.item-with-text]`, task 13: three buttons side by
+ * side left the message a narrow column, order −123 px on the iPad).
+ */
 const BACK_LAYOUT = {
   plain: {
-    message: 'portrait:row-span-2',
+    message: 'portrait:row-span-2 in-[.item-with-text]:row-span-2',
     back: 'col-start-2 row-start-1 portrait:row-start-1',
     falle: '',
-    next: 'col-start-3 row-start-1 portrait:col-start-2 portrait:row-start-2',
+    next: 'col-start-3 row-start-1 portrait:col-start-2 portrait:row-start-2 in-[.item-with-text]:col-start-2 in-[.item-with-text]:row-start-2',
   },
   asking: {
-    message: 'row-span-2 portrait:row-span-3',
+    message: 'row-span-2 portrait:row-span-3 in-[.item-with-text]:row-span-3',
     back: 'col-start-2 row-start-2',
-    falle: 'col-start-3 row-start-1 portrait:col-start-2',
-    next: 'col-start-3 row-start-2 portrait:col-start-2 portrait:row-start-3',
+    falle: 'col-start-3 row-start-1 portrait:col-start-2 in-[.item-with-text]:col-start-2',
+    next: 'col-start-3 row-start-2 portrait:col-start-2 portrait:row-start-3 in-[.item-with-text]:col-start-2 in-[.item-with-text]:row-start-3',
   },
 } as const;
 
@@ -99,7 +103,7 @@ export function FeedbackPanel({
       className={clsx(
         'grid items-end gap-x-lg gap-y-xs',
         back
-          ? 'grid-cols-[minmax(0,1fr)_auto_auto] portrait:grid-cols-[minmax(0,1fr)_auto]'
+          ? 'grid-cols-[minmax(0,1fr)_auto_auto] portrait:grid-cols-[minmax(0,1fr)_auto] in-[.item-with-text]:grid-cols-[minmax(0,1fr)_auto]'
           : 'grid-cols-[minmax(0,1fr)_auto]',
       )}
     >

@@ -4,13 +4,18 @@
 //   screens      intro, overview, questions, result: no scroll, targets ≥ 48 px, band visible
 //   items        every item of mathe-01 while answering and while looking through (wrong answer,
 //                no answer), the short answer while comparing: fitProblems, the least room kept
+//   texts        the fixture deutsch-90 (task 13): items beside t-sach-900 (single-choice, order,
+//                match, short-answer) while answering and looking through (short answer also
+//                comparing), ≥ 18 px air, nothing overflows or overlaps; the reading screen with
+//                the Probetest's Kopf before each text
 //   map          the line "Probetest Mathe" in the legend line: ≥ 48 px, map names still ≥ 18 px
 //   print        /probetest/mathe-01/print as A4 PDF and as a print-media screenshot (Chromium)
 // Numbers go to probetest-budget-<viewport>.json in SCREENSHOTS (output-dir.ts), screenshots beside them.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems } from './helpers';
+import { SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems, matchProblems } from './helpers';
+import { overflowProblems, overlapProblems } from './screen-checks';
 
 const PROBETEST = JSON.parse(readFileSync('content/probetests/mathe-01.json', 'utf8')) as {
   itemIds: string[];
@@ -28,6 +33,30 @@ const SCREENS = [
   'auswertung-offen',
   'durchsehen-uebersicht',
 ] as const;
+
+/** The fixture with reading texts and its items beside t-sach-900, one per measured format. */
+const FIXTURE = 'deutsch-90';
+const TEXT_ITEMS = [
+  { id: 'd-lsa-1-950', format: 'single-choice' },
+  { id: 'd-lsa-2-950', format: 'order' },
+  { id: 'd-lsa-2-952', format: 'match' },
+  { id: 'd-lsa-3-950', format: 'short-answer' },
+] as const;
+/** The first item of each fixture text: the reading screen comes before it. */
+const READING = [
+  { item: 'd-lsa-1-950', title: 'Baumeister am Bach', current: 1 },
+  { item: 'd-lli-1-900', title: 'Der Igel im Winter', current: 7 },
+] as const;
+/** Air above the band beside a reading text, as in text-layout.spec. */
+const AIR = 18;
+/**
+ * Exception (decision Markus, task 13): looking through beside a text in Safari landscape stacks
+ * Falle, Zurück and Weiter; there only no overflow and no overlap, air ≥ 0 (measured: order 1,
+ * match 15, short-answer 19 px). Every other state and viewport keeps 18 px.
+ */
+function airWanted(state: string, viewport: string): number {
+  return state === 'durchsehen' && viewport === 'safari-landscape' ? 0 : AIR;
+}
 
 const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('safari')) : VIEWPORTS;
 
@@ -135,6 +164,68 @@ for (const viewport of MEASURED) {
     keep('vergleichen', SHORT_ANSWER, (await fitMetrics(page))!.slack);
     await page.screenshot({ path: `${SCREENSHOTS}/probetest-vergleichen-${viewport.name}.png` });
     report.slack = slack;
+
+    // Items beside a reading text (fixture deutsch-90) and the reading screen with the Kopf.
+    const text: Record<string, Record<string, number>> = {};
+    const tightest: Record<string, { query: string; slack: number }> = {};
+    for (const { id, format } of TEXT_ITEMS) {
+      const states =
+        format === 'short-answer'
+          ? ['aufgabe', 'durchsehen', 'vergleichen']
+          : ['aufgabe', 'durchsehen'];
+      for (const state of states) {
+        const query = `probetest=${FIXTURE}&zustand=${state}&item=${id}`;
+        await open(page, query);
+        const label = `text ${state} ${format}`;
+        for (const p of await fitProblems(page)) red.push(`${label}: ${p}`);
+        for (const p of await overflowProblems(page)) red.push(`${label}: ${p}`);
+        for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
+        if (format === 'match')
+          for (const p of await matchProblems(page)) red.push(`${label}: ${p}`);
+        if ((await page.locator('[data-region="text"]').count()) !== 1)
+          red.push(`${label}: no text box`);
+        const at = Math.round((await fitMetrics(page))!.slack);
+        const wanted = airWanted(state, viewport.name);
+        if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
+        (text[state] ??= {})[format] = at;
+        if (!tightest[state] || at < tightest[state].slack) tightest[state] = { query, slack: at };
+      }
+    }
+    for (const { item, title, current } of READING) {
+      await open(page, `probetest=${FIXTURE}&zustand=lesen&item=${item}`);
+      const label = `lesen ${item}`;
+      for (const p of await screenProblems(page)) red.push(`${label}: ${p}`);
+      for (const p of await overflowProblems(page)) red.push(`${label}: ${p}`);
+      for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
+      const m = await headerMetrics(page);
+      if (m.middles > 12 || m.minGap <= 0) red.push(`${label} header: ${JSON.stringify(m)}`);
+      if ((await page.getByRole('heading', { level: 1 }).textContent()) !== 'Lies den Text.')
+        red.push(`${label}: no instruction`);
+      if ((await page.getByRole('heading', { level: 2 }).textContent()) !== title)
+        red.push(`${label}: title missing`);
+      if (!(await page.locator('[data-kopf]').textContent())?.includes(`${current} von 18`))
+        red.push(`${label}: Kopf without "${current} von 18"`);
+      if ((await page.getByRole('button', { name: 'Vorlesen' }).count()) > 0)
+        red.push(`${label}: Vorlesen in the Probetest`);
+      const room = await page.evaluate(() => {
+        const box = document.querySelector('[data-region="text"]')!.getBoundingClientRect();
+        const band = document.querySelector('[data-region="band"]')!.getBoundingClientRect();
+        return Math.round(band.top - box.bottom);
+      });
+      if (room < 0) red.push(`${label}: text box runs ${-room} px under the band`);
+      (text.lesen ??= {})[item] = room;
+      if (item === READING[0].item) {
+        await page.screenshot({ path: `${SCREENSHOTS}/probetest-lesen-${viewport.name}.png` });
+      }
+    }
+    report.text = text;
+    for (const [state, { query }] of Object.entries(tightest)) {
+      if (state === 'vergleichen') continue;
+      await open(page, query);
+      await page.screenshot({
+        path: `${SCREENSHOTS}/probetest-text-${state}-knappstes-${viewport.name}.png`,
+      });
+    }
     for (const [state, { id }] of Object.entries(slack).filter(
       ([s]) => s !== 'vergleichen' && s !== 'nur-wartende',
     )) {
