@@ -19,7 +19,15 @@ import clsx from 'clsx';
 import { useMemo, useState, type ReactNode } from 'react';
 import { presentedMatch, PRESENTATION_TEXTS as T } from '../../domain/presentation';
 import { keepNumbersTogether as nb } from '../text/numbers';
-import { SolutionMark, StateWords, tileClass, tileState, type TileState } from './choice';
+import {
+  EMPTY_MARK,
+  SolutionMark,
+  StateWords,
+  emptyTileClass,
+  tileClass,
+  tileState,
+  type TileState,
+} from './choice';
 import type { FormatProps } from './types';
 
 type Selection = { side: 'left' | 'right'; id: string } | null;
@@ -75,6 +83,7 @@ function Card({
       {...listeners}
       aria-label={label}
       aria-pressed={state === 'selected'}
+      disabled={disabled}
       onClick={onTap}
       className={tileClass(
         state,
@@ -289,13 +298,14 @@ export function Match({
                       aria-label={`Feld für ${l.text}`}
                       disabled={disabled}
                       onClick={() => tapRow(l.id)}
-                      className={clsx(
-                        'block min-h-touch w-full rounded-control border-2 bg-paper',
-                        active || selected?.side === 'right'
-                          ? 'border-signal-edge'
-                          : 'border-dashed border-line-strong',
+                      className={emptyTileClass(
+                        !disabled,
+                        active || selected?.side === 'right',
+                        'w-full',
                       )}
-                    />
+                    >
+                      <span aria-hidden="true">{EMPTY_MARK}</span>
+                    </button>
                   ) : (
                     <Card
                       id={card}

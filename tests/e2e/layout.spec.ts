@@ -6,12 +6,16 @@
 // the complete list. Runs against /dev/item (dev build only). match also gets matchProblems.
 // Every screen also gets the generic checks (screen-checks.ts): no visible text runs out of its
 // element, no two tap targets or text blocks overlap (iPad findings 2026-10-19).
+// match keeps 18 px air above the band (task 14, the empty field with "…"); its air per item and
+// state goes to layout-match-<viewport>.json.
 
 import { expect, test, type Page } from '@playwright/test';
+import { writeFileSync } from 'node:fs';
 import {
   ITEMS,
   SCREENSHOTS,
   VIEWPORTS as ALL_VIEWPORTS,
+  fitMetrics,
   fitProblems,
   matchProblems,
 } from './helpers';
@@ -21,6 +25,8 @@ const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
   : ALL_VIEWPORTS;
 const STATES = ['answering', 'richtig', 'noch-nicht'] as const;
+/** Air between the answers and the band for match items (task 14), as in text-layout. */
+const MATCH_AIR = 18;
 /** short-answer has one screen more: the model answer and the rating band. */
 const statesOf = (item: (typeof ITEMS)[number]): string[] =>
   item.format === 'short-answer' ? [...STATES, 'vergleichen'] : [...STATES];
@@ -72,6 +78,7 @@ for (const viewport of VIEWPORTS) {
     test.setTimeout(Math.max(300_000, ITEMS.length * (STATES.length + 1) * 3_000));
     await page.setViewportSize(viewport);
     const red: string[] = [];
+    const matchAir: Record<string, number> = {};
     for (const item of ITEMS) {
       // A fresh tab per item: in CI one tab crashed after about 300 navigations ("Page crashed").
       const tab = await context.newPage();
@@ -84,9 +91,16 @@ for (const viewport of VIEWPORTS) {
           ...(await overlapProblems(tab)),
         ])
           red.push(`${item.id} ${state}: ${problem}`);
-        if (item.format === 'match')
+        if (item.format === 'match') {
           for (const problem of await matchProblems(tab))
             red.push(`${item.id} ${state}: ${problem}`);
+          const slack = Math.round((await fitMetrics(tab))?.slack ?? -Infinity);
+          matchAir[`${item.id} ${state}`] = slack;
+          if (slack < MATCH_AIR)
+            red.push(
+              `${item.id} ${state}: only ${slack} px air above the band (match: ${MATCH_AIR})`,
+            );
+        }
       }
       await tab.close();
     }
@@ -98,6 +112,10 @@ for (const viewport of VIEWPORTS) {
       await page.waitForTimeout(300);
       await page.screenshot({ path: `${SCREENSHOTS}/layout-bild-${viewport.name}.png` });
     }
+    writeFileSync(
+      `${SCREENSHOTS}/layout-match-${viewport.name}.json`,
+      `${JSON.stringify(matchAir, null, 2)}\n`,
+    );
     expect(red, `${red.length} Befunde auf ${viewport.name}:\n${red.join('\n')}`).toEqual([]);
   });
 }

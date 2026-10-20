@@ -4,8 +4,11 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { presentedMatch } from '../../../src/domain/presentation';
+import { emptyTileClass } from '../../../src/ui/formats/choice';
+import { ClozeSelect } from '../../../src/ui/formats/ClozeSelect';
 import { Match } from '../../../src/ui/formats/Match';
 import { contentItem } from '../../fixtures/content-items';
+import { clozeSelect } from '../../fixtures/items';
 
 const item = contentItem('m-rf-1-004', 'match');
 const pool = () => screen.getByRole('group', { name: 'Antworten' });
@@ -84,6 +87,95 @@ describe('Match (m-rf-1-004)', () => {
     );
     expect(card('6 gleich große Quadrate')).toBeTruthy();
     expect(onChange).toHaveBeenLastCalledWith(null);
+  });
+
+  // iPad finding (task 14): the empty field looks like the empty gap of cloze-select.
+  it('an empty field looks like an empty cloze gap: "…" in a plain tile, solid line', () => {
+    setup();
+    const field = row('Feld für Würfel');
+    render(
+      <ClozeSelect
+        item={clozeSelect}
+        attemptIndex={0}
+        answer={null}
+        onChange={() => {}}
+        disabled={false}
+      />,
+    );
+    // The first gap opens by itself; the second one waits closed.
+    const gap = screen.getByRole('button', { name: /^Lücke 2/ });
+    for (const el of [field, gap]) {
+      expect(el.textContent).toBe('…');
+      for (const c of emptyTileClass(true, false).split(' ')) expect(el.classList).toContain(c);
+      expect(el.className).not.toMatch(/border-dashed|bg-paper|border-signal-edge/);
+    }
+  });
+
+  it('the field itself takes the first tap too; a selected card lights every empty field', async () => {
+    const onChange = setup();
+    await userEvent.click(row('Feld für Kugel'));
+    expect(row('Kugel').getAttribute('aria-pressed')).toBe('true');
+    expect(row('Feld für Kugel').className).toContain('border-signal-edge');
+    await userEvent.click(card('rund, rollt in alle Richtungen'));
+    expect(
+      screen.getByRole('button', { name: /rund, rollt in alle Richtungen, bei Kugel/ }),
+    ).toBeTruthy();
+
+    await userEvent.click(card('6 gleich große Quadrate'));
+    expect(row('Feld für Würfel').className).toContain('border-signal-edge');
+    await userEvent.click(row('Feld für Würfel'));
+    expect(
+      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
+    ).toBeTruthy();
+    expect(onChange).toHaveBeenLastCalledWith(null);
+  });
+
+  it('a second tap on the same card or row deselects; another one takes the selection', async () => {
+    setup();
+    await userEvent.click(card('6 gleich große Quadrate'));
+    expect(card('6 gleich große Quadrate').getAttribute('aria-pressed')).toBe('true');
+    await userEvent.click(card('6 gleich große Quadrate'));
+    expect(card('6 gleich große Quadrate').getAttribute('aria-pressed')).toBe('false');
+
+    await userEvent.click(row('Würfel'));
+    await userEvent.click(row('Kugel'));
+    expect(row('Würfel').getAttribute('aria-pressed')).toBe('false');
+    expect(row('Kugel').getAttribute('aria-pressed')).toBe('true');
+    await userEvent.click(row('Kugel'));
+    expect(row('Kugel').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('a selected card on a filled field takes its place; the other goes back to the pool', async () => {
+    setup();
+    await userEvent.click(row('Würfel'));
+    await userEvent.click(card('4 Dreiecke und 1 Quadrat'));
+    await userEvent.click(card('6 gleich große Quadrate'));
+    await userEvent.click(
+      screen.getByRole('button', { name: /4 Dreiecke und 1 Quadrat, bei Würfel/ }),
+    );
+    expect(
+      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
+    ).toBeTruthy();
+    expect(card('4 Dreiecke und 1 Quadrat')).toBeTruthy();
+  });
+
+  it('nothing moves while disabled, not even a placed card', async () => {
+    const onChange = vi.fn();
+    render(
+      <Match
+        item={item}
+        attemptIndex={0}
+        answer={{ pairs: [['l1', item.solution.pairs[0]![1]]] }}
+        onChange={onChange}
+        disabled
+      />,
+    );
+    const placed = screen
+      .getAllByRole('button')
+      .find((b) => /, bei /.test(b.getAttribute('aria-label') ?? ''))!;
+    expect((placed as HTMLButtonElement).disabled).toBe(true);
+    await userEvent.click(placed);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it('works with the keyboard: Enter on a row, then Enter on a card', async () => {

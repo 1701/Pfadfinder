@@ -48,3 +48,18 @@ export function StateWords({ state }: { state: TileState }) {
 export function tileClass(state: TileState, interactive: boolean, extra?: string): string {
   return clsx(TILE_CLASS, tileStateClass[state], interactive && 'cursor-pointer', extra);
 }
+
+/** What an empty gap (cloze-select) and an empty match field show: one look for "fill me in". */
+export const EMPTY_MARK = '…';
+
+/**
+ * An empty gap and an empty match field look alike (iPad finding, task 14): a plain tile with
+ * EMPTY_MARK in the middle; `ready` lights the edge when a tap would fill it.
+ */
+export function emptyTileClass(interactive: boolean, ready: boolean, extra?: string): string {
+  return tileClass(
+    'plain',
+    interactive,
+    clsx('justify-center px-md', ready && 'border-signal-edge', extra),
+  );
+}

@@ -10,8 +10,18 @@ import {
   PRESENTATION_TEXTS as T,
 } from '../../domain/presentation';
 import { keepNumbersTogether as nb } from '../text/numbers';
-import { SolutionMark, StateWords, tileClass, tileState } from './choice';
+import {
+  EMPTY_MARK,
+  SolutionMark,
+  StateWords,
+  emptyTileClass,
+  tileClass,
+  tileState,
+} from './choice';
 import type { FormatProps } from './types';
+
+const GAP_CLASS = 'mx-2xs my-2xs inline-flex align-middle';
+const GAP_OPEN_CLASS = 'outline-2 outline-signal-edge';
 
 export function ClozeSelect({
   item,
@@ -59,17 +69,22 @@ export function ClozeSelect({
                 aria-label={`${T.gap} ${part.number}: ${value ?? 'leer'}`}
                 onClick={() => setOpen(isOpen ? null : part.key)}
                 style={{ minWidth: width }}
-                className={tileClass(
-                  value === undefined && !revealed ? 'plain' : state,
-                  !disabled,
-                  clsx(
-                    'mx-2xs my-2xs inline-flex justify-center px-md align-middle',
-                    isOpen && 'border-signal-edge outline-2 outline-signal-edge',
-                  ),
-                )}
+                className={
+                  value === undefined && !revealed
+                    ? emptyTileClass(!disabled, isOpen, clsx(GAP_CLASS, isOpen && GAP_OPEN_CLASS))
+                    : tileClass(
+                        state,
+                        !disabled,
+                        clsx(
+                          GAP_CLASS,
+                          'justify-center px-md',
+                          isOpen && ['border-signal-edge', GAP_OPEN_CLASS],
+                        ),
+                      )
+                }
               >
                 <SolutionMark state={state} />
-                <span aria-hidden="true">{value === undefined ? '…' : nb(value)}</span>
+                <span aria-hidden="true">{value === undefined ? EMPTY_MARK : nb(value)}</span>
               </button>
               {revealed && state === 'chosen' && right !== undefined && (
                 <span className="text-correct">
