@@ -16,6 +16,150 @@
       "minGap": 215
     }
   },
+  "deutsch": {
+    "slack": {
+      "aufgabe": {
+        "id": "d-lsa-1-001",
+        "slack": 138
+      },
+      "durchsehen": {
+        "id": "d-lsa-2-002",
+        "slack": 42
+      },
+      "fehlt": {
+        "id": "d-lsa-1-001",
+        "slack": 84
+      },
+      "vergleichen": {
+        "id": "d-lsa-3-001",
+        "slack": 126
+      }
+    },
+    "items": {
+      "d-lsa-1-001": {
+        "aufgabe": 138,
+        "durchsehen": 82,
+        "fehlt": 84
+      },
+      "d-lsa-1-002": {
+        "aufgabe": 213,
+        "durchsehen": 93,
+        "fehlt": 149
+      },
+      "d-lsa-1-003": {
+        "aufgabe": 161,
+        "durchsehen": 243,
+        "fehlt": 299
+      },
+      "d-lsa-2-001": {
+        "aufgabe": 183,
+        "durchsehen": 63,
+        "fehlt": 119
+      },
+      "d-lsa-2-002": {
+        "aufgabe": 229,
+        "durchsehen": 42,
+        "fehlt": 98
+      },
+      "d-lsa-3-001": {
+        "aufgabe": 273,
+        "durchsehen": 44,
+        "fehlt": 131,
+        "vergleichen": 126
+      },
+      "d-lli-1-005": {
+        "aufgabe": 250,
+        "durchsehen": 130,
+        "fehlt": 186
+      },
+      "d-lli-1-006": {
+        "aufgabe": 269,
+        "durchsehen": 149,
+        "fehlt": 205
+      },
+      "d-lli-2-005": {
+        "aufgabe": 264,
+        "durchsehen": 77,
+        "fehlt": 133
+      },
+      "d-lli-2-006": {
+        "aufgabe": 218,
+        "durchsehen": 98,
+        "fehlt": 154
+      },
+      "d-lli-3-003": {
+        "aufgabe": 194,
+        "durchsehen": 74,
+        "fehlt": 130
+      },
+      "d-rsl-1-002": {
+        "aufgabe": 648,
+        "durchsehen": 528,
+        "fehlt": 568
+      },
+      "d-rss-1-004": {
+        "aufgabe": 696,
+        "durchsehen": 576,
+        "fehlt": 632
+      },
+      "d-rsl-1-004": {
+        "aufgabe": 648,
+        "durchsehen": 528,
+        "fehlt": 584
+      },
+      "d-rss-1-002": {
+        "aufgabe": 704,
+        "durchsehen": 584,
+        "fehlt": 616
+      },
+      "d-rss-1-006": {
+        "aufgabe": 532,
+        "durchsehen": 363,
+        "fehlt": 385
+      },
+      "d-rsl-2-005": {
+        "aufgabe": 648,
+        "durchsehen": 528,
+        "fehlt": 568
+      },
+      "d-rss-2-003": {
+        "aufgabe": 648,
+        "durchsehen": 528,
+        "fehlt": 568
+      },
+      "d-rsl-2-002": {
+        "aufgabe": 696,
+        "durchsehen": 520,
+        "fehlt": 616
+      },
+      "d-rss-2-004": {
+        "aufgabe": 570,
+        "durchsehen": 450,
+        "fehlt": 490
+      },
+      "d-rsl-2-004": {
+        "aufgabe": 480,
+        "durchsehen": 322,
+        "fehlt": 362
+      },
+      "d-rss-3-001": {
+        "aufgabe": 557,
+        "durchsehen": 328,
+        "fehlt": 400,
+        "vergleichen": 411
+      },
+      "d-rss-2-008": {
+        "aufgabe": 648,
+        "durchsehen": 528,
+        "fehlt": 534
+      },
+      "d-rsl-3-002": {
+        "aufgabe": 576,
+        "durchsehen": 456,
+        "fehlt": 496
+      }
+    }
+  },
   "slack": {
     "aufgabe": {
       "id": "m-dz-2-002",
@@ -65,6 +209,11 @@
     "line": {
       "height": 48,
       "bottom": 1012
-    }
+    },
+    "deutsch": {
+      "height": 48,
+      "bottom": 1012
+    },
+    "rows": 1
   }
 }

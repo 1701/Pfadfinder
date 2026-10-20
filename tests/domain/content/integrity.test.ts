@@ -442,12 +442,13 @@ describe('validateContent – probetest rules (§6)', () => {
     ]);
   });
 
-  it('keeps the real mathe-01 free of findings', () => {
+  it('keeps the real mathe-01 and deutsch-01 free of findings', () => {
     const files: ContentFile[] = readdirSync('content', { recursive: true, encoding: 'utf8' })
       .filter((f) => f.endsWith('.json') && f !== 'manifest.json')
       .map((f) => ({ path: f.split(sep).join('/'), data: JSON.parse(readFileSync(`content/${f}`, 'utf8')) as unknown }));
     const { issues } = run(files, { assetExists: () => true });
     expect(issues.filter((i) => i.file === 'probetests/mathe-01.json')).toEqual([]);
+    expect(issues.filter((i) => i.file === 'probetests/deutsch-01.json')).toEqual([]);
   });
 
   it('allows at most 15 % short-answer items', () => {

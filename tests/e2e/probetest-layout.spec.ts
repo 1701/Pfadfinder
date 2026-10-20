@@ -8,16 +8,22 @@
 //                match, short-answer) while answering and looking through (short answer also
 //                comparing), ≥ 18 px air, nothing overflows or overlaps; the reading screen with
 //                the Probetest's Kopf before each text
-//   map          the line "Probetest Mathe" in the legend line: ≥ 48 px, map names still ≥ 18 px
+//   deutsch-01   every item answering, looking through, missing (short answers also comparing);
+//                beside a text the same rules as the fixture, air per item in the budget
+//   map          the line "Probetest Mathe" (and "Probetest Deutsch") in the legend line: ≥ 48 px,
+//                one row, map names still ≥ 18 px
 //   print        /probetest/mathe-01/print as A4 PDF and as a print-media screenshot (Chromium)
 // Numbers go to probetest-budget-<viewport>.json in SCREENSHOTS (output-dir.ts), screenshots beside them.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems, matchProblems } from './helpers';
+import { ITEMS, SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems, matchProblems } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
 const PROBETEST = JSON.parse(readFileSync('content/probetests/mathe-01.json', 'utf8')) as {
+  itemIds: string[];
+};
+const DEUTSCH = JSON.parse(readFileSync('content/probetests/deutsch-01.json', 'utf8')) as {
   itemIds: string[];
 };
 const SHORT_ANSWER = 'm-gm-3-002';
@@ -107,7 +113,8 @@ async function headerMetrics(page: Page) {
 
 for (const viewport of MEASURED) {
   test(`probetest screens – ${viewport.name}`, async ({ browser }) => {
-    test.setTimeout(300_000);
+    // mathe-01, deutsch-01 and the fixture: about 160 screens per viewport.
+    test.setTimeout(600_000);
     const context = await browser.newContext({ viewport });
     const report: Record<string, unknown> = { viewport };
     const red: string[] = [];
@@ -153,6 +160,37 @@ for (const viewport of MEASURED) {
       }
       await page.close();
     }
+    // deutsch-01 (task 13): every item; beside a text no overflow, no overlap, 18 px air (the
+    // Safari landscape review exception as for the fixture). Air per item and state.
+    const deutsch: Record<string, Record<string, number>> = {};
+    const deutschMin: Record<string, { id: string; slack: number }> = {};
+    for (const id of DEUTSCH.itemIds) {
+      const item = ITEMS.find((i) => i.id === id)!;
+      const withText = item.stimulus?.textRef !== undefined;
+      const states = ['aufgabe', 'durchsehen', 'fehlt'];
+      if (item.format === 'short-answer') states.push('vergleichen');
+      page = await context.newPage();
+      for (const state of states) {
+        await open(page, `probetest=deutsch-01&zustand=${state}&item=${id}`);
+        const label = `deutsch-01 ${state} ${id}`;
+        for (const p of await fitProblems(page)) red.push(`${label}: ${p}`);
+        const at = Math.round((await fitMetrics(page))!.slack);
+        if (withText) {
+          for (const p of await overflowProblems(page)) red.push(`${label}: ${p}`);
+          for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
+          if (item.format === 'match')
+            for (const p of await matchProblems(page)) red.push(`${label}: ${p}`);
+          const wanted = airWanted(state, viewport.name);
+          if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
+        }
+        (deutsch[id] ??= {})[state] = at;
+        if (!deutschMin[state] || at < deutschMin[state].slack)
+          deutschMin[state] = { id, slack: at };
+      }
+      await page.close();
+    }
+    report.deutsch = { slack: deutschMin, items: deutsch };
+
     page = await context.newPage();
     // "1 Antwort vergleichen": the short answer, "1 von 1", without "Zurück".
     await open(page, 'zustand=nur-wartende');
@@ -254,7 +292,29 @@ for (const viewport of MEASURED) {
         overflow: document.documentElement.scrollHeight - window.innerHeight,
       };
     });
-    report.map = { ...map, line: { height: box.height, bottom: box.y + box.height } };
+    // The second entry and whether the line stays one row (measured, task 13).
+    const deutschBox = await page.getByRole('link', { name: 'Probetest Deutsch' }).boundingBox();
+    const rows = await page.evaluate(
+      () =>
+        new Set(
+          [...document.querySelectorAll('main > div:last-child :is(a, button)')]
+            .map((e) => e.getBoundingClientRect())
+            .filter((r) => r.width > 0)
+            .map((r) => Math.round(r.bottom)),
+        ).size,
+    );
+    report.map = {
+      ...map,
+      line: { height: box.height, bottom: box.y + box.height },
+      deutsch: deutschBox && {
+        height: deutschBox.height,
+        bottom: deutschBox.y + deutschBox.height,
+      },
+      rows,
+    };
+    if (!deutschBox) red.push('map line without "Probetest Deutsch"');
+    else if (deutschBox.height < 48) red.push(`map line Deutsch only ${deutschBox.height} px high`);
+    if (rows !== 1) red.push(`map line has ${rows} rows`);
     if (box.height < 48) red.push(`map line only ${box.height} px high`);
     if (box.y + box.height > viewport.height) red.push('map line leaves the screen');
     if (map.smallestName < 18) red.push(`map name ${map.smallestName.toFixed(1)} px`);
@@ -293,4 +353,26 @@ test('probetest print sheet – A4 PDF, solutions on their own page', async ({
   });
   await page.setViewportSize({ width: 794, height: 1123 });
   await page.screenshot({ path: `${SCREENSHOTS}/probetest-druck-seite1.png` });
+});
+
+test('probetest print sheet Deutsch – each text before its items, the second on a new page', async ({
+  page,
+}) => {
+  await page.goto('/probetest/deutsch-01/print');
+  await expect(page.locator('[data-item]')).toHaveCount(DEUTSCH.itemIds.length);
+  const texts = page.locator('[data-text]');
+  await expect(texts).toHaveCount(2);
+  const order = await page
+    .locator('.druck [data-text], .druck > .contents [data-item]')
+    .evaluateAll((els) =>
+      els.map((e) => (e as HTMLElement).dataset.text ?? (e as HTMLElement).dataset.item),
+    );
+  expect(order.indexOf('t-sach-001')).toBe(0);
+  expect(order.indexOf('t-lit-003')).toBe(order.indexOf('d-lli-1-005') - 1);
+  await page.emulateMedia({ media: 'print' });
+  expect(await texts.nth(0).evaluate((e) => getComputedStyle(e).breakBefore)).toBe('auto');
+  expect(await texts.nth(1).evaluate((e) => getComputedStyle(e).breakBefore)).toBe('page');
+  await page.evaluate(() => document.fonts.ready);
+  await page.setViewportSize({ width: 794, height: 1123 });
+  await page.screenshot({ path: `${SCREENSHOTS}/probetest-druck-deutsch-seite1.png` });
 });

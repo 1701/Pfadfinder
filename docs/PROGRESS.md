@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-20 – Aufgabe 13 (2)–(4): Lese-Screen im Probetest, deutsch-01
+- **Gebaut:** Store-Status `reading` vor dem ersten Item eines Textes im Durchgang (`shownTextIds` nur im Speicher), `ProbetestLesen` mit Kopf, ohne Vorlesen; Item-Zeit erst nach „Weiter“, die Frist läuft weiter. Kasten mit Scrollposition je Text auch im Durchsehen. Druck: Text mit nummerierten Absätzen vor seinen Items, der zweite auf neuer Seite. `/dev/probetest-lauf/:id` (Fixture deutsch-90) für den E2E-Lauf. deutsch-01 eingespielt: 0 Fehler, 0 Warnungen, 25,98 Min.
+- **Fallbacks (vorab entschieden):** Durchsehen neben Text quer: Falle/Zurück/Weiter untereinander (vorher iPad quer order −123 px); hoch Reserve + Kopfhöhe (`--reading-extra`, vorher short-answer −30, order −6).
+- **Entschieden (Markus):** Ausnahme Durchsehen neben Text Safari quer Luft ≥ 0 (ARCHITECTURE §5). deutsch-01 dort: d-lsa-2-002 und d-lli-2-005 (order) je 1 px bei 185 bzw. 102 Zeichen Rückmeldung, d-lsa-3-001 19 px; alles andere ≥ 18.
+- **Gemessen:** knappste Luft deutsch-01 (Aufgabe/Durchsehen/fehlt/vergleichen) iPad quer 224/85/132/209, iPad hoch 138/42/84/126, Safari quer 116/1/24/101, Safari hoch 138/42/84/126. Kartenzeile mit beiden Probetests in allen vier Viewports einzeilig, Einträge 48 px, kleinster Name 19,1 px (Safari quer); Fallback nicht nötig.
+- **Offen:** Sweep Summenregel 1.0.17 (match); order neben Text bindet im Durchsehen Safari quer unabhängig von der Rückmeldungslänge. Kartenzeile mit „Neu laden“ und zwei Probetests nicht gemessen.
+- **Lokal:** `npm run check` grün, Chromium-Projekte grün, Layout `probetest-layout`/`karte`/`text-layout` in vier Viewports grün.
+
 ## 2026-10-20 – Aufgabe 13 (1): Textkasten im Probetest, Befund match 35/52
 - **Gebaut:** Schema 1.0.16 (Deutsch 24–32 Min. mit Lesezeit, Textblöcke als Fehler). Probetest-Kontext lädt die Texte; Kasten neben Text-Items in Aufgabe und Durchsehen, Vorlesen über `probetestTextReadAloud` (Deutsch aus; Gegenprobe rot). ARCHITECTURE §5 an `not-reading-texts` angepasst (Entscheidung Markus). Fixtures: d-lsa-2-952 (match), t-lit-900, RS-Klone, deutsch-90 (18 Items, der Loader parst das volle Schema).
 - **Befund match neben Text (Safari quer, „noch nicht“):** Kartentexte zusammen 112 Zeichen → 63 px (d-lli-2-003), 119 → 21 (d-lsa-2-005), 172 → −6 (Fixture mit je einer Karte an 35/52; iPad quer −15). Vier Karten nahe 52: bis −91 px.

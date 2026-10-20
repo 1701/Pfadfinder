@@ -91,7 +91,7 @@ describe('KartenScreen', () => {
     expect(screen.getByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
   });
 
-  it('offers the Probetest of a Fach as a line below the map, only if the manifest has one', async () => {
+  it('offers the Probetest of each Fach in the manifest as a line below the map', async () => {
     renderScreen(() =>
       Promise.resolve({
         mastery: [],
@@ -103,7 +103,9 @@ describe('KartenScreen', () => {
     await screen.findAllByRole('group', { name: 'Karte' });
     const link = screen.getByRole('link', { name: 'Probetest Mathe' });
     expect(link.getAttribute('href')).toBe('/probetest/mathe-01');
-    expect(screen.queryByRole('link', { name: 'Probetest Deutsch' })).toBeNull();
+    // deutsch-01 since task 13.
+    const deutsch = screen.getByRole('link', { name: 'Probetest Deutsch' });
+    expect(deutsch.getAttribute('href')).toBe('/probetest/deutsch-01');
   });
 
   it('shows no Probetest line without a Probetest in the manifest', async () => {
