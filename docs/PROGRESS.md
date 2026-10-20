@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-20 – Aufgabe 13 (1): Textkasten im Probetest, Befund match 35/52
+- **Gebaut:** Schema 1.0.16 (Deutsch 24–32 Min. mit Lesezeit, Textblöcke als Fehler). Probetest-Kontext lädt die Texte; Kasten neben Text-Items in Aufgabe und Durchsehen, Vorlesen über `probetestTextReadAloud` (Deutsch aus; Gegenprobe rot). ARCHITECTURE §5 an `not-reading-texts` angepasst (Entscheidung Markus). Fixtures: d-lsa-2-952 (match), t-lit-900, RS-Klone, deutsch-90 (18 Items, der Loader parst das volle Schema).
+- **Befund match neben Text (Safari quer, „noch nicht“):** Kartentexte zusammen 112 Zeichen → 63 px (d-lli-2-003), 119 → 21 (d-lsa-2-005), 172 → −6 (Fixture mit je einer Karte an 35/52; iPad quer −15). Vier Karten nahe 52: bis −91 px.
+- **Entschieden (Markus):** Fixture in der Form von d-lli-2-003 (57 + 55 = 112 Zeichen); vorläufiger Hinweis in CONTENT_SCHEMA §4.4 (≤ 110 Zeichen zusammen), ohne Versionssprung, Validator bleibt bei 35/52.
+- **Offen:** Folgeauftrag „Sweep Summenregel 1.0.17“ (Summe variieren, Prompt und Rückmeldung fest, vier Viewports).
+- **Lokal:** `npm run check` grün; `text-layout` und `lesen` 10/10 (vier Viewports), match-Fixture knappste Luft 128 / 95 / 63 / 95 px (iPad quer, hoch, Safari quer, hoch).
+
 ## 2026-10-20 – match ohne Text: die Karte hat Vorrang (m-dz-2-008)
 - **Entschieden (Markus):** Ohne Textkasten ist die Kartenspalte `max-content` statt `fit-content`; das Label bricht in der Restbreite um.
 - **Gemessen (alle neun match-Items, vier Viewports):** m-dz-2-008 Karten einzeilig („möglich, aber nicht sicher“ vorher zweizeilig), Label quer zweizeilig, Luft ≥ 157 px quer, ≥ 257 hoch. Alle Items ohne Befund, knappste Luft weiter 21 px (d-lsa-2-005 neben dem Text, unverändert). m-rf-1-004 und m-zo-1-009 unverändert einzeilig, 26 px zwischen Labeltext und Feld.

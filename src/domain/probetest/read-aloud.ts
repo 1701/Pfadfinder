@@ -1,6 +1,6 @@
 // Vorlesen in the Probetest (ARCHITECTURE.md §5, decision Markus): on in Mathe, where reading is
-// not what is tested. Deutsch will switch it off for reading texts; the switch exists, the
-// Deutsch Probetest does not yet (task 8).
+// not what is tested. Deutsch switches it off for reading texts and their items; spelling items
+// keep it, they test writing, not reading.
 
 import type { Fach, Item, ReadingText } from '../content';
 
@@ -17,9 +17,9 @@ export function probetestReadAloud(fach: Fach, item: Pick<Item, 'stimulus'>): bo
 }
 
 /**
- * Whether the text box beside a Probetest item offers Vorlesen (task 9): only where the text
- * allows it and the Fach's switch does. The Deutsch Probetest is not built yet; its text box
- * will call this and stay silent (`not-reading-texts`).
+ * Whether the text box beside a Probetest item offers Vorlesen: only where the text allows it and
+ * the Fach's switch does. In Deutsch it is never on (`not-reading-texts`): ReadingText.readAloud
+ * holds for practice only (CONTENT_SCHEMA §5).
  */
 export function probetestTextReadAloud(
   fach: Fach,

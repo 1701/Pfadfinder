@@ -6,16 +6,18 @@
 
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router';
-import type { Bereich } from '../../domain/content';
+import type { Bereich, Item } from '../../domain/content';
 import {
   isAnswered,
   isFinalMinutes,
   itemOutcome,
   probetestReadAloud,
+  probetestTextReadAloud,
   remainingMinutes,
 } from '../../domain/probetest';
 import { runDeadline } from '../../data/probetest';
 import { useProbetestClock } from '../probetest-clock';
+import { TextKasten } from '../components/TextKasten';
 import { useProbetest } from '../probetest-context';
 import { ProbetestAufgabe } from './ProbetestAufgabe';
 import { ProbetestAuswertung } from './ProbetestAuswertung';
@@ -51,7 +53,20 @@ function Probetest({ id }: { id: string }) {
   if (status === 'unavailable') return <ProbetestFehlt readAloud={learnerReadAloud} />;
   if (!context) return null;
 
-  const { items, probetest } = context;
+  const { items, probetest, texts } = context;
+  // Beside an item with textRef the text box, as in practice; its own Vorlesen only where the
+  // Probetest allows it (Deutsch: never, ReadingText.readAloud is for practice only, §5).
+  const textBox = (item: Item) => {
+    const text = texts.find((t) => t.id === item.stimulus?.textRef);
+    return (
+      text && (
+        <TextKasten
+          text={text}
+          readAloud={learnerReadAloud && probetestTextReadAloud(probetest.fach, item, text)}
+        />
+      )
+    );
+  };
   const total = items.length;
   const iso = new Date(now).toISOString();
   const time =
@@ -86,6 +101,7 @@ function Probetest({ id }: { id: string }) {
           total={total}
           time={time}
           readAloud={learnerReadAloud && probetestReadAloud(probetest.fach, item)}
+          text={textBox(item)}
           onBack={s.back}
           onNext={s.next}
           onOverview={s.showOverview}
@@ -172,6 +188,7 @@ function Probetest({ id }: { id: string }) {
           current={position + 1}
           total={reviewOnly ? reviewOnly.length : total}
           readAloud={learnerReadAloud && probetestReadAloud(probetest.fach, item)}
+          text={textBox(item)}
           onBack={s.back}
           onNext={s.next}
           onResult={s.showResult}

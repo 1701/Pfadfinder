@@ -127,7 +127,7 @@ solution: { value: number; tolerance?: number }                           // tol
 payload:  { left: { id: string; text: string }[]; right: { id: string; text: string }[] }  // 3–5 Paare, right darf 1 Distraktor enthalten
 solution: { pairs: [leftId: string, rightId: string][] }
 ```
-Mit `stimulus.textRef` (seit 1.0.15, vorher 27/43): jeder Text in `left` höchstens 35 Zeichen, jeder in `right` höchstens 52. Die App macht das Zielfeld so breit wie die längste Karte mit Haken, höchstens 60 % der Zeile; die Zeile links bekommt den Rest und bricht in ausgeglichenen Zeilen um. Neben dem Textkasten stehen die Karten unter den Zeilen. Gemessen an d-lli-2-003 neben t-lit-002: links 39 Zeichen brachen auf dem iPad quer in drei Zeilen um, rechts 59 Zeichen ließen Safari quer 10 px Luft; bis 35/52 blieben in allen vier Viewports mindestens 39 px. Der Validator warnt.
+Mit `stimulus.textRef` (seit 1.0.15, vorher 27/43): jeder Text in `left` höchstens 35 Zeichen, jeder in `right` höchstens 52. Die App macht das Zielfeld so breit wie die längste Karte mit Haken, höchstens 60 % der Zeile; die Zeile links bekommt den Rest und bricht in ausgeglichenen Zeilen um. Neben dem Textkasten stehen die Karten unter den Zeilen. Gemessen an d-lli-2-003 neben t-lit-002: links 39 Zeichen brachen auf dem iPad quer in drei Zeilen um, rechts 59 Zeichen ließen Safari quer 10 px Luft; bis 35/52 blieben in allen vier Viewports mindestens 39 px. Der Validator warnt. Vorläufig, bis 1.0.17: alle Kartentexte zusammen ≤ 110 Zeichen. 35/52 je Karte reicht nicht; vier Karten an der Grenze laufen quer bis −91 px über (Messung 20.10., Fixture d-lsa-2-952).
 
 ### 4.5 `order`
 ```ts

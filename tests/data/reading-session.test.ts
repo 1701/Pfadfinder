@@ -1,5 +1,5 @@
 // Practice rounds with reading texts (task 9): store + in-memory repositories + the fixture texts
-// t-sach-900 and t-sach-901 (tests/fixtures/lesen), 10 items in lesen-sachtext.
+// t-sach-900 and t-sach-901 (tests/fixtures/lesen), 11 items in lesen-sachtext.
 
 import { describe, expect, it } from 'vitest';
 import { createContentLoader } from '../../src/content-runtime/loader';
@@ -7,7 +7,7 @@ import { createMemoryRepositories } from '../../src/data/memory/repos';
 import type { PracticeDeps } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
 import type { Repositories } from '../../src/data/repos';
-import { lesenContentModules } from '../fixtures/lesen';
+import { LESEN_TEXTS, lesenContentModules } from '../fixtures/lesen';
 import { answerFor, testDeps, tickingClock } from './helpers';
 
 const LSA = 'lesen-sachtext' as const;
@@ -48,13 +48,16 @@ describe('practice round with reading texts', () => {
     }
     expect(store.getState().status).toBe('finished');
 
-    // The reading screen comes before item 1 and item 6 only: one per text.
+    // The reading screen comes before the first item of each text only: one per text. The first
+    // text runs through all its items (t-sach-900 has 6, t-sach-901 5).
+    const switchAt = LESEN_TEXTS.find((t) => t.id === texts[0])!.itemIds.length;
     expect(statuses.map((s, i) => (s === 'reading' ? i : -1)).filter((i) => i >= 0)).toEqual([
-      0, 5,
+      0,
+      switchAt,
     ]);
-    expect(new Set(texts.slice(0, 5)).size).toBe(1);
-    expect(new Set(texts.slice(5)).size).toBe(1);
-    expect(texts[0]).not.toBe(texts[5]);
+    expect(new Set(texts.slice(0, switchAt)).size).toBe(1);
+    expect(new Set(texts.slice(switchAt)).size).toBe(1);
+    expect(texts[0]).not.toBe(texts[switchAt]);
   });
 
   it('starts the item time after the reading screen', async () => {

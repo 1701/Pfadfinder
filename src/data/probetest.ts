@@ -3,7 +3,7 @@
 // an iOS kill loses nothing. Ending a run or rating a short answer writes run and attempts in
 // one transaction. Mastery, Fehlerkiste and Tagesziel are never touched (PRODUCT.md §5.5).
 
-import type { ContentLoader, Item, Probetest } from '../domain/content';
+import type { ContentLoader, Item, Probetest, ReadingText } from '../domain/content';
 import type { SelfRating } from '../domain/evaluation';
 import type { ProbetestEndReason, ProbetestRun } from '../domain/learner';
 import {
@@ -20,18 +20,20 @@ import type { PracticeDeps } from './practice';
 import type { Repositories } from './repos';
 
 export interface ProbetestDeps extends Pick<PracticeDeps, 'repos' | 'now' | 'newId'> {
-  content: Pick<ContentLoader, 'loadItems' | 'loadProbetest'>;
+  content: Pick<ContentLoader, 'loadItems' | 'loadProbetest' | 'loadReadingText'>;
 }
 
 export interface ProbetestContext {
   probetest: Probetest;
   /** The items of the test, in test order. */
   items: Item[];
+  /** The reading texts the items refer to, in order of their first item (Deutsch: two). */
+  texts: ReadingText[];
 }
 
 const PROBETEST_ID = /^(mathe|deutsch)-\d{2}$/;
 
-/** Null when there is no such Probetest (or an item of it is missing). */
+/** Null when there is no such Probetest (or an item or reading text of it is missing). */
 export async function loadProbetestContext(
   deps: Pick<ProbetestDeps, 'content'>,
   id: string,
@@ -48,7 +50,17 @@ export async function loadProbetestContext(
   const byId = new Map(files.flat().map((item) => [item.id, item]));
   const items = probetest.itemIds.map((itemId) => byId.get(itemId));
   if (items.some((item) => item === undefined)) return null;
-  return { probetest, items: items as Item[] };
+  const found = items as Item[];
+  const textIds = [
+    ...new Set(found.map((item) => item.stimulus?.textRef).filter((t) => t !== undefined)),
+  ];
+  let texts: ReadingText[];
+  try {
+    texts = await Promise.all(textIds.map((textId) => deps.content.loadReadingText(textId)));
+  } catch {
+    return null;
+  }
+  return { probetest, items: found, texts };
 }
 
 export function runDeadline(ctx: ProbetestContext, run: Pick<ProbetestRun, 'startedAt'>): number {

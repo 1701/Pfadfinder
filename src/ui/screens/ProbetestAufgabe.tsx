@@ -2,6 +2,7 @@
 // always work, with or without an answer, like turning pages on paper. A short answer is only
 // typed in; comparing comes when looking through the submitted test.
 
+import type { ReactNode } from 'react';
 import type { Item } from '../../domain/content';
 import { Button } from '../components/Button';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
@@ -19,6 +20,8 @@ export interface ProbetestAufgabeProps {
   total: number;
   time: ProbetestZeit;
   readAloud: boolean;
+  /** The text box beside an item with textRef (ItemScreen.text). */
+  text?: ReactNode;
   onBack(): void;
   onNext(): void;
   onOverview(): void;
@@ -36,6 +39,7 @@ export function ProbetestAufgabe(props: ProbetestAufgabeProps) {
       phase="answering"
       correct={null}
       readAloud={props.readAloud}
+      text={props.text}
       onSubmit={noop}
       onNext={noop}
       header={

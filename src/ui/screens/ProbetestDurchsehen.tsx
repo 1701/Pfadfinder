@@ -6,6 +6,7 @@
 // Top right "Übersicht" as in the test (task 11). On the first item there is no "Zurück", also
 // in the list of only the waiting short answers ("1 von 1").
 
+import type { ReactNode } from 'react';
 import type { Item } from '../../domain/content';
 import type { Correctness, SelfRating } from '../../domain/evaluation';
 import type { ItemOutcome } from '../../domain/probetest';
@@ -32,6 +33,8 @@ export interface ProbetestDurchsehenProps {
   onResult(): void;
   onOverview(): void;
   onRate(rating: SelfRating): void;
+  /** The text box beside an item with textRef (ItemScreen.text). */
+  text?: ReactNode;
   /** Dev preview only: open a waiting short answer directly in the comparing step. */
   previewComparing?: boolean;
 }
@@ -55,6 +58,7 @@ export function ProbetestDurchsehen(props: ProbetestDurchsehenProps) {
       phase={waiting ? 'answering' : 'feedback'}
       correct={waiting ? null : correctness(outcome, props.rating)}
       readAloud={props.readAloud}
+      text={props.text}
       onSubmit={(given) => {
         const rating = (given as { rating?: SelfRating } | undefined)?.rating;
         if (rating !== undefined) props.onRate(rating);

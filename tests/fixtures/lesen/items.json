@@ -182,6 +182,72 @@
     }
   },
   {
+    "id": "d-lsa-2-952",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-900"
+    },
+    "prompt": "Lies Absatz 3 bis 5. Wozu ist das gut? Eine Antwort bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Ihr Eingang ist im Bach."
+        },
+        {
+          "id": "l2",
+          "text": "Sie sammeln Äste."
+        },
+        {
+          "id": "l3",
+          "text": "Sie bauen Dämme."
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Schutz vor Fuchs"
+        },
+        {
+          "id": "r2",
+          "text": "Futter im Winter"
+        },
+        {
+          "id": "r3",
+          "text": "tiefer Teich"
+        },
+        {
+          "id": "r4",
+          "text": "harte Zähne"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        ["l1", "r1"],
+        ["l2", "r2"],
+        ["l3", "r3"]
+      ]
+    },
+    "feedback": {
+      "correct": "Genau. Jeder Bau hat einen Grund.",
+      "incorrect": "Lies den Satz nach jedem Bau im Text. Er sagt, wozu er gut ist.",
+      "misconception": "Die Zähne stehen in Absatz 2."
+    },
+    "tags": ["verknuepfen", "zusammenhaenge"],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "none"
+    }
+  },
+  {
     "id": "d-lsa-3-950",
     "schemaVersion": "1.0",
     "fach": "deutsch",

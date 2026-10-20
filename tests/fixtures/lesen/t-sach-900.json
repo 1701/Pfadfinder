@@ -12,5 +12,12 @@
     "Manche Menschen ärgern sich über Biber, weil sie Bäume fällen. Doch die Teiche der Biber helfen vielen anderen Tieren. Frösche, Fische und Libellen finden dort ein Zuhause. Forscher nennen den Biber deshalb einen Helfer der Natur."
   ],
   "readAloud": true,
-  "itemIds": ["d-lsa-1-950", "d-lsa-1-951", "d-lsa-2-950", "d-lsa-2-951", "d-lsa-3-950"]
+  "itemIds": [
+    "d-lsa-1-950",
+    "d-lsa-1-951",
+    "d-lsa-2-950",
+    "d-lsa-2-951",
+    "d-lsa-2-952",
+    "d-lsa-3-950"
+  ]
 }
