@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.15 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.16 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -187,16 +187,17 @@ type Probetest = {
   id: string;                        // mathe-01
   fach: "mathe" | "deutsch";
   durationMinutes: 45;
-  itemIds: string[];                 // feste Reihenfolge, 18–24 Items (Mathe) bzw. 2 Texte + ~20 Items (Deutsch)
+  itemIds: string[];                 // feste Reihenfolge, 18–24 Items; Deutsch mit genau 2 Texten (aus den textRefs, kein eigenes Feld)
   niveauMix: { 1: number; 2: number; 3: number };   // Soll: 0.4 / 0.4 / 0.2, wird validiert (±1 Item)
   bereichMix: Record<Bereich, number>;              // jeder Bereich ≥ 2 Items
 };
 ```
 
 Regeln:
-- Summe `estimatedSeconds` (seit 1.0.9): **Mathe 24–32 Min.** bei 18–24 Items; **Deutsch 35–42 Min.**, vorläufig, wird mit `deutsch-01` festgelegt. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
+- Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und genau 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
 - kein `short-answer`-Anteil über 15 %
 - Deutsch beginnt mit Lesen, endet mit Rechtschreibung (wie das Original)
+- Deutsch (seit 1.0.16): Die Texte ergeben sich aus den `textRef`s der Items. Genau 2 Texte, ein Sachtext und ein literarischer (verschiedene `kind`). Die Items eines Textes stehen zusammen, weil der Lese-Screen einmal vor dem ersten Item eines Textes kommt. Kein Item ohne `textRef` steht vor einem Item mit `textRef`. Alles sind Fehler im Validator
 
 ## 7. Autorenregeln (gelten für jeden Batch)
 

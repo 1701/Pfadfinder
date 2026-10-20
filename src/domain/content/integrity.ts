@@ -6,6 +6,7 @@ import type { z } from 'zod';
 import {
   PROBETEST_MAX_SHORT_ANSWER_SHARE,
   PROBETEST_SECONDS_RANGE,
+  READING_SECONDS_PER_WORD,
   itemSchema,
   probetestSchema,
   readingTextSchema,
@@ -341,15 +342,27 @@ export function validateContent(
       }
     }
 
-    const seconds = items.reduce((sum, item) => sum + item.estimatedSeconds, 0);
+    // Texts come from the items' textRefs, in order of first appearance (no field of its own).
+    const textRefs = [...new Set(items.map((item) => item.stimulus?.textRef).filter((t) => t !== undefined))];
+    const texts = textRefs.map((id) => bundle.texts.get(id)?.value).filter((t) => t !== undefined);
+
+    const itemSeconds = items.reduce((sum, item) => sum + item.estimatedSeconds, 0);
     const range = PROBETEST_SECONDS_RANGE[probetest.fach];
-    if (seconds < range.min || seconds > range.max) {
-      error(
-        file,
-        `Summe estimatedSeconds ist ${(seconds / 60).toFixed(1)} Min., erlaubt sind ${range.min / 60}–${range.max / 60} Min.`,
-        probetest.id,
-        'itemIds',
-      );
+    const allowed = `erlaubt sind ${range.min / 60}–${range.max / 60} Min.`;
+    if (probetest.fach === 'deutsch') {
+      // The item clock starts after the reading screen: reading time is in no item (§6, 1.0.16).
+      const readingSeconds = texts.reduce((sum, t) => sum + t.wordCount * READING_SECONDS_PER_WORD, 0);
+      const seconds = itemSeconds + readingSeconds;
+      if (seconds < range.min || seconds > range.max) {
+        error(
+          file,
+          `Summe ist ${secondsText(seconds)} s (${(seconds / 60).toFixed(2).replace('.', ',')} Min.): estimatedSeconds ${itemSeconds} s + Lesezeit ${secondsText(readingSeconds)} s, ${allowed}`,
+          probetest.id,
+          'itemIds',
+        );
+      }
+    } else if (itemSeconds < range.min || itemSeconds > range.max) {
+      error(file, `Summe estimatedSeconds ist ${(itemSeconds / 60).toFixed(1)} Min., ${allowed}`, probetest.id, 'itemIds');
     }
 
     const shortAnswers = items.filter((item) => item.format === 'short-answer').length;
@@ -358,10 +371,16 @@ export function validateContent(
     }
 
     if (probetest.fach === 'deutsch' && items.length > 0) {
-      checkDeutschOrder(items, (message, path) => error(file, message, probetest.id, path));
-      const textRefs = new Set(items.map((item) => item.stimulus?.textRef).filter((t) => t !== undefined));
-      if (textRefs.size !== 2) {
-        error(file, `Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: ${textRefs.size}`, probetest.id, 'itemIds');
+      const report = (message: string, path: string) => error(file, message, probetest.id, path);
+      checkDeutschOrder(items, report);
+      checkDeutschTexts(items, report);
+      if (textRefs.length !== 2) {
+        report(`Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: ${textRefs.length}`, 'itemIds');
+      } else {
+        const [first, second] = texts;
+        if (first && second && first.kind === second.kind) {
+          report(`Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "${first.kind}"`, 'itemIds');
+        }
       }
     }
   }
@@ -384,6 +403,37 @@ function checkDeutschOrder(items: readonly Item[], report: (message: string, pat
       report(`Lese-Item "${item.id}" steht nach Rechtschreibung`, `itemIds[${i}]`);
     }
   });
+}
+
+/**
+ * Reading blocks in a Deutsch Probetest (§6, 1.0.16): the reading screen comes once before the first
+ * item of a text, so a text's items stand together, and no item without a text comes before one with.
+ */
+function checkDeutschTexts(items: readonly Item[], report: (message: string, path: string) => void): void {
+  const ended = new Set<string>();
+  let current: string | undefined;
+  let firstWithout: Item | undefined;
+  let reportedWithout = false;
+  items.forEach((item, i) => {
+    const textRef = item.stimulus?.textRef;
+    if (textRef === undefined) {
+      firstWithout ??= item;
+    } else {
+      if (firstWithout && !reportedWithout) {
+        report(`Item "${firstWithout.id}" ohne Lesetext steht vor "${item.id}" mit Lesetext`, `itemIds[${i}]`);
+        reportedWithout = true;
+      }
+      if (textRef !== current && ended.has(textRef)) {
+        report(`Items zu "${textRef}" stehen nicht zusammen: "${item.id}" folgt nach einem anderen Item`, `itemIds[${i}]`);
+      }
+    }
+    if (current !== undefined && textRef !== current) ended.add(current);
+    current = textRef;
+  });
+}
+
+function secondsText(seconds: number): string {
+  return String(Math.round(seconds * 10) / 10).replace('.', ',');
 }
 
 /** Limits for items beside a reading text (WITH_TEXT): message and path per finding. */

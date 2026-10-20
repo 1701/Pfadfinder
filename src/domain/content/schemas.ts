@@ -413,13 +413,16 @@ export const readingTextSchema = z
 export const PROBETEST_ITEM_RANGE = { min: 18, max: 24 } as const;
 export const PROBETEST_NIVEAU_TARGET = { 1: 0.4, 2: 0.4, 3: 0.2 } as const;
 /**
- * Sum of estimatedSeconds per Fach (§6, since 1.0.9). These are app times; the 45-minute
- * timer stays, as on paper children may finish early. Deutsch is provisional until deutsch-01.
+ * Time per Fach (§6): Mathe since 1.0.9, Deutsch since 1.0.16. These are app times; the 45-minute
+ * timer stays, as on paper children may finish early. Deutsch adds the reading time of each text
+ * (READING_SECONDS_PER_WORD): the item clock starts after the reading screen.
  */
 export const PROBETEST_SECONDS_RANGE: Readonly<Record<Fach, { min: number; max: number }>> = {
   mathe: { min: 24 * 60, max: 32 * 60 },
-  deutsch: { min: 35 * 60, max: 42 * 60 },
+  deutsch: { min: 24 * 60, max: 32 * 60 },
 };
+/** Reading time per word of a text in a Deutsch Probetest: 80 words per minute (§6, 1.0.16). */
+export const READING_SECONDS_PER_WORD = 0.75;
 export const PROBETEST_MAX_SHORT_ANSWER_SHARE = 0.15;
 export const PROBETEST_MIN_ITEMS_PER_BEREICH = 2;
 

@@ -1,9 +1,14 @@
+import { readFileSync, readdirSync } from 'node:fs';
+import { sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   validateContent,
   type ContentFile,
   type ContentIssue,
   type Item,
+  type Niveau,
+  type Probetest,
+  type ReadingText,
   type ValidateContentOptions,
 } from '../../../src/domain/content';
 import {
@@ -18,7 +23,7 @@ import {
   singleChoice,
   validItemsByFormat,
 } from '../../fixtures/items';
-import { buildDeutschProbetest, buildMatheProbetest, cloneItem, toFiles } from '../../fixtures/builders';
+import { buildDeutschProbetest, buildMatheProbetest, cloneItem, mixesOf, toFiles } from '../../fixtures/builders';
 
 const noAssets: ValidateContentOptions = { assetExists: () => false };
 
@@ -411,18 +416,38 @@ describe('validateContent – probetest rules (§6)', () => {
     ]);
   });
 
-  it('keeps 35–42 minutes for Deutsch (provisional until deutsch-01)', () => {
+  it('requires 24–32 minutes for Deutsch, reading time included (1.0.16)', () => {
     const { items, texts, probetest } = buildDeutschProbetest();
-    const timed = (seconds: number) =>
-      run(toFiles({ items: items.map((i) => ({ ...i, estimatedSeconds: seconds })), texts, probetests: [probetest] }))
-        .issues;
-    expect(errors(timed(90))).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe estimatedSeconds ist 30.0 Min., erlaubt sind 35–42 Min.',
+    const timed = (seconds: number, words = 152) =>
+      run(
+        toFiles({
+          items: items.map((i) => ({ ...i, estimatedSeconds: seconds })),
+          texts: texts.map((t) => ({ ...t, wordCount: words })),
+          probetests: [probetest],
+        }),
+      ).issues;
+    // 20 items × 60 s = 1200 s; 2 × 152 words × 0.75 s = 228 s; 1428 s < 1440 s.
+    expect(errors(timed(60))).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1428 s (23,80 Min.): estimatedSeconds 1200 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
     ]);
-    expect(timed(126)).toEqual([]);
-    expect(errors(timed(127))).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe estimatedSeconds ist 42.3 Min., erlaubt sind 35–42 Min.',
+    // The reading time counts: 2 × 160 words = 240 s reach exactly 24 min, 2 × 159 words fall 3 s short.
+    expect(errors(timed(60, 160))).toEqual([]);
+    expect(errors(timed(60, 159))).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1438,5 s (23,98 Min.): estimatedSeconds 1200 s + Lesezeit 238,5 s, erlaubt sind 24–32 Min.',
     ]);
+    // 84 s: 1680 + 228 = 1908 s; 85 s: 1928 s > 1920 s.
+    expect(timed(84)).toEqual([]);
+    expect(errors(timed(85))).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1928 s (32,13 Min.): estimatedSeconds 1700 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
+    ]);
+  });
+
+  it('keeps the real mathe-01 free of findings', () => {
+    const files: ContentFile[] = readdirSync('content', { recursive: true, encoding: 'utf8' })
+      .filter((f) => f.endsWith('.json') && f !== 'manifest.json')
+      .map((f) => ({ path: f.split(sep).join('/'), data: JSON.parse(readFileSync(`content/${f}`, 'utf8')) as unknown }));
+    const { issues } = run(files, { assetExists: () => true });
+    expect(issues.filter((i) => i.file === 'probetests/mathe-01.json')).toEqual([]);
   });
 
   it('allows at most 15 % short-answer items', () => {
@@ -456,8 +481,11 @@ describe('validateContent – probetest rules (§6)', () => {
     ids.splice(5, 0, spelling!);
     probetest.itemIds = ids;
     const result = errors(run(toFiles({ items, texts, probetests: [probetest] })).issues);
-    expect(result.length).toBeGreaterThan(0);
-    expect(result.every((e) => e.includes('steht nach Rechtschreibung'))).toBe(true);
+    expect(result.filter((e) => e.includes('steht nach Rechtschreibung')).length).toBeGreaterThan(0);
+    // The spelling item also stands without a text before items with one (1.0.16).
+    expect(result.filter((e) => !e.includes('steht nach Rechtschreibung'))).toEqual([
+      expect.stringContaining('ohne Lesetext steht vor'),
+    ]);
   });
 
   it('Deutsch needs exactly 2 reading texts', () => {
@@ -467,6 +495,54 @@ describe('validateContent – probetest rules (§6)', () => {
     const result = errors(run(toFiles({ items: unlinked, texts: texts.slice(0, 1), probetests: [probetest] })).issues);
     expect(result).toEqual([
       'probetests/deutsch-01.json|deutsch-01|itemIds|Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: 1',
+    ]);
+  });
+  it('Deutsch keeps the items of a text together (1.0.16)', () => {
+    const { items, texts, probetest } = buildDeutschProbetest();
+    const ids = [...probetest.itemIds];
+    // Swap one Sachtext item with the first literary one: both blocks break.
+    [ids[2], ids[5]] = [ids[5]!, ids[2]!];
+    probetest.itemIds = ids;
+    expect(errors(run(toFiles({ items, texts, probetests: [probetest] })).issues)).toEqual([
+      `probetests/deutsch-01.json|deutsch-01|itemIds[3]|Items zu "t-sach-901" stehen nicht zusammen: "${ids[3]}" folgt nach einem anderen Item`,
+      `probetests/deutsch-01.json|deutsch-01|itemIds[6]|Items zu "t-lit-901" stehen nicht zusammen: "${ids[6]}" folgt nach einem anderen Item`,
+    ]);
+  });
+
+  it('Deutsch puts no item without a text before one with a text (1.0.16)', () => {
+    const { items, texts, probetest } = buildDeutschProbetest();
+    // A Sachtext item without textRef (removed from the text's list): Lesen, but no reading block.
+    const loose = items[0]!;
+    const unlinked = items.map((i) => (i.id === loose.id ? ({ ...i, stimulus: undefined } as Item) : i));
+    const sach = { ...texts[0]!, itemIds: texts[0]!.itemIds.filter((id) => id !== loose.id) };
+    const files = (ids: string[]) =>
+      toFiles({ items: unlinked, texts: [sach, texts[1]!], probetests: [{ ...probetest, itemIds: ids }] });
+    expect(errors(run(files(probetest.itemIds)).issues)).toEqual([
+      `probetests/deutsch-01.json|deutsch-01|itemIds[1]|Item "${loose.id}" ohne Lesetext steht vor "${probetest.itemIds[1]}" mit Lesetext`,
+    ]);
+    // Counter-check: the same item after both reading blocks is fine.
+    const after = [...probetest.itemIds.slice(1, 10), loose.id, ...probetest.itemIds.slice(10)];
+    expect(errors(run(files(after)).issues)).toEqual([]);
+  });
+
+  it('Deutsch needs one Sachtext and one literary text (1.0.16)', () => {
+    const { items, texts, probetest } = buildDeutschProbetest();
+    const second: ReadingText = { ...structuredClone(sachtext), id: 't-sach-902' };
+    const ladder: Niveau[] = [1, 1, 2, 2, 3];
+    const secondItems = ladder.map((niveau, i) =>
+      cloneItem(findError, 'lesen-sachtext', niveau, 910 + i, { estimatedSeconds: 75, stimulus: { textRef: second.id } }),
+    );
+    second.itemIds = secondItems.map((i) => i.id);
+    // Every Bereich needs 2 items: two literary items without a text stay after the blocks.
+    const literary = items
+      .filter((i) => i.bereich === 'lesen-literarisch')
+      .slice(3) // niveau 2 and 3, keeping the niveau mix
+      .map((i) => ({ ...i, stimulus: undefined }) as Item);
+    const spelling = items.filter((i) => i.stimulus === undefined);
+    const all = [...items.slice(0, 5), ...secondItems, ...literary, ...spelling];
+    const sameKind: Probetest = { ...probetest, itemIds: all.map((i) => i.id), ...mixesOf(all) };
+    expect(errors(run(toFiles({ items: all, texts: [texts[0]!, second], probetests: [sameKind] })).issues)).toEqual([
+      'probetests/deutsch-01.json|deutsch-01|itemIds|Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "sachtext"',
     ]);
   });
 });

@@ -105,7 +105,10 @@ export function buildMatheProbetest(): { items: Item[]; probetest: Probetest } {
   return { items, probetest };
 }
 
-/** Two texts (5 items each), then 5 + 5 spelling items; 8/8/4 niveaus; 120 s each = 40 min. */
+/**
+ * Two texts (5 items each), then 5 + 5 spelling items; 8/8/4 niveaus. 75 s each = 1500 s plus
+ * the reading time of both texts (2 × 152 words × 0.75 s = 228 s) = 28.8 min (§6, 1.0.16).
+ */
 export function buildDeutschProbetest(): {
   items: Item[];
   texts: ReadingText[];
@@ -122,7 +125,7 @@ export function buildDeutschProbetest(): {
   const group = (bereich: Bereich, offset: number, textRef?: string) =>
     ladder.map((niveau, i) =>
       cloneItem(findError, bereich, niveau, offset + i, {
-        estimatedSeconds: 120,
+        estimatedSeconds: 75,
         ...(textRef && { stimulus: { textRef } }),
       }),
     );

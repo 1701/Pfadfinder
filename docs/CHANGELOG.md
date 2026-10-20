@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.16 – 2026-10-20
+- §6 Deutsch: Zeit 24–32 Min. bei 18–24 Items und genau 2 Texten (vorher „35–42 Min., vorläufig“). Gezählt werden die Summe `estimatedSeconds` der Items plus die Lesezeit je referenziertem Text, `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Im Probetest startet die Item-Uhr nach dem Lese-Screen, die Lesezeit steckt in keinem Item. deutsch-01 kommt auf 1305 s + 253,5 s = 25,98 Min.
+- §6 Deutsch, neue Fehler im Validator: Items mit demselben `textRef` stehen zusammen; kein Item ohne `textRef` steht vor einem mit; die 2 Texte haben verschiedene `kind`. Die Texte werden aus den `textRef`s der `itemIds` abgeleitet, kein neues Feld. mathe-01 bleibt ohne Befund. Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.15 – 2026-10-19
 - §4.4/§7 Deutsch: `match` mit `stimulus.textRef`: jeder Text in `left` höchstens 35 Zeichen (vorher 27), in `right` höchstens 52 (vorher 43). Grund ist der Umbau des match-Renderers nach dem iPad-Befund vom 19.10.: Das Zielfeld ist so breit wie die längste Karte mit Haken und Innenabstand, höchstens 60 %; die Zeile links bekommt den Rest und bricht ausgeglichen um (`text-wrap: balance`, ohne balance gleich gemessen). Neben dem Textkasten stehen die Karten unter den Zeilen; ohne Textkasten gilt die 60-%-Grenze nicht (Nachtrag 2026-10-20: Raster gepackt, Zielfeld so breit wie die Karte). Sweep über d-lli-2-003 neben t-lit-002 in vier Viewports (links 9–53, rechts 18–59 Zeichen): links 39 dreizeilig auf dem iPad quer, rechts 59 nur 10 px Luft in Safari quer; bis 35/52 mindestens 39 px und keine Ein-Wort-Zeile. Der Validator warnt nur (`WITH_TEXT.match`). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 
