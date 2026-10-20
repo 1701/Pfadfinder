@@ -3,6 +3,9 @@
 // runs. Drafts, position and time per item are saved after every change, in order.
 // Timers live in the UI: it calls timeUp() when the deadline timer fires and checkTime()
 // when the page becomes visible again.
+// Reading texts (task 13): before an item whose text has not been shown in this run on screen,
+// the reading screen ("reading"); the item's time starts after "Weiter" there, the deadline runs
+// on. Which texts were shown is kept in memory only: after a reload the text comes again.
 
 import { createStore, type StoreApi } from 'zustand/vanilla';
 import type { SelfRating } from '../domain/evaluation';
@@ -36,6 +39,8 @@ export type ProbetestStatus =
   /** No such Probetest. */
   | 'unavailable'
   | 'intro'
+  /** The reading screen before the item at `index` (its text was not shown yet). */
+  | 'reading'
   | 'answering'
   | 'overview'
   /** "Abgeben" with open items asks first. */
@@ -64,10 +69,14 @@ export interface ProbetestState {
    * a rating when "N Antworten vergleichen" was tapped. Null: every item.
    */
   reviewOnly: readonly number[] | null;
+  /** Texts whose reading screen came in this run on screen (memory only, like practice). */
+  shownTextIds: readonly string[];
 
   open(probetestId: string): Promise<void>;
   /** "Starten": a new run, or the running one. */
   begin(): Promise<void>;
+  /** "Weiter" on the reading screen: the item, its time starts now. */
+  doneReading(): void;
   setAnswer(draft: unknown): void;
   goTo(index: number): void;
   /** "Weiter": the next item; after the last one the overview (review: the result). */
@@ -105,6 +114,7 @@ export interface ProbetestState {
 export type ProbetestStore = StoreApi<ProbetestState>;
 
 const RUNNING: readonly ProbetestStatus[] = [
+  'reading',
   'answering',
   'overview',
   'confirmSubmit',
@@ -128,12 +138,25 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
         .catch((error: unknown) => console.error(error));
     }
 
-    /** Adds the time since the item was shown to the item on screen. */
+    /** Adds the time since the item was shown to the item on screen; reading counts for none. */
     function account(run: ProbetestRun, at: string): ProbetestRun {
       const item = get().context?.items[get().index];
       const ms = Date.parse(at) - shownAt;
       shownAt = Date.parse(at);
-      return item ? withTime(run, item.id, ms) : run;
+      return item && get().status !== 'reading' ? withTime(run, item.id, ms) : run;
+    }
+
+    /** The item at `index`, or first the reading screen when its text has not been shown. */
+    function arrive(
+      context: ProbetestContext,
+      index: number,
+    ): Pick<ProbetestState, 'status' | 'shownTextIds'> {
+      const textRef = context.items[index]?.stimulus?.textRef;
+      const { shownTextIds } = get();
+      if (textRef === undefined || shownTextIds.includes(textRef)) {
+        return { status: 'answering', shownTextIds };
+      }
+      return { status: 'reading', shownTextIds: [...shownTextIds, textRef] };
     }
 
     function running(): { run: ProbetestRun; context: ProbetestContext } | null {
@@ -148,7 +171,7 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       const at = now();
       const run = withIndex(account(r.run, at), index);
       persist(run);
-      set({ run, index, status: 'answering' });
+      set({ run, index, ...arrive(r.context, index) });
     }
 
     async function end(reason: 'submit' | 'time' | 'leave' | 'expired') {
@@ -180,6 +203,7 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       run: null,
       index: 0,
       reviewOnly: null,
+      shownTextIds: [],
 
       async open(probetestId) {
         const mine = ++token;
@@ -190,6 +214,7 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
           run: null,
           index: 0,
           reviewOnly: null,
+          shownTextIds: [],
         });
         const learner = get().learner ?? (await ensureLearner(deps));
         const context = await loadProbetestContext(deps, probetestId);
@@ -209,7 +234,7 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
             intro,
             run: resumed,
             index: resumed.currentIndex,
-            status: 'answering',
+            ...arrive(context, resumed.currentIndex),
           });
         } else {
           set({ learner, context, intro, status: 'intro' });
@@ -223,7 +248,15 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
         const run = await beginRun(deps, learner.id, context);
         if (mine !== token) return;
         shownAt = Date.parse(now());
-        set({ run, index: run.currentIndex, status: 'answering' });
+        // A new run on screen: every text comes again.
+        set({ shownTextIds: [] });
+        set({ run, index: run.currentIndex, ...arrive(context, run.currentIndex) });
+      },
+
+      doneReading() {
+        if (get().status !== 'reading') return;
+        shownAt = Date.parse(now());
+        set({ status: 'answering' });
       },
 
       setAnswer(draft) {
@@ -270,7 +303,7 @@ export function createProbetestStore(deps: ProbetestDeps): ProbetestStore {
       showOverview() {
         const r = running();
         if (!r) return;
-        if (get().status === 'answering') {
+        if (get().status === 'answering' || get().status === 'reading') {
           const run = account(r.run, now());
           persist(run);
           set({ run, status: 'overview' });

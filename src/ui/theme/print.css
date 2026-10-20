@@ -38,6 +38,23 @@
     gap: 2mm;
     min-width: 0;
   }
+  /* A reading text before its items: every further text on a new page (task 13). */
+  .druck-text {
+    break-before: page;
+    padding-top: 4mm;
+  }
+  .druck-kopf + .contents > .druck-text {
+    break-before: auto;
+  }
+  .druck-text > h2 {
+    margin-bottom: 2mm;
+  }
+  .druck-absatz {
+    display: grid;
+    grid-template-columns: 9mm 1fr;
+    gap: 2mm;
+    padding-block: 1mm;
+  }
   .druck-loesungen {
     break-before: page;
     padding-top: 6mm;

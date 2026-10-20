@@ -2,10 +2,14 @@
 // WebKit: Karte → Start → 3 items → overview → jump → submit with the question → result →
 // looking through with the short-answer rating → result updated → Karte. Plus: a reload in the
 // middle continues, time running out in the foreground (fake clock) leads to the result, and
-// opening after the time ran out shows the intro.
+// opening after the time ran out shows the intro. Deutsch with reading texts runs on the dev
+// server (/dev/probetest-lauf, fixture deutsch-90, memory repos), never in the production build.
 
 import { expect, test, type Page } from '@playwright/test';
-import { answer, currentItem } from './helpers';
+import { PROBETEST_ITEMS, PROBETEST_TEXTS } from '../fixtures/lesen';
+import { answer, currentItem, type ContentItem } from './helpers';
+
+const DEV = 'http://localhost:5199';
 
 const T0 = new Date('2026-10-15T08:00:00');
 
@@ -186,4 +190,84 @@ test('offline: Probetest starten, eine Aufgabe, Übersicht', async ({
   await answer(page, await currentItem(page), true);
   await page.getByRole('button', { name: 'Übersicht' }).click();
   await expect(page.getByRole('button', { name: 'Aufgabe 1, beantwortet' })).toBeVisible();
+});
+
+test('Deutsch mit Lesetexten: Lese-Screen einmal je Text, Uhr läuft, Zurück/Weiter, Abgeben, Durchsehen mit Kasten', async ({
+  page,
+}) => {
+  const [sach, lit] = PROBETEST_TEXTS;
+  const reading = page.getByRole('heading', { level: 1, name: 'Lies den Text.' });
+  const box = page.locator('[data-region="text"]');
+  const weiter = () => band(page).getByRole('button', { name: 'Weiter' }).click();
+  const at = async (n: number) => {
+    await expect(header(page)).toContainText(`${n} von 18`);
+    await expect(reading).toHaveCount(0);
+  };
+
+  await page.clock.install({ time: T0 });
+  await page.goto(`${DEV}/dev/probetest-lauf/deutsch-90`);
+  await page.getByRole('button', { name: 'Starten' }).click();
+
+  // The reading screen before item 1: the Probetest's Kopf, title, the text, no Vorlesen.
+  await expect(reading).toBeVisible();
+  await expect(header(page)).toContainText('1 von 18');
+  await expect(header(page)).toContainText('45 Min.');
+  await expect(page.getByRole('heading', { level: 2, name: sach!.title })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Vorlesen' })).toHaveCount(0);
+  // The time runs on while the child reads.
+  await page.clock.fastForward('05:00');
+  await expect(header(page)).toContainText('40 Min.');
+  await weiter();
+
+  await at(1);
+  await expect(box).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Vorlesen' })).toHaveCount(0);
+  await answer(page, PROBETEST_ITEMS[0] as unknown as ContentItem, true);
+  await weiter();
+  await at(2);
+  await band(page).getByRole('button', { name: 'Zurück' }).click();
+  await at(1);
+  for (let n = 2; n <= 6; n++) {
+    await weiter();
+    await at(n);
+    await expect(box).toBeVisible();
+  }
+
+  // The second text: its reading screen before item 7, once.
+  await weiter();
+  await expect(reading).toBeVisible();
+  await expect(header(page)).toContainText('7 von 18');
+  await expect(page.getByRole('heading', { level: 2, name: lit!.title })).toBeVisible();
+  await weiter();
+  await at(7);
+  await band(page).getByRole('button', { name: 'Zurück' }).click();
+  await at(6);
+  await weiter();
+  await at(7);
+
+  // A spelling item keeps its Vorlesen and has no text box.
+  await page.getByRole('button', { name: 'Übersicht' }).click();
+  await page.getByRole('button', { name: 'Aufgabe 11, offen' }).click();
+  await at(11);
+  await expect(box).toHaveCount(0);
+  await expect(
+    page.locator('[data-region="sheet"]').getByRole('button', { name: 'Vorlesen' }),
+  ).toBeVisible();
+
+  await page.getByRole('button', { name: 'Übersicht' }).click();
+  await page.getByRole('button', { name: 'Abgeben' }).click();
+  await expect(page.getByRole('heading', { name: 'Noch 17 Aufgaben sind offen.' })).toBeVisible();
+  await page.getByRole('button', { name: 'Abgeben' }).click();
+  await expect(page.getByRole('heading', { name: 'Geschafft.' })).toBeVisible();
+  await expect(page.locator('[data-bereich="zusammen"]')).toContainText('1 von 18');
+
+  // Looking through: the box beside every text item, never a reading screen.
+  await page.getByRole('button', { name: 'Durchsehen' }).click();
+  await at(1);
+  await expect(box).toBeVisible();
+  for (let n = 2; n <= 7; n++) {
+    await weiter();
+    await at(n);
+    await expect(box).toBeVisible();
+  }
 });

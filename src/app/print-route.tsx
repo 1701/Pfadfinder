@@ -26,5 +26,5 @@ export function PrintRoute() {
 
   if (ctx === undefined) return null;
   if (ctx === null) return <p className="p-lg">{UNAVAILABLE}</p>;
-  return <Druckansicht probetest={ctx.probetest} items={ctx.items} />;
+  return <Druckansicht probetest={ctx.probetest} items={ctx.items} texts={ctx.texts} />;
 }

@@ -7,6 +7,7 @@ import type { Item, Probetest } from '../../../src/domain/content';
 import { Druckansicht } from '../../../src/ui/print/Druckansicht';
 import { contentItem } from '../../fixtures/content-items';
 import { validItemsByFormat } from '../../fixtures/items';
+import { DEUTSCH_90, PROBETEST_ITEMS, PROBETEST_TEXTS, biberText } from '../../fixtures/lesen';
 
 const probetest = JSON.parse(readFileSync('content/probetests/mathe-01.json', 'utf8')) as Probetest;
 
@@ -55,5 +56,44 @@ describe('Druckansicht', () => {
     const solution = container.querySelector('[data-loesung]')!.textContent;
     expect(solution).toContain('12:15 Uhr');
     expect(solution).toContain('Darauf kommt es an:');
+  });
+
+  it('a reading text stands before its items, with its title and numbered paragraphs', () => {
+    const items = DEUTSCH_90.itemIds.map((id) => PROBETEST_ITEMS.find((i) => i.id === id)!);
+    const { container } = render(
+      <Druckansicht probetest={DEUTSCH_90} items={items} texts={PROBETEST_TEXTS} />,
+    );
+    const texts = [...container.querySelectorAll<HTMLElement>('[data-text]')];
+    expect(texts.map((t) => t.dataset.text)).toEqual(['t-sach-900', 't-lit-900']);
+    expect(texts[0]!.querySelector('h2')!.textContent).toBe(biberText.title);
+    const paragraphs = [...texts[0]!.querySelectorAll('.druck-absatz')];
+    expect(paragraphs.map((p) => p.querySelector('b')!.textContent)).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+    ]);
+    expect(paragraphs[0]!.textContent).toContain(biberText.paragraphs[0]!);
+
+    // Document order: text 1, its 6 items, text 2, its 4 items, then spelling; numbers run on.
+    const order = [...container.querySelectorAll<HTMLElement>('[data-text], [data-item]')]
+      .filter((el) => !el.closest('.druck-loesungen'))
+      .map((el) => el.dataset.text ?? el.dataset.item);
+    expect(order).toEqual([
+      't-sach-900',
+      ...DEUTSCH_90.itemIds.slice(0, 6),
+      't-lit-900',
+      ...DEUTSCH_90.itemIds.slice(6),
+    ]);
+    const numbers = [...container.querySelectorAll('.druck-aufgabe > b')].map((b) => b.textContent);
+    expect(numbers).toEqual(DEUTSCH_90.itemIds.map((_, i) => String(i + 1)));
+  });
+
+  it('every further text starts on a new page, the first right under the heading', () => {
+    const css = readFileSync('src/ui/theme/print.css', 'utf8');
+    expect(css).toMatch(/\.druck-text \{[^}]*break-before: page/);
+    expect(css).toMatch(/\.druck-kopf \+ \.contents > \.druck-text \{[^}]*break-before: auto/);
   });
 });

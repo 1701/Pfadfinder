@@ -2,8 +2,10 @@
 // (number, stimulus, picture black on white, answer box or options to tick, paper forms of
 // match/order/cloze), then the solution sheet on a page of its own. Only by URL, no link on a
 // child's screen; no app frame, no Vorlesen. On screen a "Drucken" button stands above the sheet.
+// A reading text stands before its items, with its title and numbered paragraphs (items refer to
+// paragraphs); every further text starts on a new page (task 13).
 
-import type { Item, Probetest } from '../../domain/content';
+import type { Item, Probetest, ReadingText } from '../../domain/content';
 import { Button } from '../components/Button';
 import { ContentAsset } from '../components/ContentAsset';
 import { FACH_NAME } from '../text/bereiche';
@@ -26,7 +28,50 @@ function Aufgabe({ item, number }: { item: Item; number: number }) {
   );
 }
 
-export function Druckansicht({ probetest, items }: { probetest: Probetest; items: Item[] }) {
+function Lesetext({ text }: { text: ReadingText }) {
+  return (
+    <section className="druck-text" data-text={text.id}>
+      <h2 className="font-bold">{text.title}</h2>
+      <ol>
+        {text.paragraphs.map((paragraph, i) => (
+          <li key={i} className="druck-absatz">
+            <b>{i + 1}</b>
+            <p>{paragraph}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+interface Block {
+  text?: ReadingText;
+  /** Index in the test of the block's first item. */
+  start: number;
+  items: Item[];
+}
+
+/** Consecutive items with the same text form a block, the text before them. */
+function blocksOf(items: readonly Item[], texts: readonly ReadingText[]): Block[] {
+  const blocks: Block[] = [];
+  items.forEach((item, i) => {
+    const textRef = item.stimulus?.textRef;
+    const last = blocks.at(-1);
+    if (last && last.text?.id === textRef) last.items.push(item);
+    else blocks.push({ text: texts.find((t) => t.id === textRef), start: i, items: [item] });
+  });
+  return blocks;
+}
+
+export function Druckansicht({
+  probetest,
+  items,
+  texts = [],
+}: {
+  probetest: Probetest;
+  items: Item[];
+  texts?: ReadingText[];
+}) {
   const title = printTitle(FACH_NAME[probetest.fach], probetest.id);
   return (
     <div className="py-lg">
@@ -43,11 +88,16 @@ export function Druckansicht({ probetest, items }: { probetest: Probetest; items
           </span>
           <span>{probetest.durationMinutes} Minuten</span>
         </header>
-        <ol>
-          {items.map((item, i) => (
-            <Aufgabe key={item.id} item={item} number={i + 1} />
-          ))}
-        </ol>
+        {blocksOf(items, texts).map((block) => (
+          <div key={block.start} className="contents">
+            {block.text && <Lesetext text={block.text} />}
+            <ol start={block.start + 1}>
+              {block.items.map((item, i) => (
+                <Aufgabe key={item.id} item={item} number={block.start + i + 1} />
+              ))}
+            </ol>
+          </div>
+        ))}
         <section className="druck-loesungen">
           <header className="druck-kopf">
             <h2 className="font-bold">

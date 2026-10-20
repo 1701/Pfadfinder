@@ -1,6 +1,7 @@
 // Route /probetest/:id – the Probetest (PRODUCT.md §5.4): intro, items with "Zurück"/"Weiter"
 // and the time, the overview, the questions before ending, the result and looking through
-// (all items, or only the waiting short answers, with its own overview).
+// (all items, or only the waiting short answers, with its own overview). Before the first item
+// of a reading text the reading screen; beside its items the text box, scrolled as the child left it.
 // Everything is stored as it happens; a reload continues at the same item with the time the
 // wall clock has left.
 
@@ -18,12 +19,14 @@ import {
 import { runDeadline } from '../../data/probetest';
 import { useProbetestClock } from '../probetest-clock';
 import { TextKasten } from '../components/TextKasten';
+import { useTextScroll } from '../text-scroll';
 import { useProbetest } from '../probetest-context';
 import { ProbetestAufgabe } from './ProbetestAufgabe';
 import { ProbetestAuswertung } from './ProbetestAuswertung';
 import { AbgebenFrage, ProbetestFehlt, ProbetestIntro, VerlassenFrage } from './ProbetestBlaetter';
 import { ProbetestDurchsehen } from './ProbetestDurchsehen';
 import { ProbetestDurchsehenUebersicht } from './ProbetestDurchsehenUebersicht';
+import { ProbetestLesen } from './ProbetestLesen';
 import { ProbetestUebersicht } from './ProbetestUebersicht';
 
 export function ProbetestScreen() {
@@ -36,6 +39,8 @@ function Probetest({ id }: { id: string }) {
   const { status, context, run, index, intro, reviewOnly } = s;
   const learnerReadAloud = s.learner?.settings.readAloud ?? true;
   const open = s.open;
+  // Per text, over the items of this screen (ItemScreen mounts anew for every item).
+  const scroll = useTextScroll();
 
   useEffect(() => {
     void open(id);
@@ -63,6 +68,8 @@ function Probetest({ id }: { id: string }) {
         <TextKasten
           text={text}
           readAloud={learnerReadAloud && probetestTextReadAloud(probetest.fach, item, text)}
+          scrollTop={scroll.of(text.id)}
+          onScroll={(top) => scroll.keep(text.id, top)}
         />
       )
     );
@@ -87,6 +94,24 @@ function Probetest({ id }: { id: string }) {
 
   if (running) {
     const answered = items.map((item) => isAnswered(item, running.answers[item.id]));
+    if (status === 'reading') {
+      const text = texts.find((t) => t.id === items[index]?.stimulus?.textRef);
+      if (!text) return null;
+      return (
+        <ProbetestLesen
+          key={text.id}
+          text={text}
+          current={index + 1}
+          total={total}
+          time={time}
+          onNext={() => {
+            scroll.reset(text.id);
+            s.doneReading();
+          }}
+          onOverview={s.showOverview}
+        />
+      );
+    }
     if (status === 'answering') {
       const item = items[index];
       if (!item) return null;

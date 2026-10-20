@@ -8,6 +8,7 @@ import { runDeadline, type ProbetestDeps } from '../../src/data/probetest';
 import { createProbetestStore, type ProbetestStore } from '../../src/data/probetest-store';
 import type { Repositories } from '../../src/data/repos';
 import { previewAnswer } from '../../src/ui/dev/preview-answers';
+import { probetestContentModules } from '../fixtures/lesen';
 
 const T0 = Date.parse('2026-10-15T08:00:00.000Z');
 const MINUTE = 60_000;
@@ -393,5 +394,115 @@ describe('probetest store: the self-rating while looking through', () => {
     expect(s.store.getState().status).toBe('unavailable');
     await s.store.getState().open('../etwas');
     expect(s.store.getState().status).toBe('unavailable');
+  });
+});
+
+describe('probetest store: reading texts (Deutsch, fixture deutsch-90)', () => {
+  // deutsch-90: items 0–5 with t-sach-900, 6–9 with t-lit-900, 10–17 spelling.
+  function deutsch(repos: Repositories = createMemoryRepositories(), clock = { t: T0 }) {
+    const deps: ProbetestDeps = {
+      repos,
+      content: createContentLoader(probetestContentModules()),
+      now: () => new Date(clock.t).toISOString(),
+      newId: () => `id-${++lastId}`,
+    };
+    return { repos, clock, store: createProbetestStore(deps), reopen: () => deutsch(repos, clock) };
+  }
+  async function begun(s = deutsch()) {
+    await s.store.getState().open('deutsch-90');
+    await s.store.getState().begin();
+    return s;
+  }
+  const state = (s: { store: ProbetestStore }) => s.store.getState();
+
+  it('the reading screen comes once per text, before its first item; the deadline runs on', async () => {
+    const s = await begun();
+    expect(state(s)).toMatchObject({ status: 'reading', index: 0, shownTextIds: ['t-sach-900'] });
+    s.clock.t += 2 * MINUTE;
+    state(s).doneReading();
+    expect(state(s)).toMatchObject({ status: 'answering', index: 0 });
+    for (let i = 1; i <= 5; i++) {
+      state(s).next();
+      expect(state(s)).toMatchObject({ status: 'answering', index: i });
+    }
+    state(s).next();
+    expect(state(s)).toMatchObject({ status: 'reading', index: 6 });
+    state(s).doneReading();
+    // "Zurück" on the first item of a text: the previous item, not the reading screen.
+    state(s).back();
+    expect(state(s)).toMatchObject({ status: 'answering', index: 5 });
+    state(s).next();
+    expect(state(s)).toMatchObject({ status: 'answering', index: 6 });
+    for (let i = 7; i <= 17; i++) {
+      state(s).next();
+      expect(state(s)).toMatchObject({ status: 'answering', index: i });
+    }
+    // Reading took 2 of the 45 minutes: the deadline is the start plus 45, as without text.
+    expect(
+      remainingMinutes(
+        new Date(s.clock.t).toISOString(),
+        runDeadline(state(s).context!, state(s).run!),
+      ),
+    ).toBe(43);
+  });
+
+  it('the item time starts after "Weiter" on the reading screen', async () => {
+    const s = await begun();
+    s.clock.t += 3 * MINUTE;
+    state(s).doneReading();
+    s.clock.t += 20_000;
+    state(s).next();
+    expect(state(s).run?.itemMs['d-lsa-1-950']).toBe(20_000);
+  });
+
+  it('a jump shows the reading screen only for a text not shown yet; the overview keeps it', async () => {
+    const s = await begun();
+    // "Übersicht" on the reading screen, then "Weitermachen": the item, without a second reading.
+    state(s).showOverview();
+    expect(state(s).status).toBe('overview');
+    state(s).goTo(state(s).index);
+    expect(state(s)).toMatchObject({ status: 'answering', index: 0 });
+    state(s).showOverview();
+    state(s).goTo(8);
+    expect(state(s)).toMatchObject({ status: 'reading', index: 8 });
+    state(s).doneReading();
+    state(s).showOverview();
+    state(s).goTo(3);
+    expect(state(s)).toMatchObject({ status: 'answering', index: 3 });
+    state(s).showOverview();
+    state(s).goTo(7);
+    expect(state(s)).toMatchObject({ status: 'answering', index: 7 });
+  });
+
+  it('after a reload the text comes again (memory only), then the same item', async () => {
+    const s = await begun();
+    state(s).doneReading();
+    state(s).next();
+    state(s).next();
+    await s.store.getState().flush();
+    const after = s.reopen();
+    await after.store.getState().open('deutsch-90');
+    expect(state(after)).toMatchObject({
+      status: 'reading',
+      index: 2,
+      shownTextIds: ['t-sach-900'],
+    });
+    after.store.getState().doneReading();
+    expect(state(after)).toMatchObject({ status: 'answering', index: 2 });
+  });
+
+  it('looking through never shows the reading screen', async () => {
+    const s = await begun();
+    state(s).doneReading();
+    state(s).showOverview();
+    await state(s).askSubmit();
+    await state(s).submit();
+    expect(state(s).status).toBe('result');
+    state(s).review(0);
+    expect(state(s)).toMatchObject({ status: 'review', index: 0 });
+    for (let i = 1; i < 18; i++) {
+      state(s).next();
+      expect(state(s)).toMatchObject({ status: 'review', index: i });
+    }
   });
 });

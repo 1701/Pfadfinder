@@ -31,6 +31,7 @@ for (const file of files) {
     'EinstiegPage',
     '/dev/probetest',
     'ProbetestPage',
+    'ProbetestLaufPage',
     '/dev/text',
     'TextPage',
     'Baumeister am Bach',

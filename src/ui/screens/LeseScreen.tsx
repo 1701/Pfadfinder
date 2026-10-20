@@ -2,7 +2,9 @@
 // instruction "Lies den Text." stands where an item has its prompt, with Vorlesen (instruction and
 // title). Below it the whole text in its box, with the title and its own Vorlesen, and the yellow
 // "Weiter" where "Prüfen" will be. The item that follows counts in the Fortschritt.
+// The Probetest passes its own top line (`header`) and switches both Vorlesen off (task 13).
 
+import type { ReactNode } from 'react';
 import type { ReadingText } from '../../domain/content';
 import { Button } from '../components/Button';
 import { TextKasten } from '../components/TextKasten';
@@ -17,6 +19,8 @@ export interface LeseScreenProps extends ItemKopfProps {
   /** Vorlesen for the text itself: ReadingText.readAloud, off where the Probetest says so. */
   textReadAloud: boolean;
   onNext(): void;
+  /** Its own top line instead of Pause and Fortschritt (the Probetest's Kopf). */
+  header?: ReactNode;
   /** Dev preview only: where the box starts. */
   scrollTop?: number;
 }
@@ -33,11 +37,12 @@ export function LeseScreen({
   onNext,
   pause,
   progress,
+  header,
   scrollTop,
 }: LeseScreenProps) {
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-sm px-lg py-sm">
-      <ItemKopf pause={pause} progress={progress} />
+      {header ?? <ItemKopf pause={pause} progress={progress} />}
       <section
         data-region="sheet"
         className="mx-auto flex w-full max-w-reading items-center gap-lg rounded-sheet border border-line bg-surface px-lg py-sm"
