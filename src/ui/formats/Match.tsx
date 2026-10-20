@@ -36,13 +36,14 @@ const POOL = 'pool';
  * invisibly: CardSizer), so it is as wide before checking as after: nothing moves.
  * Beside a reading text (.item-with-text) the cards go below the rows, the slot takes at most 60 %
  * and the label the rest, wrapping in balanced lines: d-lli-2-003 broke into three lines of one
- * word each (iPad finding 2026-10-19). Without a text the grid is packed: label column auto, slot
- * fit-content, no empty space between them (m-zo-1-009), cards on one line (m-rf-1-004).
+ * word each (iPad finding 2026-10-19). Without a text the grid is packed and the card comes first:
+ * slot max-content (one line), label column auto with the rest, where it wraps if it must
+ * (m-dz-2-008); no empty space between them (m-zo-1-009), cards on one line (m-rf-1-004).
  */
 const LAYOUT_CLASS =
   'grid w-full items-start gap-x-md gap-y-sm landscape:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] [.item-with-text_&]:grid-cols-1';
 const ROWS_CLASS =
-  'grid grid-cols-[auto_fit-content(100%)] items-center justify-start gap-x-sm gap-y-xs [.item-with-text_&]:grid-cols-[minmax(0,1fr)_fit-content(60%)]';
+  'grid grid-cols-[auto_max-content] items-center justify-start gap-x-sm gap-y-xs [.item-with-text_&]:grid-cols-[minmax(0,1fr)_fit-content(60%)]';
 const LABEL_CLASS =
   'flex min-h-touch items-center rounded-control border-2 px-sm text-left text-option text-balance';
 const rowId = (leftId: string) => `row:${leftId}`;

@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-20 – match ohne Text: die Karte hat Vorrang (m-dz-2-008)
+- **Entschieden (Markus):** Ohne Textkasten ist die Kartenspalte `max-content` statt `fit-content`; das Label bricht in der Restbreite um.
+- **Gemessen (alle neun match-Items, vier Viewports):** m-dz-2-008 Karten einzeilig („möglich, aber nicht sicher“ vorher zweizeilig), Label quer zweizeilig, Luft ≥ 157 px quer, ≥ 257 hoch. Alle Items ohne Befund, knappste Luft weiter 21 px (d-lsa-2-005 neben dem Text, unverändert). m-rf-1-004 und m-zo-1-009 unverändert einzeilig, 26 px zwischen Labeltext und Feld.
+- **Lokal:** `npm run check` grün (960 Tests), Chromium-Projekte 37/37, Layout-Projekt 41/41. Lauf mit Schalter: keine versionierte Datei geändert, die zu match gehört (`format-match-*` byte-gleich, m-dz-2-008 hat keinen versionierten Screenshot); Messbilder unter `tests/e2e/output/dz8/`.
+
 ## 2026-10-20 – Nachtrag Paket 3: match ohne Text gepackt, Tasten 72–90 px, Reserve 666, Trenner „ – “
 - **Entschieden (Markus):** Karten unter den Zeilen neben dem Textkasten bleiben. 60-%-Kappung und Karten unter den Zeilen nur neben einem Textkasten (`.item-with-text`); ohne Text Label `auto`, Zielfeld `fit-content`, Raster gepackt. Ziffertasten `minmax(72px, 90px)` (neu `--spacing-key-max`). `--spacing-reading-reserve-short-answer` 704 → 666 px. Lösungszeile bei match „Würfel – 6 gleich große Quadrate“.
 - **Gemessen (vier Viewports):** m-rf-1-004 und m-zo-1-009 Karten einzeilig, vom Labeltext bis zum Feld 26 px (Innenabstand + Abstand). Tasten 90 px, neben dem Text iPad quer 75 px, „Löschen“ ohne Überlauf; mit Komma 90 px. short-answer mit Text hoch ≥ 18 px (d-lsa-3-002 und Fixture: noch nicht 18).
