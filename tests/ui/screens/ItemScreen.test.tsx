@@ -147,6 +147,41 @@ describe('ItemScreen', () => {
     );
   }
 
+  // iPad run of deutsch-01 (task 14): Prüfen works from the first pick, like every other format.
+  // Too few or too many picks are mistakes: "Noch nicht ganz." with the explanation and the Falle.
+  describe('multi-choice (m-dz-2-007, two right): Prüfen from the first pick', () => {
+    const item = contentItem('m-dz-2-007', 'multi-choice');
+    const pick = (name: string) => userEvent.click(screen.getByRole('checkbox', { name }));
+    const pruefen = () => screen.getByRole('button', { name: 'Prüfen' }) as HTMLButtonElement;
+
+    it('one of two right: Prüfen is on, the band says "Noch nicht ganz."', async () => {
+      const onSubmit = vi.fn();
+      render(<Played item={item} onSubmit={onSubmit} />);
+      expect(pruefen().disabled).toBe(true);
+      await pick('Zu Fuß: am meisten.');
+      expect(pruefen().disabled).toBe(false);
+      await userEvent.click(pruefen());
+      expect(onSubmit).toHaveBeenCalledWith({ optionIds: ['a'] });
+      const band = document.querySelector('[data-region="band"]') as HTMLElement;
+      expect(band.textContent).toContain('Noch nicht ganz.');
+      expect(band.textContent).toContain(item.feedback.incorrect);
+      expect(within(band).getByRole('button', { name: 'Falle zeigen' })).toBeTruthy();
+    });
+
+    it('one too many: all three can be picked, the band says "Noch nicht ganz."', async () => {
+      const onSubmit = vi.fn();
+      render(<Played item={item} onSubmit={onSubmit} />);
+      await pick('Zu Fuß: am meisten.');
+      await pick('Bus: mehr als Fahrrad.');
+      await pick('Auto: mehr als Fahrrad.');
+      await userEvent.click(pruefen());
+      expect(onSubmit).toHaveBeenCalledWith({ optionIds: ['a', 'b', 'c'] });
+      const band = document.querySelector('[data-region="band"]') as HTMLElement;
+      expect(band.textContent).toContain('Noch nicht ganz.');
+      expect(band.textContent).not.toContain('Richtig.');
+    });
+  });
+
   describe('short-answer (m-dz-3-003): compare, then rate yourself', () => {
     const item = contentItem('m-dz-3-003', 'short-answer');
 

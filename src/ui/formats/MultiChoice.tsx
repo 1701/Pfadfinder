@@ -1,6 +1,7 @@
 // Mehrfachwahl: native checkboxes in tiles like single-choice, with a square mark. The prompt
-// says how many to pick ("Wähle 2 aus."), so the renderer adds no hint. Prüfen waits for exactly
-// minSelect; once they are chosen, the other tiles wait until the child deselects one.
+// says how many to pick ("Wähle 2 aus."), so the renderer adds no hint and no limit (task 14):
+// Prüfen works from the first pick, like every other format, and every tile stays open. Too few
+// or too many picks are mistakes and are checked as such ("Noch nicht ganz.").
 
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
@@ -20,7 +21,7 @@ function SquareMark({ state }: { state: TileState }) {
         'grid size-lg shrink-0 place-items-center rounded-sheet border-2',
         state === 'selected' && 'border-signal-edge bg-signal-edge text-surface',
         state === 'chosen' && 'border-notyet bg-notyet',
-        (state === 'plain' || state === 'blocked') && 'border-line-strong bg-surface',
+        state === 'plain' && 'border-line-strong bg-surface',
       )}
     >
       {state === 'selected' && <CheckGlyph className="size-md" />}
@@ -38,39 +39,32 @@ export function MultiChoice({
 }: FormatProps<'multi-choice'>) {
   const options = useMemo(() => presentedOptions(item, attemptIndex), [item, attemptIndex]);
   const [chosen, setChosen] = useState<string[]>(() => answer?.optionIds ?? []);
-  const { minSelect } = item.payload;
-  const full = chosen.length >= minSelect;
   const long = options.some((o) => o.text.length > LONG_OPTION_CHARS);
 
   const toggle = (id: string) => {
     const next = chosen.includes(id) ? chosen.filter((c) => c !== id) : [...chosen, id];
     setChosen(next);
-    onChange(next.length === minSelect ? { optionIds: next } : null);
+    onChange(next.length > 0 ? { optionIds: next } : null);
   };
 
   return (
     <fieldset className="w-full">
-      <legend className="sr-only">Wähle {minSelect} Antworten.</legend>
+      <legend className="sr-only">Du kannst mehrere Antworten wählen.</legend>
       <div className={clsx('grid gap-xs', long ? 'grid-cols-1' : 'grid-cols-2')}>
         {options.map((option) => {
           const isChosen = chosen.includes(option.id);
-          const blocked = full && !isChosen;
           const state = tileState(
             revealed !== undefined,
             revealed?.solution.optionIds.includes(option.id) ?? false,
             isChosen,
-            blocked,
           );
           return (
-            <label
-              key={option.id}
-              className={tileClass(state, !disabled && !blocked, 'choice px-lg')}
-            >
+            <label key={option.id} className={tileClass(state, !disabled, 'choice px-lg')}>
               <input
                 type="checkbox"
                 value={option.id}
                 checked={isChosen}
-                disabled={disabled || blocked}
+                disabled={disabled}
                 onChange={() => toggle(option.id)}
                 className="sr-only"
               />

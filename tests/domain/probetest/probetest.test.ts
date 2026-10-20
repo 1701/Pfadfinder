@@ -22,7 +22,7 @@ import {
   withTime,
 } from '../../../src/domain/probetest';
 import { previewAnswer } from '../../../src/ui/dev/preview-answers';
-import { numberInput, order, shortAnswer, singleChoice } from '../../fixtures/items';
+import { multiChoice, numberInput, order, shortAnswer, singleChoice } from '../../fixtures/items';
 
 // zo, gm, zo, dz: two Bereiche with two items, one with a short answer.
 const ITEMS: Item[] = [numberInput, singleChoice, order, shortAnswer];
@@ -107,6 +107,15 @@ describe('run', () => {
     expect(run.answers).toEqual({ [singleChoice.id]: { optionId: 'a' } });
     expect(run.itemMs).toEqual({ [singleChoice.id]: 2000 });
     expect(run.currentIndex).toBe(3);
+  });
+
+  it('multi-choice: too few or too many picks are answered and not solved (task 14)', () => {
+    const outcome = (optionIds: string[]) =>
+      itemOutcome(multiChoice, { answers: { [multiChoice.id]: { optionIds } }, ratings: {} });
+    expect(isAnswered(multiChoice, { optionIds: ['a'] })).toBe(true);
+    expect(outcome(['a'])).toBe('notSolved');
+    expect(outcome(['a', 'c', 'd', 'b'])).toBe('notSolved');
+    expect(outcome(['a', 'c', 'd'])).toBe('solved');
   });
 
   it('a short answer counts as answered only with text', () => {

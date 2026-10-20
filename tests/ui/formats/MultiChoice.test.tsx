@@ -26,7 +26,8 @@ describe('MultiChoice (m-dz-2-007)', () => {
     expect(container.querySelector('.grid-cols-2')).not.toBeNull();
   });
 
-  it('reports an answer only with exactly minSelect options; then the others wait', async () => {
+  // Task 14: no lock below or above minSelect, no hint. Too few or too many picks are mistakes.
+  it('reports an answer from the first pick; every tile stays open after minSelect', async () => {
     const onChange = vi.fn();
     render(
       <MultiChoice
@@ -38,16 +39,35 @@ describe('MultiChoice (m-dz-2-007)', () => {
       />,
     );
     await userEvent.click(box('Zu Fuß: am meisten.'));
-    expect(onChange).toHaveBeenLastCalledWith(null);
+    expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a'] });
     await userEvent.click(box('Bus: mehr als Fahrrad.'));
-    expect(onChange.mock.lastCall?.[0].optionIds.sort()).toEqual(['a', 'b']);
+    expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a', 'b'] });
 
-    expect(box('Auto: mehr als Fahrrad.').disabled).toBe(true);
-    expect(box('Insgesamt 20 Kinder.').disabled).toBe(true);
+    expect(boxes().every((b) => !b.disabled)).toBe(true);
+    expect(document.querySelector('.border-dashed')).toBeNull();
+    await userEvent.click(box('Auto: mehr als Fahrrad.'));
+    expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a', 'b', 'c'] });
 
-    await userEvent.click(box('Zu Fuß: am meisten.'));
+    for (const name of ['Zu Fuß: am meisten.', 'Bus: mehr als Fahrrad.', 'Auto: mehr als Fahrrad.'])
+      await userEvent.click(box(name));
     expect(onChange).toHaveBeenLastCalledWith(null);
-    expect(box('Auto: mehr als Fahrrad.').disabled).toBe(false);
+  });
+
+  it('a draft from the Probetest comes back as it was, even below minSelect', () => {
+    render(
+      <MultiChoice
+        item={item}
+        attemptIndex={0}
+        answer={{ optionIds: ['c'] }}
+        onChange={() => {}}
+        disabled={false}
+      />,
+    );
+    expect(
+      boxes()
+        .filter((b) => b.checked)
+        .map((b) => b.value),
+    ).toEqual(['c']);
   });
 
   it('marks the solution and the child’s other choice after checking, never as wrong', () => {

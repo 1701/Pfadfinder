@@ -134,6 +134,34 @@ describe('the time', () => {
 });
 
 describe('ProbetestAufgabe', () => {
+  // Task 14: a single pick of a multi-choice item is a draft, not "open"; Weiter works as always.
+  it('multi-choice: the first pick is kept as the draft', async () => {
+    const item = contentItem('m-dz-2-007', 'multi-choice');
+    const onAnswer = vi.fn();
+    render(
+      <MemoryRouter>
+        <ProbetestAufgabe
+          item={item}
+          attemptIndex={0}
+          answer={null}
+          onAnswer={onAnswer}
+          current={1}
+          total={24}
+          time={time}
+          readAloud={false}
+          onBack={() => {}}
+          onNext={() => {}}
+          onOverview={() => {}}
+        />
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByRole('checkbox', { name: 'Zu Fuß: am meisten.' }));
+    expect(onAnswer).toHaveBeenLastCalledWith({ optionIds: ['a'] });
+    expect((screen.getByRole('button', { name: 'Weiter' }) as HTMLButtonElement).disabled).toBe(
+      false,
+    );
+  });
+
   it('has no checking: "Zurück" and "Weiter", time and "7 von 24" on top', async () => {
     const onNext = vi.fn();
     render(
