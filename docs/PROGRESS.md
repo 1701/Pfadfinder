@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 14: Befunde iPad-Durchlauf deutsch-01 (1)–(5), (6) offen
+- **Gebaut:** (1) `probetestName(fach)` für Startseite, Karte und Druck (`INTRO_TITLE`/`MAP_LINE` entfernt); Fluss-Test deutsch-90 (Start bis Durchsehen) vor der Reparatur nur an der Startseite rot. (2) multi-choice ohne Sperre unter und über `minSelect`, ohne Hinweis; zu wenig oder zu viel = „noch nicht“. (3) Leeres match-Feld = leere Lücke (`emptyTileClass`, „…“). (4) order: FLIP 180 ms (`--duration-move`), 1 s Tönung `touch-soft`, bei reduce nur Tönung. (5) short-answer `enterKeyHint="done"`, Enter schließt die Tastatur.
+- **Entscheidungen (Markus):** Obergrenze multi-choice fällt; Tönung `--color-touch-soft` #dce7e2 (ink 9,9:1); match in `layout.spec` Luft ≥ 18.
+- **Gemessen:** match knappste Luft (layout/text-layout) iPad quer 105, hoch 95, Safari quer 21, hoch 95 px; Probetest d-lsa-2-952 Aufgabe 292/264/184/252, Durchsehen 123/95/15 (Ausnahme)/83.
+- **Offen (6):** Kartenzeile gebaut, liegt auf lokalem Zweig `wip/karte-zeile`: Safari hoch mit „Neu laden“ 16,955 px (Grenze 17), iPad hoch 20,3 px, ohne „Neu laden“ unverändert (18,2/19,1). Wartet auf Entscheidung.
+- **Lokal:** `npm run check` grün (994 Tests), Chromium-Projekte 39/39, Layout-Projekt 42/42 in vier Viewports.
+
 ## 2026-10-20 – Aufgabe 13 (2)–(4): Lese-Screen im Probetest, deutsch-01
 - **Gebaut:** Store-Status `reading` vor dem ersten Item eines Textes im Durchgang (`shownTextIds` nur im Speicher), `ProbetestLesen` mit Kopf, ohne Vorlesen; Item-Zeit erst nach „Weiter“, die Frist läuft weiter. Kasten mit Scrollposition je Text auch im Durchsehen. Druck: Text mit nummerierten Absätzen vor seinen Items, der zweite auf neuer Seite. `/dev/probetest-lauf/:id` (Fixture deutsch-90) für den E2E-Lauf. deutsch-01 eingespielt: 0 Fehler, 0 Warnungen, 25,98 Min.
 - **Fallbacks (vorab entschieden):** Durchsehen neben Text quer: Falle/Zurück/Weiter untereinander (vorher iPad quer order −123 px); hoch Reserve + Kopfhöhe (`--reading-extra`, vorher short-answer −30, order −6).
