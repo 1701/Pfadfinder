@@ -116,6 +116,7 @@ export function ProbetestPage() {
     case 'intro-fertig':
       return (
         <ProbetestIntro
+          fach={ctx.probetest.fach}
           doneBefore={zustand === 'intro-fertig'}
           readAloud
           onStart={noop}

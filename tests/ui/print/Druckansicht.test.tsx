@@ -58,6 +58,18 @@ describe('Druckansicht', () => {
     expect(solution).toContain('Darauf kommt es an:');
   });
 
+  it('the title and the solution sheet name the Fach of the Probetest: Deutsch 90 (task 14)', () => {
+    const items = DEUTSCH_90.itemIds.map((id) => PROBETEST_ITEMS.find((i) => i.id === id)!);
+    const { container } = render(
+      <Druckansicht probetest={DEUTSCH_90} items={items} texts={PROBETEST_TEXTS} />,
+    );
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Probetest Deutsch 90');
+    expect(screen.getByRole('heading', { level: 2, name: /Lösungen/ }).textContent).toBe(
+      'Lösungen · Probetest Deutsch 90',
+    );
+    expect(container.textContent).not.toMatch(/Mathe/);
+  });
+
   it('a reading text stands before its items, with its title and numbered paragraphs', () => {
     const items = DEUTSCH_90.itemIds.map((id) => PROBETEST_ITEMS.find((i) => i.id === id)!);
     const { container } = render(

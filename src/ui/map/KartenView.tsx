@@ -25,7 +25,8 @@ import { QUIET_ACTION_CLASS } from '../components/quiet';
 import { RechtlichesLinks } from '../components/RechtlichesLinks';
 import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { VorlesenButton } from '../components/VorlesenButton';
-import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
+import { BEREICH_NAME } from '../text/bereiche';
+import { probetestName } from '../text/probetest';
 import { OFFER_GO, OFFER_LATER, offerSpeech, offerTitle } from '../text/einstieg';
 import { Karte } from './Karte';
 import { Tagesziel, tageszielText } from './Tagesziel';
@@ -97,7 +98,7 @@ export function KartenView({
       <div className="flex min-h-touch flex-wrap items-center justify-end gap-x-lg">
         {probetests.map(({ fach, id }) => (
           <Link key={id} to={`/probetest/${id}`} className={clsx(QUIET_ACTION_CLASS, 'mr-auto')}>
-            Probetest {FACH_NAME[fach]}
+            {probetestName(fach)}
           </Link>
         ))}
         <UpdateHinweis update={update} onMap />

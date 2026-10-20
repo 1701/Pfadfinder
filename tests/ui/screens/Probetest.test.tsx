@@ -89,6 +89,7 @@ describe('the questions and the intro', () => {
     const { rerender } = render(
       <MemoryRouter>
         <ProbetestIntro
+          fach="mathe"
           doneBefore={false}
           readAloud={false}
           onStart={() => {}}
@@ -98,13 +99,21 @@ describe('the questions and the intro', () => {
     );
     expect(screen.queryByText('Du hast diesen Probetest schon gemacht.')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Auswertung ansehen' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Probetest Mathe' })).toBeTruthy();
     rerender(
       <MemoryRouter>
-        <ProbetestIntro doneBefore readAloud={false} onStart={() => {}} onShowResult={() => {}} />
+        <ProbetestIntro
+          fach="deutsch"
+          doneBefore
+          readAloud={false}
+          onStart={() => {}}
+          onShowResult={() => {}}
+        />
       </MemoryRouter>,
     );
     expect(screen.getByText('Du hast diesen Probetest schon gemacht.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Auswertung ansehen' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Probetest Deutsch' })).toBeTruthy();
     expect(
       screen.getByText('45 Minuten, wie in der Schule. Du kannst vor und zurück.'),
     ).toBeTruthy();

@@ -40,6 +40,35 @@ describe('ProbetestScreen – Deutsch with reading texts', () => {
   });
   afterEach(() => vi.unstubAllGlobals());
 
+  // iPad run of deutsch-01 (task 14): the start page said "Probetest Mathe". The Fach comes from
+  // the Probetest on every screen of the flow, never from a constant.
+  it('names Deutsch, never Mathe: start, reading, item, overview, question, result, review', async () => {
+    const user = userEvent.setup();
+    const store = renderProbetest();
+    const noMathe = () => expect(document.body.textContent).not.toMatch(/Mathe/);
+
+    expect(await screen.findByRole('heading', { name: 'Probetest Deutsch' })).toBeTruthy();
+    noMathe();
+    await user.click(screen.getByRole('button', { name: 'Starten' }));
+    await screen.findByText('Lies den Text.');
+    noMathe();
+    store.getState().doneReading();
+    await screen.findByText('1 von 18');
+    noMathe();
+    store.getState().showOverview();
+    await screen.findByText('Tippe auf eine Aufgabe, dann springst du hin.');
+    noMathe();
+    await store.getState().askSubmit();
+    await screen.findByText('Willst du trotzdem abgeben?');
+    noMathe();
+    await store.getState().submit();
+    await screen.findByText('Geschafft.');
+    noMathe();
+    store.getState().review();
+    await screen.findByText('1 von 18');
+    noMathe();
+  });
+
   it('the text box beside a reading item has no Vorlesen, a spelling item keeps its own', async () => {
     const user = userEvent.setup();
     const store = renderProbetest();

@@ -8,7 +8,6 @@
 import type { Item, Probetest, ReadingText } from '../../domain/content';
 import { Button } from '../components/Button';
 import { ContentAsset } from '../components/ContentAsset';
-import { FACH_NAME } from '../text/bereiche';
 import { keepNumbersWithWords as nb } from '../text/numbers';
 import { PRINT, PRINT_NAME, PRINT_SOLUTIONS, printTitle } from '../text/probetest';
 import { papierAufgabe, papierLoesung } from './papier';
@@ -72,7 +71,7 @@ export function Druckansicht({
   items: Item[];
   texts?: ReadingText[];
 }) {
-  const title = printTitle(FACH_NAME[probetest.fach], probetest.id);
+  const title = printTitle(probetest.fach, probetest.id);
   return (
     <div className="py-lg">
       <div className="nur-bildschirm mx-auto mb-md flex max-w-page justify-end px-lg">

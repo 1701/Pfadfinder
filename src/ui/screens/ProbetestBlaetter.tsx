@@ -5,6 +5,7 @@
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
+import type { Fach } from '../../domain/content/taxonomy';
 import { Button, buttonClass } from '../components/Button';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
 import { focusQuietly } from '../focus';
@@ -12,7 +13,6 @@ import {
   CONTINUE,
   DONE_BEFORE,
   INTRO_TEXT,
-  INTRO_TITLE,
   LEAVE_TEXT,
   LEAVE_TITLE,
   SHOW_RESULT,
@@ -22,11 +22,13 @@ import {
   TO_MAP,
   UNAVAILABLE,
   openTitle,
+  probetestName,
 } from '../text/probetest';
 import { Blatt } from './Blatt';
 import { Zeit, type ProbetestZeit } from './ProbetestKopf';
 
 export function ProbetestIntro(props: {
+  fach: Fach;
   doneBefore: boolean;
   readAloud: boolean;
   onStart(): void;
@@ -39,7 +41,7 @@ export function ProbetestIntro(props: {
           {TO_MAP}
         </Link>
       }
-      title={INTRO_TITLE}
+      title={probetestName(props.fach)}
       text={INTRO_TEXT}
       note={props.doneBefore ? DONE_BEFORE : undefined}
       readAloud={props.readAloud}

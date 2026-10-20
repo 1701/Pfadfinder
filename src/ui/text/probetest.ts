@@ -1,9 +1,15 @@
 // Everything a child reads in the Probetest (PRODUCT.md §5.4, decisions 2026-10-15). Calm and
 // plain: numbers only in the result, no percent, no grade, never "falsch".
+// The Fach always comes from the Probetest (task 14: the start page said "Mathe" for Deutsch).
 
-export const MAP_LINE = 'Probetest Mathe';
+import type { Fach } from '../../domain/content/taxonomy';
+import { FACH_NAME } from './bereiche';
 
-export const INTRO_TITLE = 'Probetest Mathe';
+/** "Probetest Deutsch": start page and the line below the map. */
+export function probetestName(fach: Fach): string {
+  return `Probetest ${FACH_NAME[fach]}`;
+}
+
 export const INTRO_TEXT = '45 Minuten, wie in der Schule. Du kannst vor und zurück.';
 export const DONE_BEFORE = 'Du hast diesen Probetest schon gemacht.';
 export const SHOW_RESULT = 'Auswertung ansehen';
@@ -46,8 +52,8 @@ export const PRINT_NAME = 'Name';
 export const PRINT_SOLUTIONS = 'Lösungen';
 
 /** "Probetest Mathe 1" from the id mathe-01. */
-export function printTitle(fach: string, id: string): string {
-  return `Probetest ${fach} ${Number(id.slice(-2))}`;
+export function printTitle(fach: Fach, id: string): string {
+  return `${probetestName(fach)} ${Number(id.slice(-2))}`;
 }
 
 /** "Noch 16 Aufgaben sind offen." */
@@ -73,8 +79,8 @@ export function timeText(minutes: number, final: boolean): string {
 
 /** Every fixed text above, for the language checks in tests/ui/text.test.ts. */
 export const PROBETEST_TEXTS = [
-  MAP_LINE,
-  INTRO_TITLE,
+  probetestName('mathe'),
+  probetestName('deutsch'),
   INTRO_TEXT,
   DONE_BEFORE,
   SHOW_RESULT,
@@ -105,7 +111,8 @@ export const PROBETEST_TEXTS = [
   PRINT,
   PRINT_NAME,
   PRINT_SOLUTIONS,
-  printTitle('Mathe', 'mathe-01'),
+  printTitle('mathe', 'mathe-01'),
+  printTitle('deutsch', 'deutsch-01'),
   openTitle(1),
   openTitle(16),
   compareLabel(1),

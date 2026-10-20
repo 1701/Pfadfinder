@@ -84,6 +84,7 @@ function Probetest({ id }: { id: string }) {
   if (status === 'intro' && intro) {
     return (
       <ProbetestIntro
+        fach={probetest.fach}
         doneBefore={intro.doneBefore}
         readAloud={learnerReadAloud}
         onStart={() => void s.begin()}
