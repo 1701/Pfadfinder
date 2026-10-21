@@ -123,7 +123,13 @@ test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertun
   await expect(page.getByRole('link', { name: 'Probetest Mathe', exact: true })).toBeVisible();
   // A second run is allowed; the intro remembers the first and offers its result.
   await page.getByRole('link', { name: 'Probetest Mathe', exact: true }).click();
-  await page.getByRole('link', { name: /^Probetest Mathe 1/ }).click();
+  // The list shows the Stand from the stored run (task 16), also after a reload.
+  const entry = page.getByRole('link', { name: /^Probetest Mathe 1/ });
+  await expect(entry).toContainText('gemacht am');
+  await expect(entry).not.toContainText('noch nicht');
+  await page.reload();
+  await expect(entry).toContainText('gemacht am');
+  await entry.click();
   await expect(page.getByText('Du hast diesen Probetest schon gemacht.')).toBeVisible();
   await page.getByRole('button', { name: 'Auswertung ansehen' }).click();
   await expect(total).toContainText('4 von 24');

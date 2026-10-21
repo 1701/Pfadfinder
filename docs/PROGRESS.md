@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 16 (3): Stand je Probetest
+- **Gebaut:** `probetestStand(ids, runs)` (domain) und `loadProbetestList(repos, ids)` (data, liest nur): „gemacht am …“ = `endedAt` des letzten abgegebenen Laufs, also desselben wie bei „Auswertung ansehen“. Gespeichert wird nichts Neues. Die Route liest den Stand aus Dexie; ist der Speicher nicht lesbar, stehen nur die Namen da. Der Chunk `probetest-liste-route` ist im Precache.
+- **Entscheidungen:** Abgebrochene und laufende Läufe zählen als „noch nicht gemacht“, das Datum steht ohne Jahr in lokaler Zeit.
+- **Tests:** Memory-Repos mit zwei Probetests, einer gemacht (echter Lauf über den Store): gleicher Stand bei erneutem Lesen und nach Export → Import in ein leeres Gerät. `probetest.spec`: „gemacht am“ nach Abgabe und nach Neuladen. DEPLOY §8 Prüfschritt 7.
+- **Lokal:** `npm run check` grün (1023 Tests), Chromium-Projekte 39/39, `probetest-liste` 4/4.
+
 ## 2026-10-21 – Aufgabe 16 (2): Fußzeile der Karte zeigt auf die Übersicht
 - **Gebaut:** „Probetest Mathe“ und „Probetest Deutsch“ führen auf `/probetest/mathe` bzw. `/probetest/deutsch` (`KartenView.probetests` sind jetzt die Fächer mit mindestens einem Probetest), Namen und Zeile sind gleich geblieben. `probetest.spec` geht über die Übersicht zur Startseite.
 - **Gemessen (`karte.spec`, kleinster Name ohne „Neu laden“ / mit / `/`):** iPad quer 23,4/23,4/23,4, iPad hoch 21,8/20,5/22,7, Safari quer 19,1/19,1/19,1, Safari hoch 18,4/17,2/19,4 px. Das ist unverändert, die Zeile ist einzeilig (hoch mit „Neu laden“ zwei Zeilen wie beschlossen).

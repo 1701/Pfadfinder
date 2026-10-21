@@ -102,6 +102,7 @@ Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 4. Eine Runde beginnen, die App in den Hintergrund und zurück: kein Hinweis, kein Neuladen, die Runde läuft weiter.
 5. Zur Karte, „Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg, `/eltern` (über „Impressum“ → „Für Eltern“) zeigt die neue Kennung.
 6. In der installierten App auf `/eltern` „Sicherung herunterladen“ tippen: Liefert iOS eine Datei (Teilen-Menü oder „In Dateien sichern“)? Ergebnis hier eintragen; ohne Datei braucht die Sicherung in der installierten App einen anderen Weg.
+7. Probetest-Liste zeigt Stand nach Update: Vor dem Update in der installierten App einen Probetest abgeben (oder einen schon abgegebenen nutzen). Nach „Neu laden“ Karte → „Probetest Mathe“ (bzw. „Probetest Deutsch“): Der Eintrag zeigt „gemacht am …“ mit dem Tag der Abgabe, die anderen „noch nicht gemacht“.
 
 ## 9. GitHub-CI und Screenshots
 

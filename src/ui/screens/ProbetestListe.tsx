@@ -5,6 +5,7 @@
 
 import { Link } from 'react-router';
 import type { Fach } from '../../domain/content/taxonomy';
+import type { ProbetestStand } from '../../domain/probetest/list';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
 import {
   BACK,
@@ -15,13 +16,8 @@ import {
   probetestName,
 } from '../text/probetest';
 
-export interface ProbetestListEntry {
-  id: string;
-  /** Position in the manifest, from 1. */
-  number: number;
-  /** End of the last submitted run; null: not done yet. */
-  doneAt: string | null;
-}
+/** id, number (position in the manifest) and doneAt (null: not done yet). */
+export type ProbetestListEntry = ProbetestStand;
 
 export function ProbetestListe({
   fach,
