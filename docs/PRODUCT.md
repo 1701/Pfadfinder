@@ -203,7 +203,7 @@ Nicht drin: alles aus Abschnitt 4 und Abschnitt 11.
 
 ## 11. Roadmap (Big Picture)
 
-- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch", Validator prüft die 24-Zeichen-Regel für Optionen bei Bild-Items (CONTENT_SCHEMA §7, seit 1.0.7 nur dokumentiert), Nach-Check für Bereiche, die nach dem Einstiegscheck erst Content bekommen (im MVP starten sie auf Niveau 1)
+- **v1.1 (nach dem Test 2026):** Lehrkraft-Review der Items, Content-Verdopplung, echtes Spaced Repetition, Audio-Aufgaben (Hörverstehen), Feedback-Funktion "Diese Aufgabe ist komisch", Validator prüft die 24-Zeichen-Regel für Optionen bei Bild-Items (CONTENT_SCHEMA §7, seit 1.0.7 nur dokumentiert), Nach-Check für Bereiche, die nach dem Einstiegscheck erst Content bekommen (im MVP starten sie auf Niveau 1), Screenshots deterministisch: fester Seed für Üben/Lese-Runde in Tests, Build-Kennung, Datum und Rechenfrage maskieren (Bericht vom 21.10.2026: fünf Gruppen ändern sich je Lauf – Üben-Lauf, Lese-Runde, Eltern-Frage und Build-Kennung, Einblendung der Rückmeldung, PDF-Datum)
 - **v2:** Optionale Accounts (Eltern), Multi-Kind, Sync über Geräte, Eltern-Dashboard, Content-Editor mit Review-Workflow, Item-Statistiken (Basis für IRT-Kalibrierung)
 - **v3:** Lehrkräfte-Modus (Klasse anlegen, Übungspläne), weitere Bundesländer/Übergangsformate (Bayern Übertritt, NRW), Monetarisierungsoptionen prüfen (Schullizenz, Eltern-Premium, Non-Profit/Spenden)
 

@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Content muster-strukturen (18 Items), Roadmap Screenshots
+- **Gebaut:** 18 Items (m-ms-1-001…3-004, draft) angehängt, `ms-kette-1.svg`, `ms-figur-1.svg`; Pool 20 Items, Niveau 8/8/4. `content:validate` 0 Fehler, 0 Warnungen. Alle Mathe-Bereiche sind jetzt übbar: die Tests für einen zu dünnen Bereich nutzen einen synthetischen Loader (`thinMatheContent`), der Check-Test R W R leitet die Bereiche mit drittem Item ab (12 Items für 5 Bereiche).
+- **Gemessen (knappste Luft, iPad quer/hoch, Safari quer/hoch):** m-ms-2-006 179/371/127/247, m-ms-3-004 168/384/60/260, m-ms-2-003 360/616/252/492 px; alle 18 Items ≥ 60 px.
+- **Roadmap v1.1:** Screenshots deterministisch (PRODUCT §11).
+- **Lokal:** `npm run check` grün (995 Tests), Chromium-Projekte 39/39, `layout.spec` 4/4, `karte`/`einstieg-layout`/`probetest-layout` grün.
+
 ## 2026-10-21 – Aufgabe 14 (7): Screenshots bereinigt
 - 45 versionierte Screenshots mit Schalter erneuert (`npm run screenshots`, Layout- und Chromium-Projekte), kein Code; Gründe je Gruppe im Bericht vom 21.10.
 
