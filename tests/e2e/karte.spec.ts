@@ -1,6 +1,10 @@
 // The map on four viewports (the two iPad sizes and the same iPad in Safari with its bars):
 // no scrolling, readable names, large tap targets, one layout at a time, keyboard order and
 // focus ring. /dev/karte shows every state at once (dev build only); / is the real start page.
+// The line below the map (task 14): one row everywhere, except /dev/karte?neu in portrait, where
+// "Neu laden" has its own row above the two groups. Names ≥ 18 px, only ?neu in Safari portrait
+// (768×900) ≥ 17 px (decision Markus: rare, short state, a button for adults; children play in the
+// installed app, 768×1024, where 18 px holds with "Neu laden" too).
 
 import { expect, test, type Page } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
@@ -44,6 +48,7 @@ async function measure(page: Page) {
         .map((e) => ({ name: e.textContent, rect: e.getBoundingClientRect() }))
         .filter(({ rect }) => rect.width > 0)
         .map(({ name, rect }) => ({ name, height: rect.height, bottom: rect.bottom })),
+      line: document.querySelector('main > div:last-child')!.getBoundingClientRect().height,
     };
   });
 }
@@ -60,18 +65,30 @@ for (const viewport of VIEWPORTS) {
       expect(m.overflow, `${url}: page scrolls`).toBeLessThanOrEqual(0);
       expect(m.overflowX, `${url}: page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.visibleMaps, `${url}: exactly one layout`).toBe(1);
-      expect(m.smallestName, `${url}: names below 18 px`).toBeGreaterThanOrEqual(18);
+      const neu = url.endsWith('?neu');
+      const portrait = viewport.height > viewport.width;
+      const minName = neu && viewport.name === 'safari-portrait' ? 17 : 18;
+      expect(m.smallestName, `${url}: names below ${minName} px`).toBeGreaterThanOrEqual(minName);
       expect(m.smallestTarget, `${url}: Gebiet smaller than 48 px`).toBeGreaterThanOrEqual(48);
       expect(m.mapBottom, `${url}: map leaves the screen`).toBeLessThanOrEqual(m.height);
       expect(m.legend.map((l) => l.name)).toEqual(
         expect.arrayContaining(['Impressum', 'Datenschutz']),
       );
-      // The line below the map stays one row: a second one took the names below 18 px.
-      expect(new Set(m.legend.map((l) => Math.round(l.bottom))).size, `${url}: line wraps`).toBe(1);
-      if (url.endsWith('?neu')) {
-        // "Neu laden" fits the line in every viewport (Probetest left, reload and legal right).
-        const reload = m.legend.some((l) => l.name === 'Neu laden');
-        expect(reload, `${url}: "Neu laden"`).toBe(true);
+      const rows = [...new Set(m.legend.map((l) => Math.round(l.bottom)))].sort((a, b) => a - b);
+      if (neu) {
+        // Both Probetests, "Neu laden" and Impressum · Datenschutz: one row in landscape; in
+        // portrait "Neu laden" stands alone in a row above the two groups (built that way).
+        expect(m.legend.map((l) => l.name)).toEqual(
+          expect.arrayContaining(['Probetest Mathe', 'Probetest Deutsch', 'Neu laden']),
+        );
+        expect(rows.length, `${url}: rows`).toBe(portrait ? 2 : 1);
+        if (portrait) {
+          const top = m.legend.filter((l) => Math.round(l.bottom) === rows[0]).map((l) => l.name);
+          expect(top, `${url}: "Neu laden" alone on top`).toEqual(['Neu laden']);
+        }
+      } else {
+        // Without "Neu laden" the line stays one row (a second one took the names below 18 px).
+        expect(rows.length, `${url}: line wraps`).toBe(1);
       }
       for (const l of m.legend) {
         expect(l.height, `${url}: "${l.name}" below 48 px`).toBeGreaterThanOrEqual(48);
@@ -79,10 +96,11 @@ for (const viewport of VIEWPORTS) {
       }
       budget[url] = {
         smallestName: Number(m.smallestName.toFixed(1)),
-        lineRows: new Set(m.legend.map((l) => Math.round(l.bottom))).size,
+        lineRows: rows.length,
+        lineHeight: Math.round(m.line),
       };
     }
-    // Smallest Gebietsname per page (task 11: 18 px with Impressum · Datenschutz and Neu laden).
+    // Smallest Gebietsname, rows and height of the line below the map per page.
     writeFileSync(
       `${SCREENSHOTS}/karte-budget-${viewport.name}.json`,
       `${JSON.stringify(budget, null, 2)}\n`,

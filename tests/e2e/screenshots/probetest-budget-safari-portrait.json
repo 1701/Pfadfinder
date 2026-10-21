@@ -204,15 +204,15 @@
     }
   },
   "map": {
-    "smallestName": 19.144166666666667,
+    "smallestName": 19.357499999999998,
     "overflow": 0,
     "line": {
       "height": 48,
-      "bottom": 888
+      "bottom": 892
     },
     "deutsch": {
       "height": 48,
-      "bottom": 888
+      "bottom": 892
     },
     "rows": 1
   }

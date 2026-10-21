@@ -1,14 +1,17 @@
 {
   "/dev/karte": {
-    "smallestName": 21.5,
-    "lineRows": 1
+    "smallestName": 21.8,
+    "lineRows": 1,
+    "lineHeight": 48
   },
   "/dev/karte?neu": {
-    "smallestName": 21.5,
-    "lineRows": 1
+    "smallestName": 20.5,
+    "lineRows": 2,
+    "lineHeight": 96
   },
   "/": {
-    "smallestName": 22.5,
-    "lineRows": 1
+    "smallestName": 22.7,
+    "lineRows": 1,
+    "lineHeight": 48
   }
 }

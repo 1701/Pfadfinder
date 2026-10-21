@@ -7,13 +7,17 @@
 // size. Measured in portrait (768 px, 2026-10-19), end of the row Mathe/Deutsch: "… ist noch
 // unerforscht." 824/849, with gap-sm 812/837, "Noch unerforscht: …" 768/793, "Unerforscht: …"
 // 686/711 with gap-sm and 698/723 with gap-md. Hence the short title, with gap-md.
-// A Fach with a Probetest gets a quiet line "Probetest Mathe" at the left of the legend line,
-// right below the Mathe island in landscape; in portrait the water between the islands is too
-// narrow for a 48 px target (measured 2026-10-15), so it stays in the same line.
-// At the right of the line, quietly: "Neu laden" while a new version waits, and
-// "Impressum · Datenschutz" in every viewport (DDG). Measured in Safari (task 11): the long
-// "Neue Version – Neu laden" took the Gebietsnamen to 17.2 px landscape and 15.7 px portrait;
-// a second row costs them about 1.2 px in Safari portrait, so the line stays one row.
+// The line below the map (task 14): left the Probetests as one quiet group "Probetest Mathe ·
+// Probetest Deutsch", right "Impressum · Datenschutz" (DDG) in the same look, both at the edges.
+// In portrait the water between the islands is too narrow for a 48 px target (measured
+// 2026-10-15), so the Probetests stay in this line. "Neu laden" (a new version waits, for adults)
+// stands left of "Impressum" in landscape; in portrait it gets its own row above the groups,
+// right-aligned. That row costs the map 48 px: Gebietsnamen ≥ 18 px on the iPad (768×1024),
+// ≥ 17 px only in Safari portrait (768×900) while "Neu laden" shows (decision Markus, task 14).
+// For that the page padding in portrait is 8 px instead of 12 px, always, so the map does not
+// jump when the button appears (Safari portrait with "Neu laden" 16.955 → 17.2 px).
+// Measured in Safari (task 11): the long "Neue Version – Neu laden" took the names to 17.2 px
+// landscape, so the map says only "Neu laden".
 
 import clsx from 'clsx';
 import { Link } from 'react-router';
@@ -21,7 +25,7 @@ import type { Bereich, Fach } from '../../domain/content/taxonomy';
 import { BEREICHE } from '../../domain/content/taxonomy';
 import type { RegionState, TodayProgress } from '../../domain/progress';
 import { Button, buttonClass } from '../components/Button';
-import { QUIET_ACTION_CLASS } from '../components/quiet';
+import { QuietLinks } from '../components/QuietLinks';
 import { RechtlichesLinks } from '../components/RechtlichesLinks';
 import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { VorlesenButton } from '../components/VorlesenButton';
@@ -67,7 +71,7 @@ export function KartenView({
 }: KartenViewProps) {
   return (
     <main
-      className="screen-fit mx-auto grid max-w-page grid-rows-[auto_minmax(0,1fr)_auto] gap-sm px-lg py-sm"
+      className="screen-fit mx-auto grid max-w-page grid-rows-[auto_minmax(0,1fr)_auto] gap-sm px-lg py-sm portrait:py-xs"
       aria-busy={progress === null}
     >
       <header className="flex flex-wrap items-center justify-between gap-x-lg gap-y-xs">
@@ -94,15 +98,23 @@ export function KartenView({
         {progress && !offer && <Tagesziel {...progress.today} />}
       </header>
       <div className="min-h-0">{progress && <Karte states={progress.states} />}</div>
-      {/* Reserved line: the map does not jump when "Neu laden" appears. */}
-      <div className="flex min-h-touch flex-wrap items-center justify-end gap-x-lg">
-        {probetests.map(({ fach, id }) => (
-          <Link key={id} to={`/probetest/${id}`} className={clsx(QUIET_ACTION_CLASS, 'mr-auto')}>
-            {probetestName(fach)}
-          </Link>
-        ))}
-        <UpdateHinweis update={update} onMap />
-        <RechtlichesLinks />
+      {/* Reserved line: in landscape the map does not jump when "Neu laden" appears. */}
+      <div className="flex min-h-touch flex-wrap items-center gap-x-lg">
+        {probetests.length > 0 && (
+          <QuietLinks
+            label="Probetests"
+            links={probetests.map(({ fach, id }) => ({
+              to: `/probetest/${id}`,
+              text: probetestName(fach),
+            }))}
+          />
+        )}
+        {update && (
+          <div className="flex justify-end portrait:order-first portrait:basis-full landscape:ml-auto">
+            <UpdateHinweis update={update} onMap />
+          </div>
+        )}
+        <RechtlichesLinks className={update ? 'portrait:ml-auto' : 'ml-auto'} />
       </div>
     </main>
   );

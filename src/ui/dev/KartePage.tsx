@@ -1,6 +1,6 @@
 // Developer preview of the map with every state at once (dev build only): /dev/karte.
 // Used by tests/e2e/karte.spec.ts for the layout check and the screenshots; ?neu fills the
-// legend line (Probetest, legend, new version, Impressum · Datenschutz); ?angebot=deutsch shows
+// line below the map (both Probetests, new version, Impressum · Datenschutz); ?angebot=deutsch shows
 // the Einstieg offer of Deutsch (the longer title) with no Fundstück yet.
 
 import { BEREICHE, type Bereich, type Fach } from '../../domain/content/taxonomy';
@@ -20,7 +20,7 @@ const DEMO: Record<Bereich, RegionState> = {
   'rs-strategien': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
 };
 
-/** ?neu: the fullest legend line, with the Probetest line and a waiting new version. */
+/** ?neu: the fullest line below the map: both Probetests and a waiting new version. */
 export function KartePage() {
   const search = new URLSearchParams(window.location.search);
   const reached = search.has('geschafft');
@@ -36,7 +36,14 @@ export function KartePage() {
           : { count: offerFach ? 0 : 4, goal: 10, reached: false },
       }}
       offer={offerFach && { fach: offerFach, onLater: () => undefined }}
-      probetests={full ? [{ fach: 'mathe', id: 'mathe-01' }] : []}
+      probetests={
+        full
+          ? [
+              { fach: 'mathe', id: 'mathe-01' },
+              { fach: 'deutsch', id: 'deutsch-01' },
+            ]
+          : []
+      }
       update={full ? { onReload: () => undefined } : null}
     />
   );

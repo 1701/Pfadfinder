@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 14 (6): Zeile unter der Karte
+- **Gebaut:** Links „Probetest Mathe · Probetest Deutsch“, rechts „Impressum · Datenschutz“, gleicher Stil (`QuietLinks`), beide an den Rändern. „Neu laden“ quer links von Impressum, hoch eigene rechtsbündige Zeile darüber. Startseite hoch dauerhaft 8 statt 12 px Rand oben/unten (Variante b, Entscheidung Markus).
+- **Gemessen (kleinster Name; ohne „Neu laden“ / mit / `/`):** iPad quer 23,4/23,4/23,4, iPad hoch 21,8/20,5/22,7, Safari quer 19,1/19,1/19,1, Safari hoch 18,4/17,2/19,4 px. Zeile mit „Neu laden“ hoch 96 px (2 Zeilen), sonst 48 px. Ausnahme ≥ 17 px nur Safari hoch mit „Neu laden“ (ARCHITECTURE §5), nicht gesenkt.
+- **Lokal:** `karte`, `probetest-layout`, `einstieg-layout` in vier Viewports grün, Screenshots `karte-*`, `karte-angebot-*`, `probetest-karte-*` mit Schalter.
+
 ## 2026-10-21 – Aufgabe 14: Befunde iPad-Durchlauf deutsch-01 (1)–(5), (6) offen
 - **Gebaut:** (1) `probetestName(fach)` für Startseite, Karte und Druck (`INTRO_TITLE`/`MAP_LINE` entfernt); Fluss-Test deutsch-90 (Start bis Durchsehen) vor der Reparatur nur an der Startseite rot. (2) multi-choice ohne Sperre unter und über `minSelect`, ohne Hinweis; zu wenig oder zu viel = „noch nicht“. (3) Leeres match-Feld = leere Lücke (`emptyTileClass`, „…“). (4) order: FLIP 180 ms (`--duration-move`), 1 s Tönung `touch-soft`, bei reduce nur Tönung. (5) short-answer `enterKeyHint="done"`, Enter schließt die Tastatur.
 - **Entscheidungen (Markus):** Obergrenze multi-choice fällt; Tönung `--color-touch-soft` #dce7e2 (ink 9,9:1); match in `layout.spec` Luft ≥ 18.
