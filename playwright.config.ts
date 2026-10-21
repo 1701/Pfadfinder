@@ -51,5 +51,16 @@ export default defineConfig({
       testMatch: /(layout|karte|formate|lesen)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: DEV },
     },
+    // Measuring sweeps (task 15): only with PFADFINDER_SWEEP=1, so CI and `npm run e2e` never
+    // see them. The spec sets its own viewports.
+    ...(process.env.PFADFINDER_SWEEP === '1'
+      ? [
+          {
+            name: 'sweep',
+            testMatch: /sweep-.*\.spec\.ts/,
+            use: { ...landscape, browserName: 'chromium' as const, baseURL: DEV },
+          },
+        ]
+      : []),
   ],
 });

@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (1): Sweep Summenregel match – angehalten (Fallback)
+- **Gebaut:** `tests/e2e/sweep-match.spec.ts` (Projekt `sweep`, nur mit `PFADFINDER_SWEEP=1`, nie in CI), Fixture `tests/fixtures/sweep-match` (37 Items neben t-sach-901, Prompt 74, Rückmeldung 195 = m-dz-2-008; 3/4 Paare × 80–180 × gleichmäßig/Schieflage, 5 Paare bei 80). Dev-Seiten `/dev/text` und `/dev/probetest` (deutsch-90) zeigen die Sweep-Items. Ausgabe `tests/e2e/output/sweep-match.json`.
+- **Befund:** Keine Summe erfüllt die Regel; N = –, auch Üben allein (4 Paare überall −4 hoch, −36 Safari quer). 3 Paare: Üben bis 140 ≥ 18 (Safari quer 20), aber Durchsehen Safari quer −20 schon bei 80 (Überlappung mit „Falle“). Die Luft hängt bis etwa 130 nicht von der Summe ab, sondern von Paaren und Rückmeldung. 5 Paare bei 80: −92 px. Keine Karte dreizeilig.
+- **Offen:** Entscheidung Markus (Regel ist Layout, nicht Content); (2)–(4) nicht begonnen. Zwei Läufe zahlengleich.
+- **Lokal:** `npm run check` grün; Sweep 2 × 10 min, grün (misst nur).
+
 ## 2026-10-21 – Aufgabe 15 (0): Einstieg Mathe 15 Items, Arbeitsregel check && commit
 - **Gebaut:** `CHECK_ITEM_COUNT` je Fach (Mathe 15 = 3 je Bereich bei 5 Bereichen, Deutsch unverändert 12). Runde 3 erreicht in Mathe jetzt jeden Bereich; die Kürzung bleibt im Code, die jetzigen Bereichszahlen erreichen sie nicht mehr. Intro Mathe „etwa 15 Minuten“ (Entscheidung Markus), Dev-Vorschau Einstieg mit 15 Plätzen.
 - **Befund:** „etwa 10 Minuten“ stimmte schon bei 12 Items nicht: 12 × 62 s (Mittel `estimatedSeconds` Mathe ohne Kurzantwort) = 12,4 Min., bei 15 rund 15,5 Min.

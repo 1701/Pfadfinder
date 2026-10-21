@@ -12,10 +12,14 @@
 //   durchsehen-uebersicht           the overview while looking through, ring on the short answer
 // Same components as the route, fed with fixed data instead of the store. Items with textRef get
 // the text box as in the route (without Vorlesen, Deutsch).
+// With probetest=deutsch-90 and a sweep item (tests/fixtures/sweep-match) as `item`, the sweep
+// item takes the place of the fixture's match d-lsa-2-952, beside t-sach-901
+// (tests/e2e/sweep-match.spec.ts).
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { probetestContentModules } from '../../../tests/fixtures/lesen';
+import { igelText, probetestContentModules } from '../../../tests/fixtures/lesen';
+import { SWEEP_MATCH_ITEMS } from '../../../tests/fixtures/sweep-match';
 import { createContentLoader } from '../../content-runtime/loader';
 import { loadProbetestContext, type ProbetestContext } from '../../data/probetest';
 import type { Bereich, Item } from '../../domain/content';
@@ -35,6 +39,8 @@ import { previewAnswer } from './preview-answers';
 const content = createContentLoader();
 /** The fixture Probetest with reading texts (tests/fixtures/lesen), never in content/. */
 const FIXTURE = 'deutsch-90';
+/** The fixture's match: a sweep item stands in its place. */
+const FIXTURE_MATCH = 'd-lsa-2-952';
 const fixtureContent = createContentLoader(probetestContentModules());
 const noop = () => undefined;
 /** Answered in the overview preview: 1–6, 9 and 10; the ring on 7. */
@@ -85,7 +91,10 @@ export function ProbetestPage() {
 
   if (ctx === undefined) return null;
   if (ctx === null) return <p className="p-lg">{id} nicht gefunden.</p>;
-  const { items, texts } = ctx;
+  const sweep =
+    id === FIXTURE ? SWEEP_MATCH_ITEMS.find((i) => i.id === search.get('item')) : undefined;
+  const items = sweep ? ctx.items.map((i) => (i.id === FIXTURE_MATCH ? sweep : i)) : ctx.items;
+  const texts = sweep ? [...ctx.texts, igelText] : ctx.texts;
   const total = items.length;
   const time = { minutes: zeit, final: zeit <= 5 };
   const index = Math.max(

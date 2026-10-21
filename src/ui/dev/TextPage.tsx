@@ -9,6 +9,8 @@
 //   &hoehe=280    portrait box height in px, &breite=42 landscape column in % (measuring only)
 //   /dev/text/:id?runde  a real practice round in lesen-sachtext with the fixture texts: the
 //                 session store on in-memory repositories (nothing stored; tests/e2e/lesen.spec.ts)
+// The sweep items of tests/fixtures/sweep-match (match beside t-sach-901) are items here too
+// (tests/e2e/sweep-match.spec.ts).
 
 import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
@@ -20,6 +22,7 @@ import {
   type ReadingText,
 } from '../../domain/content';
 import { LESEN_ITEMS, LESEN_TEXTS, lesenContentModules } from '../../../tests/fixtures/lesen';
+import { SWEEP_MATCH_ITEMS } from '../../../tests/fixtures/sweep-match';
 import { createContentLoader } from '../../content-runtime/loader';
 import { createMemoryRepositories } from '../../data/memory/repos';
 import { createSessionStore } from '../../data/session-store';
@@ -86,7 +89,7 @@ export function TextPage() {
   if (search.has('runde')) return <Runde />;
 
   const itemId = search.get('item');
-  const items = [...LESEN_ITEMS, ...(app?.items ?? [])];
+  const items = [...LESEN_ITEMS, ...SWEEP_MATCH_ITEMS, ...(app?.items ?? [])];
   const texts = [...LESEN_TEXTS, ...(app?.texts ?? [])];
   const item = items.find((i) => i.id === itemId);
   const text = texts.find((t) => t.id === (item?.stimulus?.textRef ?? id));
