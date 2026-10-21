@@ -13,7 +13,7 @@ const OFFER_DEUTSCH = 'Unerforscht: Deutsch';
 const ANY_OFFER = /^Unerforscht: /;
 const MAP_TITLE = 'Wohin geht’s heute?';
 
-// Practiceable Mathe Bereiche from the manifest: 3 questions each, at most 12.
+// Practiceable Mathe Bereiche from the manifest: 3 questions each, at most 15.
 const manifest = JSON.parse(readFileSync('content/manifest.json', 'utf8')) as {
   bereiche: Record<
     string,
@@ -30,7 +30,7 @@ const MATHE_OPEN = Object.entries(manifest.bereiche)
     return count >= 10;
   })
   .map(([bereich]) => bereich);
-const TOTAL = Math.min(12, 3 * MATHE_OPEN.length);
+const TOTAL = Math.min(15, 3 * MATHE_OPEN.length);
 
 async function startEinstieg(page: Page) {
   await page.goto('/');

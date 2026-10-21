@@ -9,13 +9,15 @@ import { createContentLoader } from '../../content-runtime/loader';
 import type { Item } from '../../domain/content';
 import { BEREICHE, type Bereich } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
+import { CHECK_ITEM_COUNT } from '../../domain/scheduler';
 import { EinstiegErgebnis } from '../screens/EinstiegErgebnis';
 import { EinstiegIntro, EinstiegPause, Hinweis } from '../screens/EinstiegScreen';
 import { ItemScreen } from '../screens/ItemScreen';
 import { STARTED_TEXT } from '../text/einstieg';
 
 const content = createContentLoader();
-const TOTAL = 12;
+/** The previews are Mathe, except the Deutsch intro: as many places as the check has. */
+const TOTAL = CHECK_ITEM_COUNT.mathe;
 
 // A start as the check could set it: Etappen below the start are reached.
 const START: Partial<Record<Bereich, RegionState>> = {
@@ -40,7 +42,9 @@ export function EinstiegPage() {
 
   if (zustand === 'intro' || zustand === 'intro-deutsch') {
     const fach = zustand === 'intro' ? 'mathe' : 'deutsch';
-    return <EinstiegIntro fach={fach} total={TOTAL} readAloud onStart={() => {}} />;
+    return (
+      <EinstiegIntro fach={fach} total={CHECK_ITEM_COUNT[fach]} readAloud onStart={() => {}} />
+    );
   }
   if (zustand === 'pause') {
     return <EinstiegPause index={3} total={TOTAL} readAloud onContinue={() => {}} />;

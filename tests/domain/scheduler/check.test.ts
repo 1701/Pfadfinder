@@ -51,7 +51,7 @@ describe('buildCheck – number of questions', () => {
   it.each([
     [3, 9],
     [4, 12],
-    [5, 12],
+    [5, 15],
   ])('%i Bereiche → %i questions, 2–3 per Bereich', (n, total) => {
     const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE.slice(0, n)));
     expect(plan.total).toBe(total);
@@ -131,29 +131,40 @@ describe('buildCheck – number of questions', () => {
   });
 });
 
-describe('buildCheck – round 3 with 5 Bereiche (2 extra places)', () => {
+// Since task 15 Mathe has 15 places: round 3 reaches all 5 Bereiche, and only the order is
+// decided (with 12 the cut fell on the ones answered the same way twice).
+describe('buildCheck – round 3 with 5 Bereiche (5 extra places)', () => {
   const plan = buildCheck('mathe', makePool('mathe'), opts(MATHE));
   const thirdRound = (mixed: readonly Bereich[]) =>
     runCheck(plan, (i, index) => (mixed.includes(i.bereich) ? index === 0 : true))
       .slice(10)
       .map((a) => a.bereich);
 
-  it('goes to the Bereiche whose two answers differ', () => {
+  it('goes first to the Bereiche whose two answers differ', () => {
     expect(thirdRound(['groessen-messen', 'muster-strukturen'])).toEqual([
       'groessen-messen',
       'muster-strukturen',
+      'zahlen-operationen',
+      'raum-form',
+      'daten-zufall',
     ]);
   });
 
-  it('then to the first Bereiche answered the same way twice', () => {
-    expect(thirdRound(['daten-zufall'])).toEqual(['daten-zufall', 'zahlen-operationen']);
-    expect(thirdRound([])).toEqual(['zahlen-operationen', 'raum-form']);
+  it('then to the Bereiche answered the same way twice, in round order', () => {
+    expect(thirdRound(['daten-zufall'])).toEqual([
+      'daten-zufall',
+      'zahlen-operationen',
+      'raum-form',
+      'groessen-messen',
+      'muster-strukturen',
+    ]);
+    expect(thirdRound([])).toEqual(MATHE);
   });
 
   it('keeps the total fixed whatever the answers', () => {
     for (const mixed of [[], ['raum-form'], MATHE] as Bereich[][]) {
       expect(runCheck(plan, (i, n) => (mixed.includes(i.bereich) ? n === 0 : true))).toHaveLength(
-        CHECK_ITEM_COUNT,
+        CHECK_ITEM_COUNT.mathe,
       );
     }
   });
@@ -237,7 +248,7 @@ describe('nextCheckItem – ladder', () => {
 });
 
 describe('buildCheck with the real content', () => {
-  it('Mathe: every practiceable Bereich gets 2–3 items, at most 12', () => {
+  it('Mathe: every practiceable Bereich gets 2–3 items, at most 15', () => {
     const formats = ['single-choice', 'number-input'] as const;
     const pool = practiceableItems(
       MATHE.flatMap((b) => {
@@ -254,7 +265,7 @@ describe('buildCheck with the real content', () => {
     const bereiche = practiceableBereiche(pool, formats);
     expect(bereiche).toEqual(OPEN_BEREICHE.filter((b) => MATHE.includes(b)));
     const plan = buildCheck('mathe', pool, opts(bereiche));
-    expect(plan.total).toBe(Math.min(CHECK_ITEM_COUNT, 3 * bereiche.length));
+    expect(plan.total).toBe(Math.min(CHECK_ITEM_COUNT.mathe, 3 * bereiche.length));
     const answers = runCheck(plan, () => true);
     expect(answers).toHaveLength(plan.total);
     expect([...perBereich(answers).keys()]).toEqual(bereiche);

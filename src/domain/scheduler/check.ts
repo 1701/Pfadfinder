@@ -1,18 +1,19 @@
 // Einstiegscheck (PRODUCT.md §5.4, ARCHITECTURE.md §5): 2–3 items per practiceable Bereich,
-// at most 12, auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a
+// at most 15 in Mathe and 12 in Deutsch, auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a
 // plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
 // rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
 // first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
 // A Lesen-Bereich takes all its items from one reading text and asks them as one block, so the
 // items of the text follow each other (2026-10-16). The blocks come after the rounds (task 10):
-// the check starts with short items, the long reading comes last; the cut to 12 never hits a
-// block.
+// the check starts with short items, the long reading comes last; the cut to CHECK_ITEM_COUNT
+// never hits a block.
 
 import { isLesenBereich, type Bereich, type Fach, type Item, type Niveau } from '../content';
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
 import { seededShuffle } from './shuffle';
 
-export const CHECK_ITEM_COUNT = 12;
+/** Mathe: 3 for each of its 5 Bereiche (task 15, before 12); Deutsch: 3 for each of its 4. */
+export const CHECK_ITEM_COUNT: Record<Fach, number> = { mathe: 15, deutsch: 12 };
 
 export interface CheckPlan {
   fach: Fach;
@@ -89,7 +90,7 @@ export function buildCheck(
   const block = blockSlots(plan).length;
   const first = firstRounds(plan).length;
   const third = roundBereiche(plan).filter((b) => capacity(plan, b) > CHECK_ITEMS_PER_BEREICH.min);
-  return { ...plan, total: Math.min(CHECK_ITEM_COUNT, block + first + third.length) };
+  return { ...plan, total: Math.min(CHECK_ITEM_COUNT[fach], block + first + third.length) };
 }
 
 /**

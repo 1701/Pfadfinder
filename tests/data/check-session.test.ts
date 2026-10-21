@@ -21,7 +21,7 @@ import { answerFor, FORMATS, testDeps } from './helpers';
 const MATHE_OPEN = OPEN_BEREICHE.filter((b) =>
   (BEREICHE_BY_FACH.mathe as readonly Bereich[]).includes(b),
 );
-const TOTAL = Math.min(CHECK_ITEM_COUNT, 3 * MATHE_OPEN.length);
+const TOTAL = Math.min(CHECK_ITEM_COUNT.mathe, 3 * MATHE_OPEN.length);
 
 /** Answers `count` questions (all when omitted); `correct` gets the item and its index in its Bereich. */
 async function play(
@@ -114,10 +114,10 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     store.getState().begin();
     const shown = await play(store, (_, n) => n !== 1);
     const { mastery, unlocked } = store.getState().result!;
-    // With more than four open Bereiche round 3 does not reach every Bereich (12 items at most):
-    // R W R reaches 2, R W stays at 1.
+    // 15 items for at most 5 Bereiche: round 3 reaches every Bereich (task 15, before 12), and
+    // R W R reaches 2.
     const third = MATHE_OPEN.filter((b) => shown.filter((i) => i.bereich === b).length === 3);
-    expect(third.length).toBeGreaterThan(0);
+    expect(third).toEqual(MATHE_OPEN);
     expect(mastery.map((m) => m.niveau)).toEqual(
       MATHE_OPEN.map((b) => (third.includes(b) ? 2 : 1)),
     );

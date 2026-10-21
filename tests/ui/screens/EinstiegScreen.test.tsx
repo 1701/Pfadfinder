@@ -48,7 +48,7 @@ describe('EinstiegScreen', () => {
     const { container } = renderEinstieg(store);
     expect(await screen.findByRole('heading', { name: 'Wir erkunden Mathe.' })).toBeTruthy();
     expect(
-      screen.getByText('Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa 10 Minuten.'),
+      screen.getByText('Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa 15 Minuten.'),
     ).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
     const total = store.getState().check!.plan.total;
@@ -58,7 +58,7 @@ describe('EinstiegScreen', () => {
     expect(container.textContent).not.toMatch(/Check|Test/);
   });
 
-  it('names Deutsch in the intro, with the longer time (twelve questions and two texts)', () => {
+  it('names Deutsch in the intro, with its time (twelve questions and two texts)', () => {
     render(
       <MemoryRouter>
         <EinstiegIntro fach="deutsch" total={14} readAloud={false} onStart={() => {}} />

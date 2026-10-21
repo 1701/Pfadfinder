@@ -17,8 +17,8 @@ export const offerSpeech = (fach: Fach, openGebiete: readonly string[]) =>
     : `${offerTitle(fach)}. Tippe auf ${OFFER_GO}.`;
 
 export const introTitle = (fach: Fach) => `Wir erkunden ${FACH_NAME[fach]}.`;
-/** Deutsch takes longer: twelve questions plus two reading texts. */
-const INTRO_MINUTES: Record<Fach, number> = { mathe: 10, deutsch: 15 };
+/** Mathe: fifteen questions; Deutsch: twelve questions plus two reading texts (task 15). */
+const INTRO_MINUTES: Record<Fach, number> = { mathe: 15, deutsch: 15 };
 export const introText = (fach: Fach) =>
   `Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa ${INTRO_MINUTES[fach]} Minuten.`;
 export const START = 'Starten';

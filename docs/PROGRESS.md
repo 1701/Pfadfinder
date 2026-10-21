@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (0): Einstieg Mathe 15 Items, Arbeitsregel check && commit
+- **Gebaut:** `CHECK_ITEM_COUNT` je Fach (Mathe 15 = 3 je Bereich bei 5 Bereichen, Deutsch unverändert 12). Runde 3 erreicht in Mathe jetzt jeden Bereich; die Kürzung bleibt im Code, die jetzigen Bereichszahlen erreichen sie nicht mehr. Intro Mathe „etwa 15 Minuten“ (Entscheidung Markus), Dev-Vorschau Einstieg mit 15 Plätzen.
+- **Befund:** „etwa 10 Minuten“ stimmte schon bei 12 Items nicht: 12 × 62 s (Mittel `estimatedSeconds` Mathe ohne Kurzantwort) = 12,4 Min., bei 15 rund 15,5 Min.
+- **CLAUDE.md:** „Vor jedem Commit: check && commit, nie getrennt“.
+- **Lokal:** `npm run check` grün, Chromium-Projekte 39/39, `einstieg-layout` 4/4; Screenshots `einstieg-intro-*`, `einstieg-aufgabe-*`, `einstieg-pause-*` mit Schalter (15 Plätze, 15 Minuten).
+
 ## 2026-10-21 – Content muster-strukturen (18 Items), Roadmap Screenshots
 - **Gebaut:** 18 Items (m-ms-1-001…3-004, draft) angehängt, `ms-kette-1.svg`, `ms-figur-1.svg`; Pool 20 Items, Niveau 8/8/4. `content:validate` 0 Fehler, 0 Warnungen. Alle Mathe-Bereiche sind jetzt übbar: die Tests für einen zu dünnen Bereich nutzen einen synthetischen Loader (`thinMatheContent`), der Check-Test R W R leitet die Bereiche mit drittem Item ab (12 Items für 5 Bereiche).
 - **Gemessen (knappste Luft, iPad quer/hoch, Safari quer/hoch):** m-ms-2-006 179/371/127/247, m-ms-3-004 168/384/60/260, m-ms-2-003 360/616/252/492 px; alle 18 Items ≥ 60 px.

@@ -19,6 +19,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 ## Arbeitsweise
 - Lies erst, dann plane in 3–6 Stichpunkten, dann baue. Bei Aufgaben > 1 Stunde: Plan zuerst zeigen, auf Freigabe warten
 - Kleine, vollständige Schritte: jede Aufgabe endet mit grünem `npm run check` (lint + content-validate + test + build)
+- Vor jedem Commit: check && commit, nie getrennt (`npm run check && git commit …` in einem Aufruf)
 - Domain-Logik (`src/domain`) immer mit Tests, bevor UI darauf aufsetzt
 - Keine neue Laufzeit-Dependency ohne Eintrag unten unter "Dependencies" mit Begründung
 - Keine Änderung an `docs/CONTENT_SCHEMA.md` ohne Versionssprung und CHANGELOG-Eintrag; im Zweifel Rückfrage
