@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Content: muster-strukturen Patch 2, Schema 1.0.18
+- **Eingespielt:** m-ms-1-004, m-ms-2-005, m-ms-1-008: Gleichungen im Stimulus mit „und“ statt Komma, die gesuchte Aufgabe als Frage im Prompt, `readAloud` nachgezogen, Lösungen unverändert. `content:validate` 0 Fehler, 0 Warnungen.
+- **Gemessen (Luft antworten/richtig/noch nicht; iPad quer, hoch, Safari quer, hoch):** m-ms-1-004 280/394/354, 442/628/589, 172/286/246, 318/504/465; m-ms-2-005 280/394/354, 442/628/565, 172/286/246, 318/504/441; m-ms-1-008 392/338/336, 632/552/552, 284/230/228, 508/428/428.
+- **Schema 1.0.18 (nur Doku):** §7 Mathematik „Mehrere Gleichungen nie durch Komma trennen“, CHANGELOG. Der Validator prüft das nicht.
+- **Lokal:** `npm run check` grün, `layout.spec` in vier Viewports grün.
+
 ## 2026-10-22 – Content: lesen-sachtext Patch 5, deutsch-02 eingespielt
 - **Eingespielt:** d-lsa-3-002 (Musterlösung 83 → 72, Kernpunkte 51/36 → 29/36, correct 67 → 57), danach deutsch-02 (1573,5 s = 26,23 Min.). `content:validate` 0 Fehler, 0 Warnungen.
 - **Gemessen:** d-lsa-3-002 Durchsehen Safari quer −7 → 19 px, Prompt weiter 2 Zeilen. Knappstes deutsch-02 im Durchsehen (iPad quer/hoch, Safari quer/hoch): d-lli-2-002 79, d-lli-1-001 18, d-lsa-2-004 1 (Ausnahme ≥ 0), d-lli-1-001 18. Üben d-lsa-3-002 ≥ 44 px (`text-inhalt`).

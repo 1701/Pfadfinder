@@ -220,10 +220,10 @@
     "format": "number-input",
     "status": "draft",
     "stimulus": {
-      "text": "Schau dir das Muster an: 3 + 4 = 7, 30 + 40 = 70, 300 + 400 = ?"
+      "text": "Schau dir das Muster an: 3 + 4 = 7 und 30 + 40 = 70."
     },
-    "prompt": "Rechne die letzte Aufgabe aus.",
-    "readAloud": "Schau dir das Muster an: 3 plus 4 gleich 7, 30 plus 40 gleich 70, 300 plus 400 gleich? Rechne die letzte Aufgabe aus.",
+    "prompt": "Rechne das Muster weiter: Wie viel ist 300 + 400?",
+    "readAloud": "Schau dir das Muster an: 3 plus 4 gleich 7 und 30 plus 40 gleich 70. Rechne das Muster weiter: Wie viel ist 300 plus 400?",
     "payload": {
       "maxDigits": 4
     },
@@ -244,7 +244,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-20",
-      "calibration": "original-2024"
+      "calibration": "original-2024",
+      "pilotNote": "Patch 2 (22.10., Markus): Gleichungen nicht mehr kommagetrennt – „18, 99“ liest sich wie 18,99."
     }
   },
   {
@@ -417,10 +418,10 @@
     "format": "single-choice",
     "status": "draft",
     "stimulus": {
-      "text": "Jonas rechnet ein Päckchen: 12 + 9 = 21, 22 + 9 = 31, 32 + 9 = 41."
+      "text": "Jonas rechnet ein Päckchen: 12 + 9 = 21 und 22 + 9 = 31 und 32 + 9 = 41."
     },
     "prompt": "Welche Aufgabe kommt als Nächstes?",
-    "readAloud": "Jonas rechnet ein Päckchen: 12 plus 9 gleich 21, 22 plus 9 gleich 31, 32 plus 9 gleich 41. Welche Aufgabe kommt als Nächstes?",
+    "readAloud": "Jonas rechnet ein Päckchen: 12 plus 9 gleich 21 und 22 plus 9 gleich 31 und 32 plus 9 gleich 41. Welche Aufgabe kommt als Nächstes?",
     "payload": {
       "options": [
         {
@@ -462,7 +463,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-20",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch 2 (22.10., Markus): Gleichungen nicht mehr kommagetrennt – „18, 99“ liest sich wie 18,99."
     }
   },
   {
@@ -631,10 +633,10 @@
     "format": "number-input",
     "status": "draft",
     "stimulus": {
-      "text": "Schau dir das Muster an: 9 + 9 = 18, 99 + 99 = 198, 999 + 999 = ?"
+      "text": "Schau dir das Muster an: 9 + 9 = 18 und 99 + 99 = 198."
     },
-    "prompt": "Rechne die letzte Aufgabe aus.",
-    "readAloud": "Schau dir das Muster an: 9 plus 9 gleich 18, 99 plus 99 gleich 198, 999 plus 999 gleich? Rechne die letzte Aufgabe aus.",
+    "prompt": "Rechne das Muster weiter: Wie viel ist 999 + 999?",
+    "readAloud": "Schau dir das Muster an: 9 plus 9 gleich 18 und 99 plus 99 gleich 198. Rechne das Muster weiter: Wie viel ist 999 plus 999?",
     "payload": {
       "maxDigits": 4
     },
@@ -655,7 +657,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-20",
-      "calibration": "original-2024"
+      "calibration": "original-2024",
+      "pilotNote": "Patch 2 (22.10., Markus): Gleichungen nicht mehr kommagetrennt – „18, 99“ liest sich wie 18,99."
     }
   },
   {

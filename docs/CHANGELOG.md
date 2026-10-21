@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.18 – 2026-10-22
+- §7 Mathematik: Mehrere Gleichungen nie durch Komma trennen (Verwechslung mit Dezimalkomma); mit „und“ oder als eigene Sätze. Grund: In m-ms-1-004, m-ms-2-005 und m-ms-1-008 las sich „= 18, 99 + 99“ wie 18,99 (Patch 2 muster-strukturen). Der Validator prüft das nicht. Nur Doku, keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.17 – 2026-10-21
 - §4.4/§7 Deutsch: `match` mit `stimulus.textRef`: höchstens 3 Paare (plus 1 Distraktor), alle Kartentexte zusammen höchstens 140 Zeichen, `prompt` höchstens 60 Zeichen; der Validator warnt bei jeder Grenze einzeln (`WITH_TEXT.match`). Die Warnung je Karte (35/52, seit 1.0.15) entfällt, 35/52 bleiben als Umbruchgrenzen im Text. Der vorläufige Hinweis „≤ 110 Zeichen zusammen“ (20.10.) entfällt. Grund: Befund vom 20.10., vier Karten nahe 52 liefen quer bis −91 px über. Messgrundlage (Aufgabe 15, `tests/e2e/sweep-match.spec.ts`, nur mit `PFADFINDER_SWEEP=1`): Sweep 1 über die Summe (3/4 Paare × 80–180 Zeichen × gleichmäßig/Schieflage, dazu 5 Paare bei 80; Prompt 74, Rückmeldung 195) fand keine Summe, die alle Regeln hielt: 4 Paare Üben Safari quer −36, 5 Paare −92, 3 Paare Üben bis 140 ≥ 18 px, aber Durchsehen Safari quer −20 bei jeder Summe. Sweep 2 über die Rückmeldung (95–195 Zeichen, Summe 100/140) änderte das Durchsehen nicht. Der Messpunkt mit 60 Zeichen Prompt (quer 2 statt 3 Zeilen) hielt alle Regeln, Durchsehen Safari quer +15 px. Die Rückmeldung von 195 Zeichen entspricht m-dz-2-008, dem längsten match-Feedback im Content (Mathe, ohne Text) – eine konservative Messgrundlage; sie bekommt keine Grenze. Zeichengrenzen sind Stellvertreter für Zeilen (Prompt mit 74 Zeichen: 2 oder 3 Zeilen je nach Wörtern, 35 px). Keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 

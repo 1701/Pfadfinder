@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.17 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.18 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -211,6 +211,7 @@ Regeln:
 - Zahlenraum bis 1.000.000, schriftliche Verfahren mit Übertrag, Geld in € und ct, Zeit in h/min, Längen mm–km, Gewicht g–kg–t
 - Distraktoren sind *echte* Fehlwege (Zahlendreher, vergessener Übertrag, falsche Einheit, "Anzahl statt Position"), nie Zufallszahlen
 - Sachaufgaben enthalten nie überflüssige Zahlen auf Niveau I; ab Niveau II gezielt eine Ablenkzahl
+- Mehrere Gleichungen nie durch Komma trennen (Verwechslung mit Dezimalkomma); mit „und“ oder als eigene Sätze
 
 **Deutsch**
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
