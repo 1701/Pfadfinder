@@ -225,7 +225,7 @@ describe('validateContent – mark-in-text beside a reading text (1.0.11)', () =
   });
 });
 
-describe('validateContent – other formats beside a reading text (1.0.13, match 1.0.15)', () => {
+describe('validateContent – other formats beside a reading text (1.0.13, match 1.0.17)', () => {
   /** The item in lesen-sachtext beside t-sach-901 (or without a text); returns the issues. */
   function besideText(item: Item, textRef = true) {
     const text = structuredClone(sachtext);
@@ -304,17 +304,42 @@ describe('validateContent – other formats beside a reading text (1.0.13, match
     expect(besideText(probe)).toEqual([]);
   });
 
-  it('match (1.0.15): left at most 35, right at most 52 characters', () => {
+  it('match (1.0.17): at most 3 pairs, 140 characters on all cards, a prompt of 60', () => {
     const probe = structuredClone(match);
-    probe.payload.left[0] = { ...probe.payload.left[0]!, text: chars(35) };
-    probe.payload.right[3] = { ...probe.payload.right[3]!, text: chars(52) };
-    expect(besideText(probe)).toEqual([]);
-    probe.payload.left[2] = { ...probe.payload.left[2]!, text: chars(36) };
+    const cardSum = () =>
+      [...probe.payload.left, ...probe.payload.right].reduce((n, c) => n + c.text.length, 0);
+    // A single card beyond 35/52 no longer warns (they stay as wrapping limits).
+    probe.payload.left[0] = { ...probe.payload.left[0]!, text: chars(36) };
     probe.payload.right[1] = { ...probe.payload.right[1]!, text: chars(53) };
+    probe.payload.right[2] = { ...probe.payload.right[2]!, text: chars(140 - cardSum() + 6) };
+    expect(cardSum()).toBe(140);
+    probe.prompt = chars(60);
+    expect(besideText(probe)).toEqual([]);
+
+    probe.payload.right[2] = { ...probe.payload.right[2]!, text: chars(probe.payload.right[2]!.text.length + 1) };
     expect(besideText(probe)).toEqual([
-      expect.objectContaining({ severity: 'warning', path: 'payload.left[2].text', message: expect.stringContaining('hier 36') }),
-      expect.objectContaining({ severity: 'warning', path: 'payload.right[1].text', message: expect.stringContaining('hier 53') }),
+      expect.objectContaining({ severity: 'warning', path: 'payload', message: expect.stringMatching(/höchstens 140 Zeichen, hier 141/) }),
     ]);
+
+    probe.payload.right[2] = { ...probe.payload.right[2]!, text: chars(5) };
+    probe.prompt = chars(61);
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'prompt', message: expect.stringMatching(/höchstens 60 Zeichen, hier 61/) }),
+    ]);
+
+    probe.prompt = chars(60);
+    probe.payload.left.push({ id: 'l4', text: 'Ein Stein' });
+    probe.payload.right.push({ id: 'r5', text: 'Ein Berg' });
+    probe.solution.pairs.push(['l4', 'r5']);
+    expect(besideText(probe)).toEqual([
+      expect.objectContaining({ severity: 'warning', path: 'payload.left', message: expect.stringMatching(/höchstens 3 Paare, hier 4/) }),
+    ]);
+
+    // Each limit warns on its own.
+    probe.prompt = chars(61);
+    probe.payload.right[2] = { ...probe.payload.right[2]!, text: chars(30) };
+    expect(cardSum()).toBeGreaterThan(140);
+    expect(besideText(probe).map((i) => i.path)).toEqual(['payload.left', 'payload', 'prompt']);
     expect(besideText(probe, false)).toEqual([]);
   });
 

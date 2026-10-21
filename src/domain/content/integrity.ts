@@ -71,7 +71,7 @@ const WORD_COUNT_TOLERANCE = 10;
  */
 export const MARK_IN_TEXT_WITH_TEXT = { maxSentences: 4, maxChars: 200 } as const;
 /**
- * Other formats beside a reading text (1.0.13, match 1.0.15): limits set from the air above the
+ * Other formats beside a reading text (1.0.13, match 1.0.17): limits set from the air above the
  * band in all four viewports (text-inhalt-*.json, lesen-sachtext and its patches, 2026-10-18;
  * fixture t-sach-900). Beyond them nothing has been measured.
  */
@@ -82,12 +82,13 @@ export const WITH_TEXT = {
   /** 5 options only with a short prompt (multi-choice has 4–5 options). */
   multiChoice: { maxPromptCharsWithFiveOptions: 60 },
   /**
-   * 1.0.15, measured after the slot became as wide as the longest card (at most 60 %) and the
-   * cards moved below the rows beside a reading text (2026-10-19, sweep on d-lli-2-003): left 39
-   * wraps a sentence into three lines (iPad landscape), right 59 leaves 10 px air (Safari
-   * landscape); up to 35/52 at least 39 px in all four viewports.
+   * 1.0.17 (task 15, tests/e2e/sweep-match.spec.ts beside t-sach-901): 4 pairs left Üben −36 px
+   * in Safari landscape already at 80 characters, 3 pairs keep ≥ 18 px up to 140; a prompt of 74
+   * characters takes 3 lines in landscape and Durchsehen in Safari landscape −20 px, 60
+   * characters 2 lines and +15. The feedback (up to 195 measured) does not bind. Character
+   * limits stand in for lines. 35/52 per card (1.0.15) stay as wrapping limits without a warning.
    */
-  match: { maxLeftChars: 35, maxRightChars: 52 },
+  match: { maxPairs: 3, maxCardChars: 140, maxPromptChars: 60 },
 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
@@ -485,19 +486,27 @@ function withTextFindings(item: Item): [string, string][] {
     }
   }
   if (item.format === 'match') {
-    const { maxLeftChars, maxRightChars } = WITH_TEXT.match;
-    for (const [side, max] of [
-      ['left', maxLeftChars],
-      ['right', maxRightChars],
-    ] as const) {
-      item.payload[side].forEach((entry, i) => {
-        if (entry.text.length > max) {
-          findings.push([
-            `match mit Lesetext: ${side} höchstens ${max} Zeichen, hier ${entry.text.length}`,
-            `payload.${side}[${i}].text`,
-          ]);
-        }
-      });
+    const { maxPairs, maxCardChars, maxPromptChars } = WITH_TEXT.match;
+    const pairs = item.payload.left.length;
+    if (pairs > maxPairs) {
+      findings.push([
+        `match mit Lesetext: höchstens ${maxPairs} Paare, hier ${pairs}`,
+        'payload.left',
+      ]);
+    }
+    const cards = [...item.payload.left, ...item.payload.right];
+    const sum = cards.reduce((n, card) => n + card.text.length, 0);
+    if (sum > maxCardChars) {
+      findings.push([
+        `match mit Lesetext: alle Kartentexte zusammen höchstens ${maxCardChars} Zeichen, hier ${sum}`,
+        'payload',
+      ]);
+    }
+    if (item.prompt.length > maxPromptChars) {
+      findings.push([
+        `match mit Lesetext: prompt höchstens ${maxPromptChars} Zeichen, hier ${item.prompt.length}`,
+        'prompt',
+      ]);
     }
   }
   if (item.format === 'single-choice' && item.stimulus?.text !== undefined) {

@@ -192,7 +192,7 @@
     "stimulus": {
       "textRef": "t-sach-900"
     },
-    "prompt": "Lies Absatz 3 bis 5. Wozu ist das gut? Eine Antwort bleibt übrig.",
+    "prompt": "Lies Absatz 3 bis 5. Wozu dient das? Eine Karte ist zu viel.",
     "payload": {
       "left": [
         {

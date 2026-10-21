@@ -4,7 +4,7 @@
 // - t-sach-900 "Baumeister am Bach": 250 words, one item per format that Lesen uses
 //   (single-choice, mark-in-text, order, multi-choice with 5 options, match, short-answer).
 //   d-lsa-2-952 (match) measures geometry only, in the form of d-lli-2-003: card texts 57 + 55 =
-//   112 characters. 35/52 per card is not enough (task 13: one card at each limit, −15 px quer).
+//   112 characters, 3 pairs, prompt 60 characters (task 15: the limits of 1.0.17; before 65).
 // - t-sach-901 "Der Igel im Winter" from items.ts with 5 find-error clones, as in
 //   buildDeutschProbetest. Together the Bereich has 11 items and is practiceable
 //   (MIN_ITEMS_FOR_PRACTICE), and a round can move from one text to the other.

@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (3): Validator match neben Text (1.0.17)
+- **Gebaut:** `WITH_TEXT.match` = höchstens 3 Paare, 140 Zeichen auf allen Karten, `prompt` 60; drei Warnungen einzeln (Pfade `payload.left`, `payload`, `prompt`), Meldung nennt Ist und Grenze. Warnung je Karte (35/52) entfällt. Test vor dem Umbau rot („left höchstens 35 Zeichen, hier 36“).
+- **content:validate:** 0 Fehler, 1 Warnung: d-lsa-2-005 `prompt` 74 > 60 (nicht gepatcht, Chat-Claude kürzt im nächsten Batch). Luft Üben noch nicht (iPad quer/hoch, Safari quer/hoch) 105/95/21/95, antworten 145/144/37/144.
+- **Fixture:** d-lsa-2-952 Prompt 65 → 60 („… Wozu dient das? Eine Karte ist zu viel.“), damit sie warnungsfrei bleibt; quer weiter 2 Zeilen, Durchsehen Safari quer 15 px. Screenshots `text-match-*`, `probetest-text-aufgabe-knappstes-{ipad,safari}-landscape`, `text-budget-{ipad,safari}-landscape.json` mit Schalter.
+- **Lokal:** `npm run check` grün (1004 Tests), `text-layout`/`probetest-layout` 14/14.
+
 ## 2026-10-21 – Aufgabe 15 (2): Schema 1.0.17, match neben Text dreiteilig
 - **Entschieden (Markus):** höchstens 3 Paare (plus 1 Distraktor), Kartentexte zusammen ≤ 140, `prompt` ≤ 60 Zeichen; Rückmeldung ohne Grenze (bis 195 gemessen, bindet nicht). 35/52 je Karte bleiben als Umbruchgrenzen ohne Warnung, der 110-Hinweis entfällt.
 - **Doku:** CONTENT_SCHEMA §4.4/§7 und Status 1.0.17, CHANGELOG 1.0.17, ARCHITECTURE §5 (Sweep-Specs, Schalter `PFADFINDER_SWEEP=1`, Durchsehen Safari quer +15 / −20 je nach Prompt-Zeilen), PRODUCT §11 nach MVP: Band im Durchsehen umbauen.
