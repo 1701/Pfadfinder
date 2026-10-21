@@ -18,6 +18,8 @@
 //   × incorrect + misconception 95, 120, 150, 180, 195 characters (about 45/55 as in content;
 //   195 is the fixed feedback of the first sweep). Ids d-lsa-3-960 onwards: the three-digit
 //   number of d-lsa-2-… ends at 999.
+// One more point (task 15, 1c): 3 pairs, sum 140, feedback 195, prompt 60 characters, which
+// wraps into 2 lines in landscape where the 74 of the sweeps take 3 (d-lsa-3-980).
 
 import { z } from 'zod';
 import { itemSchema, type Item } from '../../../src/domain/content';
@@ -33,6 +35,8 @@ export interface SweepPoint {
   split: SweepSplit;
   /** incorrect + misconception in characters. */
   feedback: number;
+  /** The prompt, when it is not SWEEP_PROMPT. */
+  prompt?: string;
 }
 
 export const SWEEP_SUMS = [80, 90, 100, 110, 120, 130, 140, 160, 180] as const;
@@ -44,6 +48,8 @@ export const CARD_LIMITS = { left: 35, right: 52 } as const;
 
 export const SWEEP_PROMPT =
   'Lies Absatz 2 und 3. Was gehört zusammen? Eine Karte passt zu keinem Satz.';
+/** 60 characters (task 15, 1c): the limit of the rule, two lines in landscape. */
+export const SWEEP_PROMPT_SHORT = 'Lies Absatz 3. Was gehört zusammen? Eine Karte bleibt übrig.';
 export const SWEEP_FEEDBACK = {
   correct: 'Genau. Jede Karte passt zu einem Satz im Text.',
   incorrect:
@@ -166,7 +172,10 @@ export function cardLengths(pairs: number, sum: number, split: SweepSplit) {
   return { left: lengths.slice(0, pairs), right: lengths.slice(pairs) };
 }
 
-function sweepItem(id: string, { pairs, sum, split, feedback }: Omit<SweepPoint, 'item'>): Item {
+function sweepItem(
+  id: string,
+  { pairs, sum, split, feedback, prompt = SWEEP_PROMPT }: Omit<SweepPoint, 'item'>,
+): Item {
   const lengths = cardLengths(pairs, sum, split);
   // Every card starts at another word; a text that is already there takes the next start, so no
   // two cards of an item read the same (the renderer keys its card sizer by text).
@@ -191,7 +200,7 @@ function sweepItem(id: string, { pairs, sum, split, feedback }: Omit<SweepPoint,
     format: 'match',
     status: 'draft',
     stimulus: { textRef: sachtext.id },
-    prompt: SWEEP_PROMPT,
+    prompt,
     payload: { left, right },
     solution: { pairs: left.map((l, i) => [l.id, right[i]!.id] as [string, string]) },
     feedback: sweepFeedback(feedback),
@@ -216,16 +225,26 @@ const FEEDBACK_POINTS: Omit<SweepPoint, 'item'>[] = SWEEP_PAIRS.flatMap((pairs) 
   ),
 );
 
-const build = (points: Omit<SweepPoint, 'item'>[], niveau: 2 | 3) =>
+const build = (points: Omit<SweepPoint, 'item'>[], niveau: 2 | 3, first = 960) =>
   points.map((p, i) => ({
     ...p,
-    item: z.array(itemSchema).parse([sweepItem(itemId('lesen-sachtext', niveau, 960 + i), p)])[0]!,
+    item: z
+      .array(itemSchema)
+      .parse([sweepItem(itemId('lesen-sachtext', niveau, first + i), p)])[0]!,
   }));
 
 /** The first sweep (sum of the card texts): ids d-lsa-2-960 onwards, in the order of POINTS. */
 export const SWEEP_MATCH: SweepPoint[] = build(POINTS, 2);
 /** The second sweep (feedback length): ids d-lsa-3-960 onwards. */
 export const SWEEP_FEEDBACK_MATCH: SweepPoint[] = build(FEEDBACK_POINTS, 3);
-export const SWEEP_MATCH_ITEMS: Item[] = [...SWEEP_MATCH, ...SWEEP_FEEDBACK_MATCH].map(
-  (p) => p.item,
+/** The point with the short prompt: d-lsa-3-980. */
+export const SWEEP_PROMPT_MATCH: SweepPoint[] = build(
+  [{ pairs: 3, sum: 140, split: 'even', feedback: FIXED, prompt: SWEEP_PROMPT_SHORT }],
+  3,
+  980,
 );
+export const SWEEP_MATCH_ITEMS: Item[] = [
+  ...SWEEP_MATCH,
+  ...SWEEP_FEEDBACK_MATCH,
+  ...SWEEP_PROMPT_MATCH,
+].map((p) => p.item);

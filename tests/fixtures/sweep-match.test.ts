@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 import type { Item } from '../../src/domain/content';
 import { sachtext } from './items';
 import {
+  SWEEP_PROMPT_MATCH,
+  SWEEP_PROMPT_SHORT,
   CARD_LIMITS,
   FEEDBACK_LENGTHS,
   SWEEP_FEEDBACK_MATCH,
@@ -117,5 +119,17 @@ describe('sweep fixture match, feedback length (task 15, second sweep)', () => {
       expect(text, String(length)).toHaveLength(length);
       expect(text.endsWith('.')).toBe(true);
     }
+  });
+});
+
+describe('sweep fixture match, short prompt (task 15, 1c)', () => {
+  it('is the 3 pairs / 140 / 195 point of the first sweep with a prompt of 60 characters', () => {
+    expect(SWEEP_PROMPT_SHORT).toHaveLength(60);
+    const [point] = SWEEP_PROMPT_MATCH;
+    expect(point!.item.id).toBe('d-lsa-3-980');
+    expect(point!.item.prompt).toBe(SWEEP_PROMPT_SHORT);
+    const twin = SWEEP_MATCH.find((p) => p.pairs === 3 && p.sum === 140 && p.split === 'even');
+    expect(cards(point!.item)).toEqual(cards(twin!.item));
+    expect(point!.item.feedback).toEqual(twin!.item.feedback);
   });
 });

@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (1c): Messpunkt Prompt 60 Zeichen
+- **Gebaut:** d-lsa-3-980 (3 Paare, Summe 140, F 195, Prompt 60), dritter Test `-g Prompt` mit Zeilenzahl des Prompts, Ausgabe `sweep-match-prompt.json`.
+- **Gemessen (iPad quer/hoch, Safari quer/hoch):** Üben 87/71/20/71, Aufgabe 277/264/184/252, Durchsehen 108/95/**15**/83, alle Regeln erfüllt, keine Überlappung. Prompt quer in Aufgabe/Durchsehen 2 Zeilen (74 Zeichen: 3, Durchsehen Safari quer −20), im Üben quer 3 (Vorlesen daneben), hoch überall 2.
+- **Lokal:** `npm run check` grün.
+
 ## 2026-10-21 – Aufgabe 15 (1b): Sweep Rückmeldungslänge – angehalten (Entscheidungspunkt)
 - **Gebaut:** zweiter Test in `sweep-match.spec.ts` (`-g Rückmeldung`), Fixture um die Rückmeldungslänge F erweitert (3/4 Paare × Summe 100/140 × F 95/120/150/180/195, etwa 45/55; IDs d-lsa-3-960…979, weil d-lsa-2-… bei 999 endet). Ausgabe `sweep-match-feedback.json`.
 - **Befund:** Durchsehen Safari quer hängt nicht von F ab: 3 Paare −20, 4 Paare −76 bei jedem F. Damit kein F ≥ 120 für 3 Paare → Layout-Aufgabe. Nur Üben: 3 Paare bis F 195 ≥ 18 (Safari quer 44 bis F 150, 20 ab 180); 4 Paare Safari quer −12 schon bei F 95.

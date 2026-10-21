@@ -16,10 +16,18 @@
 // per pair count the largest F such that every point with a feedback up to F keeps the rule at
 // both sums. Output tests/e2e/output/sweep-match-feedback.json. Only this one:
 //   PFADFINDER_SWEEP=1 npx playwright test --project=sweep -g Rückmeldung
+// One point with a prompt of 60 characters (task 15, 1c), the prompt lines per viewport, output
+// tests/e2e/output/sweep-match-prompt.json:
+//   PFADFINDER_SWEEP=1 npx playwright test --project=sweep -g Prompt
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { SWEEP_FEEDBACK_MATCH, SWEEP_MATCH, type SweepPoint } from '../fixtures/sweep-match';
+import {
+  SWEEP_FEEDBACK_MATCH,
+  SWEEP_MATCH,
+  SWEEP_PROMPT_MATCH,
+  type SweepPoint,
+} from '../fixtures/sweep-match';
 import { VIEWPORTS, fitMetrics, matchProblems } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
@@ -29,6 +37,7 @@ const AIR = 18;
 const UEBEN = ['antworten', 'richtig', 'noch-nicht'] as const;
 const PROBETEST = ['aufgabe', 'durchsehen'] as const;
 type State = (typeof UEBEN)[number] | (typeof PROBETEST)[number];
+type MatchItem = Extract<SweepPoint['item'], { format: 'match' }>;
 
 interface Screen {
   air: number;
@@ -36,6 +45,8 @@ interface Screen {
   screen: string[];
   match: string[];
   lines: { left: number; right: number };
+  /** Lines of the prompt (0 when it is not found as one text). */
+  promptLines: number;
 }
 
 async function open(page: Page, url: string) {
@@ -77,7 +88,28 @@ async function cardLines(page: Page, left: string[], right: string[]) {
   );
 }
 
-async function measure(page: Page, left: string[], right: string[]): Promise<Screen> {
+/** Lines of the prompt on the screen. */
+async function promptLines(page: Page, prompt: string) {
+  return page.evaluate((prompt) => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if ((n.textContent ?? '').replace(/\u00a0/g, ' ').trim() !== prompt) continue;
+      if (n.parentElement?.closest('.sr-only')) continue;
+      const range = document.createRange();
+      range.selectNodeContents(n);
+      const tops: number[] = [];
+      for (const r of range.getClientRects()) {
+        if (r.width > 0 && !tops.some((t) => Math.abs(t - r.top) < 4)) tops.push(r.top);
+      }
+      return tops.length;
+    }
+    return 0;
+  }, prompt);
+}
+
+async function measure(page: Page, item: MatchItem): Promise<Screen> {
+  const left = item.payload.left.map((c) => c.text);
+  const right = item.payload.right.map((c) => c.text);
   const fit = await fitMetrics(page);
   const scroll = fit && fit.overflow > 0 ? [`page scrolls by ${Math.round(fit.overflow)} px`] : [];
   return {
@@ -85,6 +117,7 @@ async function measure(page: Page, left: string[], right: string[]): Promise<Scr
     screen: [...scroll, ...(await overflowProblems(page)), ...(await overlapProblems(page))],
     match: await matchProblems(page),
     lines: await cardLines(page, left, right),
+    promptLines: await promptLines(page, item.prompt),
   };
 }
 
@@ -115,18 +148,16 @@ async function sweep(browser: Browser, points: SweepPoint[]): Promise<Results> {
     const page = await context.newPage();
     for (const { item } of points) {
       if (item.format !== 'match') continue;
-      const left = item.payload.left.map((c) => c.text);
-      const right = item.payload.right.map((c) => c.text);
       const byState: Partial<Record<State, Screen>> = {};
       for (const state of UEBEN) {
         await open(page, `/dev/text/t-sach-901?item=${item.id}&zustand=${state}`);
-        byState[state] = await measure(page, left, right);
+        byState[state] = await measure(page, item);
       }
       for (const state of PROBETEST) {
         await open(page, `/dev/probetest?probetest=deutsch-90&zustand=${state}&item=${item.id}`);
         if ((await page.locator('[data-region="text"]').count()) !== 1)
           throw new Error(`${item.id} ${state}: no text box`);
-        byState[state] = await measure(page, left, right);
+        byState[state] = await measure(page, item);
       }
       (results[item.id] ??= {})[viewport.name] = byState;
     }
@@ -179,6 +210,14 @@ function rowsOf(points: SweepPoint[], results: Results) {
       aufgabe: min(['aufgabe']),
       durchsehen: min(['durchsehen']),
       lines: { left: most('left'), right: most('right') },
+      promptLines: Object.fromEntries(
+        VIEWPORTS.map((v) => [
+          v.name,
+          Object.fromEntries(
+            Object.entries(byViewport[v.name]!).map(([state, s]) => [state, s!.promptLines]),
+          ),
+        ]),
+      ),
       failingAll: failing([...UEBEN, ...PROBETEST]),
       failingUeben: failing(UEBEN),
       findings,
@@ -278,4 +317,17 @@ test('Sweep: match neben dem Text, Rückmeldungslänge', async ({ browser }) => 
     results,
   });
   expect(rows).toHaveLength(SWEEP_FEEDBACK_MATCH.length);
+});
+
+test('Sweep: match neben dem Text, Prompt 60 Zeichen', async ({ browser }) => {
+  test.skip(!RUN, 'nur mit PFADFINDER_SWEEP=1, nie in CI');
+  test.setTimeout(10 * 60_000);
+  const points = [
+    ...SWEEP_PROMPT_MATCH,
+    // The same cards and feedback with the prompt of 74, for the difference.
+    ...SWEEP_MATCH.filter((p) => p.pairs === 3 && p.sum === 140 && p.split === 'even'),
+  ];
+  const rows = rowsOf(points, await sweep(browser, points));
+  write('sweep-match-prompt.json', { viewports: VIEWPORTS, air: AIR, rows });
+  expect(rows).toHaveLength(2);
 });
