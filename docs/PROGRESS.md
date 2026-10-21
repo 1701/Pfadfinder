@@ -2,6 +2,9 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 14 (7): Screenshots bereinigt
+- 45 versionierte Screenshots mit Schalter erneuert (`npm run screenshots`, Layout- und Chromium-Projekte), kein Code; Gründe je Gruppe im Bericht vom 21.10.
+
 ## 2026-10-21 – Aufgabe 14 (6): Zeile unter der Karte
 - **Gebaut:** Links „Probetest Mathe · Probetest Deutsch“, rechts „Impressum · Datenschutz“, gleicher Stil (`QuietLinks`), beide an den Rändern. „Neu laden“ quer links von Impressum, hoch eigene rechtsbündige Zeile darüber. Startseite hoch dauerhaft 8 statt 12 px Rand oben/unten (Variante b, Entscheidung Markus).
 - **Gemessen (kleinster Name; ohne „Neu laden“ / mit / `/`):** iPad quer 23,4/23,4/23,4, iPad hoch 21,8/20,5/22,7, Safari quer 19,1/19,1/19,1, Safari hoch 18,4/17,2/19,4 px. Zeile mit „Neu laden“ hoch 96 px (2 Zeilen), sonst 48 px. Ausnahme ≥ 17 px nur Safari hoch mit „Neu laden“ (ARCHITECTURE §5), nicht gesenkt.
