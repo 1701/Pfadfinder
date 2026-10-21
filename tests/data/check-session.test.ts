@@ -112,10 +112,16 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
     const store = createCheckStore(deps);
     await store.getState().start('mathe');
     store.getState().begin();
-    await play(store, (_, n) => n !== 1);
+    const shown = await play(store, (_, n) => n !== 1);
     const { mastery, unlocked } = store.getState().result!;
-    expect(mastery.map((m) => m.niveau)).toEqual(MATHE_OPEN.map(() => 2));
-    expect(unlocked).toEqual(MATHE_OPEN.map((b) => `${b}:1`));
+    // With more than four open Bereiche round 3 does not reach every Bereich (12 items at most):
+    // R W R reaches 2, R W stays at 1.
+    const third = MATHE_OPEN.filter((b) => shown.filter((i) => i.bereich === b).length === 3);
+    expect(third.length).toBeGreaterThan(0);
+    expect(mastery.map((m) => m.niveau)).toEqual(
+      MATHE_OPEN.map((b) => (third.includes(b) ? 2 : 1)),
+    );
+    expect(unlocked).toEqual(third.map((b) => `${b}:1`));
   });
 
   it('pause keeps the answers; resume continues with the same question', async () => {

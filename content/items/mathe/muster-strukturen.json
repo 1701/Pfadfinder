@@ -78,5 +78,880 @@
       "createdAt": "2026-10-14",
       "calibration": "iqb"
     }
+  },
+  {
+    "id": "m-ms-1-001",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia schreibt eine Zahlenreihe: 4, 8, 12, 16, 20, …"
+    },
+    "prompt": "Welche Zahl kommt als Nächstes?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 24
+    },
+    "feedback": {
+      "correct": "Richtig! Die Reihe geht immer plus 4. Nach 20 kommt 24.",
+      "incorrect": "Schau, wie viel von Zahl zu Zahl dazukommt: 4, 8, 12. Rechne diesen Schritt bei 20 weiter.",
+      "misconception": "Manche schreiben 22, weil sie nur plus 2 rechnen. Der Schritt ist aber 4."
+    },
+    "tags": [
+      "zahlenreihe",
+      "fortsetzen",
+      "vierer"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    },
+    "readAloud": "Mia schreibt eine Zahlenreihe: 4, 8, 12, 16, 20 und so weiter. Welche Zahl kommt als Nächstes?"
+  },
+  {
+    "id": "m-ms-1-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "In der Reihe fehlt eine Zahl. Wähle sie aus.",
+    "payload": {
+      "template": "7, 14, {1}, 28, 35",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "21",
+            "20",
+            "24"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "21"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! Die Reihe geht immer plus 7: 14 + 7 = 21.",
+      "incorrect": "Rechne den Schritt aus: Von 7 zu 14 sind es 7. Zähle bei 14 denselben Schritt weiter.",
+      "misconception": "Wer 20 oder 24 wählt, hat den Schritt geschätzt. Rechne ihn aus: 14 − 7 = 7."
+    },
+    "tags": [
+      "zahlenreihe",
+      "luecke",
+      "siebener"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-1-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias zeigt dir diese Reihe: 2, 4, 8, 16, 32."
+    },
+    "prompt": "Welche Regel hat die Reihe?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "immer verdoppeln"
+        },
+        {
+          "id": "b",
+          "text": "immer plus 2"
+        },
+        {
+          "id": "c",
+          "text": "immer plus 4"
+        },
+        {
+          "id": "d",
+          "text": "immer plus 8"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Jede Zahl ist doppelt so groß wie die davor: 2, 4, 8, 16, 32.",
+      "incorrect": "Prüfe deine Regel an jedem Schritt. Gilt sie von 2 zu 4 und auch von 16 zu 32?",
+      "misconception": "„Plus 2“ passt nur am Anfang. Eine Regel muss für die ganze Reihe gelten."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "verdoppeln"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-ms-1-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Schau dir das Muster an: 3 + 4 = 7, 30 + 40 = 70, 300 + 400 = ?"
+    },
+    "prompt": "Rechne die letzte Aufgabe aus.",
+    "readAloud": "Schau dir das Muster an: 3 plus 4 gleich 7, 30 plus 40 gleich 70, 300 plus 400 gleich? Rechne die letzte Aufgabe aus.",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 700
+    },
+    "feedback": {
+      "correct": "Genau! 3 Hunderter plus 4 Hunderter sind 7 Hunderter, also 700.",
+      "incorrect": "Rechne wie bei 3 + 4 = 7, nur mit Hundertern: 3 Hunderter + 4 Hunderter.",
+      "misconception": "Wer 7 000 schreibt, hat eine Null zu viel angehängt. 300 und 400 sind Hunderter."
+    },
+    "tags": [
+      "rechenmuster",
+      "analogie",
+      "stellenwert"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "original-2024"
+    }
+  },
+  {
+    "id": "m-ms-1-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "ms-kette-1",
+      "assetAlt": "Eine Kette aus Kreisen und Dreiecken. Am Ende steht ein Fragezeichen."
+    },
+    "prompt": "Welche Form kommt beim Fragezeichen?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Kreis"
+        },
+        {
+          "id": "b",
+          "text": "Dreieck"
+        },
+        {
+          "id": "c",
+          "text": "Quadrat"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! Das Muster ist Kreis, Dreieck, Dreieck. Nach einem Dreieck kommt noch ein Dreieck.",
+      "incorrect": "Suche den Teil, der sich wiederholt. Wie viele Formen gehören dazu? Zähle dann vom Anfang.",
+      "misconception": "Wer „Kreis“ wählt, denkt an „immer abwechselnd“. Hier kommen aber zwei Dreiecke hintereinander."
+    },
+    "tags": [
+      "geometrisches-muster",
+      "fortsetzen",
+      "formen"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-1-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla zählt rückwärts: 1 000, 950, 900, 850, …"
+    },
+    "readAloud": "Leyla zählt rückwärts: 1000, 950, 900, 850 und so weiter. Welche Zahl nennt sie als Nächstes?",
+    "prompt": "Welche Zahl nennt sie als Nächstes?",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 800
+    },
+    "feedback": {
+      "correct": "Richtig! Leyla zählt immer 50 zurück. Nach 850 kommt 800.",
+      "incorrect": "Rechne den Schritt aus: 1 000 − 950 = 50. Ziehe von 850 noch einmal 50 ab.",
+      "misconception": "Manche schreiben 840, weil sie nur 10 abziehen. Der Schritt ist 50."
+    },
+    "tags": [
+      "zahlenreihe",
+      "rueckwaerts",
+      "fuenfziger"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-1-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "prompt": "Verbinde jede Reihe mit ihrer Regel. Eine Regel bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "6, 12, 18, 24"
+        },
+        {
+          "id": "l2",
+          "text": "6, 12, 24, 48"
+        },
+        {
+          "id": "l3",
+          "text": "24, 18, 12, 6"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "immer + 6"
+        },
+        {
+          "id": "r2",
+          "text": "immer · 2"
+        },
+        {
+          "id": "r3",
+          "text": "immer − 6"
+        },
+        {
+          "id": "r4",
+          "text": "immer + 12"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Alles richtig! „Immer + 12“ passt zu keiner Reihe.",
+      "incorrect": "Rechne bei jeder Reihe den ersten Schritt aus. Prüfe dann, ob der Schritt bis zum Ende gleich bleibt.",
+      "misconception": "6, 12, 18 und 6, 12, 24 fangen gleich an. Erst der dritte Schritt zeigt den Unterschied."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "zuordnen"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-ms-1-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas rechnet ein Päckchen: 12 + 9 = 21, 22 + 9 = 31, 32 + 9 = 41."
+    },
+    "prompt": "Welche Aufgabe kommt als Nächstes?",
+    "readAloud": "Jonas rechnet ein Päckchen: 12 plus 9 gleich 21, 22 plus 9 gleich 31, 32 plus 9 gleich 41. Welche Aufgabe kommt als Nächstes?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "42 + 9 = 51",
+          "readAloud": "42 plus 9 gleich 51"
+        },
+        {
+          "id": "b",
+          "text": "33 + 9 = 42",
+          "readAloud": "33 plus 9 gleich 42"
+        },
+        {
+          "id": "c",
+          "text": "42 + 10 = 52",
+          "readAloud": "42 plus 10 gleich 52"
+        },
+        {
+          "id": "d",
+          "text": "32 + 19 = 51",
+          "readAloud": "32 plus 19 gleich 51"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! Die erste Zahl wird immer 10 größer, die 9 bleibt. Das Ergebnis wächst auch um 10.",
+      "incorrect": "Schau, was sich von Aufgabe zu Aufgabe ändert und was gleich bleibt. Nur die erste Zahl ändert sich.",
+      "misconception": "Wer 33 + 9 wählt, erhöht nur um 1. Im Päckchen wächst die erste Zahl um 10."
+    },
+    "tags": [
+      "rechenmuster",
+      "paeckchen",
+      "fortsetzen"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-2-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "In einer Zahlenmauer steht in jedem Stein die Summe der zwei Steine darunter. Unten stehen 12, 8 und 15."
+    },
+    "prompt": "Welche Zahl steht im obersten Stein?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 43
+    },
+    "feedback": {
+      "correct": "Richtig! Mitte: 12 + 8 = 20 und 8 + 15 = 23. Oben: 20 + 23 = 43.",
+      "incorrect": "Rechne zuerst die mittlere Reihe: 12 + 8 und 8 + 15. Zähle dann die beiden Ergebnisse zusammen.",
+      "misconception": "Wer 35 schreibt, hat nur 12 + 8 + 15 gerechnet. Die 8 zählt in der Mauer zweimal."
+    },
+    "tags": [
+      "zahlenmauer",
+      "addition",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-ms-2-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ein Heft kostet 3 €. Amira schreibt eine Tabelle: 1 Heft 3 €, 2 Hefte 6 €, 3 Hefte 9 €."
+    },
+    "prompt": "Setze die Tabelle fort.",
+    "readAloud": "Ein Heft kostet 3 Euro. Amira schreibt eine Tabelle: 1 Heft 3 Euro, 2 Hefte 6 Euro, 3 Hefte 9 Euro. Setze die Tabelle fort.",
+    "payload": {
+      "template": "5 Hefte kosten {1} €, 10 Hefte kosten {2} €.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "15",
+            "12",
+            "8"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "30",
+            "20",
+            "13"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "15",
+        "2": "30"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! Jedes Heft kostet 3 €: 5 · 3 = 15 und 10 · 3 = 30.",
+      "incorrect": "Jedes Heft kostet 3 €. Rechne 5 mal 3 und 10 mal 3.",
+      "misconception": "Wer 13 wählt, rechnet 10 + 3 statt 10 · 3. Der Preis wird mal gerechnet, nicht plus."
+    },
+    "tags": [
+      "tabelle",
+      "proportional",
+      "dreier"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-2-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben zählt von 50 an immer 25 weiter: 50, 75, 100, …"
+    },
+    "prompt": "Welche Zahlen nennt Ben? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "125"
+        },
+        {
+          "id": "b",
+          "text": "160"
+        },
+        {
+          "id": "c",
+          "text": "200"
+        },
+        {
+          "id": "d",
+          "text": "230"
+        },
+        {
+          "id": "e",
+          "text": "275"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! 125, 200 und 275 liegen in der Reihe. 160 und 230 werden übersprungen.",
+      "incorrect": "Zähle die Reihe weiter: 100, 125, 150, 175, 200, 225, 250, 275. Welche Zahlen davon stehen hier?",
+      "misconception": "Viele prüfen nur, ob die Zahl auf 0 oder 5 endet. 160 endet auf 0, liegt aber nicht in der Reihe."
+    },
+    "tags": [
+      "zahlenreihe",
+      "pruefen",
+      "fuenfundzwanziger"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    },
+    "readAloud": "Ben zählt von 50 an immer 25 weiter: 50, 75, 100 und so weiter. Welche Zahlen nennt Ben? Tippe alle an."
+  },
+  {
+    "id": "m-ms-2-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Schau dir das Muster an: 9 + 9 = 18, 99 + 99 = 198, 999 + 999 = ?"
+    },
+    "prompt": "Rechne die letzte Aufgabe aus.",
+    "readAloud": "Schau dir das Muster an: 9 plus 9 gleich 18, 99 plus 99 gleich 198, 999 plus 999 gleich? Rechne die letzte Aufgabe aus.",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 1998
+    },
+    "feedback": {
+      "correct": "Genau! Jedes Mal kommt eine 9 mehr vorn dazu: 18, 198, 1 998.",
+      "incorrect": "Schau auf die Ergebnisse 18 und 198. Was kommt jedes Mal dazu? Oder rechne 1 000 + 1 000 − 2.",
+      "misconception": "Wer 1 898 schreibt, hat die Neunen verschoben. Nur ganz vorn kommt eine 1, am Ende steht immer 8."
+    },
+    "tags": [
+      "rechenmuster",
+      "analogie",
+      "uebertrag"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "original-2024"
+    }
+  },
+  {
+    "id": "m-ms-2-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "ms-figur-1",
+      "assetAlt": "Drei Figuren aus Plättchen, von links nach rechts beschriftet mit Figur 1, Figur 2 und Figur 3. Jede Figur ist breiter als die davor."
+    },
+    "prompt": "Wie viele Plättchen hat Figur 5?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "16"
+        },
+        {
+          "id": "b",
+          "text": "13"
+        },
+        {
+          "id": "c",
+          "text": "15"
+        },
+        {
+          "id": "d",
+          "text": "20"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Jede Figur hat 3 Plättchen mehr: 4, 7, 10, 13, 16.",
+      "incorrect": "Zähle die Plättchen jeder Figur: 4, 7, 10. Wie viele kommen jedes Mal dazu? Zähle so bis Figur 5.",
+      "misconception": "Wer 13 wählt, hat bei Figur 4 aufgehört. Wer 15 wählt, rechnet 5 mal 3 und vergisst das eine Plättchen oben."
+    },
+    "tags": [
+      "geometrisches-muster",
+      "wachsend",
+      "plaettchen"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-ms-2-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "In der Reihe fehlen zwei Zahlen. Wähle sie aus.",
+    "payload": {
+      "template": "7, 70, {1}, 7 000, {2}",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "700",
+            "770",
+            "77"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "70 000",
+            "7 700",
+            "70 007"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "700",
+        "2": "70 000"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! Jede Zahl ist 10-mal so groß wie die davor. Es kommt immer eine Null dazu.",
+      "incorrect": "Von 7 zu 70 kommt eine Null dazu. Was passiert von 70 zur nächsten Zahl? Prüfe das bis zum Ende.",
+      "misconception": "Wer 77 oder 7 700 wählt, hängt eine 7 an statt eine 0. Die Reihe geht mal 10."
+    },
+    "tags": [
+      "zahlenreihe",
+      "mal-zehn",
+      "stellenwert"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    },
+    "readAloud": "In der Reihe fehlen zwei Zahlen. Wähle sie aus. 7, 70, Lücke, 7000, Lücke."
+  },
+  {
+    "id": "m-ms-2-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias zählt von 320 an immer 15 weiter. Seine erste Zahl ist 320, seine zweite 335."
+    },
+    "prompt": "Welche Zahl nennt er als sechste?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 395
+    },
+    "feedback": {
+      "correct": "Richtig! 320, 335, 350, 365, 380, 395 – die sechste Zahl ist 395.",
+      "incorrect": "Schreibe die Reihe auf und zähle die Zahlen mit: 320 ist die erste, 335 die zweite. Rechne bis zur sechsten.",
+      "misconception": "Wer 410 schreibt, zählt 6 Schritte von 320 aus. Die 320 ist aber schon die erste Zahl."
+    },
+    "tags": [
+      "zahlenreihe",
+      "position",
+      "fuenfzehner"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "m-ms-3-002",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira sagt: „In der Reihe 3, 6, 9, 12, … kommt irgendwann die Zahl 100 vor.“"
+    },
+    "prompt": "Hat Amira recht? Begründe.",
+    "payload": {
+      "maxChars": 200,
+      "hint": "Welche Zahlen in der Nähe von 100 kennst du aus der Dreierreihe?"
+    },
+    "solution": {
+      "model": "Nein. In der Reihe stehen nur Zahlen aus der Dreierreihe. 99 ist 33 · 3, danach kommt 102. 100 wird übersprungen.",
+      "keyPoints": [
+        "Nein, sie hat nicht recht",
+        "99 und 102 liegen in der Reihe, 100 dazwischen nicht"
+      ]
+    },
+    "feedback": {
+      "correct": "Stark! Du hast die Reihe bis in die Nähe von 100 gedacht und die Lücke gefunden.",
+      "incorrect": "Zähle die Dreierreihe in Gedanken weiter: 90, 93, 96, 99, … Kommt dabei 100 vor?",
+      "misconception": "Viele denken: Die Reihe geht ewig weiter, also kommt jede Zahl irgendwann. Es kommen aber nur Dreierzahlen."
+    },
+    "tags": [
+      "zahlenreihe",
+      "begruenden",
+      "teilbarkeit"
+    ],
+    "estimatedSeconds": 120,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    },
+    "readAloud": "Amira sagt: In der Reihe 3, 6, 9, 12 und so weiter kommt irgendwann die Zahl 100 vor. Hat Amira recht? Begründe."
+  },
+  {
+    "id": "m-ms-3-003",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas weiß: 25 · 25 = 625. Er sagt: „Dann ist 250 · 250 = 6 250, weil eine Null dazukommt.“"
+    },
+    "prompt": "Hat Jonas recht?",
+    "readAloud": "Jonas weiß: 25 mal 25 gleich 625. Er sagt: „Dann ist 250 mal 250 gleich 6250, weil eine Null dazukommt.“ Hat Jonas recht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nein, es sind 62 500."
+        },
+        {
+          "id": "b",
+          "text": "Ja, er hat recht."
+        },
+        {
+          "id": "c",
+          "text": "Nein, es sind 625 000."
+        },
+        {
+          "id": "d",
+          "text": "Nein, es sind 6 250 000."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Beide Zahlen sind 10-mal so groß. Das Ergebnis wird 100-mal so groß: 625 · 100 = 62 500.",
+      "incorrect": "Jede der beiden Zahlen hat eine Null mehr. Prüfe am kleinen Beispiel: 2 · 2 = 4, aber 20 · 20 = ?",
+      "misconception": "Wer Jonas zustimmt, hängt nur eine Null an. Bei mal 10 und mal 10 kommen aber zwei Nullen dazu."
+    },
+    "tags": [
+      "rechenmuster",
+      "regel-uebertragen",
+      "mal-zehn"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-ms-3-004",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "In dieser Reihe ist jede Zahl die Summe der zwei Zahlen davor: 2, 3, 5, 8, 13, …"
+    },
+    "prompt": "Welche Sätze stimmen? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die nächste Zahl ist 21."
+        },
+        {
+          "id": "b",
+          "text": "Die Zahl 34 kommt in der Reihe vor."
+        },
+        {
+          "id": "c",
+          "text": "Jede Zahl ist doppelt so groß wie die davor."
+        },
+        {
+          "id": "d",
+          "text": "Die Zahlen werden immer größer."
+        },
+        {
+          "id": "e",
+          "text": "Die Reihe geht immer plus 3."
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! 8 + 13 = 21, 13 + 21 = 34. Und weil immer zwei Zahlen addiert werden, wächst die Reihe.",
+      "incorrect": "Rechne die Reihe zwei Schritte weiter: 8 + 13 und dann 13 + die neue Zahl. Prüfe dann jeden Satz.",
+      "misconception": "„Immer plus 3“ und „immer doppelt“ stimmen nur an einzelnen Stellen. Eine Regel muss überall gelten."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "pruefen",
+      "aussagen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-20",
+      "calibration": "iqb"
+    },
+    "readAloud": "In dieser Reihe ist jede Zahl die Summe der zwei Zahlen davor: 2, 3, 5, 8, 13 und so weiter. Welche Sätze stimmen? Tippe alle an."
   }
 ]

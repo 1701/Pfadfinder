@@ -4,7 +4,7 @@ import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { loadMapProgress, postponeOffer } from '../../src/data/map-progress';
 import { loadTodayProgress } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
-import { thinMatheBereich } from '../fixtures/content-state';
+import { thinMatheContent } from '../fixtures/content-state';
 import { FORMATS, answerFor, settableClock, testDeps, tickingClock } from './helpers';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -271,8 +271,9 @@ describe('practice session (store + in-memory repositories + real content)', () 
   });
 
   it('reports a Bereich with too few practiceable items as empty', async () => {
-    const store = createSessionStore(testDeps());
-    await store.getState().startPractice('mathe', thinMatheBereich());
+    const { content, bereich } = thinMatheContent();
+    const store = createSessionStore({ ...testDeps(), content });
+    await store.getState().startPractice('mathe', bereich);
     expect(store.getState().status).toBe('empty');
     expect(store.getState().current).toBeNull();
   });

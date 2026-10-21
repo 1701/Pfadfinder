@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 110" role="img">
+  <circle cx="40" cy="55" r="24" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="4"/>
+  <polygon points="100,31 76,79 124,79" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="160,31 136,79 184,79" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="220" cy="55" r="24" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="4"/>
+  <polygon points="280,31 256,79 304,79" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="340,31 316,79 364,79" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="400" cy="55" r="24" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="4"/>
+  <polygon points="460,31 436,79 484,79" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="496" y="27" width="56" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="8 6"/>
+  <text x="524" y="72" text-anchor="middle" font-family="inherit" font-size="44" font-weight="bold" fill="currentColor">?</text>
+</svg>

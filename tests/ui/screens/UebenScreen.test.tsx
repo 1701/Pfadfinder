@@ -4,18 +4,19 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RouterProvider, createMemoryRouter } from 'react-router';
 import { beforeAll, describe, expect, it } from 'vitest';
+import type { ContentRuntime } from '../../../src/content-runtime/loader';
 import { createMemoryRepositories } from '../../../src/data/memory/repos';
 import type { Repositories } from '../../../src/data/repos';
 import { createSessionStore } from '../../../src/data/session-store';
 import { SessionStoreContext } from '../../../src/ui/session-context';
 import { UebenScreen } from '../../../src/ui/screens/UebenScreen';
-import { thinMatheBereich } from '../../fixtures/content-state';
+import { thinMatheContent } from '../../fixtures/content-state';
 import { answerFor, testDeps } from '../../data/helpers';
 import { answerOnScreen } from '../answer-on-screen';
 import { preloadFormats } from '../../../src/ui/formats/registry';
 
-function renderAt(path: string, repos?: Repositories) {
-  const store = createSessionStore(testDeps(repos));
+function renderAt(path: string, repos?: Repositories, content?: ContentRuntime) {
+  const store = createSessionStore({ ...testDeps(repos), ...(content && { content }) });
   const router = createMemoryRouter(
     [
       { path: '/', element: <p>Übersicht</p> },
@@ -94,7 +95,8 @@ describe('UebenScreen', () => {
   });
 
   it('explains when a Bereich has too few items or does not exist', async () => {
-    renderAt(`/ueben/mathe/${thinMatheBereich()}`);
+    const { content, bereich } = thinMatheContent();
+    renderAt(`/ueben/mathe/${bereich}`, undefined, content);
     expect(await screen.findByText('Hier gibt es noch nicht genug Aufgaben.')).toBeTruthy();
   });
 
