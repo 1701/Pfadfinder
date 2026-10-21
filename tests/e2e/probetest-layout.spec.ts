@@ -2,30 +2,42 @@
 // in all four viewports; in CI only the tightest ones (Safari), like layout.spec:
 //   header       "Übersicht | 7 von 24 | 45 Min." and with "Noch 5 Minuten": one line, apart
 //   screens      intro, overview, questions, result: no scroll, targets ≥ 48 px, band visible
-//   items        every item of mathe-01 while answering and while looking through (wrong answer,
-//                no answer), the short answer while comparing: fitProblems, the least room kept
+//   items        every item of every Mathe Probetest in content/probetests (task 16: mathe-01,
+//                mathe-02) while answering and while looking through (wrong answer, no answer),
+//                the short answer while comparing: fitProblems, the least room kept per test
 //   texts        the fixture deutsch-90 (task 13): items beside t-sach-900 (single-choice, order,
 //                match, short-answer) while answering and looking through (short answer also
 //                comparing), ≥ 18 px air, nothing overflows or overlaps; the reading screen with
 //                the Probetest's Kopf before each text
-//   deutsch-01   every item answering, looking through, missing (short answers also comparing);
-//                beside a text the same rules as the fixture, air per item in the budget
+//   deutsch      every item of every Deutsch Probetest (deutsch-01, deutsch-02) answering, looking
+//                through, missing (short answers also comparing); beside a text the same rules as
+//                the fixture, air per item in the budget
 //   map          the line "Probetest Mathe" (and "Probetest Deutsch") in the legend line: ≥ 48 px,
 //                one row, map names still ≥ 18 px
 //   print        /probetest/mathe-01/print as A4 PDF and as a print-media screenshot (Chromium)
 // Numbers go to probetest-budget-<viewport>.json in SCREENSHOTS (output-dir.ts), screenshots beside them.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { ITEMS, SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems, matchProblems } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
-const PROBETEST = JSON.parse(readFileSync('content/probetests/mathe-01.json', 'utf8')) as {
-  itemIds: string[];
-};
-const DEUTSCH = JSON.parse(readFileSync('content/probetests/deutsch-01.json', 'utf8')) as {
-  itemIds: string[];
-};
+/** Every Probetest in content (task 16: a new file is measured without touching this spec). */
+const PROBETESTS = readdirSync('content/probetests')
+  .filter((f) => /^(mathe|deutsch)-\d{2}\.json$/.test(f))
+  .sort()
+  .map(
+    (f) =>
+      JSON.parse(readFileSync(`content/probetests/${f}`, 'utf8')) as {
+        id: string;
+        fach: 'mathe' | 'deutsch';
+        itemIds: string[];
+      },
+  );
+const MATHE = PROBETESTS.filter((p) => p.fach === 'mathe');
+const DEUTSCH = PROBETESTS.filter((p) => p.fach === 'deutsch');
+/** The default of /dev/probetest and the print sheet. */
+const PROBETEST = MATHE.find((p) => p.id === 'mathe-01')!;
 const SHORT_ANSWER = 'm-gm-3-002';
 const LONGEST = 'm-rf-3-004';
 const SCREENS = [
@@ -113,8 +125,8 @@ async function headerMetrics(page: Page) {
 
 for (const viewport of MEASURED) {
   test(`probetest screens – ${viewport.name}`, async ({ browser }) => {
-    // mathe-01, deutsch-01 and the fixture: about 160 screens per viewport.
-    test.setTimeout(600_000);
+    // Two Probetests per Fach and the fixture: about 320 screens per viewport.
+    test.setTimeout(1_200_000);
     const context = await browser.newContext({ viewport });
     const report: Record<string, unknown> = { viewport };
     const red: string[] = [];
@@ -145,51 +157,64 @@ for (const viewport of MEASURED) {
     });
     await page.close();
 
-    // Every item: answering, looking through with a wrong answer and without one.
-    const slack: Record<string, { id: string; slack: number }> = {};
-    const keep = (state: string, id: string, value: number) => {
+    // Every Mathe item: answering, looking through with a wrong answer and without one.
+    // slack: the tightest over all tests (for the screenshots); mathe: per test and item.
+    const slack: Record<string, { probetest: string; id: string; slack: number }> = {};
+    const keep = (state: string, id: string, value: number, probetest = PROBETEST.id) => {
       if (!slack[state] || value < slack[state].slack)
-        slack[state] = { id, slack: Math.round(value) };
+        slack[state] = { probetest, id, slack: Math.round(value) };
     };
-    for (const id of PROBETEST.itemIds) {
-      page = await context.newPage();
-      for (const state of ['aufgabe', 'durchsehen', 'fehlt'] as const) {
-        await open(page, `zustand=${state}&item=${id}`);
-        for (const p of await fitProblems(page)) red.push(`${state} ${id}: ${p}`);
-        keep(state, id, (await fitMetrics(page))!.slack);
-      }
-      await page.close();
-    }
-    // deutsch-01 (task 13): every item; beside a text no overflow, no overlap, 18 px air (the
-    // Safari landscape review exception as for the fixture). Air per item and state.
-    const deutsch: Record<string, Record<string, number>> = {};
-    const deutschMin: Record<string, { id: string; slack: number }> = {};
-    for (const id of DEUTSCH.itemIds) {
-      const item = ITEMS.find((i) => i.id === id)!;
-      const withText = item.stimulus?.textRef !== undefined;
-      const states = ['aufgabe', 'durchsehen', 'fehlt'];
-      if (item.format === 'short-answer') states.push('vergleichen');
-      page = await context.newPage();
-      for (const state of states) {
-        await open(page, `probetest=deutsch-01&zustand=${state}&item=${id}`);
-        const label = `deutsch-01 ${state} ${id}`;
-        for (const p of await fitProblems(page)) red.push(`${label}: ${p}`);
-        const at = Math.round((await fitMetrics(page))!.slack);
-        if (withText) {
-          for (const p of await overflowProblems(page)) red.push(`${label}: ${p}`);
-          for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
-          if (item.format === 'match')
-            for (const p of await matchProblems(page)) red.push(`${label}: ${p}`);
-          const wanted = airWanted(state, viewport.name);
-          if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
+    const mathe: Record<string, { slack: Record<string, { id: string; slack: number }> }> = {};
+    for (const test of MATHE) {
+      const least: Record<string, { id: string; slack: number }> = {};
+      for (const id of test.itemIds) {
+        page = await context.newPage();
+        for (const state of ['aufgabe', 'durchsehen', 'fehlt'] as const) {
+          await open(page, `probetest=${test.id}&zustand=${state}&item=${id}`);
+          for (const p of await fitProblems(page)) red.push(`${test.id} ${state} ${id}: ${p}`);
+          const at = Math.round((await fitMetrics(page))!.slack);
+          keep(state, id, at, test.id);
+          if (!least[state] || at < least[state].slack) least[state] = { id, slack: at };
         }
-        (deutsch[id] ??= {})[state] = at;
-        if (!deutschMin[state] || at < deutschMin[state].slack)
-          deutschMin[state] = { id, slack: at };
+        await page.close();
       }
-      await page.close();
+      mathe[test.id] = { slack: least };
     }
-    report.deutsch = { slack: deutschMin, items: deutsch };
+    report.mathe = mathe;
+    // Every Deutsch Probetest (task 13, 16): every item; beside a text no overflow, no overlap,
+    // 18 px air (the Safari landscape review exception as for the fixture). Air per item and state.
+    const deutschReport: Record<string, unknown> = {};
+    for (const test of DEUTSCH) {
+      const deutsch: Record<string, Record<string, number>> = {};
+      const deutschMin: Record<string, { id: string; slack: number }> = {};
+      for (const id of test.itemIds) {
+        const item = ITEMS.find((i) => i.id === id)!;
+        const withText = item.stimulus?.textRef !== undefined;
+        const states = ['aufgabe', 'durchsehen', 'fehlt'];
+        if (item.format === 'short-answer') states.push('vergleichen');
+        page = await context.newPage();
+        for (const state of states) {
+          await open(page, `probetest=${test.id}&zustand=${state}&item=${id}`);
+          const label = `${test.id} ${state} ${id}`;
+          for (const p of await fitProblems(page)) red.push(`${label}: ${p}`);
+          const at = Math.round((await fitMetrics(page))!.slack);
+          if (withText) {
+            for (const p of await overflowProblems(page)) red.push(`${label}: ${p}`);
+            for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
+            if (item.format === 'match')
+              for (const p of await matchProblems(page)) red.push(`${label}: ${p}`);
+            const wanted = airWanted(state, viewport.name);
+            if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
+          }
+          (deutsch[id] ??= {})[state] = at;
+          if (!deutschMin[state] || at < deutschMin[state].slack)
+            deutschMin[state] = { id, slack: at };
+        }
+        await page.close();
+      }
+      deutschReport[test.id] = { slack: deutschMin, items: deutsch };
+    }
+    report.deutsch = deutschReport;
 
     page = await context.newPage();
     // "1 Antwort vergleichen": the short answer, "1 von 1", without "Zurück".
@@ -264,10 +289,10 @@ for (const viewport of MEASURED) {
         path: `${SCREENSHOTS}/probetest-text-${state}-knappstes-${viewport.name}.png`,
       });
     }
-    for (const [state, { id }] of Object.entries(slack).filter(
+    for (const [state, { probetest, id }] of Object.entries(slack).filter(
       ([s]) => s !== 'vergleichen' && s !== 'nur-wartende',
     )) {
-      await open(page, `zustand=${state}&item=${id}`);
+      await open(page, `probetest=${probetest}&zustand=${state}&item=${id}`);
       await page.screenshot({
         path: `${SCREENSHOTS}/probetest-${state}-knappstes-${viewport.name}.png`,
       });
@@ -359,7 +384,9 @@ test('probetest print sheet Deutsch – each text before its items, the second o
   page,
 }) => {
   await page.goto('/probetest/deutsch-01/print');
-  await expect(page.locator('[data-item]')).toHaveCount(DEUTSCH.itemIds.length);
+  await expect(page.locator('[data-item]')).toHaveCount(
+    DEUTSCH.find((p) => p.id === 'deutsch-01')!.itemIds.length,
+  );
   const texts = page.locator('[data-text]');
   await expect(texts).toHaveCount(2);
   const order = await page

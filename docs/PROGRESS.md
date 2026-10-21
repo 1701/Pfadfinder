@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 16 (4): mathe-02 eingespielt, deutsch-02 ausgelassen
+- **Eingespielt:** mathe-02 (24 Items, 1550 s = 25,83 Min.). `content:validate` 0 Fehler, 0 Warnungen; mit beiden Dateien ebenfalls 0 Fehler (deutsch-02: 1305 s + Lesezeit 268,5 s = 1573,5 s = 26,23 Min.; laut README ≈ 255 s Lesezeit).
+- **Ausgelassen (Regel nicht geändert):** deutsch-02 scheitert im Durchsehen neben dem Text in Safari quer (Regel ≥ 0, keine Überlappung): d-lli-2-002 (order) −29 px, „Richtig ist“ überlappt „Falle“; d-lsa-3-002 (Kurzantwort) −7 px. Sonst grün (d-lsa-2-004 dort 1 px, d-lli-3-001 19 px).
+- **Spec:** `probetest-layout` misst jetzt alle Dateien in `content/probetests` (Budget je Probetest unter `mathe`/`deutsch`), Timeout 20 Min. je Viewport.
+- **Gemessen mathe-02 (knappste Luft, iPad quer/hoch, Safari quer/hoch):** Aufgabe m-dz-1-001 85/165/33/41; Durchsehen m-gm-3-003 144 / m-dz-1-001 247 / m-gm-3-003 36 / m-dz-1-001 123; fehlt m-gm-3-003 144 / m-rf-1-004 277 / m-gm-3-003 36 / m-rf-1-004 153.
+- **Lokal:** `npm run check` grün, `probetest-layout` und `probetest-liste` 10/10 in vier Viewports (ohne deutsch-02). Mit Schalter: `probetest-budget-*`, `probetest-durchsehen-knappstes-safari-landscape`, `probetest-fehlt-knappstes-{ipad-portrait,safari-landscape,safari-portrait}` (knappstes Item jetzt aus mathe-02).
+
 ## 2026-10-21 – Aufgabe 16 (3): Stand je Probetest
 - **Gebaut:** `probetestStand(ids, runs)` (domain) und `loadProbetestList(repos, ids)` (data, liest nur): „gemacht am …“ = `endedAt` des letzten abgegebenen Laufs, also desselben wie bei „Auswertung ansehen“. Gespeichert wird nichts Neues. Die Route liest den Stand aus Dexie; ist der Speicher nicht lesbar, stehen nur die Namen da. Der Chunk `probetest-liste-route` ist im Precache.
 - **Entscheidungen:** Abgebrochene und laufende Läufe zählen als „noch nicht gemacht“, das Datum steht ohne Jahr in lokaler Zeit.

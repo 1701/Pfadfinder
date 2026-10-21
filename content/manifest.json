@@ -394,7 +394,8 @@
   },
   "probetests": {
     "mathe": [
-      "mathe-01"
+      "mathe-01",
+      "mathe-02"
     ],
     "deutsch": [
       "deutsch-01"

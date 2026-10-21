@@ -16,168 +16,209 @@
       "minGap": 343
     }
   },
-  "deutsch": {
-    "slack": {
-      "aufgabe": {
-        "id": "d-rsl-2-004",
-        "slack": 116
-      },
-      "durchsehen": {
-        "id": "d-lsa-2-002",
-        "slack": 1
-      },
-      "fehlt": {
-        "id": "d-rsl-2-004",
-        "slack": 24
-      },
-      "vergleichen": {
-        "id": "d-lsa-3-001",
-        "slack": 101
+  "mathe": {
+    "mathe-01": {
+      "slack": {
+        "aufgabe": {
+          "id": "m-dz-2-002",
+          "slack": 33
+        },
+        "durchsehen": {
+          "id": "m-rf-3-004",
+          "slack": 52
+        },
+        "fehlt": {
+          "id": "m-gm-3-002",
+          "slack": 44
+        }
       }
     },
-    "items": {
-      "d-lsa-1-001": {
-        "aufgabe": 188,
-        "durchsehen": 132,
-        "fehlt": 134
+    "mathe-02": {
+      "slack": {
+        "aufgabe": {
+          "id": "m-dz-1-001",
+          "slack": 33
+        },
+        "durchsehen": {
+          "id": "m-gm-3-003",
+          "slack": 36
+        },
+        "fehlt": {
+          "id": "m-gm-3-003",
+          "slack": 36
+        }
+      }
+    }
+  },
+  "deutsch": {
+    "deutsch-01": {
+      "slack": {
+        "aufgabe": {
+          "id": "d-rsl-2-004",
+          "slack": 116
+        },
+        "durchsehen": {
+          "id": "d-lsa-2-002",
+          "slack": 1
+        },
+        "fehlt": {
+          "id": "d-rsl-2-004",
+          "slack": 24
+        },
+        "vergleichen": {
+          "id": "d-lsa-3-001",
+          "slack": 101
+        }
       },
-      "d-lsa-1-002": {
-        "aufgabe": 221,
-        "durchsehen": 101,
-        "fehlt": 157
-      },
-      "d-lsa-1-003": {
-        "aufgabe": 153,
-        "durchsehen": 163,
-        "fehlt": 219
-      },
-      "d-lsa-2-001": {
-        "aufgabe": 153,
-        "durchsehen": 33,
-        "fehlt": 89
-      },
-      "d-lsa-2-002": {
-        "aufgabe": 188,
-        "durchsehen": 1,
-        "fehlt": 41
-      },
-      "d-lsa-3-001": {
-        "aufgabe": 231,
-        "durchsehen": 19,
-        "fehlt": 75,
-        "vergleichen": 101
-      },
-      "d-lli-1-005": {
-        "aufgabe": 277,
-        "durchsehen": 157,
-        "fehlt": 213
-      },
-      "d-lli-1-006": {
-        "aufgabe": 300,
-        "durchsehen": 180,
-        "fehlt": 236
-      },
-      "d-lli-2-005": {
-        "aufgabe": 188,
-        "durchsehen": 1,
-        "fehlt": 57
-      },
-      "d-lli-2-006": {
-        "aufgabe": 188,
-        "durchsehen": 68,
-        "fehlt": 124
-      },
-      "d-lli-3-003": {
-        "aufgabe": 244,
-        "durchsehen": 124,
-        "fehlt": 180
-      },
-      "d-rsl-1-002": {
-        "aufgabe": 284,
-        "durchsehen": 228,
-        "fehlt": 230
-      },
-      "d-rss-1-004": {
-        "aufgabe": 332,
-        "durchsehen": 276,
-        "fehlt": 278
-      },
-      "d-rsl-1-004": {
-        "aufgabe": 340,
-        "durchsehen": 284,
-        "fehlt": 286
-      },
-      "d-rss-1-002": {
-        "aufgabe": 340,
-        "durchsehen": 252,
-        "fehlt": 252
-      },
-      "d-rss-1-006": {
-        "aufgabe": 228,
-        "durchsehen": 172,
-        "fehlt": 174
-      },
-      "d-rsl-2-005": {
-        "aufgabe": 284,
-        "durchsehen": 228,
-        "fehlt": 230
-      },
-      "d-rss-2-003": {
-        "aufgabe": 284,
-        "durchsehen": 228,
-        "fehlt": 230
-      },
-      "d-rsl-2-002": {
-        "aufgabe": 332,
-        "durchsehen": 252,
-        "fehlt": 252
-      },
-      "d-rss-2-004": {
-        "aufgabe": 228,
-        "durchsehen": 172,
-        "fehlt": 174
-      },
-      "d-rsl-2-004": {
-        "aufgabe": 116,
-        "durchsehen": 22,
-        "fehlt": 24
-      },
-      "d-rss-3-001": {
-        "aufgabe": 193,
-        "durchsehen": 124,
-        "fehlt": 126,
-        "vergleichen": 150
-      },
-      "d-rss-2-008": {
-        "aufgabe": 284,
-        "durchsehen": 196,
-        "fehlt": 196
-      },
-      "d-rsl-3-002": {
-        "aufgabe": 228,
-        "durchsehen": 172,
-        "fehlt": 174
+      "items": {
+        "d-lsa-1-001": {
+          "aufgabe": 188,
+          "durchsehen": 132,
+          "fehlt": 134
+        },
+        "d-lsa-1-002": {
+          "aufgabe": 221,
+          "durchsehen": 101,
+          "fehlt": 157
+        },
+        "d-lsa-1-003": {
+          "aufgabe": 153,
+          "durchsehen": 163,
+          "fehlt": 219
+        },
+        "d-lsa-2-001": {
+          "aufgabe": 153,
+          "durchsehen": 33,
+          "fehlt": 89
+        },
+        "d-lsa-2-002": {
+          "aufgabe": 188,
+          "durchsehen": 1,
+          "fehlt": 41
+        },
+        "d-lsa-3-001": {
+          "aufgabe": 231,
+          "durchsehen": 19,
+          "fehlt": 75,
+          "vergleichen": 101
+        },
+        "d-lli-1-005": {
+          "aufgabe": 277,
+          "durchsehen": 157,
+          "fehlt": 213
+        },
+        "d-lli-1-006": {
+          "aufgabe": 300,
+          "durchsehen": 180,
+          "fehlt": 236
+        },
+        "d-lli-2-005": {
+          "aufgabe": 188,
+          "durchsehen": 1,
+          "fehlt": 57
+        },
+        "d-lli-2-006": {
+          "aufgabe": 188,
+          "durchsehen": 68,
+          "fehlt": 124
+        },
+        "d-lli-3-003": {
+          "aufgabe": 244,
+          "durchsehen": 124,
+          "fehlt": 180
+        },
+        "d-rsl-1-002": {
+          "aufgabe": 284,
+          "durchsehen": 228,
+          "fehlt": 230
+        },
+        "d-rss-1-004": {
+          "aufgabe": 332,
+          "durchsehen": 276,
+          "fehlt": 278
+        },
+        "d-rsl-1-004": {
+          "aufgabe": 340,
+          "durchsehen": 284,
+          "fehlt": 286
+        },
+        "d-rss-1-002": {
+          "aufgabe": 340,
+          "durchsehen": 252,
+          "fehlt": 252
+        },
+        "d-rss-1-006": {
+          "aufgabe": 228,
+          "durchsehen": 172,
+          "fehlt": 174
+        },
+        "d-rsl-2-005": {
+          "aufgabe": 284,
+          "durchsehen": 228,
+          "fehlt": 230
+        },
+        "d-rss-2-003": {
+          "aufgabe": 284,
+          "durchsehen": 228,
+          "fehlt": 230
+        },
+        "d-rsl-2-002": {
+          "aufgabe": 332,
+          "durchsehen": 252,
+          "fehlt": 252
+        },
+        "d-rss-2-004": {
+          "aufgabe": 228,
+          "durchsehen": 172,
+          "fehlt": 174
+        },
+        "d-rsl-2-004": {
+          "aufgabe": 116,
+          "durchsehen": 22,
+          "fehlt": 24
+        },
+        "d-rss-3-001": {
+          "aufgabe": 193,
+          "durchsehen": 124,
+          "fehlt": 126,
+          "vergleichen": 150
+        },
+        "d-rss-2-008": {
+          "aufgabe": 284,
+          "durchsehen": 196,
+          "fehlt": 196
+        },
+        "d-rsl-3-002": {
+          "aufgabe": 228,
+          "durchsehen": 172,
+          "fehlt": 174
+        }
       }
     }
   },
   "slack": {
     "aufgabe": {
+      "probetest": "mathe-01",
       "id": "m-dz-2-002",
       "slack": 33
     },
     "durchsehen": {
-      "id": "m-rf-3-004",
-      "slack": 52
+      "probetest": "mathe-02",
+      "id": "m-gm-3-003",
+      "slack": 36
     },
     "fehlt": {
-      "id": "m-gm-3-002",
-      "slack": 44
+      "probetest": "mathe-02",
+      "id": "m-gm-3-003",
+      "slack": 36
     },
     "nur-wartende": {
+      "probetest": "mathe-01",
       "id": "m-gm-3-002",
       "slack": 163
     },
     "vergleichen": {
+      "probetest": "mathe-01",
       "id": "m-gm-3-002",
       "slack": 94
     }
