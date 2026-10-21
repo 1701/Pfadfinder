@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (1b): Sweep Rückmeldungslänge – angehalten (Entscheidungspunkt)
+- **Gebaut:** zweiter Test in `sweep-match.spec.ts` (`-g Rückmeldung`), Fixture um die Rückmeldungslänge F erweitert (3/4 Paare × Summe 100/140 × F 95/120/150/180/195, etwa 45/55; IDs d-lsa-3-960…979, weil d-lsa-2-… bei 999 endet). Ausgabe `sweep-match-feedback.json`.
+- **Befund:** Durchsehen Safari quer hängt nicht von F ab: 3 Paare −20, 4 Paare −76 bei jedem F. Damit kein F ≥ 120 für 3 Paare → Layout-Aufgabe. Nur Üben: 3 Paare bis F 195 ≥ 18 (Safari quer 44 bis F 150, 20 ab 180); 4 Paare Safari quer −12 schon bei F 95.
+- **Ground Truth:** Hoch passt der Sweep zu d-lsa-2-952, quer liegt er 35 px darunter: Der Prompt (74 statt 65 Zeichen) hat quer 3 statt 2 Zeilen, Antwortbereich und Band sind gleich hoch. d-lsa-2-005 (74 Zeichen) bricht hoch in 2 Zeilen um, der Sweep-Prompt in 3. Die Luft folgt Zeilen, nicht Zeichensummen.
+- **Lokal:** `npm run check` grün; Sweep 2 5,4 min; `text-layout` und `probetest-layout` 14/14.
+
 ## 2026-10-21 – Aufgabe 15 (1): Sweep Summenregel match – angehalten (Fallback)
 - **Gebaut:** `tests/e2e/sweep-match.spec.ts` (Projekt `sweep`, nur mit `PFADFINDER_SWEEP=1`, nie in CI), Fixture `tests/fixtures/sweep-match` (37 Items neben t-sach-901, Prompt 74, Rückmeldung 195 = m-dz-2-008; 3/4 Paare × 80–180 × gleichmäßig/Schieflage, 5 Paare bei 80). Dev-Seiten `/dev/text` und `/dev/probetest` (deutsch-90) zeigen die Sweep-Items. Ausgabe `tests/e2e/output/sweep-match.json`.
 - **Befund:** Keine Summe erfüllt die Regel; N = –, auch Üben allein (4 Paare überall −4 hoch, −36 Safari quer). 3 Paare: Üben bis 140 ≥ 18 (Safari quer 20), aber Durchsehen Safari quer −20 schon bei 80 (Überlappung mit „Falle“). Die Luft hängt bis etwa 130 nicht von der Summe ab, sondern von Paaren und Rückmeldung. 5 Paare bei 80: −92 px. Keine Karte dreizeilig.

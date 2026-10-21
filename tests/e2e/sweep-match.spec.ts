@@ -12,10 +12,14 @@
 // N = the largest sum such that every point with a sum up to N keeps the rule (3 and 4 pairs,
 // both splits). `uebenOnly` is the same from the Üben states alone.
 // Output: tests/e2e/output/sweep-match.json (always the output folder, it is no screenshot).
+// Second sweep (after the first found no N): the feedback length F varies at sum 100 and 140;
+// per pair count the largest F such that every point with a feedback up to F keeps the rule at
+// both sums. Output tests/e2e/output/sweep-match-feedback.json. Only this one:
+//   PFADFINDER_SWEEP=1 npx playwright test --project=sweep -g Rückmeldung
 
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
-import { SWEEP_MATCH } from '../fixtures/sweep-match';
+import { expect, test, type Browser, type Page } from '@playwright/test';
+import { SWEEP_FEEDBACK_MATCH, SWEEP_MATCH, type SweepPoint } from '../fixtures/sweep-match';
 import { VIEWPORTS, fitMetrics, matchProblems } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
@@ -91,26 +95,25 @@ function keeps(state: State, viewport: string, s: Screen): boolean {
   return s.air >= AIR;
 }
 
-/** Largest sum N such that every point (3 and 4 pairs) with a sum up to N passes. */
+/** Largest key such that every point with a key up to it passes. */
 function derive(passes: Map<number, boolean>): number | null {
   let n: number | null = null;
-  for (const sum of [...passes.keys()].sort((a, b) => a - b)) {
-    if (!passes.get(sum)) break;
-    n = sum;
+  for (const key of [...passes.keys()].sort((a, b) => a - b)) {
+    if (!passes.get(key)) break;
+    n = key;
   }
   return n;
 }
 
-test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser }) => {
-  test.skip(!RUN, 'nur mit PFADFINDER_SWEEP=1, nie in CI');
-  test.setTimeout(60 * 60_000);
-  /** item id → viewport → state → screen */
-  const results: Record<string, Record<string, Partial<Record<State, Screen>>>> = {};
+type Results = Record<string, Record<string, Partial<Record<State, Screen>>>>;
 
+/** Every point in every viewport and state: item id → viewport → state → screen. */
+async function sweep(browser: Browser, points: SweepPoint[]): Promise<Results> {
+  const results: Results = {};
   for (const viewport of VIEWPORTS) {
     const context = await browser.newContext({ viewport });
     const page = await context.newPage();
-    for (const { item } of SWEEP_MATCH) {
+    for (const { item } of points) {
       if (item.format !== 'match') continue;
       const left = item.payload.left.map((c) => c.text);
       const right = item.payload.right.map((c) => c.text);
@@ -129,8 +132,12 @@ test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser })
     }
     await context.close();
   }
+  return results;
+}
 
-  const rows = SWEEP_MATCH.map(({ item, pairs, sum, split }) => {
+/** One row per point: the air per viewport, what fails the rule, the findings. */
+function rowsOf(points: SweepPoint[], results: Results) {
+  return points.map(({ item, pairs, sum, split, feedback }) => {
     const byViewport = results[item.id]!;
     const lengths =
       item.format === 'match'
@@ -163,6 +170,7 @@ test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser })
       pairs,
       sum,
       split,
+      feedback,
       lengths,
       nochNicht: Object.fromEntries(
         VIEWPORTS.map((v) => [v.name, byViewport[v.name]!['noch-nicht']!.air]),
@@ -176,15 +184,37 @@ test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser })
       findings,
     };
   });
+}
+type Row = ReturnType<typeof rowsOf>[number];
 
-  const bySum = (pick: (r: (typeof rows)[number]) => string[]) => {
-    const passes = new Map<number, boolean>();
-    for (const r of rows.filter((r) => r.pairs <= 4))
-      passes.set(r.sum, (passes.get(r.sum) ?? true) && pick(r).length === 0);
-    return passes;
-  };
-  const all = bySum((r) => r.failingAll);
-  const ueben = bySum((r) => r.failingUeben);
+/** Does every row with the same key pass? key → passes. */
+function passesBy(rows: Row[], key: (r: Row) => number, pick: (r: Row) => string[]) {
+  const passes = new Map<number, boolean>();
+  for (const r of rows) passes.set(key(r), (passes.get(key(r)) ?? true) && pick(r).length === 0);
+  return passes;
+}
+
+function write(file: string, data: unknown) {
+  mkdirSync(OUT, { recursive: true });
+  writeFileSync(`${OUT}/${file}`, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser }) => {
+  test.skip(!RUN, 'nur mit PFADFINDER_SWEEP=1, nie in CI');
+  test.setTimeout(60 * 60_000);
+  const results = await sweep(browser, SWEEP_MATCH);
+  const rows = rowsOf(SWEEP_MATCH, results);
+  const upToFour = rows.filter((r) => r.pairs <= 4);
+  const all = passesBy(
+    upToFour,
+    (r) => r.sum,
+    (r) => r.failingAll,
+  );
+  const ueben = passesBy(
+    upToFour,
+    (r) => r.sum,
+    (r) => r.failingUeben,
+  );
   const five = rows.find((r) => r.pairs === 5);
   const derived = {
     n: derive(all),
@@ -201,11 +231,51 @@ test('Sweep: match neben dem Text, Summe aller Kartentexte', async ({ browser })
       .filter((r) => r.lines.left >= 3 || r.lines.right >= 3)
       .map((r) => ({ id: r.id, sum: r.sum, split: r.split, lines: r.lines, lengths: r.lengths })),
   };
-
-  mkdirSync(OUT, { recursive: true });
-  writeFileSync(
-    `${OUT}/sweep-match.json`,
-    `${JSON.stringify({ viewports: VIEWPORTS, air: AIR, derived, rows, results }, null, 2)}\n`,
-  );
+  write('sweep-match.json', { viewports: VIEWPORTS, air: AIR, derived, rows, results });
   expect(rows).toHaveLength(SWEEP_MATCH.length);
+});
+
+test('Sweep: match neben dem Text, Rückmeldungslänge', async ({ browser }) => {
+  test.skip(!RUN, 'nur mit PFADFINDER_SWEEP=1, nie in CI');
+  test.setTimeout(60 * 60_000);
+  const results = await sweep(browser, SWEEP_FEEDBACK_MATCH);
+  const rows = rowsOf(SWEEP_FEEDBACK_MATCH, results);
+  /** Per pair count: the largest F at which sum 100 and 140 both keep the rule. */
+  const perPairs = Object.fromEntries(
+    [...new Set(rows.map((r) => r.pairs))].map((pairs) => {
+      const mine = rows.filter((r) => r.pairs === pairs);
+      const all = passesBy(
+        mine,
+        (r) => r.feedback,
+        (r) => r.failingAll,
+      );
+      const ueben = passesBy(
+        mine,
+        (r) => r.feedback,
+        (r) => r.failingUeben,
+      );
+      const sum100 = passesBy(
+        mine.filter((r) => r.sum === 100),
+        (r) => r.feedback,
+        (r) => r.failingAll,
+      );
+      return [
+        pairs,
+        {
+          f: derive(all),
+          uebenOnly: derive(ueben),
+          fAtSum100: derive(sum100),
+          passesByFeedback: Object.fromEntries(all),
+        },
+      ];
+    }),
+  );
+  write('sweep-match-feedback.json', {
+    viewports: VIEWPORTS,
+    air: AIR,
+    derived: perPairs,
+    rows,
+    results,
+  });
+  expect(rows).toHaveLength(SWEEP_FEEDBACK_MATCH.length);
 });

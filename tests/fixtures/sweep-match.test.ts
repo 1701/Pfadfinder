@@ -6,6 +6,9 @@ import type { Item } from '../../src/domain/content';
 import { sachtext } from './items';
 import {
   CARD_LIMITS,
+  FEEDBACK_LENGTHS,
+  SWEEP_FEEDBACK_MATCH,
+  feedbackText,
   SWEEP_FEEDBACK,
   SWEEP_MATCH,
   SWEEP_PROMPT,
@@ -78,5 +81,41 @@ describe('sweep fixture match (task 15)', () => {
       }
     }
     expect(cardLengths(3, 80, 'skew')).toEqual({ left: [7, 7, 7], right: [15, 15, 15, 14] });
+  });
+});
+
+describe('sweep fixture match, feedback length (task 15, second sweep)', () => {
+  it('covers 3 and 4 pairs × sum 100 and 140 × five feedback lengths, ids d-lsa-3-960…979', () => {
+    expect(SWEEP_FEEDBACK_MATCH).toHaveLength(2 * 2 * FEEDBACK_LENGTHS.length);
+    expect(SWEEP_FEEDBACK_MATCH.map((p) => p.item.id)).toEqual(
+      Array.from({ length: 20 }, (_, i) => `d-lsa-3-${960 + i}`),
+    );
+  });
+
+  it('has the feedback length of the point, about 45/55, and the cards of the first sweep', () => {
+    for (const { item, pairs, sum: wanted, split, feedback } of SWEEP_FEEDBACK_MATCH) {
+      const { incorrect, misconception = '' } = item.feedback;
+      expect(incorrect.length + misconception.length, item.id).toBe(feedback);
+      expect(incorrect.length / feedback, item.id).toBeGreaterThan(0.4);
+      expect(incorrect.length / feedback, item.id).toBeLessThan(0.5);
+      expect(item.prompt).toBe(SWEEP_PROMPT);
+      const { left, right } = cards(item);
+      expect(sum([...left, ...right]), item.id).toBe(wanted);
+      const twin = SWEEP_MATCH.find(
+        (p) => p.pairs === pairs && p.sum === wanted && p.split === split,
+      );
+      expect(cards(item), item.id).toEqual(cards(twin!.item));
+    }
+  });
+
+  it('builds feedback of the exact length, ending with a full stop', () => {
+    for (let length = 30; length <= 110; length++) {
+      const text = feedbackText(
+        length,
+        'Lies jeden Satz links noch einmal. Suche danach im Text die Stelle.',
+      );
+      expect(text, String(length)).toHaveLength(length);
+      expect(text.endsWith('.')).toBe(true);
+    }
   });
 });

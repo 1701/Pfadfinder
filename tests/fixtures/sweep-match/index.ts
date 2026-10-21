@@ -12,6 +12,12 @@
 //   left card); plus 5 pairs with a distractor at sum 80, even.
 // Every single card stays within 35 (left) / 52 (right) characters. The card texts are real words
 // of the igel text, so they wrap like German, not like a row of x.
+//
+// Second sweep (task 15, after the first found no sum): the feedback length varies.
+//   pairs 3 and 4 (each with one distractor) × sum 100 and 140 (even)
+//   × incorrect + misconception 95, 120, 150, 180, 195 characters (about 45/55 as in content;
+//   195 is the fixed feedback of the first sweep). Ids d-lsa-3-960 onwards: the three-digit
+//   number of d-lsa-2-… ends at 999.
 
 import { z } from 'zod';
 import { itemSchema, type Item } from '../../../src/domain/content';
@@ -25,6 +31,8 @@ export interface SweepPoint {
   pairs: number;
   sum: number;
   split: SweepSplit;
+  /** incorrect + misconception in characters. */
+  feedback: number;
 }
 
 export const SWEEP_SUMS = [80, 90, 100, 110, 120, 130, 140, 160, 180] as const;
@@ -43,6 +51,16 @@ export const SWEEP_FEEDBACK = {
   misconception:
     'Viele nehmen die Karte, die nur ein gleiches Wort hat. Prüfe danach, ob auch der ganze Satz genau passt.',
 };
+
+/** Second sweep: feedback lengths at these sums (even split). */
+export const FEEDBACK_LENGTHS = [95, 120, 150, 180, 195] as const;
+export const FEEDBACK_SUMS = [100, 140] as const;
+/** incorrect : misconception, about as in the match items of content/. */
+const INCORRECT_SHARE = 0.45;
+const INCORRECT_WORDS =
+  'Lies jeden Satz links noch einmal. Suche danach im Text die Stelle, die genau zu ihm passt. Dann siehst du, welche Karte dazugehört und welche Karte am Ende übrig bleibt.';
+const MISCONCEPTION_WORDS =
+  'Viele nehmen die Karte, die nur ein gleiches Wort hat. Prüfe danach, ob auch der ganze Satz genau passt. Ein gleiches Wort allein reicht nicht, auch der Sinn muss stimmen.';
 
 /** Words of the igel text, in text order; the card texts walk through them. */
 const WORDS = sachtext.paragraphs
@@ -98,6 +116,34 @@ export function cardText(length: number, start: number): string {
   return capitalize(words.join(' '));
 }
 
+/** A feedback sentence of exactly `length` characters: words of `base`, a short word, a full stop. */
+export function feedbackText(length: number, base: string): string {
+  const words: string[] = [];
+  let left = length;
+  const all = base.split(' ');
+  // Words of `base`, from the start again when they run out, until at most 9 characters are left.
+  for (let i = 0; left > 9; i++) {
+    const word = all[i % all.length]!;
+    // Room for the space, a last word of at least 2 characters and the full stop.
+    if (word.length + 1 + 3 > left) continue;
+    words.push(word);
+    left -= word.length + 1;
+  }
+  return `${[...words, BY_LENGTH[left - 1]![0]!].join(' ')}.`;
+}
+
+/** The feedback of a sweep item: the fixed one at 195, otherwise generated to the length. */
+export function sweepFeedback(total: number) {
+  if (total === SWEEP_FEEDBACK.incorrect.length + SWEEP_FEEDBACK.misconception.length)
+    return { ...SWEEP_FEEDBACK };
+  const incorrect = Math.round(total * INCORRECT_SHARE);
+  return {
+    correct: SWEEP_FEEDBACK.correct,
+    incorrect: feedbackText(incorrect, INCORRECT_WORDS),
+    misconception: feedbackText(total - incorrect, MISCONCEPTION_WORDS),
+  };
+}
+
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
@@ -120,7 +166,7 @@ export function cardLengths(pairs: number, sum: number, split: SweepSplit) {
   return { left: lengths.slice(0, pairs), right: lengths.slice(pairs) };
 }
 
-function sweepItem(n: number, pairs: number, sum: number, split: SweepSplit): Item {
+function sweepItem(id: string, { pairs, sum, split, feedback }: Omit<SweepPoint, 'item'>): Item {
   const lengths = cardLengths(pairs, sum, split);
   // Every card starts at another word; a text that is already there takes the next start, so no
   // two cards of an item read the same (the renderer keys its card sizer by text).
@@ -137,36 +183,49 @@ function sweepItem(n: number, pairs: number, sum: number, split: SweepSplit): It
     text: unique(len, 7 * (pairs + i) + 3),
   }));
   return {
-    id: itemId('lesen-sachtext', 2, n),
+    id,
     schemaVersion: '1.0',
     fach: 'deutsch',
     bereich: 'lesen-sachtext',
-    niveau: 2,
+    niveau: Number(id.split('-')[2]) as 2 | 3,
     format: 'match',
     status: 'draft',
     stimulus: { textRef: sachtext.id },
     prompt: SWEEP_PROMPT,
     payload: { left, right },
     solution: { pairs: left.map((l, i) => [l.id, right[i]!.id] as [string, string]) },
-    feedback: { ...SWEEP_FEEDBACK },
+    feedback: sweepFeedback(feedback),
     tags: ['sweep'],
     estimatedSeconds: 70,
     meta: { author: 'claude', createdAt: '2026-10-21', calibration: 'none' },
   } as Item;
 }
 
+const FIXED = SWEEP_FEEDBACK.incorrect.length + SWEEP_FEEDBACK.misconception.length;
 const POINTS: Omit<SweepPoint, 'item'>[] = [
   ...SWEEP_PAIRS.flatMap((pairs) =>
     SWEEP_SUMS.flatMap((sum) =>
-      (['even', 'skew'] as const).map((split) => ({ pairs, sum, split })),
+      (['even', 'skew'] as const).map((split) => ({ pairs, sum, split, feedback: FIXED })),
     ),
   ),
-  SWEEP_FIVE_PAIRS,
+  { ...SWEEP_FIVE_PAIRS, feedback: FIXED },
 ];
+const FEEDBACK_POINTS: Omit<SweepPoint, 'item'>[] = SWEEP_PAIRS.flatMap((pairs) =>
+  FEEDBACK_SUMS.flatMap((sum) =>
+    FEEDBACK_LENGTHS.map((feedback) => ({ pairs, sum, split: 'even' as const, feedback })),
+  ),
+);
 
-/** The sweep: ids d-lsa-2-960 onwards, in the order of POINTS. */
-export const SWEEP_MATCH: SweepPoint[] = POINTS.map((p, i) => ({
-  ...p,
-  item: z.array(itemSchema).parse([sweepItem(960 + i, p.pairs, p.sum, p.split)])[0]!,
-}));
-export const SWEEP_MATCH_ITEMS: Item[] = SWEEP_MATCH.map((p) => p.item);
+const build = (points: Omit<SweepPoint, 'item'>[], niveau: 2 | 3) =>
+  points.map((p, i) => ({
+    ...p,
+    item: z.array(itemSchema).parse([sweepItem(itemId('lesen-sachtext', niveau, 960 + i), p)])[0]!,
+  }));
+
+/** The first sweep (sum of the card texts): ids d-lsa-2-960 onwards, in the order of POINTS. */
+export const SWEEP_MATCH: SweepPoint[] = build(POINTS, 2);
+/** The second sweep (feedback length): ids d-lsa-3-960 onwards. */
+export const SWEEP_FEEDBACK_MATCH: SweepPoint[] = build(FEEDBACK_POINTS, 3);
+export const SWEEP_MATCH_ITEMS: Item[] = [...SWEEP_MATCH, ...SWEEP_FEEDBACK_MATCH].map(
+  (p) => p.item,
+);
