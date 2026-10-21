@@ -17,12 +17,14 @@
 // (tests/e2e/sweep-match.spec.ts).
 
 import { useEffect, useState } from 'react';
+import manifest from '../../../content/manifest.json';
 import { useSearchParams } from 'react-router';
 import { igelText, probetestContentModules } from '../../../tests/fixtures/lesen';
 import { SWEEP_MATCH_ITEMS } from '../../../tests/fixtures/sweep-match';
 import { createContentLoader } from '../../content-runtime/loader';
 import { loadProbetestContext, type ProbetestContext } from '../../data/probetest';
 import type { Bereich, Item } from '../../domain/content';
+import { probetestNumber, type ContentManifest } from '../../domain/content/manifest';
 import type { ProbetestResult } from '../../domain/learner';
 import { probetestReadAloud } from '../../domain/probetest';
 import { TextKasten } from '../components/TextKasten';
@@ -36,6 +38,7 @@ import { ProbetestLesen } from '../screens/ProbetestLesen';
 import { ProbetestUebersicht } from '../screens/ProbetestUebersicht';
 import { previewAnswer } from './preview-answers';
 
+const MANIFEST = manifest as ContentManifest;
 const content = createContentLoader();
 /** The fixture Probetest with reading texts (tests/fixtures/lesen), never in content/. */
 const FIXTURE = 'deutsch-90';
@@ -126,6 +129,7 @@ export function ProbetestPage() {
       return (
         <ProbetestIntro
           fach={ctx.probetest.fach}
+          number={probetestNumber(MANIFEST.probetests[ctx.probetest.fach], ctx.probetest.id)}
           doneBefore={zustand === 'intro-fertig'}
           readAloud
           onStart={noop}

@@ -10,6 +10,35 @@ export function probetestName(fach: Fach): string {
   return `Probetest ${FACH_NAME[fach]}`;
 }
 
+/** "Probetest Mathe 2": the n-th Probetest of the Fach in manifest order (task 16). */
+export function listEntryName(fach: Fach, n: number): string {
+  return `${probetestName(fach)} ${n}`;
+}
+
+// The list of a Fach's Probetests (/probetest/mathe, task 16): name and whether it was done.
+export const NOT_DONE = 'noch nicht gemacht';
+export const LIST_EMPTY = 'Hier gibt es noch keinen Probetest.';
+const MONTHS = [
+  'Januar',
+  'Februar',
+  'März',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Dezember',
+] as const;
+
+/** "gemacht am 21. Oktober": the local day of the last submitted run, without the year. */
+export function doneOn(iso: string): string {
+  const date = new Date(iso);
+  return `gemacht am ${date.getDate()}. ${MONTHS[date.getMonth()]}`;
+}
+
 export const INTRO_TEXT = '45 Minuten, wie in der Schule. Du kannst vor und zurück.';
 export const DONE_BEFORE = 'Du hast diesen Probetest schon gemacht.';
 export const SHOW_RESULT = 'Auswertung ansehen';
@@ -81,6 +110,10 @@ export function timeText(minutes: number, final: boolean): string {
 export const PROBETEST_TEXTS = [
   probetestName('mathe'),
   probetestName('deutsch'),
+  listEntryName('mathe', 2),
+  NOT_DONE,
+  LIST_EMPTY,
+  doneOn('2026-09-30T10:00:00'),
   INTRO_TEXT,
   DONE_BEFORE,
   SHOW_RESULT,

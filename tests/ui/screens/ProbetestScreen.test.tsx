@@ -11,6 +11,8 @@ import { createProbetestStore, type ProbetestStore } from '../../../src/data/pro
 import { preloadFormats } from '../../../src/ui/formats/registry';
 import { ProbetestStoreContext } from '../../../src/ui/probetest-context';
 import { ProbetestScreen } from '../../../src/ui/screens/ProbetestScreen';
+import type { ContentModules } from '../../../src/content-runtime/loader';
+import { buildMatheProbetest } from '../../fixtures/builders';
 import { probetestContentModules } from '../../fixtures/lesen';
 
 let lastId = 0;
@@ -82,5 +84,43 @@ describe('ProbetestScreen – Deutsch with reading texts', () => {
     await screen.findByText('11 von 18');
     expect(screen.queryByRole('region', { name: 'Baumeister am Bach' })).toBeNull();
     expect(within(screen.getByRole('main')).getByRole('button', { name: 'Vorlesen' })).toBeTruthy();
+  });
+});
+
+describe('ProbetestScreen – the start page names the test by its manifest position', () => {
+  beforeAll(() => preloadFormats());
+
+  // Task 16: the second Mathe Probetest of the manifest is "Probetest Mathe 2", whatever its id.
+  it('"Probetest Mathe 2" for the second entry', async () => {
+    const { items, probetest } = buildMatheProbetest();
+    const second = { ...probetest, id: 'mathe-07' };
+    const byBereich = Map.groupBy(items, (i) => i.bereich);
+    const modules: ContentModules = {
+      items: Object.fromEntries(
+        [...byBereich].map(([bereich, list]) => [
+          `fixtures/mathe/${bereich}.json`,
+          async () => structuredClone(list),
+        ]),
+      ),
+      texts: {},
+      probetests: { 'fixtures/probetests/mathe-07.json': async () => structuredClone(second) },
+    };
+    const store = createProbetestStore({
+      repos: createMemoryRepositories(),
+      content: createContentLoader(modules),
+      now: () => new Date().toISOString(),
+      newId: () => `id-${++lastId}`,
+    });
+    const probetests = { mathe: ['mathe-01', 'mathe-07'], deutsch: [] };
+    const router = createMemoryRouter(
+      [{ path: '/probetest/:id', element: <ProbetestScreen probetests={probetests} /> }],
+      { initialEntries: ['/probetest/mathe-07'] },
+    );
+    render(
+      <ProbetestStoreContext value={store}>
+        <RouterProvider router={router} />
+      </ProbetestStoreContext>,
+    );
+    expect(await screen.findByRole('heading', { name: 'Probetest Mathe 2' })).toBeTruthy();
   });
 });

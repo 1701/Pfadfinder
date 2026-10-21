@@ -48,7 +48,7 @@ export default defineConfig({
     },
     {
       name: 'layout',
-      testMatch: /(layout|karte|formate|lesen)\.spec\.ts/,
+      testMatch: /(layout|karte|formate|lesen|probetest-liste)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: DEV },
     },
     // Measuring sweeps (task 15): only with PFADFINDER_SWEEP=1, so CI and `npm run e2e` never

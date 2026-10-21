@@ -7,7 +7,8 @@
 
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router';
-import type { Bereich, Item } from '../../domain/content';
+import type { Bereich, Fach, Item } from '../../domain/content';
+import { probetestNumber } from '../../domain/content/manifest';
 import {
   isAnswered,
   isFinalMinutes,
@@ -29,12 +30,23 @@ import { ProbetestDurchsehenUebersicht } from './ProbetestDurchsehenUebersicht';
 import { ProbetestLesen } from './ProbetestLesen';
 import { ProbetestUebersicht } from './ProbetestUebersicht';
 
-export function ProbetestScreen() {
+/** probetests: the ids per Fach from the manifest; the start page numbers the test by them. */
+export function ProbetestScreen({
+  probetests,
+}: {
+  probetests?: Readonly<Record<Fach, readonly string[]>>;
+}) {
   const id = useParams().id ?? '';
-  return <Probetest key={id} id={id} />;
+  return <Probetest key={id} id={id} probetests={probetests} />;
 }
 
-function Probetest({ id }: { id: string }) {
+function Probetest({
+  id,
+  probetests,
+}: {
+  id: string;
+  probetests?: Readonly<Record<Fach, readonly string[]>>;
+}) {
   const s = useProbetest((state) => state);
   const { status, context, run, index, intro, reviewOnly } = s;
   const learnerReadAloud = s.learner?.settings.readAloud ?? true;
@@ -85,6 +97,7 @@ function Probetest({ id }: { id: string }) {
     return (
       <ProbetestIntro
         fach={probetest.fach}
+        number={probetestNumber(probetests?.[probetest.fach] ?? [], probetest.id)}
         doneBefore={intro.doneBefore}
         readAloud={learnerReadAloud}
         onStart={() => void s.begin()}

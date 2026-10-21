@@ -5,7 +5,7 @@ import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router';
 import manifest from '../../content/manifest.json';
 import type { ContentManifest } from '../domain/content/manifest';
-import type { Fach } from '../domain/content/taxonomy';
+import { FAECHER, type Fach } from '../domain/content/taxonomy';
 import { practiceableBereicheFromManifest } from '../domain/scheduler/practiceable';
 import { SUPPORTED_FORMATS } from '../ui/formats/supported';
 import { KartenScreen } from '../ui/map/KartenScreen';
@@ -48,6 +48,10 @@ const CheckRoute = lazy(() => import('./check-route').then((m) => ({ default: m.
 const ProbetestRoute = lazy(() =>
   import('./probetest-route').then((m) => ({ default: m.ProbetestRoute })),
 );
+// The Probetests of one Fach (task 16), from the line below the map.
+const ProbetestListeRoute = lazy(() =>
+  import('./probetest-liste-route').then((m) => ({ default: m.ProbetestListeRoute })),
+);
 const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.PrintRoute })));
 
 // The Eltern page (by URL or from the legal pages, never from a child's screen) in its own chunk.
@@ -80,6 +84,11 @@ const ProbetestLaufPage = import.meta.env.DEV
 const TextPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/TextPage').then((m) => ({ default: m.TextPage })))
   : null;
+const ProbetestListePage = import.meta.env.DEV
+  ? lazy(() =>
+      import('../ui/dev/ProbetestListePage').then((m) => ({ default: m.ProbetestListePage })),
+    )
+  : null;
 const ItemPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/ItemPage').then((m) => ({ default: m.ItemPage })))
   : null;
@@ -93,6 +102,14 @@ export function AppRouter() {
           <Route path="/" element={<StartRoute />} />
           <Route path="/ueben/:fach/:bereich" element={<PracticeRoute />} />
           <Route path="/einstieg/:fach" element={<CheckRoute />} />
+          {/* Static, so they win over /probetest/:id; ids always look like mathe-01. */}
+          {FAECHER.map((fach) => (
+            <Route
+              key={fach}
+              path={`/probetest/${fach}`}
+              element={<ProbetestListeRoute fach={fach} />}
+            />
+          ))}
           <Route path="/probetest/:id" element={<ProbetestRoute />} />
           <Route path="/probetest/:id/print" element={<PrintRoute />} />
           <Route path="/eltern" element={<ElternRoute />} />
@@ -104,6 +121,9 @@ export function AppRouter() {
           {KartePage && <Route path="/dev/karte" element={<KartePage />} />}
           {EinstiegPage && <Route path="/dev/einstieg" element={<EinstiegPage />} />}
           {ProbetestPage && <Route path="/dev/probetest" element={<ProbetestPage />} />}
+          {ProbetestListePage && (
+            <Route path="/dev/probetest-liste" element={<ProbetestListePage />} />
+          )}
           {ProbetestLaufPage && (
             <Route path="/dev/probetest-lauf/:id" element={<ProbetestLaufPage />} />
           )}

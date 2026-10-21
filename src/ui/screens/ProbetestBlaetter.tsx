@@ -21,6 +21,7 @@ import {
   SUBMIT_QUESTION,
   TO_MAP,
   UNAVAILABLE,
+  listEntryName,
   openTitle,
   probetestName,
 } from '../text/probetest';
@@ -29,6 +30,8 @@ import { Zeit, type ProbetestZeit } from './ProbetestKopf';
 
 export function ProbetestIntro(props: {
   fach: Fach;
+  /** Position in the manifest ("Probetest Mathe 2", task 16); null: the name of the Fach only. */
+  number: number | null;
   doneBefore: boolean;
   readAloud: boolean;
   onStart(): void;
@@ -41,7 +44,9 @@ export function ProbetestIntro(props: {
           {TO_MAP}
         </Link>
       }
-      title={probetestName(props.fach)}
+      title={
+        props.number === null ? probetestName(props.fach) : listEntryName(props.fach, props.number)
+      }
       text={INTRO_TEXT}
       note={props.doneBefore ? DONE_BEFORE : undefined}
       readAloud={props.readAloud}

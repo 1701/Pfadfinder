@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 16 (1): Seite /probetest/:fach
+- **Gebaut:** `ProbetestListe` unter `/probetest/mathe` und `/probetest/deutsch`: statische Routen vor `/probetest/:id` (lazy Chunk `probetest-liste-route`). Titel `probetestName`, je Probetest ein Eintrag (≥ 64 px, volle Breite) „Probetest Mathe n“ mit Stand, „Zurück“ im Band zur Karte, ohne Probetest der Satz „Hier gibt es noch keinen Probetest.“ Den Stand liefert die Route erst ab (3). Dev-Seite `/dev/probetest-liste?fach=…&stand=keiner|einer|alle&anzahl=0|2|3`.
+- **Entschieden (Markus):** Die Startseite des Probetests heißt `listEntryName(fach, n)` mit n = Position im Manifest (`probetestNumber`), „Zur Karte“ bleibt bei `/`, der Druck-Titel bleibt unverändert.
+- **Gemessen (`probetest-liste.spec`, iPad quer/hoch, Safari quer/hoch; Luft über dem Band bei 3 Einträgen):** 412/668/304/544 px, Einträge 64 px, Stand in jedem Viewport einzeilig neben dem Namen, kein Scrollen, Fallback nicht nötig.
+- **Lokal:** `npm run check` grün (1018 Tests), Chromium-Projekte 39/39, `probetest-liste` 4/4. Screenshots `probetest-liste-*` und `probetest-intro-*` mit Schalter.
+
 ## 2026-10-21 – Content: lesen-sachtext Patch 3 (d-lsa-2-005, Regel 1.0.17)
 - **Eingespielt:** d-lsa-2-005 Prompt 74 → 60 Zeichen („Verbinde jedes Wort mit seiner Bedeutung. Eine bleibt übrig.“), sonst unverändert. `content:validate` 0 Fehler, 0 Warnungen.
 - **Gemessen (iPad quer/hoch, Safari quer/hoch):** antworten 145/144/56/144, richtig 214/206/125/206, noch nicht 105/95/39/95 (Safari quer vorher 37/106/21). Prompt-Zeilen 3/2/2/2: iPad quer 3, weil die Textspalte ab 768 px Höhe 42 % statt 34 % breit ist; Luft dort 105.

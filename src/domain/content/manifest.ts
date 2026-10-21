@@ -57,3 +57,13 @@ export function countItems(entry: BereichManifest, formats: readonly Format[]): 
     return sum + (counts ? counts[1] + counts[2] + counts[3] : 0);
   }, 0);
 }
+
+/**
+ * The number of a Probetest within its Fach: its position in the manifest, from 1 (task 16:
+ * "Probetest Mathe 2" in the list and on the start page, never read from the id). Null for an id
+ * the manifest does not list (dev fixtures).
+ */
+export function probetestNumber(ids: readonly string[], id: string): number | null {
+  const index = ids.indexOf(id);
+  return index < 0 ? null : index + 1;
+}

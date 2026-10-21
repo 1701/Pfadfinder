@@ -5,7 +5,7 @@ import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
 import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
 import { ELTERN_TEXTS } from '../../src/ui/text/eltern';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
-import { PROBETEST_TEXTS } from '../../src/ui/text/probetest';
+import { PROBETEST_TEXTS, doneOn, listEntryName } from '../../src/ui/text/probetest';
 import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
 import { UPDATE_TEXTS } from '../../src/ui/text/update';
 import { keepNumbersTogether, keepNumbersWithWords } from '../../src/ui/text/numbers';
@@ -39,6 +39,14 @@ describe('the Probetest', () => {
       expect(text.split(/[.?]\s/).length).toBeLessThanOrEqual(2);
     },
   );
+});
+
+describe('the Probetest list (task 16)', () => {
+  it('names the n-th Probetest of a Fach and the local day it was done, without the year', () => {
+    expect(listEntryName('mathe', 2)).toBe('Probetest Mathe 2');
+    expect(doneOn('2026-10-21T23:30:00')).toBe('gemacht am 21. Oktober');
+    expect(doneOn('2027-03-01T08:00:00')).toBe('gemacht am 1. März');
+  });
 });
 
 describe('the choice before practice goes on', () => {

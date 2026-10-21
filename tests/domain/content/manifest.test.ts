@@ -4,6 +4,7 @@ import {
   BEREICHE,
   buildContentManifest,
   countItems,
+  probetestNumber,
   type ContentManifest,
   type Item,
   type Probetest,
@@ -80,5 +81,13 @@ describe('content/manifest.json', () => {
         practiceableBereiche(items, formats),
       );
     }
+  });
+});
+
+describe('probetestNumber', () => {
+  it('is the position in the manifest from 1, never read from the id', () => {
+    expect(probetestNumber(['mathe-01', 'mathe-03'], 'mathe-03')).toBe(2);
+    expect(probetestNumber(['mathe-01'], 'mathe-01')).toBe(1);
+    expect(probetestNumber(['mathe-01'], 'deutsch-90')).toBeNull();
   });
 });
