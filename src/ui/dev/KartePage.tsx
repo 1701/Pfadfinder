@@ -36,14 +36,7 @@ export function KartePage() {
           : { count: offerFach ? 0 : 4, goal: 10, reached: false },
       }}
       offer={offerFach && { fach: offerFach, onLater: () => undefined }}
-      probetests={
-        full
-          ? [
-              { fach: 'mathe', id: 'mathe-01' },
-              { fach: 'deutsch', id: 'deutsch-01' },
-            ]
-          : []
-      }
+      probetests={full ? ['mathe', 'deutsch'] : []}
       update={full ? { onReload: () => undefined } : null}
     />
   );

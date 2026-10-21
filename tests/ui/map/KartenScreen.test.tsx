@@ -102,10 +102,10 @@ describe('KartenScreen', () => {
     );
     await screen.findAllByRole('group', { name: 'Karte' });
     const link = screen.getByRole('link', { name: 'Probetest Mathe' });
-    expect(link.getAttribute('href')).toBe('/probetest/mathe-01');
+    expect(link.getAttribute('href')).toBe('/probetest/mathe');
     // deutsch-01 since task 13.
     const deutsch = screen.getByRole('link', { name: 'Probetest Deutsch' });
-    expect(deutsch.getAttribute('href')).toBe('/probetest/deutsch-01');
+    expect(deutsch.getAttribute('href')).toBe('/probetest/deutsch');
   });
 
   it('shows no Probetest line without a Probetest in the manifest', async () => {

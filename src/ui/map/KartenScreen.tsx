@@ -31,10 +31,10 @@ export interface KartenScreenProps {
   update?: AppUpdate;
 }
 
-/** The first Probetest of each Fach that has one. */
-function probetestLines(manifest: ContentManifest): { fach: Fach; id: string }[] {
+/** Each Fach with at least one Probetest; the line links to its list (task 16). */
+function probetestLines(manifest: ContentManifest): Fach[] {
   return (Object.entries(manifest.probetests) as [Fach, string[]][]).flatMap(([fach, ids]) =>
-    ids[0] ? [{ fach, id: ids[0] }] : [],
+    ids.length > 0 ? [fach] : [],
   );
 }
 

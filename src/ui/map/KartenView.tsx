@@ -42,8 +42,8 @@ export interface KartenViewProps {
   progress: { states: Record<Bereich, RegionState>; today: TodayProgress } | null;
   /** The Einstieg offer for one Fach; null when there is none or after "Später". */
   offer?: { fach: Fach; onLater(): void } | null;
-  /** The Probetest each Fach offers (the first in the manifest); none for a Fach without one. */
-  probetests?: readonly { fach: Fach; id: string }[];
+  /** The Fächer with a Probetest; each links to its list (task 16), none for a Fach without one. */
+  probetests?: readonly Fach[];
   readAloud?: boolean;
   /** "Neu laden" in the line below the map, for adults (task 11). */
   update?: AppUpdate;
@@ -103,8 +103,8 @@ export function KartenView({
         {probetests.length > 0 && (
           <QuietLinks
             label="Probetests"
-            links={probetests.map(({ fach, id }) => ({
-              to: `/probetest/${id}`,
+            links={probetests.map((fach) => ({
+              to: `/probetest/${fach}`,
               text: probetestName(fach),
             }))}
           />

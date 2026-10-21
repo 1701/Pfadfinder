@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 16 (2): Fußzeile der Karte zeigt auf die Übersicht
+- **Gebaut:** „Probetest Mathe“ und „Probetest Deutsch“ führen auf `/probetest/mathe` bzw. `/probetest/deutsch` (`KartenView.probetests` sind jetzt die Fächer mit mindestens einem Probetest), Namen und Zeile sind gleich geblieben. `probetest.spec` geht über die Übersicht zur Startseite.
+- **Gemessen (`karte.spec`, kleinster Name ohne „Neu laden“ / mit / `/`):** iPad quer 23,4/23,4/23,4, iPad hoch 21,8/20,5/22,7, Safari quer 19,1/19,1/19,1, Safari hoch 18,4/17,2/19,4 px. Das ist unverändert, die Zeile ist einzeilig (hoch mit „Neu laden“ zwei Zeilen wie beschlossen).
+- **Lokal:** `npm run check` grün, Chromium-Projekte 39/39, `karte` 5/5. Keine Screenshots mit Schalter, weil sich optisch nichts geändert hat.
+
 ## 2026-10-21 – Aufgabe 16 (1): Seite /probetest/:fach
 - **Gebaut:** `ProbetestListe` unter `/probetest/mathe` und `/probetest/deutsch`: statische Routen vor `/probetest/:id` (lazy Chunk `probetest-liste-route`). Titel `probetestName`, je Probetest ein Eintrag (≥ 64 px, volle Breite) „Probetest Mathe n“ mit Stand, „Zurück“ im Band zur Karte, ohne Probetest der Satz „Hier gibt es noch keinen Probetest.“ Den Stand liefert die Route erst ab (3). Dev-Seite `/dev/probetest-liste?fach=…&stand=keiner|einer|alle&anzahl=0|2|3`.
 - **Entschieden (Markus):** Die Startseite des Probetests heißt `listEntryName(fach, n)` mit n = Position im Manifest (`probetestNumber`), „Zur Karte“ bleibt bei `/`, der Druck-Titel bleibt unverändert.

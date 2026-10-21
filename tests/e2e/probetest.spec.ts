@@ -15,8 +15,11 @@ const T0 = new Date('2026-10-15T08:00:00');
 
 async function startProbetest(page: Page) {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Probetest Mathe' }).click();
-  await expect(page.getByRole('heading', { name: 'Probetest Mathe' })).toBeVisible();
+  // The line below the map leads to the list of the Fach (task 16), its first entry to the test.
+  await page.getByRole('link', { name: 'Probetest Mathe', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Probetest Mathe', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: /^Probetest Mathe 1/ }).click();
+  await expect(page.getByRole('heading', { name: 'Probetest Mathe 1' })).toBeVisible();
   await page.getByRole('button', { name: 'Starten' }).click();
   await expect(page.getByText('1 von 24')).toBeVisible();
 }
@@ -117,9 +120,10 @@ test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertun
   await expect(total).toContainText('4 von 24');
 
   await page.getByRole('link', { name: 'Zur Karte' }).click();
-  await expect(page.getByRole('link', { name: 'Probetest Mathe' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Probetest Mathe', exact: true })).toBeVisible();
   // A second run is allowed; the intro remembers the first and offers its result.
-  await page.getByRole('link', { name: 'Probetest Mathe' }).click();
+  await page.getByRole('link', { name: 'Probetest Mathe', exact: true }).click();
+  await page.getByRole('link', { name: /^Probetest Mathe 1/ }).click();
   await expect(page.getByText('Du hast diesen Probetest schon gemacht.')).toBeVisible();
   await page.getByRole('button', { name: 'Auswertung ansehen' }).click();
   await expect(total).toContainText('4 von 24');
