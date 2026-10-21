@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 15 (2): Schema 1.0.17, match neben Text dreiteilig
+- **Entschieden (Markus):** höchstens 3 Paare (plus 1 Distraktor), Kartentexte zusammen ≤ 140, `prompt` ≤ 60 Zeichen; Rückmeldung ohne Grenze (bis 195 gemessen, bindet nicht). 35/52 je Karte bleiben als Umbruchgrenzen ohne Warnung, der 110-Hinweis entfällt.
+- **Doku:** CONTENT_SCHEMA §4.4/§7 und Status 1.0.17, CHANGELOG 1.0.17, ARCHITECTURE §5 (Sweep-Specs, Schalter `PFADFINDER_SWEEP=1`, Durchsehen Safari quer +15 / −20 je nach Prompt-Zeilen), PRODUCT §11 nach MVP: Band im Durchsehen umbauen.
+- **Lokal:** `npm run check` grün. Validator folgt in (3).
+
 ## 2026-10-21 – Aufgabe 15 (1c): Messpunkt Prompt 60 Zeichen
 - **Gebaut:** d-lsa-3-980 (3 Paare, Summe 140, F 195, Prompt 60), dritter Test `-g Prompt` mit Zeilenzahl des Prompts, Ausgabe `sweep-match-prompt.json`.
 - **Gemessen (iPad quer/hoch, Safari quer/hoch):** Üben 87/71/20/71, Aufgabe 277/264/184/252, Durchsehen 108/95/**15**/83, alle Regeln erfüllt, keine Überlappung. Prompt quer in Aufgabe/Durchsehen 2 Zeilen (74 Zeichen: 3, Durchsehen Safari quer −20), im Üben quer 3 (Vorlesen daneben), hoch überall 2.
