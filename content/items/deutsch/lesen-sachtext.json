@@ -487,14 +487,14 @@
       "hint": "Was arbeiten die Feuerwehrleute sonst?"
     },
     "solution": {
-      "model": "Die Feuerwehrleute haben einen anderen Beruf. Bei Alarm kommen sie freiwillig dazu.",
+      "model": "Die Feuerwehrleute haben einen anderen Beruf. Bei Alarm kommen sie dazu.",
       "keyPoints": [
-        "Sie arbeiten nicht hauptberuflich bei der Feuerwehr",
+        "Sie haben einen anderen Beruf",
         "Bei Alarm kommen sie freiwillig dazu"
       ]
     },
     "feedback": {
-      "correct": "Genau: Bäcker, Lehrerin, Mechaniker, und bei Alarm kommen sie dazu.",
+      "correct": "Genau: Sie haben andere Berufe und kommen bei Alarm dazu.",
       "incorrect": "Im 2. Absatz steht, was die Feuerwehrleute sonst arbeiten.",
       "misconception": "„Sie löschen freiwillig“ reicht nicht. Der andere Beruf ist der Kern."
     },

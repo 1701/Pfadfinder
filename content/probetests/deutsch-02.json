@@ -1,0 +1,42 @@
+{
+  "id": "deutsch-02",
+  "fach": "deutsch",
+  "durationMinutes": 45,
+  "itemIds": [
+    "d-lsa-1-004",
+    "d-lsa-1-005",
+    "d-lsa-2-003",
+    "d-lsa-2-004",
+    "d-lsa-3-002",
+    "d-lli-1-001",
+    "d-lli-1-002",
+    "d-lli-2-001",
+    "d-lli-2-002",
+    "d-lli-3-001",
+    "d-rsl-1-001",
+    "d-rss-1-001",
+    "d-rsl-1-003",
+    "d-rss-1-003",
+    "d-rsl-1-005",
+    "d-rss-1-005",
+    "d-rsl-2-003",
+    "d-rss-2-001",
+    "d-rsl-2-006",
+    "d-rss-2-002",
+    "d-rsl-2-008",
+    "d-rss-2-007",
+    "d-rsl-3-004",
+    "d-rss-3-002"
+  ],
+  "niveauMix": {
+    "1": 10,
+    "2": 10,
+    "3": 4
+  },
+  "bereichMix": {
+    "lesen-sachtext": 5,
+    "lesen-literarisch": 5,
+    "rs-laut-buchstabe": 7,
+    "rs-strategien": 7
+  }
+}

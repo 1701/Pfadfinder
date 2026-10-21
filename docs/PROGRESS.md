@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Content: lesen-sachtext Patch 5, deutsch-02 eingespielt
+- **Eingespielt:** d-lsa-3-002 (Musterlösung 83 → 72, Kernpunkte 51/36 → 29/36, correct 67 → 57), danach deutsch-02 (1573,5 s = 26,23 Min.). `content:validate` 0 Fehler, 0 Warnungen.
+- **Gemessen:** d-lsa-3-002 Durchsehen Safari quer −7 → 19 px, Prompt weiter 2 Zeilen. Knappstes deutsch-02 im Durchsehen (iPad quer/hoch, Safari quer/hoch): d-lli-2-002 79, d-lli-1-001 18, d-lsa-2-004 1 (Ausnahme ≥ 0), d-lli-1-001 18. Üben d-lsa-3-002 ≥ 44 px (`text-inhalt`).
+- **Lokal:** `npm run check` grün, `probetest-layout` 6/6 und `text-layout` 8/8 in vier Viewports. `probetest-budget-*` mit Schalter (jetzt mit `promptLines`).
+
 ## 2026-10-21 – Aufgabe 16 Nachlauf (1): Lesen-Patch für deutsch-02, deutsch-02 weiter ausgelassen
 - **Eingespielt:** d-lli-2-002 (Prompt 52 → 43, Elemente 103 → 84 Zeichen), d-lsa-3-002 (Prompt 64 → 53, misconception 73 → 69), d-lsa-2-004 (Prompt 64 → 54). `content:validate` 0 Fehler, 0 Warnungen, auch mit deutsch-02.
 - **Gemessen, Durchsehen Safari quer vorher → nachher:** d-lli-2-002 −29 → 1 (keine Überlappung mehr), d-lsa-3-002 −7 → −7, d-lsa-2-004 1 → 1. Prompt-Zeilen dort jeweils 2 → 2. Hoch wird d-lli-2-002 einzeilig, die beiden anderen bleiben zweizeilig.
