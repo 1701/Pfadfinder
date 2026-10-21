@@ -601,7 +601,7 @@
     "stimulus": {
       "textRef": "t-sach-003"
     },
-    "prompt": "Ordne jedem Wort zu, was es im Text bedeutet. Eine Erklärung bleibt übrig.",
+    "prompt": "Verbinde jedes Wort mit seiner Bedeutung. Eine bleibt übrig.",
     "payload": {
       "left": [
         {

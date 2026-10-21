@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Content: lesen-sachtext Patch 3 (d-lsa-2-005, Regel 1.0.17)
+- **Eingespielt:** d-lsa-2-005 Prompt 74 → 60 Zeichen („Verbinde jedes Wort mit seiner Bedeutung. Eine bleibt übrig.“), sonst unverändert. `content:validate` 0 Fehler, 0 Warnungen.
+- **Gemessen (iPad quer/hoch, Safari quer/hoch):** antworten 145/144/56/144, richtig 214/206/125/206, noch nicht 105/95/39/95 (Safari quer vorher 37/106/21). Prompt-Zeilen 3/2/2/2: iPad quer 3, weil die Textspalte ab 768 px Höhe 42 % statt 34 % breit ist; Luft dort 105.
+- **Entschieden (Markus):** Kürzung in Runde 3 des Einstiegs bleibt im Code.
+- **Lokal:** `npm run check` grün, `text-layout` (echte Lesetexte) 4/4.
+
 ## 2026-10-21 – Content: muster-strukturen Patch 1 (Pilot Tochter)
 - **Eingespielt:** m-ms-2-002 Zahlenmauer als Bild `ms-mauer-1.svg` (400 × 230, Schrift 36 ≥ 28,75), Stimulus ein Satz; m-ms-2-008 misconception nennt 350 und 410; `pilotNote` an beiden, Status `draft`. `content:validate` 0 Fehler, 1 Warnung (d-lsa-2-005, aus 1.0.17, unverändert).
 - **Gemessen (knappste Luft, iPad quer/hoch, Safari quer/hoch; antworten/richtig/noch nicht):** m-ms-2-002 166/189/114/65 (antworten), m-ms-2-008 264/448/156/324; kein Scrollen.
