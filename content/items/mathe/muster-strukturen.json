@@ -474,7 +474,9 @@
     "format": "number-input",
     "status": "draft",
     "stimulus": {
-      "text": "In einer Zahlenmauer steht in jedem Stein die Summe der zwei Steine darunter. Unten stehen 12, 8 und 15."
+      "assetId": "ms-mauer-1",
+      "assetAlt": "Eine Zahlenmauer: unten drei Steine mit 12, 8 und 15, darüber zwei leere Steine, ganz oben ein Stein mit Fragezeichen.",
+      "text": "In jedem Stein steht die Summe der zwei Steine darunter."
     },
     "prompt": "Welche Zahl steht im obersten Stein?",
     "payload": {
@@ -497,7 +499,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-20",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Pilot 21.10. (Tochter): Mauer nur als Text nicht verstanden, 60 s im Kopf ohne Papier. Patch 1: Bild statt Beschreibung."
     }
   },
   {
@@ -783,7 +786,7 @@
     "feedback": {
       "correct": "Richtig! 320, 335, 350, 365, 380, 395 – die sechste Zahl ist 395.",
       "incorrect": "Schreibe die Reihe auf und zähle die Zahlen mit: 320 ist die erste, 335 die zweite. Rechne bis zur sechsten.",
-      "misconception": "Wer 410 schreibt, zählt 6 Schritte von 320 aus. Die 320 ist aber schon die erste Zahl."
+      "misconception": "Wer 350 schreibt, hat nur die nächste Zahl gerechnet – gefragt ist die sechste. Wer 410 schreibt, zählt sechs Schritte, aber 320 ist schon die erste."
     },
     "tags": [
       "zahlenreihe",
@@ -794,7 +797,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-20",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Pilot 21.10. (Tochter): 30 s, zuerst 350 (nächste statt sechste Zahl), Frage nicht ganz gelesen. Patch 1: misconception nennt 350 und 410."
     }
   },
   {

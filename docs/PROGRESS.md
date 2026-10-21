@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Content: muster-strukturen Patch 1 (Pilot Tochter)
+- **Eingespielt:** m-ms-2-002 Zahlenmauer als Bild `ms-mauer-1.svg` (400 × 230, Schrift 36 ≥ 28,75), Stimulus ein Satz; m-ms-2-008 misconception nennt 350 und 410; `pilotNote` an beiden, Status `draft`. `content:validate` 0 Fehler, 1 Warnung (d-lsa-2-005, aus 1.0.17, unverändert).
+- **Gemessen (knappste Luft, iPad quer/hoch, Safari quer/hoch; antworten/richtig/noch nicht):** m-ms-2-002 166/189/114/65 (antworten), m-ms-2-008 264/448/156/324; kein Scrollen.
+- **Lokal:** `npm run check` grün, `layout.spec` 4/4 (vier Viewports).
+
 ## 2026-10-21 – Aufgabe 15 (3): Validator match neben Text (1.0.17)
 - **Gebaut:** `WITH_TEXT.match` = höchstens 3 Paare, 140 Zeichen auf allen Karten, `prompt` 60; drei Warnungen einzeln (Pfade `payload.left`, `payload`, `prompt`), Meldung nennt Ist und Grenze. Warnung je Karte (35/52) entfällt. Test vor dem Umbau rot („left höchstens 35 Zeichen, hier 36“).
 - **content:validate:** 0 Fehler, 1 Warnung: d-lsa-2-005 `prompt` 74 > 60 (nicht gepatcht, Chat-Claude kürzt im nächsten Batch). Luft Üben noch nicht (iPad quer/hoch, Safari quer/hoch) 105/95/21/95, antworten 145/144/37/144.
