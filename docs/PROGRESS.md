@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-21 – Aufgabe 16 Nachlauf (1): Lesen-Patch für deutsch-02, deutsch-02 weiter ausgelassen
+- **Eingespielt:** d-lli-2-002 (Prompt 52 → 43, Elemente 103 → 84 Zeichen), d-lsa-3-002 (Prompt 64 → 53, misconception 73 → 69), d-lsa-2-004 (Prompt 64 → 54). `content:validate` 0 Fehler, 0 Warnungen, auch mit deutsch-02.
+- **Gemessen, Durchsehen Safari quer vorher → nachher:** d-lli-2-002 −29 → 1 (keine Überlappung mehr), d-lsa-3-002 −7 → −7, d-lsa-2-004 1 → 1. Prompt-Zeilen dort jeweils 2 → 2. Hoch wird d-lli-2-002 einzeilig, die beiden anderen bleiben zweizeilig.
+- **Ausgelassen:** deutsch-02 scheitert weiter an d-lsa-3-002 (Regel ≥ 0); Datei draußen, nicht nachgepatcht. Schema 1.0.18 und Validator (Nachlauf 2, 3) entfallen, weil nicht alle drei Items ≥ 18 px haben.
+- **Spec:** `probetest-layout` schreibt die Prompt-Zeilen neben dem Text ins Budget (`deutsch.<id>.promptLines`); `promptLines` liegt jetzt in `helpers.ts` (vorher `sweep-match.spec`).
+- **Lokal:** `npm run check` grün (1023 Tests), Chromium-Projekte 39/39, Layout-Projekt 46/46 in vier Viewports (ohne deutsch-02). Üben (`text-inhalt`) knappste Luft: d-lsa-3-002 „noch nicht“ hoch 18 px. Keine versionierte Datei geändert.
+
 ## 2026-10-21 – Aufgabe 16 (4): mathe-02 eingespielt, deutsch-02 ausgelassen
 - **Eingespielt:** mathe-02 (24 Items, 1550 s = 25,83 Min.). `content:validate` 0 Fehler, 0 Warnungen; mit beiden Dateien ebenfalls 0 Fehler (deutsch-02: 1305 s + Lesezeit 268,5 s = 1573,5 s = 26,23 Min.; laut README ≈ 255 s Lesezeit).
 - **Ausgelassen (Regel nicht geändert):** deutsch-02 scheitert im Durchsehen neben dem Text in Safari quer (Regel ≥ 0, keine Überlappung): d-lli-2-002 (order) −29 px, „Richtig ist“ überlappt „Falle“; d-lsa-3-002 (Kurzantwort) −7 px. Sonst grün (d-lsa-2-004 dort 1 px, d-lli-3-001 19 px).

@@ -149,24 +149,24 @@
     "stimulus": {
       "textRef": "t-lit-001"
     },
-    "prompt": "Bringe in die richtige Reihenfolge, was Jonas macht.",
+    "prompt": "Bringe in die Reihenfolge, was Jonas macht.",
     "payload": {
       "items": [
         {
           "id": "a",
-          "text": "Er grinst über Neles Heft."
+          "text": "Grinsen über das Heft"
         },
         {
           "id": "b",
-          "text": "Er schaut in der Pause weg."
+          "text": "Wegschauen in der Pause"
         },
         {
           "id": "c",
-          "text": "Er schreibt Amir „nett“."
+          "text": "„nett“ an Amir schreiben"
         },
         {
           "id": "d",
-          "text": "Er nimmt den Rucksack weg."
+          "text": "Rucksack wegnehmen"
         }
       ]
     },
@@ -179,7 +179,7 @@
       ]
     },
     "feedback": {
-      "correct": "Richtig! Rucksack, Pause, Heft, Nachricht. Schritt für Schritt wird Jonas freundlicher.",
+      "correct": "Richtig! Rucksack, Pause, Heft, Nachricht. Jonas wird Schritt für Schritt freundlicher.",
       "incorrect": "Geh die Absätze 2 bis 5 der Reihe nach durch.",
       "misconception": "Das Grinsen kommt erst nach der Pause, im 4. Absatz."
     },

@@ -425,7 +425,7 @@
     "stimulus": {
       "textRef": "t-sach-002"
     },
-    "prompt": "Bringe in die richtige Reihenfolge, was nach dem Anruf passiert.",
+    "prompt": "Bringe in die Reihenfolge, was nach dem Anruf passiert.",
     "payload": {
       "items": [
         {
@@ -481,7 +481,7 @@
     "stimulus": {
       "textRef": "t-sach-002"
     },
-    "prompt": "Warum heißt es Freiwillige Feuerwehr? Erkläre mit dem 2. Absatz.",
+    "prompt": "Warum heißt es Freiwillige Feuerwehr? Nutze Absatz 2.",
     "payload": {
       "maxChars": 120,
       "hint": "Was arbeiten die Feuerwehrleute sonst?"
@@ -496,7 +496,7 @@
     "feedback": {
       "correct": "Genau: Bäcker, Lehrerin, Mechaniker, und bei Alarm kommen sie dazu.",
       "incorrect": "Im 2. Absatz steht, was die Feuerwehrleute sonst arbeiten.",
-      "misconception": "Nur „Sie löschen freiwillig“ reicht nicht. Der andere Beruf ist der Kern."
+      "misconception": "„Sie löschen freiwillig“ reicht nicht. Der andere Beruf ist der Kern."
     },
     "tags": [
       "begruenden",

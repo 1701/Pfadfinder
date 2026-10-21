@@ -378,3 +378,22 @@ export function verdictOf(item: ContentItem, correct: boolean): string | null {
   if (item.format === 'short-answer') return null;
   return correct ? 'Richtig.' : 'Noch nicht ganz.';
 }
+
+/** Lines of the prompt on the screen. */
+export async function promptLines(page: Page, prompt: string) {
+  return page.evaluate((prompt) => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if ((n.textContent ?? '').replace(/\u00a0/g, ' ').trim() !== prompt) continue;
+      if (n.parentElement?.closest('.sr-only')) continue;
+      const range = document.createRange();
+      range.selectNodeContents(n);
+      const tops: number[] = [];
+      for (const r of range.getClientRects()) {
+        if (r.width > 0 && !tops.some((t) => Math.abs(t - r.top) < 4)) tops.push(r.top);
+      }
+      return tops.length;
+    }
+    return 0;
+  }, prompt);
+}

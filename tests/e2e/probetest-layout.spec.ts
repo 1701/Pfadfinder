@@ -19,7 +19,15 @@
 
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { ITEMS, SCREENSHOTS, VIEWPORTS, fitMetrics, fitProblems, matchProblems } from './helpers';
+import {
+  ITEMS,
+  SCREENSHOTS,
+  VIEWPORTS,
+  fitMetrics,
+  fitProblems,
+  matchProblems,
+  promptLines,
+} from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
 /** Every Probetest in content (task 16: a new file is measured without touching this spec). */
@@ -187,6 +195,8 @@ for (const viewport of MEASURED) {
     for (const test of DEUTSCH) {
       const deutsch: Record<string, Record<string, number>> = {};
       const deutschMin: Record<string, { id: string; slack: number }> = {};
+      // Lines of the prompt beside a text (task 16 follow-up: the air follows lines, not characters).
+      const promptRows: Record<string, Record<string, number>> = {};
       for (const id of test.itemIds) {
         const item = ITEMS.find((i) => i.id === id)!;
         const withText = item.stimulus?.textRef !== undefined;
@@ -207,12 +217,13 @@ for (const viewport of MEASURED) {
             if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
           }
           (deutsch[id] ??= {})[state] = at;
+          if (withText) (promptRows[id] ??= {})[state] = await promptLines(page, item.prompt);
           if (!deutschMin[state] || at < deutschMin[state].slack)
             deutschMin[state] = { id, slack: at };
         }
         await page.close();
       }
-      deutschReport[test.id] = { slack: deutschMin, items: deutsch };
+      deutschReport[test.id] = { slack: deutschMin, items: deutsch, promptLines: promptRows };
     }
     report.deutsch = deutschReport;
 

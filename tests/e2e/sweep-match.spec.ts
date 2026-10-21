@@ -28,7 +28,7 @@ import {
   SWEEP_PROMPT_MATCH,
   type SweepPoint,
 } from '../fixtures/sweep-match';
-import { VIEWPORTS, fitMetrics, matchProblems } from './helpers';
+import { VIEWPORTS, fitMetrics, matchProblems, promptLines } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
 const RUN = process.env.PFADFINDER_SWEEP === '1' && !process.env.CI;
@@ -86,25 +86,6 @@ async function cardLines(page: Page, left: string[], right: string[]) {
     },
     [left, right],
   );
-}
-
-/** Lines of the prompt on the screen. */
-async function promptLines(page: Page, prompt: string) {
-  return page.evaluate((prompt) => {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-      if ((n.textContent ?? '').replace(/\u00a0/g, ' ').trim() !== prompt) continue;
-      if (n.parentElement?.closest('.sr-only')) continue;
-      const range = document.createRange();
-      range.selectNodeContents(n);
-      const tops: number[] = [];
-      for (const r of range.getClientRects()) {
-        if (r.width > 0 && !tops.some((t) => Math.abs(t - r.top) < 4)) tops.push(r.top);
-      }
-      return tops.length;
-    }
-    return 0;
-  }, prompt);
 }
 
 async function measure(page: Page, item: MatchItem): Promise<Screen> {
