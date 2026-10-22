@@ -1,0 +1,21 @@
+{
+  "id": "t-sach-004",
+  "kind": "sachtext",
+  "title": "Vom Regen zum Wasserhahn",
+  "wordCount": 156,
+  "paragraphs": [
+    "Du drehst den Hahn auf, und sauberes Wasser fließt heraus. Aber woher kommt es? Der Weg beginnt mit dem Regen.",
+    "Regen versickert im Boden. Sand und Kies wirken dabei wie ein Sieb: Sie halten Schmutz zurück. Tief unten sammelt sich das Wasser als Grundwasser. Dieser Weg dauert oft viele Jahre.",
+    "Ein Wasserwerk pumpt das Grundwasser aus Brunnen nach oben. Dort wird es geprüft und noch einmal gereinigt. Erst dann darf man es trinken.",
+    "Vom Wasserwerk fließt das Wasser durch Rohre unter der Straße bis in die Häuser. Viele Orte haben einen Wasserturm. Das Wasser steht dort hoch oben und drückt von selbst nach unten in die Rohre. So kommt es auch im obersten Stockwerk kräftig aus dem Hahn.",
+    "Ein Mensch in Deutschland verbraucht etwa 120 Liter Wasser am Tag. Das meiste davon fließt beim Duschen und in der Toilette. Nur etwa 4 Liter braucht er zum Trinken und Kochen. Wer kürzer duscht, spart also viel Wasser."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lsa-1-008",
+    "d-lsa-1-009",
+    "d-lsa-2-007",
+    "d-lsa-2-008",
+    "d-lsa-3-004"
+  ]
+}

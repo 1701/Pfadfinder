@@ -757,5 +757,240 @@
       "createdAt": "2026-10-18",
       "calibration": "vera3"
     }
+  },
+  {
+    "id": "d-lli-1-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-004"
+    },
+    "prompt": "Von wem hat Elias die Murmel? Lies im 1. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Von seinem Opa"
+        },
+        {
+          "id": "b",
+          "text": "Von Mia"
+        },
+        {
+          "id": "c",
+          "text": "Von seiner Mama"
+        },
+        {
+          "id": "d",
+          "text": "Er hat sie gefunden"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Sein Opa hat sie ihm geschenkt.",
+      "incorrect": "Der zweite Satz im 1. Absatz sagt es genau.",
+      "misconception": "Mia bekommt die Murmel erst beim Tausch. Vorher gehört sie Elias."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-1"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-1-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-004"
+    },
+    "prompt": "Tippe den Satz an, der sagt, wie sich Elias fühlt.",
+    "payload": {
+      "text": "Nach zehn Minuten ist die Batterie leer. Elias denkt an die Murmel. Sein Bauch fühlt sich an wie ein Stein. Mama fragt er lieber nicht.",
+      "unit": "sentence",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        2
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Ein Stein im Bauch, das ist ein schlechtes Gefühl.",
+      "incorrect": "Suche den Satz mit einem Körperteil. Er beschreibt ein Gefühl.",
+      "misconception": "Dass Elias an die Murmel denkt, sagt noch nicht, wie er sich fühlt."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-3",
+      "markieren"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-004"
+    },
+    "prompt": "Bringe in die Reihenfolge, was Elias erlebt.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Mia sagt Nein"
+        },
+        {
+          "id": "b",
+          "text": "Tausch in der Pause"
+        },
+        {
+          "id": "c",
+          "text": "Murmel auf dem Tisch"
+        },
+        {
+          "id": "d",
+          "text": "Batterie leer"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Tausch, leere Batterie, Nein, Murmel zurück.",
+      "incorrect": "Geh die Absätze 2 bis 5 der Reihe nach durch.",
+      "misconception": "Mia sagt erst Nein und gibt die Murmel später doch zurück."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 65,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-2-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-004",
+      "text": "Im 4. Absatz steht: „Getauscht ist getauscht.“"
+    },
+    "prompt": "Was meint Mia damit?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Der Tausch gilt. Sie gibt die Murmel nicht zurück."
+        },
+        {
+          "id": "b",
+          "text": "Sie möchte noch etwas anderes tauschen."
+        },
+        {
+          "id": "c",
+          "text": "Sie hat vergessen, was sie getauscht hat."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Mia will den Tausch nicht rückgängig machen. Jedenfalls jetzt noch nicht.",
+      "incorrect": "Lies den 4. Absatz. Was hat Elias gerade gefragt, und was tut Mia dazu?",
+      "misconception": "Mia schüttelt den Kopf. Das ist ein Nein auf die Frage von Elias."
+    },
+    "tags": [
+      "verknuepfen",
+      "absatz-4",
+      "figur"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lli-3-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-literarisch",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-lit-004"
+    },
+    "prompt": "Warum sagt Mia, die Lampe sei kaputt? Erkläre mit dem Text.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Lies Absatz 5 und 6."
+    },
+    "solution": {
+      "model": "Sie will Elias die Murmel zurückgeben, ohne dass er sich schämen muss.",
+      "keyPoints": [
+        "Sie gibt ihm die Murmel zurück",
+        "Er soll sich nicht schlecht fühlen"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Die Lampe geht noch. Mia erfindet das, damit Elias die Murmel einfach nehmen kann.",
+      "incorrect": "Lies den 6. Absatz. Was weiß Elias über die Lampe? Warum sagt Mia es dann?",
+      "misconception": "Nur „sie ist nett“ reicht nicht. Warum sagt sie etwas, das nicht stimmt?"
+    },
+    "tags": [
+      "deuten",
+      "begruenden",
+      "figur"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
   }
 ]

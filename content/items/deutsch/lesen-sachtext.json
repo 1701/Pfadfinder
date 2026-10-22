@@ -774,5 +774,266 @@
       "createdAt": "2026-10-18",
       "calibration": "vera3"
     }
+  },
+  {
+    "id": "d-lsa-1-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-004"
+    },
+    "prompt": "Wo sammelt sich das Regenwasser? Lies im 2. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Tief unten im Boden"
+        },
+        {
+          "id": "b",
+          "text": "Im Wasserturm"
+        },
+        {
+          "id": "c",
+          "text": "In den Rohren"
+        },
+        {
+          "id": "d",
+          "text": "Im Wasserwerk"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Tief unten im Boden, als Grundwasser.",
+      "incorrect": "Lies den 2. Absatz. Der dritte Satz sagt, wo das Wasser landet.",
+      "misconception": "Wasserturm und Wasserwerk kommen erst später auf dem Weg."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-2"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-1-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-004"
+    },
+    "prompt": "Wie viele Liter Wasser verbraucht ein Mensch am Tag? Lies im 5. Absatz nach.",
+    "payload": {
+      "maxDigits": 3,
+      "unit": "Liter"
+    },
+    "solution": {
+      "value": 120
+    },
+    "feedback": {
+      "correct": "Richtig! Etwa 120 Liter, das sind zwölf volle Eimer.",
+      "incorrect": "Im 5. Absatz stehen zwei Zahlen. Gesucht ist die Zahl für den ganzen Tag.",
+      "misconception": "4 Liter sind nur das Wasser zum Trinken und Kochen."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-5",
+      "zahl"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-004"
+    },
+    "prompt": "Bringe den Weg des Wassers in die Reihenfolge.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Pumpe im Wasserwerk"
+        },
+        {
+          "id": "b",
+          "text": "Regen versickert"
+        },
+        {
+          "id": "c",
+          "text": "Hahn im Haus"
+        },
+        {
+          "id": "d",
+          "text": "Rohre unter der Straße"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "a",
+        "d",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Regen, Wasserwerk, Rohre, Hahn.",
+      "incorrect": "Geh die Absätze 2, 3 und 4 der Reihe nach durch.",
+      "misconception": "Das Wasserwerk kommt vor den Rohren: Erst reinigen, dann verteilen."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-2-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-004"
+    },
+    "prompt": "Verbinde jedes Wort mit seiner Erklärung. Eine bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Grundwasser"
+        },
+        {
+          "id": "l2",
+          "text": "Wasserwerk"
+        },
+        {
+          "id": "l3",
+          "text": "Wasserturm"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Wasser tief unten im Boden"
+        },
+        {
+          "id": "r2",
+          "text": "prüft und reinigt das Wasser"
+        },
+        {
+          "id": "r3",
+          "text": "speichert Wasser hoch oben"
+        },
+        {
+          "id": "r4",
+          "text": "Rohr unter der Straße"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Alle drei Wörter erklärt der Text in den Absätzen 2, 3 und 4.",
+      "incorrect": "Suche jedes Wort im Text. Die Sätze daneben erklären es.",
+      "misconception": "Rohre liegen unter der Straße. Das ist kein Turm und kein Werk."
+    },
+    "tags": [
+      "verknuepfen",
+      "wortbedeutung"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
+  },
+  {
+    "id": "d-lsa-3-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-004"
+    },
+    "prompt": "Lea wohnt im 5. Stock. Warum kommt bei ihr trotzdem Wasser?",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Lies den 4. Absatz."
+    },
+    "solution": {
+      "model": "Der Turm ist höher als ihr Haus. Das Wasser drückt von dort bis zu ihr.",
+      "keyPoints": [
+        "Wasser im Turm steht hoch oben",
+        "Es drückt von selbst nach unten"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Von oben drückt das Wasser nach unten, auch bis in den 5. Stock.",
+      "incorrect": "Lies den 4. Absatz. Wo steht das Wasser im Turm, und was macht es von dort?",
+      "misconception": "Eine Pumpe im Haus steht nicht im Text. Der Turm macht den Druck."
+    },
+    "tags": [
+      "begruenden",
+      "uebertragen",
+      "absatz-4"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-21",
+      "calibration": "vera3"
+    }
   }
 ]

@@ -2,6 +2,12 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Content: Lese-Batch 004 (t-sach-004, t-lit-004), Sweep „Luft je Item“
+- **Eingespielt:** t-sach-004 „Vom Regen zum Wasserhahn“, t-lit-004 „Die Murmel“ und je 5 Items (d-lsa-1-008, 1-009, 2-007, 2-008, 3-004; d-lli-1-007, 1-008, 2-007, 2-008, 3-004), unverändert angehängt. `content:validate` 0 Fehler, 0 Warnungen. Nichts ausgelassen.
+- **Spec:** `tests/e2e/sweep-luft-items.spec.ts` (Projekt `sweep`, `PFADFINDER_SWEEP=1`, IDs in `PFADFINDER_SWEEP_ITEMS`) ersetzt die temporäre Spec aus muster-strukturen Patch 2, die nicht mehr da war; neu geschrieben, m-ms-1-004 liefert alle 12 Werte gleich. `/dev/probetest` zeigt dafür auch Items außerhalb des Probetests (nur Dev, `dist` byte-gleich).
+- **Knappste Luft (Üben / Durchsehen):** d-lsa-1-008 130/194, 1-009 132/198, 2-007 42/1 (Safari quer), 2-008 56/15 (Safari quer), 3-004 44/19 (Safari quer); d-lli-1-007 130/194, 1-008 37/68, 2-007 42/1 (Safari quer), 2-008 74/135, 3-004 44/19 (Safari quer). Durchsehen außerhalb Safari quer überall ≥ 44 px.
+- **Lokal:** `npm run check` grün, `text-layout` („echte Lesetexte“) 4/4, `layout.spec` 4/4 in vier Viewports; beide Lese-Screens ohne Überlauf. Keine Screenshots mit Schalter.
+
 ## 2026-10-22 – Content: muster-strukturen Patch 2, Schema 1.0.18
 - **Eingespielt:** m-ms-1-004, m-ms-2-005, m-ms-1-008: Gleichungen im Stimulus mit „und“ statt Komma, die gesuchte Aufgabe als Frage im Prompt, `readAloud` nachgezogen, Lösungen unverändert. `content:validate` 0 Fehler, 0 Warnungen.
 - **Gemessen (Luft antworten/richtig/noch nicht; iPad quer, hoch, Safari quer, hoch):** m-ms-1-004 280/394/354, 442/628/589, 172/286/246, 318/504/465; m-ms-2-005 280/394/354, 442/628/565, 172/286/246, 318/504/441; m-ms-1-008 392/338/336, 632/552/552, 284/230/228, 508/428/428.
