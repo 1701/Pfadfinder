@@ -1,3 +1,3 @@
-# Not public yet: no search engine may index Pfadfinder until it is released on purpose.
+# Public since 2026-10-22 (docs/DEPLOY.md §6): every search engine may index Pfadfinder.
 User-agent: *
-Disallow: /
+Allow: /

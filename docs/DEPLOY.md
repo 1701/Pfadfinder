@@ -66,7 +66,7 @@ Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem
 
 ## 6. Noch nicht öffentlich
 
-Bis Pfadfinder bewusst veröffentlicht wird, sperrt `public/robots.txt` alle Crawler (`Disallow: /`), und `index.html` trägt `<meta name="robots" content="noindex">`. Beides zusammen entfernen, wenn es so weit ist. Die Angaben in Impressum und Datenschutz (`src/ui/text/rechtliches.ts`) sind seit 2026-10-22 eingetragen. Lighthouse-SEO ist bis dahin niedrig; das ist gewollt und zählt nicht (ARCHITECTURE §8).
+Seit 2026-10-22 ist Pfadfinder für Suchmaschinen freigegeben: `public/robots.txt` erlaubt alles (`Allow: /`), das `noindex` in `index.html` ist entfernt. Eine Sitemap gibt es nicht (eine Seite, eine Adresse). Die Angaben in Impressum und Datenschutz (`src/ui/text/rechtliches.ts`) sind seit 2026-10-22 eingetragen.
 
 Prüfliste vor der Veröffentlichung (Datenschutzerklärung, Aufgabe 10, Markus 2026-10-18):
 

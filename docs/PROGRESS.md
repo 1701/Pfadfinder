@@ -7,6 +7,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **(2)/(3)** Name, Anschrift, E-Mail (mailto, `EmailText`) in Impressum und Datenschutz, keine Marker mehr in `src`; Impressum: „… gehört zu keinem Pfadfinderverband.“ CLAUDE.md: Seiten für Erwachsene von „≤ 2 Sätze“ ausgenommen.
 - **(5)/(11) /eltern:** Premium-Stimme-Hinweis über den Knöpfen; „Sicherung einlesen“ (Datei, `parseImport`, Rückfrage, `importLearnerData`, Karte neu). Eigener Satz bei Schreibfehler: „Das Einlesen hat nicht geklappt. …“. /eltern scrollt weiter nicht (vier Viewports).
 - **(6)** Probetest-Liste: „gemacht“ ohne Datum; Daten und Export unverändert. **(7)** Druck einer Aufgabe mit Lesetext: ganzer Text vor der Aufgabe (`print.css`), Chromium-PDF d-lsa-1-001 und d-lsa-3-004 je 5/5 Absätze. **(8)** `content:validate` nennt je Probetest die Zeit (`formatProbetestTime`), Regeln unverändert.
+- **(10)** Nach grüner CI für (1)–(9): `noindex` aus `index.html` entfernt, `robots.txt` erlaubt alles, keine Sitemap vorhanden.
 - **(9)** Kein Bug: Nach „Später“ ruht das Angebot bis Mitternacht, Deutsch kommt erst, wenn Mathe einen Stand hat (PRODUCT §5.4, `check-offer.ts`).
 - **Lokal:** `npm run check` grün, Chromium-Projekte 39/39, Layout-Projekt in vier Viewports 52 Tests: erster Lauf 50/52 (karte, blatt-layout iPad quer: Seite lud während des Laufs neu, weil ich eine Datei bearbeitet hatte), Wiederholung beider Specs 9/9 grün. Screenshots mit Schalter: eltern-frage, eltern-loeschen, impressum, datenschutz, probetest-liste, so-gehts (neu).
 

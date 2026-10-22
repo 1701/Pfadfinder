@@ -149,7 +149,7 @@ Neue Formate = neue Komponente + Eintrag in Registry + Evaluator in `domain/eval
 - `scripts/validate-content.ts` läuft in CI und als pre-commit; bei Erfolg nennt es je Probetest die geplante Zeit (`probetestTime`/`formatProbetestTime`, z. B. „deutsch-03: 1205 s Items + 246 s Lesezeit = 1451 s (24,18 Min.)“, Mathe mit „+ 0 s Lesezeit“)
 - PWA (seit 2026-10-12, Lighthouse hat keine PWA-Kategorie mehr): installierbar auf dem iPad (manuell bestätigt), Offline-E2E grün
 - Layout-Test (jedes aktive Item × 3 Zustände, short-answer zusätzlich „vergleichen“): lokal in allen vier Viewports, in CI nur in 1024 × 660 und 768 × 900. Ein Viewport misst alle Items und scheitert dann einmal mit der vollständigen Befundliste (seit Aufgabe 7). `formate.spec` spielt je neuem Format ein echtes Item auf `/dev/item/:id?state=spielen` (antworten, Prüfen, Band, Weiter; Ziehen bei match und order) mit Screenshots vor und nach Prüfen in vier Viewports. Der Preview-Server für die Smoke-Flows wird nie wiederverwendet (`reuseExistingServer: false`, Befund 5d). Das sind die engsten (iPad mit Safari-Leisten); was dort ohne Scrollen passt, passt auch auf 1024 × 768 und 768 × 1024. Er wächst mit jedem Batch, vier Viewports hätten die CI-Laufzeit mit jedem Batch weiter verlängert. Die Karte (`karte.spec`) läuft weiter in allen vier
-- Lighthouse gegen die Live-URL, mobil: Performance ≥ 90, Barrierefreiheit 100, Best Practices 100 (SEO zählt nicht, solange `noindex` gilt)
+- Lighthouse gegen die Live-URL, mobil: Performance ≥ 90, Barrierefreiheit 100, Best Practices 100 (SEO zählt seit der Freigabe am 2026-10-22 mit; `noindex` ist entfernt)
 
 ## 9. Erweiterungspunkte (nicht bauen, aber nicht verbauen)
 
