@@ -1,7 +1,9 @@
 // Start page with the map. The manifest is part of the start bundle; progress comes from a lazy
 // loader (IndexedDB), read again every time the page opens, e.g. after a practice session.
 // "Später" is stored the same way, so it holds across reloads until the end of the day. The offer
-// shows only before the day's first Fundstück and at most once a day (mapOffer).
+// shows only before the day's first Fundstück and at most once a day (mapOffer). Until the very
+// first Fundstück the Tagesziel explains them (task 17); without readable storage it does not,
+// as it could never go away.
 
 import { useEffect, useState } from 'react';
 import type { ContentManifest } from '../../domain/content/manifest';
@@ -17,6 +19,8 @@ export interface MapProgressSource {
   mastery: MasteryState[];
   unlocked: string[];
   today: TodayProgress;
+  /** A Fundstück on any day (practice or Fehlerkiste). */
+  foundAny: boolean;
   /** Today's Einstieg offer is spent ("Später" or a finished Einstieg). */
   offerSpent: boolean;
 }
@@ -42,6 +46,7 @@ const EMPTY: MapProgressSource = {
   mastery: [],
   unlocked: [],
   today: { count: 0, goal: DAILY_GOAL, reached: false },
+  foundAny: true,
   offerSpent: false,
 };
 
@@ -60,9 +65,16 @@ export function KartenScreen({
   useEffect(() => {
     let active = true;
     // Without readable storage the Einstieg could not be kept, so it is not offered.
-    const show = ({ mastery, unlocked, today, offerSpent }: MapProgressSource, stored = true) => {
+    const show = (
+      { mastery, unlocked, today, foundAny, offerSpent }: MapProgressSource,
+      stored = true,
+    ) => {
       if (!active) return;
-      setProgress({ states: mapRegionState(manifest, mastery, unlocked, formats), today });
+      setProgress({
+        states: mapRegionState(manifest, mastery, unlocked, formats),
+        today,
+        firstHint: !foundAny,
+      });
       setResting(offerSpent);
       setOfferFach(
         stored

@@ -13,6 +13,7 @@ import { BEREICHE, type Bereich } from '../../../src/domain/content/taxonomy';
 import type { RegionState } from '../../../src/domain/progress';
 import { KartenScreen, type MapProgressSource } from '../../../src/ui/map/KartenScreen';
 import { KartenView } from '../../../src/ui/map/KartenView';
+import { FUNDSTUECK_HINWEIS } from '../../../src/ui/map/Tagesziel';
 import { SUPPORTED_FORMATS } from '../../../src/ui/formats/supported';
 import { masteryFor } from '../../fixtures/pool';
 
@@ -20,6 +21,7 @@ const NEW: MapProgressSource = {
   mastery: [],
   unlocked: [],
   today: { count: 0, goal: 10, reached: false },
+  foundAny: false,
   offerSpent: false,
 };
 
@@ -115,12 +117,16 @@ describe('Einstieg offer on the map', () => {
   });
 
   it('never replaces the Tagesziel line: no offer once today has a Fundstück', async () => {
-    const first = renderScreen({ ...NEW, today: { count: 3, goal: 10, reached: false } });
+    const first = renderScreen({
+      ...NEW,
+      today: { count: 3, goal: 10, reached: false },
+      foundAny: true,
+    });
     expect(await screen.findByText('Heute: 3 von 10 Fundstücken')).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
     first.unmount();
 
-    renderScreen({ ...NEW, today: { count: 10, goal: 10, reached: true } });
+    renderScreen({ ...NEW, today: { count: 10, goal: 10, reached: true }, foundAny: true });
     expect(await screen.findByText(/10 von 10/)).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Erkunden' })).toBeNull();
   });
@@ -163,6 +169,68 @@ describe('Einstieg offer on the map', () => {
     expect(screen.queryByRole('heading', { name: /^Unerforscht: / })).toBeNull();
   });
 
+  describe('before the very first Fundstück (task 17)', () => {
+    const answer = (repos: Repositories, id: string, mode: 'check' | 'practice', at: string) =>
+      repos.attempts.put({
+        id,
+        learnerId: 'learner-1',
+        itemId: 'm-zo-1-001',
+        fach: 'mathe',
+        bereich: 'zahlen-operationen',
+        niveau: 1,
+        format: 'number-input',
+        correct: false,
+        answer: { value: 1 },
+        durationMs: 1000,
+        mode,
+        at,
+      });
+    const dashes = () => document.querySelector('header ol');
+
+    it('says what Fundstücke are for once the Tagesziel shows, until the first one', async () => {
+      const repos = createMemoryRepositories();
+      // 10:00 in Berlin (UTC+2). The offer comes first: no Tagesziel, so no sentence.
+      let now = '2026-10-14T08:00:00.000Z';
+      const first = renderStored(repos, () => now);
+      await userEvent.click(await screen.findByRole('button', { name: 'Später' }));
+      expect(screen.getByText(FUNDSTUECK_HINWEIS)).toBeTruthy();
+      expect(dashes()).toBeNull();
+      first.unmount();
+
+      // An Einstieg the next day: its answers are no Fundstücke, the sentence stays.
+      await repos.learners.put({
+        id: 'learner-1',
+        createdAt: now,
+        settings: { readAloud: true, bundesland: 'BW' },
+      });
+      await repos.mastery.put(masteryFor('daten-zufall', 1));
+      await repos.mastery.put(masteryFor('rs-strategien', 1, 'deutsch'));
+      now = '2026-10-15T08:00:00.000Z';
+      await answer(repos, 'c1', 'check', now);
+      const second = renderStored(repos, () => now);
+      expect(await screen.findByText(FUNDSTUECK_HINWEIS)).toBeTruthy();
+      second.unmount();
+
+      // One practice answer, right or not: gone, also when the map is read again the next day.
+      await answer(repos, 'p1', 'practice', '2026-10-15T08:05:00.000Z');
+      const third = renderStored(repos, () => now);
+      expect(await screen.findByText('Heute: 1 von 10 Fundstücken')).toBeTruthy();
+      expect(screen.queryByText(FUNDSTUECK_HINWEIS)).toBeNull();
+      expect(dashes()).not.toBeNull();
+      third.unmount();
+      now = '2026-10-16T08:00:00.000Z';
+      renderStored(repos, () => now);
+      expect(await screen.findByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
+      expect(screen.queryByText(FUNDSTUECK_HINWEIS)).toBeNull();
+    });
+
+    it('stays away while the offer is the title', async () => {
+      renderScreen();
+      await screen.findByRole('heading', { name: 'Unerforscht: Mathe' });
+      expect(screen.queryByText(FUNDSTUECK_HINWEIS)).toBeNull();
+    });
+  });
+
   describe('Vorlesen', () => {
     afterEach(() => vi.unstubAllGlobals());
 
@@ -191,6 +259,24 @@ describe('Einstieg offer on the map', () => {
       await screen.findByRole('heading', { name: 'Unerforscht: Mathe' });
       expect(await spoken(synth)).toMatch(
         /^Unerforscht: Mathe\. Tippe auf Erkunden, oder wähle gleich ein Gebiet: Zahlen und Rechnen, .*Schreibtricks\.$/,
+      );
+    });
+
+    it('reads the sentence after the Tagesziel before the very first Fundstück', async () => {
+      const synth = installSpeech();
+      renderScreen({ ...NEW, offerSpent: true });
+      await screen.findByText(FUNDSTUECK_HINWEIS);
+      expect(await spoken(synth)).toMatch(
+        /^Wohin geht’s heute\? Heute: 0 von 10 Fundstücken\. Jede Aufgabe, die du übst, bringt dir ein Fundstück\. Du kannst wählen: Zahlen und Rechnen, .*\.$/,
+      );
+    });
+
+    it('reads the Tagesziel as a sentence of its own once there was a Fundstück', async () => {
+      const synth = installSpeech();
+      renderScreen({ ...NEW, offerSpent: true, foundAny: true });
+      await screen.findByText('Heute: 0 von 10 Fundstücken');
+      expect(await spoken(synth)).toMatch(
+        /^Wohin geht’s heute\? Heute: 0 von 10 Fundstücken\. Du kannst wählen: /,
       );
     });
 

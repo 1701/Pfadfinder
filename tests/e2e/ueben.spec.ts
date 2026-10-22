@@ -2,7 +2,15 @@
 // Reload (IndexedDB) and offline use. Screenshots in both iPad formats (Chromium projects).
 
 import { expect, test, type Page } from '@playwright/test';
-import { SCREENSHOTS, answer, check, currentItem, expectFitsScreen, verdictOf } from './helpers';
+import {
+  SCREENSHOTS,
+  answer,
+  check,
+  currentItem,
+  expectFirstHint,
+  expectFitsScreen,
+  verdictOf,
+} from './helpers';
 
 const viewportName = (page: Page) =>
   page.viewportSize()!.width > page.viewportSize()!.height ? 'ipad-landscape' : 'ipad-portrait';
@@ -37,7 +45,7 @@ test('Karte → Gebiet → 10 Items mit Neuladen → zurück: Tagesziel 10 von 1
   await expect(page.getByRole('heading', { name: 'Wohin geht’s heute?' })).toBeVisible();
   // A new learner is offered the Einstieg first; "Später" brings back the Tagesziel.
   await page.getByRole('button', { name: 'Später' }).click();
-  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  await expectFirstHint(page);
   await shot(page, 'start');
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
 

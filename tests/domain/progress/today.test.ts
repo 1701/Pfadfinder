@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { AttemptMode } from '../../../src/domain/learner';
 import type { Session } from '../../../src/domain/learner';
-import { DAILY_GOAL, practiceDay, todayProgress } from '../../../src/domain/progress';
+import {
+  DAILY_GOAL,
+  hasFundstueck,
+  practiceDay,
+  todayProgress,
+} from '../../../src/domain/progress';
 
 const at = (time: string, mode: AttemptMode = 'practice') => ({ at: time, mode });
 const times = (n: number, start: string) =>
@@ -42,6 +47,23 @@ describe('todayProgress (Europe/Berlin in tests)', () => {
       goal: 10,
       reached: false,
     });
+  });
+});
+
+describe('hasFundstueck (task 17: the map explains them until the first)', () => {
+  it('is false without any answer', () => {
+    expect(hasFundstueck([])).toBe(false);
+  });
+
+  it('is false with Einstiegscheck and Probetest answers only: they are measurements', () => {
+    expect(hasFundstueck([{ mode: 'check' }, { mode: 'check' }, { mode: 'probetest' }])).toBe(
+      false,
+    );
+  });
+
+  it('is true with one practice answer or one Fehlerkiste answer, on any day', () => {
+    expect(hasFundstueck([{ mode: 'check' }, at('2026-09-01T08:00:00.000Z')])).toBe(true);
+    expect(hasFundstueck([at('2026-09-01T08:00:00.000Z', 'review')])).toBe(true);
   });
 });
 

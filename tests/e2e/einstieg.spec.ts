@@ -5,7 +5,7 @@
 
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { answer, currentItem } from './helpers';
+import { answer, currentItem, expectFirstHint } from './helpers';
 
 const OFFER = 'Unerforscht: Mathe';
 const OFFER_DEUTSCH = 'Unerforscht: Deutsch';
@@ -87,8 +87,8 @@ test('Karte → Los → Einstieg ohne Rückmeldung → Ergebnis → Karte mit St
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 3' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Formen und Raum, Niveau 1' })).toBeVisible();
-  // The check is no Fundstück.
-  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  // The check is no Fundstück: the map still says what they are for.
+  await expectFirstHint(page);
   await expect(page.getByRole('heading', { name: ANY_OFFER })).toHaveCount(0);
   await page.reload();
   await expect(page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 3' })).toBeVisible();
@@ -146,7 +146,7 @@ test('Später: das Angebot ruht bis zum Ende des Tages, auch nach Neuladen', asy
   await page.goto('/');
   await page.getByRole('button', { name: 'Später' }).click();
   await expect(page.getByRole('heading', { name: MAP_TITLE })).toBeVisible();
-  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  await expectFirstHint(page);
   // Into a Gebiet and back within the app: still resting.
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   await page.getByRole('link', { name: 'Pause' }).click();
@@ -154,7 +154,7 @@ test('Später: das Angebot ruht bis zum Ende des Tages, auch nach Neuladen', asy
   // A new start of the app the same evening: still resting.
   await page.clock.setFixedTime(new Date('2026-10-14T21:30:00'));
   await page.reload();
-  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  await expectFirstHint(page);
   await expect(page.getByRole('heading', { name: OFFER })).toHaveCount(0);
   // The next morning the offer is back.
   await page.clock.setFixedTime(new Date('2026-10-15T08:00:00'));

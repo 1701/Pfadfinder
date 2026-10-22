@@ -167,6 +167,7 @@ describe('ElternScreen', () => {
       mastery: [],
       unlocked: [],
       today: { count: 0, goal: 10, reached: false },
+      foundAny: false,
       offerSpent: false,
     });
   });
@@ -268,6 +269,7 @@ describe('ElternScreen', () => {
       const { repos: source, text } = await backupOfPlayedDevice();
       const target = createMemoryRepositories();
       await target.postponedOffers.put({ fach: 'mathe', at: now });
+      expect((await loadMapProgress(target, now)).foundAny).toBe(false);
       const onImported = renderOn(target);
       await passGate();
       await upload(text);
@@ -283,6 +285,8 @@ describe('ElternScreen', () => {
         (await loadMapProgress(source, now)).mastery,
       );
       expect((await loadMapProgress(target, now)).mastery).toHaveLength(1);
+      // The backup's practice answer is a Fundstück: the map's first hint is gone.
+      expect((await loadMapProgress(target, now)).foundAny).toBe(true);
     });
 
     it('"Abbrechen" changes nothing', async () => {

@@ -4,7 +4,7 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
 import { EXPORT_VERSION, parseImport } from '../../src/domain/learner';
-import { answer, check, currentItem } from './helpers';
+import { answer, check, currentItem, expectFirstHint } from './helpers';
 
 const OFFER = 'Unerforscht: Mathe';
 
@@ -53,7 +53,7 @@ test('Üben → /eltern → alles löschen → Karte mit Angebot', async ({ page
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole('button', { name: 'Später' }).click();
-  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toBeVisible();
+  await expectFirstHint(page);
   // Practice starts fresh, without the old round.
   await page.getByRole('link', { name: 'Zahlen und Rechnen, Niveau 1' }).click();
   await expect(page.getByText('1 von 10')).toBeVisible();

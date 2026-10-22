@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Aufgabe 17: Satz vor dem ersten Fundstück
+- **Befund (iPad):** Das Kind verstand die Striche, nicht ihren Sinn. Bis zum allerersten Fundstück steht im Tagesziel „Jede Aufgabe, die du übst, bringt dir ein Fundstück.“ (Wortlaut Markus) in Tinte. Quer an Stelle der leeren Wegstriche über „Heute …“, hoch in einer Zeile an Stelle von Strichen und „Heute …“.
+- **Mechanik:** Fundstück = `practice`- oder `review`-Attempt (`isFundstueck`, auch in `todayProgress`). `hasFundstueck` → `MapProgress.foundAny` aus den ohnehin gelesenen Attempts, kein Dexie-Feld, kein Store-Status. Check und Probetest zählen nicht.
+- **Entscheidungen (Markus):** Variante C, normale Tinte, ein Satz. Kein Satz, solange das Angebot steht oder der Speicher nicht lesbar ist. Vorlesen über den Titel-Knopf, neu mit Punkt nach „Heute: n von 10 Fundstücken“. Dev: `/dev/karte?erstes` (auch mit `&neu`).
+- **Gemessen (Prototyp):** Ein Zweizeiler unter dem Tagesziel oder statt der Striche auch hoch drückte die Namen in Safari hoch auf 16,8 bzw. 17,8 px, mit „Neu laden“ auf 15,6 bzw. 16,5 px. C lässt in allen vier Viewports Namen, Gebiete und Kopfhöhe gleich (karte.spec prüft das).
+- **Tests:** domain (0 Attempts, nur Check/Probetest, practice, review), map-progress, Import einer Sicherung (ElternScreen), Karte mit Testing-Library inkl. Vorlesen. In karte.spec `?erstes`, `?erstes&neu` und `/` nach „Später“, im Budget-JSON jetzt Kopf- und Kartenhöhe und Luft. In einstieg-, eltern- und ueben.spec heißt es `expectFirstHint` statt „Heute: 0 von 10“ sichtbar.
+- **Lokal:** `npm run check` grün (1065 Tests), Chromium-Projekte 39/39, Layout-Projekt 52/52 (43,2 Min., die layout.spec läuft ~10,5 Min. je Viewport nacheinander in einem Worker). Screenshots mit Schalter: karte-erstes (4, neu), start (2), karte-budget (4).
+
 ## 2026-10-22 – Chore: CI je Push ~3 Min., Layout-Projekt lokal statt in CI
 - **Diagnose:** 43–52 Min. je Push. Das Layout-Projekt brauchte 37 Min. davon (layout.spec ~19, probetest-layout.spec ~11). Install und Build < 1,5 Min. Das Repo ist privat: 2-vCPU-Runner, Playwright mit 1 Worker.
 - **`ci.yml`:** Bei jedem Push laufen drei parallele Jobs: check, Chromium-Smoke, WebKit-Smoke. Die Scope-Logik ist entfernt. **`layout.yml`:** nur das Layout-Projekt und nur von Hand. Der nächtliche Lauf ist ausgesetzt, solange das Repo privat ist.

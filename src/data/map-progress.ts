@@ -1,10 +1,12 @@
 // What the map needs from the device's storage: mastery per Gebiet, Entdeckungen, today's
-// Fundstücke and whether today's Einstieg offer is spent ("Später" or a finished Einstieg).
+// Fundstücke, whether there ever was one, and whether today's Einstieg offer is spent ("Später"
+// or a finished Einstieg).
 // Reading creates nothing; "Später" is the only thing the map writes.
 
 import type { Fach } from '../domain/content/taxonomy';
 import type { MasteryState } from '../domain/mastery/mastery';
 import {
+  hasFundstueck,
   offerSpentToday,
   practiceDay,
   todayProgress,
@@ -17,6 +19,8 @@ export interface MapProgress {
   /** Entdeckungen (Collectibles.unlocked). */
   unlocked: string[];
   today: TodayProgress;
+  /** A Fundstück on any day: from the same attempts as the Tagesziel, nothing stored for it. */
+  foundAny: boolean;
   /** Today's offer is spent (or on the day of a round still running): no other Fach today. */
   offerSpent: boolean;
 }
@@ -29,6 +33,7 @@ export async function loadMapProgress(repos: Repositories, now: string): Promise
       mastery: [],
       unlocked: [],
       today: todayProgress([], now),
+      foundAny: false,
       offerSpent: offerSpentToday({ offers, now }),
     };
   }
@@ -44,6 +49,7 @@ export async function loadMapProgress(repos: Repositories, now: string): Promise
     mastery,
     unlocked: collectibles?.unlocked ?? [],
     today: todayProgress(attempts, day, sessions),
+    foundAny: hasFundstueck(attempts),
     offerSpent: offerSpentToday({ offers, sessions, now, day }),
   };
 }

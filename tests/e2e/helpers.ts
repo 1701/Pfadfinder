@@ -44,6 +44,18 @@ export const ITEMS: ContentItem[] = readdirSync('content/items', { recursive: tr
 
 export { SCREENSHOTS } from './output-dir';
 
+/** The sentence in the map's Tagesziel before the very first Fundstück (task 17). */
+export const FUNDSTUECK_HINWEIS = 'Jede Aufgabe, die du übst, bringt dir ein Fundstück.';
+
+/**
+ * The map with no Fundstück on any day yet: the sentence shows. "Heute: 0 von 10 Fundstücken" is
+ * there too, visible in landscape only (in portrait the sentence takes its place).
+ */
+export async function expectFirstHint(page: Page) {
+  await expect(page.getByText(FUNDSTUECK_HINWEIS)).toBeVisible();
+  await expect(page.getByText('Heute: 0 von 10 Fundstücken')).toHaveCount(1);
+}
+
 /** The four viewports: iPad, and the same iPad in Safari with its bars (the tightest). */
 export const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },

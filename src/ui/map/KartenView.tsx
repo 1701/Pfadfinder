@@ -33,13 +33,18 @@ import { BEREICH_NAME } from '../text/bereiche';
 import { probetestName } from '../text/probetest';
 import { OFFER_GO, OFFER_LATER, offerSpeech, offerTitle } from '../text/einstieg';
 import { Karte } from './Karte';
-import { Tagesziel, tageszielText } from './Tagesziel';
+import { FUNDSTUECK_HINWEIS, Tagesziel, tageszielText } from './Tagesziel';
 
 export const KARTEN_TITLE = 'Wohin geht’s heute?';
 
 export interface KartenViewProps {
   /** Null while the progress is being read: the title shows, the map follows at once. */
-  progress: { states: Record<Bereich, RegionState>; today: TodayProgress } | null;
+  progress: {
+    states: Record<Bereich, RegionState>;
+    today: TodayProgress;
+    /** No Fundstück on any day yet (task 17): the Tagesziel says what they are for. */
+    firstHint?: boolean;
+  } | null;
   /** The Einstieg offer for one Fach; null when there is none or after "Später". */
   offer?: { fach: Fach; onLater(): void } | null;
   /** The Fächer with a Probetest; each links to its list (task 16), none for a Fach without one. */
@@ -53,9 +58,11 @@ function speech(progress: NonNullable<KartenViewProps['progress']>, offered: Fac
   const open = BEREICHE.filter((b) => progress.states[b].kind !== 'unerforscht');
   const names = open.map((b) => BEREICH_NAME[b]);
   if (offered) return offerSpeech(offered, names);
+  const today = tageszielText(progress.today);
   return [
     KARTEN_TITLE,
-    tageszielText(progress.today),
+    today.endsWith('.') ? today : `${today}.`,
+    progress.firstHint ? FUNDSTUECK_HINWEIS : '',
     open.length > 0 ? `Du kannst wählen: ${names.join(', ')}.` : '',
   ]
     .filter(Boolean)
@@ -95,7 +102,7 @@ export function KartenView({
             <h1 className="text-display font-bold">{KARTEN_TITLE}</h1>
           </div>
         )}
-        {progress && !offer && <Tagesziel {...progress.today} />}
+        {progress && !offer && <Tagesziel {...progress.today} firstHint={progress.firstHint} />}
       </header>
       <div className="min-h-0">{progress && <Karte states={progress.states} />}</div>
       {/* Reserved line: in landscape the map does not jump when "Neu laden" appears. */}

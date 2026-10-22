@@ -1,17 +1,54 @@
 {
   "/dev/karte": {
     "smallestName": 21.8,
+    "smallestTarget": 163,
     "lineRows": 1,
-    "lineHeight": 48
+    "lineHeight": 48,
+    "headerHeight": 120,
+    "mapHeight": 816,
+    "air": 12
   },
   "/dev/karte?neu": {
     "smallestName": 20.5,
+    "smallestTarget": 154,
     "lineRows": 2,
-    "lineHeight": 96
+    "lineHeight": 96,
+    "headerHeight": 120,
+    "mapHeight": 768,
+    "air": 12
+  },
+  "/dev/karte?erstes": {
+    "smallestName": 21.8,
+    "smallestTarget": 163,
+    "lineRows": 1,
+    "lineHeight": 48,
+    "headerHeight": 120,
+    "mapHeight": 816,
+    "air": 12
+  },
+  "/dev/karte?erstes&neu": {
+    "smallestName": 20.5,
+    "smallestTarget": 154,
+    "lineRows": 2,
+    "lineHeight": 96,
+    "headerHeight": 120,
+    "mapHeight": 768,
+    "air": 12
   },
   "/": {
     "smallestName": 22.7,
+    "smallestTarget": 161,
     "lineRows": 1,
-    "lineHeight": 48
+    "lineHeight": 48,
+    "headerHeight": 86,
+    "mapHeight": 850,
+    "air": 12
+  },
+  "/ nach Später": {
+    "smallestName": 21.8,
+    "smallestTarget": 154,
+    "headerHeight": 120,
+    "mapHeight": 816,
+    "air": 12
   }
 }

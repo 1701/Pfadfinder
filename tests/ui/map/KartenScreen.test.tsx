@@ -39,6 +39,7 @@ describe('KartenScreen', () => {
       mastery: [masteryFor('zahlen-operationen', 2), masteryFor('rs-strategien', 1, 'deutsch')],
       unlocked: ['zahlen-operationen:1'],
       today: { count: 3, goal: 10, reached: false },
+      foundAny: true,
       offerSpent: false,
     });
     const map = (await screen.findAllByRole('group', { name: 'Karte' }))[0]!;
@@ -89,6 +90,8 @@ describe('KartenScreen', () => {
     const map = (await screen.findAllByRole('group', { name: 'Karte' }))[0]!;
     expect(within(map).getAllByRole('link')).toHaveLength(OPEN_BEREICHE.length);
     expect(screen.getByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
+    // Nothing could be stored, so the sentence before the first Fundstück would never go.
+    expect(screen.queryByText(/bringt dir ein Fundstück/)).toBeNull();
   });
 
   it('offers the Probetest of each Fach in the manifest as a line below the map', async () => {
@@ -97,6 +100,7 @@ describe('KartenScreen', () => {
         mastery: [],
         unlocked: [],
         today: { count: 0, goal: 10, reached: false },
+        foundAny: false,
         offerSpent: false,
       }),
     );
@@ -120,6 +124,7 @@ describe('KartenScreen', () => {
               mastery: [],
               unlocked: [],
               today: { count: 0, goal: 10, reached: false },
+              foundAny: false,
               offerSpent: false,
             })
           }

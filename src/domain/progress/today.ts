@@ -46,6 +46,17 @@ export function practiceDay(
   return running[0]?.startedAt ?? now;
 }
 
+/** A Fundstück is an answer in practice or in the Fehlerkiste; Einstiegscheck and Probetest
+ * are measurements. */
+export function isFundstueck(attempt: Pick<Attempt, 'mode'>): boolean {
+  return attempt.mode === 'practice' || attempt.mode === 'review';
+}
+
+/** At least one Fundstück ever, on any day (task 17: until then the map explains them). */
+export function hasFundstueck(attempts: readonly Pick<Attempt, 'mode'>[]): boolean {
+  return attempts.some(isFundstueck);
+}
+
 /**
  * Practice and Fehlerkiste answers of the local calendar day of `day`. An answer of a practice
  * round counts for the day the round began; one without a known round for its own time.
@@ -63,8 +74,7 @@ export function todayProgress(
   );
   const found = attempts.filter(
     (a) =>
-      (a.mode === 'practice' || a.mode === 'review') &&
-      isSameLocalDay((a.id !== undefined && roundStart.get(a.id)) || a.at, day),
+      isFundstueck(a) && isSameLocalDay((a.id !== undefined && roundStart.get(a.id)) || a.at, day),
   ).length;
   const count = Math.min(found, DAILY_GOAL);
   return { count, goal: DAILY_GOAL, reached: count >= DAILY_GOAL };

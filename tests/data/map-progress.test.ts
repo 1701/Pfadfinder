@@ -10,6 +10,7 @@ describe('loadMapProgress', () => {
       mastery: [],
       unlocked: [],
       today: { count: 0, goal: 10, reached: false },
+      foundAny: false,
       offerSpent: false,
     });
     expect(await repos.learners.list()).toEqual([]);
@@ -45,7 +46,43 @@ describe('loadMapProgress', () => {
       mastery: [zo],
       unlocked: ['zahlen-operationen:1'],
       today: { count: 1, goal: 10, reached: false },
+      foundAny: true,
       offerSpent: false,
+    });
+  });
+
+  it('knows whether there ever was a Fundstück: Einstiegscheck answers are none', async () => {
+    const repos = createMemoryRepositories();
+    await repos.learners.put({
+      id: 'learner-1',
+      createdAt: '2026-10-11T08:00:00.000Z',
+      settings: { readAloud: true, bundesland: 'BW' },
+    });
+    const attempt = (id: string, mode: 'check' | 'practice', at: string) =>
+      repos.attempts.put({
+        id,
+        learnerId: 'learner-1',
+        itemId: 'm-zo-1-001',
+        fach: 'mathe',
+        bereich: 'zahlen-operationen',
+        niveau: 1,
+        format: 'number-input',
+        correct: true,
+        answer: { value: 1 },
+        durationMs: 1000,
+        mode,
+        at,
+      });
+    const foundAny = async () =>
+      (await loadMapProgress(repos, '2026-10-12T08:00:00.000Z')).foundAny;
+    await attempt('c1', 'check', '2026-10-12T07:00:00.000Z');
+    await attempt('c2', 'check', '2026-10-12T07:01:00.000Z');
+    expect(await foundAny()).toBe(false);
+    // One practice answer days ago: today has none, but the map has nothing left to explain.
+    await attempt('p1', 'practice', '2026-10-01T07:00:00.000Z');
+    expect(await loadMapProgress(repos, '2026-10-12T08:00:00.000Z')).toMatchObject({
+      today: { count: 0 },
+      foundAny: true,
     });
   });
 

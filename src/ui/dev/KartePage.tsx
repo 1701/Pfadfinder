@@ -1,7 +1,8 @@
 // Developer preview of the map with every state at once (dev build only): /dev/karte.
 // Used by tests/e2e/karte.spec.ts for the layout check and the screenshots; ?neu fills the
 // line below the map (both Probetests, new version, Impressum · Datenschutz); ?angebot=deutsch shows
-// the Einstieg offer of Deutsch (the longer title) with no Fundstück yet.
+// the Einstieg offer of Deutsch (the longer title) with no Fundstück yet; ?erstes the map before
+// the very first Fundstück, with its sentence in place of the dashes (task 17, also with ?neu).
 
 import { BEREICHE, type Bereich, type Fach } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
@@ -25,6 +26,7 @@ export function KartePage() {
   const search = new URLSearchParams(window.location.search);
   const reached = search.has('geschafft');
   const full = search.has('neu');
+  const erstes = search.has('erstes');
   const angebot = search.get('angebot');
   const offerFach: Fach | null = angebot === 'deutsch' || angebot === 'mathe' ? angebot : null;
   return (
@@ -33,7 +35,8 @@ export function KartePage() {
         states: Object.fromEntries(BEREICHE.map((b) => [b, DEMO[b]])) as typeof DEMO,
         today: reached
           ? { count: 10, goal: 10, reached: true }
-          : { count: offerFach ? 0 : 4, goal: 10, reached: false },
+          : { count: offerFach || erstes ? 0 : 4, goal: 10, reached: false },
+        firstHint: erstes,
       }}
       offer={offerFach && { fach: offerFach, onLater: () => undefined }}
       probetests={full ? ['mathe', 'deutsch'] : []}

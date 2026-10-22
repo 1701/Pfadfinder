@@ -5,10 +5,13 @@
 // "Neu laden" has its own row above the two groups. Names ≥ 18 px, only ?neu in Safari portrait
 // (768×900) ≥ 17 px (decision Markus: rare, short state, a button for adults; children play in the
 // installed app, 768×1024, where 18 px holds with "Neu laden" too).
+// Before the very first Fundstück (task 17, /dev/karte?erstes and / after "Später") one sentence
+// stands in place of the dashes, in portrait also of "Heute …": no Gebietsname and no Gebiet gets
+// smaller than without it.
 
 import { expect, test, type Page } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
-import { SCREENSHOTS } from './helpers';
+import { FUNDSTUECK_HINWEIS as HINWEIS, SCREENSHOTS } from './helpers';
 
 const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
@@ -20,7 +23,7 @@ const VIEWPORTS = [
 async function measure(page: Page) {
   await page.getByRole('group', { name: 'Karte' }).waitFor();
   await page.evaluate(() => document.fonts.ready);
-  return page.evaluate(() => {
+  return page.evaluate((hinweis) => {
     const maps = [...document.querySelectorAll<SVGSVGElement>('svg[aria-label="Karte"]')];
     const visible = maps.filter((m) => m.getBoundingClientRect().width > 0);
     const map = visible[0]!;
@@ -42,6 +45,16 @@ async function measure(page: Page) {
       ),
       mapBottom: map.getBoundingClientRect().bottom,
       height: window.innerHeight,
+      // Height of the map's box (the water) and of the header above it.
+      mapHeight: map.getBoundingClientRect().height,
+      headerHeight: document.querySelector('main > header')!.getBoundingClientRect().height,
+      // Water between the drawn islands (centred in the box) and the line below the map.
+      air: (() => {
+        const box = map.getBoundingClientRect();
+        const drawn = map.viewBox.baseVal.height * scale;
+        const line = document.querySelector('main > div:last-child')!.getBoundingClientRect();
+        return line.top - (box.top + (box.height + drawn) / 2);
+      })(),
       // The quiet actions below the map: Probetest, new version, Impressum · Datenschutz.
       // Only visible ones (width > 0) count.
       legend: [...document.querySelectorAll('main > div:last-child :is(a, button)')]
@@ -49,8 +62,37 @@ async function measure(page: Page) {
         .filter(({ rect }) => rect.width > 0)
         .map(({ name, rect }) => ({ name, height: rect.height, bottom: rect.bottom })),
       line: document.querySelector('main > div:last-child')!.getBoundingClientRect().height,
+      // The Tagesziel: dashes, "Heute …" and the sentence before the first Fundstück, if shown.
+      dashes: document.querySelector('header ol')?.getBoundingClientRect().width ?? 0,
+      heute: [...document.querySelectorAll('header p')]
+        .filter((p) => p.textContent?.startsWith('Heute'))
+        .some((p) => p.getBoundingClientRect().width > 0),
+      hint: [...document.querySelectorAll('header p')]
+        .filter((p) => p.textContent === hinweis)
+        .map((p) => p.getBoundingClientRect())
+        .filter((r) => r.width > 0)
+        .map((r) => ({ height: r.height }))[0],
     };
-  });
+  }, HINWEIS);
+}
+
+/** Checks of the sentence before the first Fundstück; `base` is the same page without it. */
+function expectHint(
+  url: string,
+  m: Awaited<ReturnType<typeof measure>>,
+  portrait: boolean,
+  base?: Awaited<ReturnType<typeof measure>>,
+) {
+  expect(m.hint, `${url}: sentence before the first Fundstück`).toBeDefined();
+  expect(m.dashes, `${url}: dashes beside the sentence`).toBe(0);
+  // Portrait: one line in place of dashes and "Heute …"; landscape: at most two lines above it.
+  expect(m.heute, `${url}: "Heute …"`).toBe(!portrait);
+  expect(m.hint!.height, `${url}: lines`).toBeLessThanOrEqual(portrait ? 27 : 53);
+  if (!base) return;
+  expect(m.smallestName, `${url}: names smaller`).toBeGreaterThanOrEqual(base.smallestName - 0.1);
+  expect(m.smallestTarget, `${url}: Gebiete smaller`).toBeGreaterThanOrEqual(
+    base.smallestTarget - 0.5,
+  );
 }
 
 for (const viewport of VIEWPORTS) {
@@ -59,14 +101,29 @@ for (const viewport of VIEWPORTS) {
   }) => {
     await page.setViewportSize(viewport);
     const budget: Record<string, unknown> = {};
-    for (const url of ['/dev/karte', '/dev/karte?neu', '/']) {
+    const measured: Record<string, Awaited<ReturnType<typeof measure>>> = {};
+    const urls = [
+      '/dev/karte',
+      '/dev/karte?neu',
+      '/dev/karte?erstes',
+      '/dev/karte?erstes&neu',
+      '/',
+    ];
+    for (const url of urls) {
       await page.goto(url);
       const m = await measure(page);
+      measured[url] = m;
       expect(m.overflow, `${url}: page scrolls`).toBeLessThanOrEqual(0);
       expect(m.overflowX, `${url}: page scrolls sideways`).toBeLessThanOrEqual(0);
       expect(m.visibleMaps, `${url}: exactly one layout`).toBe(1);
-      const neu = url.endsWith('?neu');
+      const query = new URL(url, 'http://karte').searchParams;
+      const neu = query.has('neu');
       const portrait = viewport.height > viewport.width;
+      if (query.has('erstes')) {
+        expectHint(url, m, portrait, measured[neu ? '/dev/karte?neu' : '/dev/karte']);
+      } else {
+        expect(m.hint, `${url}: no sentence`).toBeUndefined();
+      }
       const minName = neu && viewport.name === 'safari-portrait' ? 17 : 18;
       expect(m.smallestName, `${url}: names below ${minName} px`).toBeGreaterThanOrEqual(minName);
       expect(m.smallestTarget, `${url}: Gebiet smaller than 48 px`).toBeGreaterThanOrEqual(48);
@@ -96,10 +153,30 @@ for (const viewport of VIEWPORTS) {
       }
       budget[url] = {
         smallestName: Number(m.smallestName.toFixed(1)),
+        smallestTarget: Math.round(m.smallestTarget),
         lineRows: rows.length,
         lineHeight: Math.round(m.line),
+        headerHeight: Math.round(m.headerHeight),
+        mapHeight: Math.round(m.mapHeight),
+        air: Math.round(m.air),
       };
     }
+    // The real start page of a new device after "Später": the sentence instead of the dashes.
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Später' }).click();
+    await page.getByText(HINWEIS).waitFor();
+    const later = await measure(page);
+    expectHint('/ nach Später', later, viewport.height > viewport.width);
+    expect(later.overflow, '/ nach Später: page scrolls').toBeLessThanOrEqual(0);
+    expect(later.smallestName, '/ nach Später: names').toBeGreaterThanOrEqual(18);
+    expect(later.smallestTarget, '/ nach Später: Gebiete').toBeGreaterThanOrEqual(48);
+    budget['/ nach Später'] = {
+      smallestName: Number(later.smallestName.toFixed(1)),
+      smallestTarget: Math.round(later.smallestTarget),
+      headerHeight: Math.round(later.headerHeight),
+      mapHeight: Math.round(later.mapHeight),
+      air: Math.round(later.air),
+    };
     // Smallest Gebietsname, rows and height of the line below the map per page.
     writeFileSync(
       `${SCREENSHOTS}/karte-budget-${viewport.name}.json`,
@@ -111,6 +188,9 @@ for (const viewport of VIEWPORTS) {
     await page.goto('/dev/karte?neu');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-rechtliches-${viewport.name}.png` });
+    await page.goto('/dev/karte?erstes');
+    await measure(page);
+    await page.screenshot({ path: `${SCREENSHOTS}/karte-erstes-${viewport.name}.png` });
     await page.goto('/dev/karte?geschafft');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-geschafft-${viewport.name}.png` });
