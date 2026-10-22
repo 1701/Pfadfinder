@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
+import { exportLearnerData, importLearnerData } from '../../../src/data/backup';
 import { loadMapProgress } from '../../../src/data/map-progress';
 import { createMemoryRepositories } from '../../../src/data/memory/repos';
 import { createSessionStore } from '../../../src/data/session-store';
@@ -15,6 +16,8 @@ function renderScreen(
   onDeleted = vi.fn(),
   downloadBackup: () => Promise<void> = vi.fn().mockResolvedValue(undefined),
   update: { onReload(): void } | null = null,
+  importBackup: (text: string) => Promise<void> = vi.fn().mockResolvedValue(undefined),
+  onImported = vi.fn(),
 ) {
   const questions = [
     { a: 47, b: 38 },
@@ -26,13 +29,15 @@ function renderScreen(
         downloadBackup={downloadBackup}
         deleteAll={deleteAll}
         onDeleted={onDeleted}
+        importBackup={importBackup}
+        onImported={onImported}
         newQuestion={() => questions.shift()!}
         buildId="a1b2c3d · 18.10.2026"
         update={update}
       />
     </MemoryRouter>,
   );
-  return { deleteAll, onDeleted, downloadBackup };
+  return { deleteAll, onDeleted, downloadBackup, importBackup, onImported };
 }
 
 async function type(digits: string) {
@@ -191,5 +196,143 @@ describe('ElternScreen', () => {
       await screen.findByText('Die Sicherung hat nicht geklappt. Versuch es bitte noch einmal.'),
     ).toBeTruthy();
     expect(deleteAll).not.toHaveBeenCalled();
+  });
+
+  it('shows the hint on a Premium voice after the sum, above the buttons, without a switch', async () => {
+    renderScreen();
+    const hint =
+      'Auf dem iPad klingt das Vorlesen besser, wenn du in Einstellungen → Bedienungshilfen → Gesprochene Inhalte eine Premium-Stimme für Deutsch lädst.';
+    expect(screen.queryByText(hint)).toBeNull();
+    await passGate();
+    const text = screen.getByText(hint);
+    const backup = screen.getByRole('button', { name: 'Sicherung herunterladen' });
+    expect(text.compareDocumentPosition(backup) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.queryByRole('checkbox')).toBeNull();
+    expect(screen.queryByRole('switch')).toBeNull();
+  });
+
+  it('offers "Sicherung einlesen" between the other two, only after the sum', async () => {
+    renderScreen();
+    expect(screen.queryByRole('button', { name: 'Sicherung einlesen' })).toBeNull();
+    await passGate();
+    const band = document.querySelector('[data-region="band"]')!;
+    expect([...band.querySelectorAll('button')].map((b) => b.textContent)).toEqual([
+      'Sicherung herunterladen',
+      'Sicherung einlesen',
+      'Alles löschen',
+    ]);
+    expect(screen.getByRole('button', { name: 'Sicherung einlesen' }).className).not.toContain(
+      'bg-signal',
+    );
+    const input = document.querySelector<HTMLInputElement>('input[type="file"]')!;
+    expect(input.accept).toBe('.json,application/json');
+  });
+
+  describe('reading a backup in (memory repositories)', () => {
+    const now = '2026-10-14T09:00:00.000Z';
+
+    /** A device with one answer in Mathe; its backup file. */
+    async function backupOfPlayedDevice() {
+      const repos = createMemoryRepositories();
+      const store = createSessionStore(testDeps(repos));
+      await store.getState().startPractice('mathe', 'zahlen-operationen');
+      store.getState().setAnswer(answerFor(store.getState().current!.item, true));
+      await store.getState().submit();
+      const file = await exportLearnerData(repos, store.getState().learner!.id, now);
+      return { repos, text: JSON.stringify(file) };
+    }
+
+    const upload = (text: string, name = 'pfadfinder-sicherung-2026-10-14.json') =>
+      userEvent.upload(
+        document.querySelector<HTMLInputElement>('input[type="file"]')!,
+        new File([text], name, { type: 'application/json' }),
+      );
+
+    function renderOn(target: ReturnType<typeof createMemoryRepositories>) {
+      const onImported = vi.fn();
+      renderScreen(
+        undefined,
+        undefined,
+        undefined,
+        null,
+        async (text) => {
+          const result = await importLearnerData(target, text);
+          if (!result.ok) throw new Error('not a backup');
+        },
+        onImported,
+      );
+      return onImported;
+    }
+
+    it('asks back, then replaces everything on this device and goes to the map', async () => {
+      const { repos: source, text } = await backupOfPlayedDevice();
+      const target = createMemoryRepositories();
+      await target.postponedOffers.put({ fach: 'mathe', at: now });
+      const onImported = renderOn(target);
+      await passGate();
+      await upload(text);
+      expect(
+        await screen.findByRole('heading', { name: 'Ersetzt alles auf diesem Gerät. Weiter?' }),
+      ).toBeTruthy();
+      const band = document.querySelector('[data-region="band"]')!;
+      expect([...band.children].map((c) => c.textContent)).toEqual(['Abbrechen', 'Einlesen']);
+      expect(document.activeElement?.textContent).toBe('Abbrechen');
+      await userEvent.click(screen.getByRole('button', { name: 'Einlesen' }));
+      expect(onImported).toHaveBeenCalledOnce();
+      expect((await loadMapProgress(target, now)).mastery).toEqual(
+        (await loadMapProgress(source, now)).mastery,
+      );
+      expect((await loadMapProgress(target, now)).mastery).toHaveLength(1);
+    });
+
+    it('"Abbrechen" changes nothing', async () => {
+      const { text } = await backupOfPlayedDevice();
+      const target = createMemoryRepositories();
+      const onImported = renderOn(target);
+      await passGate();
+      await upload(text);
+      await userEvent.click(await screen.findByRole('button', { name: 'Abbrechen' }));
+      expect(screen.getByRole('button', { name: 'Sicherung einlesen' })).toBeTruthy();
+      expect(onImported).not.toHaveBeenCalled();
+      expect((await loadMapProgress(target, now)).mastery).toEqual([]);
+    });
+
+    it('a file that is no backup changes nothing and says so in one sentence', async () => {
+      const target = createMemoryRepositories();
+      await target.postponedOffers.put({ fach: 'mathe', at: now });
+      const onImported = renderOn(target);
+      await passGate();
+      for (const text of ['kein JSON', JSON.stringify({ version: '2', learner: {} })]) {
+        await upload(text);
+        expect(await screen.findByText('Das ist keine Pfadfinder-Sicherung.')).toBeTruthy();
+        expect(screen.queryByRole('button', { name: 'Einlesen' })).toBeNull();
+      }
+      expect(onImported).not.toHaveBeenCalled();
+      expect((await loadMapProgress(target, now)).offerSpent).toBe(true);
+    });
+  });
+
+  it('says so when writing the backup fails, and stays', async () => {
+    const importBackup = vi.fn().mockRejectedValue(new Error('blocked'));
+    const onImported = vi.fn();
+    renderScreen(undefined, undefined, undefined, null, importBackup, onImported);
+    await passGate();
+    const repos = createMemoryRepositories();
+    const store = createSessionStore(testDeps(repos));
+    await store.getState().startPractice('mathe', 'zahlen-operationen');
+    const file = await exportLearnerData(
+      repos,
+      store.getState().learner!.id,
+      '2026-10-14T09:00:00.000Z',
+    );
+    await userEvent.upload(
+      document.querySelector<HTMLInputElement>('input[type="file"]')!,
+      new File([JSON.stringify(file)], 'sicherung.json', { type: 'application/json' }),
+    );
+    await userEvent.click(await screen.findByRole('button', { name: 'Einlesen' }));
+    expect(
+      await screen.findByText('Das Einlesen hat nicht geklappt. Versuch es bitte noch einmal.'),
+    ).toBeTruthy();
+    expect(onImported).not.toHaveBeenCalled();
   });
 });

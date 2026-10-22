@@ -2,6 +2,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  formatProbetestTime,
+  probetestTime,
   validateContent,
   type ContentFile,
   type ContentIssue,
@@ -465,6 +467,36 @@ describe('validateContent – probetest rules (§6)', () => {
     expect(errors(timed(85))).toEqual([
       'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1928 s (32,13 Min.): estimatedSeconds 1700 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
     ]);
+  });
+
+  it('reports the planned time per Probetest for content:validate, rules unchanged', () => {
+    const deutsch = buildDeutschProbetest();
+    const { bundle } = run(
+      toFiles({
+        items: deutsch.items.map((i) => ({ ...i, estimatedSeconds: 60 })),
+        texts: deutsch.texts.map((t) => ({ ...t, wordCount: 159 })),
+        probetests: [deutsch.probetest],
+      }),
+    );
+    const time = probetestTime(deutsch.probetest, bundle);
+    // The same numbers as the rule's message above (1438,5 s = 1200 s + 238,5 s).
+    expect(time).toEqual({ itemSeconds: 1200, readingSeconds: 238.5, seconds: 1438.5 });
+    expect(formatProbetestTime('deutsch-01', time)).toBe(
+      'deutsch-01: 1200 s Items + 238,5 s Lesezeit = 1438,5 s (23,98 Min.)',
+    );
+    // The example from the release list (deutsch-03).
+    expect(formatProbetestTime('deutsch-03', { itemSeconds: 1205, readingSeconds: 246, seconds: 1451 })).toBe(
+      'deutsch-03: 1205 s Items + 246 s Lesezeit = 1451 s (24,18 Min.)',
+    );
+
+    // Mathe has no reading time.
+    const mathe = buildMatheProbetest();
+    const matheBundle = run(toFiles({ items: mathe.items, probetests: [mathe.probetest] })).bundle;
+    const matheTime = probetestTime(mathe.probetest, matheBundle);
+    expect(matheTime.readingSeconds).toBe(0);
+    expect(formatProbetestTime('mathe-01', matheTime)).toBe(
+      `mathe-01: ${matheTime.itemSeconds} s Items + 0 s Lesezeit = ${matheTime.itemSeconds} s (${(matheTime.itemSeconds / 60).toFixed(2).replace('.', ',')} Min.)`,
+    );
   });
 
   it('keeps the real mathe-01 and deutsch-01 free of findings', () => {

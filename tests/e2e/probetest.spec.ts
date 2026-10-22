@@ -125,10 +125,10 @@ test('Start → 3 Aufgaben → Übersicht → springen → Abgeben → Auswertun
   await page.getByRole('link', { name: 'Probetest Mathe', exact: true }).click();
   // The list shows the Stand from the stored run (task 16), also after a reload.
   const entry = page.getByRole('link', { name: /^Probetest Mathe 1/ });
-  await expect(entry).toContainText('gemacht am');
-  await expect(entry).not.toContainText('noch nicht');
+  // Only "gemacht", no date (release list, 2026-10-22).
+  await expect(entry.locator('span').last()).toHaveText('gemacht');
   await page.reload();
-  await expect(entry).toContainText('gemacht am');
+  await expect(entry.locator('span').last()).toHaveText('gemacht');
   await entry.click();
   await expect(page.getByText('Du hast diesen Probetest schon gemacht.')).toBeVisible();
   await page.getByRole('button', { name: 'Auswertung ansehen' }).click();

@@ -23,7 +23,14 @@ const CONTACT = `${NAME}\nMaisenbachstraße 2, 76359 Marxzell\nE-Mail: ${EMAIL}`
 export const IMPRESSUM: LegalPage = {
   title: 'Impressum',
   sections: [
-    { heading: 'Angaben nach §\u00a05\u00a0DDG', paragraphs: [CONTACT] },
+    {
+      heading: 'Angaben nach §\u00a05\u00a0DDG',
+      // The name is also that of the scout movement (release list, 2026-10-22).
+      paragraphs: [
+        CONTACT,
+        'Pfadfinder ist ein privates Übungsangebot und gehört zu keinem Pfadfinderverband.',
+      ],
+    },
     {
       heading: 'Verantwortlich für den Inhalt nach §\u00a018\u00a0Abs.\u00a02\u00a0MStV',
       paragraphs: [`${NAME}, Anschrift wie oben`],

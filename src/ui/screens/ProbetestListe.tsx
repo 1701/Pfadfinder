@@ -7,14 +7,7 @@ import { Link } from 'react-router';
 import type { Fach } from '../../domain/content/taxonomy';
 import type { ProbetestStand } from '../../domain/probetest/list';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
-import {
-  BACK,
-  LIST_EMPTY,
-  NOT_DONE,
-  doneOn,
-  listEntryName,
-  probetestName,
-} from '../text/probetest';
+import { BACK, LIST_EMPTY, NOT_DONE, DONE, listEntryName, probetestName } from '../text/probetest';
 
 /** id, number (position in the manifest) and doneAt (null: not done yet). */
 export type ProbetestListEntry = ProbetestStand;
@@ -48,9 +41,7 @@ export function ProbetestListe({
                 >
                   <span className="text-option font-bold">{listEntryName(fach, entry.number)}</span>
                   {known && (
-                    <span className="ml-auto text-ink-muted">
-                      {entry.doneAt ? doneOn(entry.doneAt) : NOT_DONE}
-                    </span>
+                    <span className="ml-auto text-ink-muted">{entry.doneAt ? DONE : NOT_DONE}</span>
                   )}
                 </Link>
               </li>

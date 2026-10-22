@@ -1,6 +1,6 @@
 // The Probetests of one Fach (task 16) on /dev/probetest-liste in four viewports (fixed entries,
-// dev build only): no page scroll, entries ≥ 64 px high and as wide as the page, targets ≥ 48 px,
-// text ≥ 18 px, ≥ 18 px air between the last entry and the band. Two and three entries, Stand
+// dev build only): Stand "gemacht" or "noch nicht gemacht" without a date (2026-10-22), no page
+// scroll, entries ≥ 64 px high and as wide as the page, targets ≥ 48 px, text ≥ 18 px, ≥ 18 px air between the last entry and the band. Two and three entries, Stand
 // keiner / einer / alle, and the Fach without a Probetest (one sentence). If three entries did
 // not fit, only the list would scroll and the band stay (fallback decided before measuring);
 // listScroll in the budget says whether it did.
@@ -60,6 +60,9 @@ async function measure(page: Page) {
       bandBottom: window.innerHeight - band.bottom,
       wrapped,
       hasList: list !== null,
+      stands: [...document.querySelectorAll('main li > a > span:last-child')].map(
+        (s) => s.textContent,
+      ),
     };
   });
 }
@@ -75,7 +78,9 @@ for (const viewport of VIEWPORTS) {
       await page.getByRole('link', { name: 'Zurück' }).waitFor();
       await page.evaluate(() => document.fonts.ready);
       const m = await measure(page);
-      report[key] = { ...m, air: Math.round(m.air) };
+      // The Stand texts are checked below, not kept in the budget.
+      const { stands: _stands, ...numbers } = m;
+      report[key] = { ...numbers, air: Math.round(m.air) };
       const problems = [
         m.overflow > 0 && `page scrolls by ${Math.round(m.overflow)} px`,
         m.overflowX > 0 && `page scrolls sideways by ${Math.round(m.overflowX)} px`,
@@ -89,6 +94,9 @@ for (const viewport of VIEWPORTS) {
         m.air < AIR && `only ${Math.round(m.air)} px air above the band`,
         m.bandBottom < 0 && 'the band leaves the screen',
         anzahl === 0 && m.hasList && 'an empty list instead of a sentence',
+        // The Stand without a date (2026-10-22): "gemacht" or "noch nicht gemacht".
+        m.stands.some((s) => s !== 'gemacht' && s !== 'noch nicht gemacht') &&
+          `Stand ${JSON.stringify(m.stands)}`,
       ].filter((p): p is string => typeof p === 'string');
       for (const p of problems) red.push(`${key}: ${p}`);
       if (anzahl === 0)

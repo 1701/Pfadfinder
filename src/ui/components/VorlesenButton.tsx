@@ -2,6 +2,7 @@
 // Hidden where the browser cannot speak. A second tap stops. No voice is chosen, only the
 // language: iOS then uses the voice set under Bedienungshilfen (parents can load a better one
 // there), where picking the first German voice of the list overrode it (decision 2026-10-16).
+// Never on paper (print:hidden, 2026-10-22).
 
 import { useEffect, useState } from 'react';
 import { SpeakerGlyph, StopGlyph } from './glyphs';
@@ -38,7 +39,7 @@ export function VorlesenButton({ text }: { text: string }) {
       type="button"
       onClick={toggle}
       aria-pressed={speaking}
-      className="group flex shrink-0 flex-col items-center gap-2xs rounded-control text-ink-muted"
+      className="group flex shrink-0 flex-col items-center gap-2xs rounded-control text-ink-muted print:hidden"
     >
       <span className="grid size-primary place-items-center rounded-round border-2 border-line-strong bg-surface text-ink group-aria-pressed:border-ink">
         {speaking ? <StopGlyph className="size-lg" /> : <SpeakerGlyph className="size-xl" />}

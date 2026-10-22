@@ -34,7 +34,7 @@ describe('ProbetestListe', () => {
     expect(screen.getByRole('heading', { name: 'Probetest Mathe' })).toBeTruthy();
     const links = within(screen.getByRole('list')).getAllByRole('link');
     expect(links.map((l) => l.textContent)).toEqual([
-      'Probetest Mathe 1gemacht am 21. Oktober',
+      'Probetest Mathe 1gemacht',
       'Probetest Mathe 2noch nicht gemacht',
     ]);
     expect(links.map((l) => l.getAttribute('href'))).toEqual([

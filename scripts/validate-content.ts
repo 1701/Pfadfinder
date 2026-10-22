@@ -1,6 +1,7 @@
 // Validates every content/**/*.json against the schemas and cross-file rules.
 // Usage: npm run content:validate  (exit code 1 on any error; warnings do not fail)
-// On success it writes content/manifest.json (generated, not authored; ARCHITECTURE.md §5).
+// On success it prints the planned time of every Probetest (one line each) and writes
+// content/manifest.json (generated, not authored; ARCHITECTURE.md §5).
 // In CI an outdated manifest is an error instead, so a stale file can never be deployed.
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -9,6 +10,8 @@ import { fileURLToPath } from 'node:url';
 import {
   buildContentManifest,
   checkSvgAsset,
+  formatProbetestTime,
+  probetestTime,
   validateContent,
   type ContentFile,
   type ContentIssue,
@@ -76,6 +79,12 @@ if (errorCount > 0) {
   process.exit(1);
 }
 console.log(`Content gültig: ${summary}`);
+// One line per Probetest, so a new file shows its time without having to fail the rule.
+for (const { value: probetest } of [...bundle.probetests.values()].sort((a, b) =>
+  a.value.id.localeCompare(b.value.id),
+)) {
+  console.log(formatProbetestTime(probetest.id, probetestTime(probetest, bundle)));
+}
 
 const manifest = `${JSON.stringify(
   buildContentManifest(

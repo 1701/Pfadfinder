@@ -18,26 +18,8 @@ export function listEntryName(fach: Fach, n: number): string {
 // The list of a Fach's Probetests (/probetest/mathe, task 16): name and whether it was done.
 export const NOT_DONE = 'noch nicht gemacht';
 export const LIST_EMPTY = 'Hier gibt es noch keinen Probetest.';
-const MONTHS = [
-  'Januar',
-  'Februar',
-  'März',
-  'April',
-  'Mai',
-  'Juni',
-  'Juli',
-  'August',
-  'September',
-  'Oktober',
-  'November',
-  'Dezember',
-] as const;
-
-/** "gemacht am 21. Oktober": the local day of the last submitted run, without the year. */
-export function doneOn(iso: string): string {
-  const date = new Date(iso);
-  return `gemacht am ${date.getDate()}. ${MONTHS[date.getMonth()]}`;
-}
+/** The Stand of a submitted Probetest: no date, no result (release list, 2026-10-22). */
+export const DONE = 'gemacht';
 
 export const INTRO_TEXT = '45 Minuten, wie in der Schule. Du kannst vor und zurück.';
 export const DONE_BEFORE = 'Du hast diesen Probetest schon gemacht.';
@@ -113,7 +95,7 @@ export const PROBETEST_TEXTS = [
   listEntryName('mathe', 2),
   NOT_DONE,
   LIST_EMPTY,
-  doneOn('2026-09-30T10:00:00'),
+  DONE,
   INTRO_TEXT,
   DONE_BEFORE,
   SHOW_RESULT,

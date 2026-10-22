@@ -1,5 +1,5 @@
 /* The paper Probetest (/probetest/:id/print, ARCHITECTURE.md §5): A4 portrait, black on white,
-   no app frame. Paper measures live here in mm, not in the components. On screen the same sheet
+   no app frame. At the end: a task with a reading text printed from the browser. Paper measures live here in mm, not in the components. On screen the same sheet
    stands on the paper ground with a "Drucken" button above it. */
 
 @layer components {
@@ -119,5 +119,34 @@
   }
   .nur-bildschirm {
     display: none;
+  }
+
+  /* A task with a reading text printed from the browser (iPad finding A5, 2026-10-22): on screen
+     the text box scrolls inside a fixed grid, on paper it was cut after paragraph 2. Here the
+     whole text stands first, then the task and the answers; no top line, no band, no fades
+     (Vorlesen hides itself on paper, `print:hidden`). The screen layout (index.css) stays as it is. */
+  .item-with-text {
+    display: block;
+    height: auto;
+  }
+  .item-with-text > header,
+  .item-with-text > [data-region='band'],
+  .item-with-text > .rating-frame,
+  .item-with-text [data-fade] {
+    display: none;
+  }
+  .item-with-text > [data-region='text'] {
+    display: block;
+    margin-bottom: var(--spacing-md);
+  }
+  .item-with-text > [data-region='text'] [role='region'] {
+    height: auto;
+    overflow: visible;
+  }
+  .item-with-text > [data-region='text'] li {
+    break-inside: avoid;
+  }
+  .item-with-text > [data-region='sheet'] {
+    margin-bottom: var(--spacing-md);
   }
 }

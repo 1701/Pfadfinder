@@ -1,6 +1,6 @@
 // The Eltern page as its own lazy chunk (it needs IndexedDB). Reached by URL or from the legal pages.
 
-import { backupFile } from '../data/backup';
+import { backupFile, importLearnerData } from '../data/backup';
 import { appRepositories } from '../data/dexie/instance';
 import { ensureLearner } from '../data/practice';
 import { downloadTextFile } from '../ui/download';
@@ -20,6 +20,12 @@ async function downloadBackup() {
   downloadTextFile(name, text);
 }
 
+// The screen checked the file already; a failed check here still changes nothing.
+async function importBackup(text: string) {
+  const result = await importLearnerData(appRepositories(), text);
+  if (!result.ok) throw new Error('not a backup');
+}
+
 export function ElternRoute() {
   const updateReady = useUpdateReady();
   return (
@@ -30,6 +36,9 @@ export function ElternRoute() {
       deleteAll={() => appRepositories().clear()}
       // A full load of the start page: the stores of this run still hold the deleted learner.
       onDeleted={() => window.location.replace('/')}
+      importBackup={importBackup}
+      // Same full load: the map then shows the state of the backup.
+      onImported={() => window.location.replace('/')}
     />
   );
 }

@@ -1,7 +1,7 @@
 // Developer preview of the Probetest list (dev build only, task 16), used by
 // tests/e2e/probetest-liste.spec.ts: /dev/probetest-liste?fach=mathe&stand=keiner|einer|alle
-// &anzahl=0|2|3 (default 2). Fixed entries <fach>-01…03, not the manifest; the dates carry the
-// longest month name, so the widest Stand is measured.
+// &anzahl=0|2|3 (default 2). Fixed entries <fach>-01…03, not the manifest. A done entry shows
+// only "gemacht" (2026-10-22); the dates stand in for the stored runs.
 
 import { useSearchParams } from 'react-router';
 import type { Fach } from '../../domain/content/taxonomy';

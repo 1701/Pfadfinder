@@ -343,17 +343,13 @@ export function validateContent(
       }
     }
 
-    // Texts come from the items' textRefs, in order of first appearance (no field of its own).
-    const textRefs = [...new Set(items.map((item) => item.stimulus?.textRef).filter((t) => t !== undefined))];
+    const textRefs = probetestTextRefs(items);
     const texts = textRefs.map((id) => bundle.texts.get(id)?.value).filter((t) => t !== undefined);
 
-    const itemSeconds = items.reduce((sum, item) => sum + item.estimatedSeconds, 0);
+    const { itemSeconds, readingSeconds, seconds } = probetestTime(probetest, bundle);
     const range = PROBETEST_SECONDS_RANGE[probetest.fach];
     const allowed = `erlaubt sind ${range.min / 60}–${range.max / 60} Min.`;
     if (probetest.fach === 'deutsch') {
-      // The item clock starts after the reading screen: reading time is in no item (§6, 1.0.16).
-      const readingSeconds = texts.reduce((sum, t) => sum + t.wordCount * READING_SECONDS_PER_WORD, 0);
-      const seconds = itemSeconds + readingSeconds;
       if (seconds < range.min || seconds > range.max) {
         error(
           file,
@@ -387,6 +383,43 @@ export function validateContent(
   }
 
   return { issues, bundle };
+}
+
+/** The texts of a Probetest come from its items' textRefs, in order of first appearance (no field of its own). */
+function probetestTextRefs(items: readonly Item[]): string[] {
+  return [...new Set(items.map((item) => item.stimulus?.textRef).filter((t) => t !== undefined))];
+}
+
+export interface ProbetestTime {
+  /** Sum of the items' estimatedSeconds. */
+  itemSeconds: number;
+  /** Deutsch: wordCount × READING_SECONDS_PER_WORD of its texts; Mathe: 0. */
+  readingSeconds: number;
+  seconds: number;
+}
+
+/**
+ * The planned time of a Probetest, as the duration rule checks it: in Deutsch the item clock starts
+ * after the reading screen, so reading time is in no item and comes on top (§6, 1.0.16). Items that
+ * do not resolve count nothing.
+ */
+export function probetestTime(probetest: Probetest, bundle: ContentBundle): ProbetestTime {
+  const items = probetest.itemIds.map((id) => bundle.items.get(id)?.value).filter((i) => i !== undefined);
+  const itemSeconds = items.reduce((sum, item) => sum + item.estimatedSeconds, 0);
+  const readingSeconds =
+    probetest.fach === 'deutsch'
+      ? probetestTextRefs(items).reduce(
+          (sum, id) => sum + (bundle.texts.get(id)?.value.wordCount ?? 0) * READING_SECONDS_PER_WORD,
+          0,
+        )
+      : 0;
+  return { itemSeconds, readingSeconds, seconds: itemSeconds + readingSeconds };
+}
+
+/** "deutsch-03: 1205 s Items + 246 s Lesezeit = 1451 s (24,18 Min.)", printed by content:validate. */
+export function formatProbetestTime(id: string, { itemSeconds, readingSeconds, seconds }: ProbetestTime): string {
+  const minutes = (seconds / 60).toFixed(2).replace('.', ',');
+  return `${id}: ${secondsText(itemSeconds)} s Items + ${secondsText(readingSeconds)} s Lesezeit = ${secondsText(seconds)} s (${minutes} Min.)`;
 }
 
 /** Deutsch starts with reading and ends with spelling; no reading item after the first spelling item. */
