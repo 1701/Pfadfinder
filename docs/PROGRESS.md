@@ -10,6 +10,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Hinweis, nicht gebaut:** layout.spec besteht aus 2 Tests à ~9,5 Min. Auch mit mehr Workern bliebe der Layout-Lauf ≥ 10 Min.
 - **Warum ohne cron (Markus):** In ~45 Layout-Läufen im Oktober (~30 h) gab es einen echten Fund (m-rf-1-004, Safari quer), zwei Abstürze („Page crashed“) und zwei Fehler, die auch Smoke-Tests zeigten. Der Oktober liegt geschätzt bei ~2.650 Actions-Minuten. Neu: Das Layout-Projekt läuft vor UI- und Content-Commits lokal (DoD 1).
 - **Doku:** DEPLOY.md §9 und CLAUDE.md (DoD 1, DoD 3 nennt nur ci.yml, Befehle).
+- **Nachtrag:** Der Browser-Install bricht nach 4 Min. ab und versucht es einmal neu (`timeout` im Shell-Schritt, weil Composite-Schritte kein `timeout-minutes` haben). Grund: apt hing in 2 von 5 Läufen 9–10 Min. `layout.yml` ist in `paths-ignore` von `ci.yml`.
 - **Lokal:** `npm run check` grün. Chromium-Projekte mit `--reporter=dot,json` 39/39, `report.json` in tests/e2e/output, `git status` danach sauber.
 
 ## 2026-10-22 – Aufgabe 18: Vorlesen verrät keine Fehlschreibung

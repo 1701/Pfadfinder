@@ -1,14 +1,14 @@
 name: CI
 
 # Every push: check (lint, content, unit tests, build) and the Chromium and WebKit smoke
-# projects, as three parallel jobs. The layout project (~40 min) runs in layout.yml, nightly
-# and by hand. Docs, Markdown and versioned screenshots start no run at all.
+# projects, as three parallel jobs. The layout project (~40 min) runs in layout.yml, by hand
+# only. Docs, Markdown, versioned screenshots and layout.yml start no run at all.
 on:
   push:
     branches: [main, master]
-    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**']
+    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**', '.github/workflows/layout.yml']
   pull_request:
-    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**']
+    paths-ignore: ['docs/**', '**/*.md', 'tests/e2e/screenshots/**', '.github/workflows/layout.yml']
   workflow_dispatch:
 
 permissions:

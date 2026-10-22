@@ -38,6 +38,8 @@ runs:
         path: ~/.cache/ms-playwright
         key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ inputs.browser }}
     # The system libraries (apt) are not cached; a hit only skips the browser download.
+    # A slow apt mirror once took 9 min. Composite steps have no timeout-minutes, so `timeout`
+    # ends an attempt after 4 min (with apt-get, same process group) and one retry follows.
     - name: Install browser
       if: inputs.browser != ''
       shell: bash
@@ -45,5 +47,11 @@ runs:
         BROWSER: ${{ inputs.browser }}
         HIT: ${{ steps.browsers.outputs.cache-hit }}
       run: |
-        if [ "$HIT" = true ]; then npx playwright install-deps "$BROWSER"
-        else npx playwright install --with-deps "$BROWSER"; fi
+        if [ "$HIT" = true ]; then install=(npx playwright install-deps "$BROWSER")
+        else install=(npx playwright install --with-deps "$BROWSER"); fi
+        for attempt in 1 2; do
+          if timeout -k 30s 4m "${install[@]}"; then exit 0; fi
+          echo "::warning::Browser install attempt $attempt failed or took longer than 4 min"
+          sudo dpkg --configure -a || true
+        done
+        exit 1
