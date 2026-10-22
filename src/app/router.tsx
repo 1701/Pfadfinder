@@ -57,6 +57,11 @@ const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.
 // The Eltern page (by URL or from the legal pages, never from a child's screen) in its own chunk.
 const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
 
+// How Pfadfinder works, for parents (from the map and /eltern), in its own small chunk.
+const SoGehtsScreen = lazy(() =>
+  import('../ui/screens/SoGehtsScreen').then((m) => ({ default: m.SoGehtsScreen })),
+);
+
 // Impressum and Datenschutz (linked from the map and /eltern) share one small chunk.
 const RechtlichesScreen = lazy(() =>
   import('../ui/screens/RechtlichesScreen').then((m) => ({ default: m.RechtlichesScreen })),
@@ -113,6 +118,7 @@ export function AppRouter() {
           <Route path="/probetest/:id" element={<ProbetestRoute />} />
           <Route path="/probetest/:id/print" element={<PrintRoute />} />
           <Route path="/eltern" element={<ElternRoute />} />
+          <Route path="/so-gehts" element={<SoGehtsScreen />} />
           <Route path="/impressum" element={<RechtlichesScreen page="impressum" />} />
           <Route path="/datenschutz" element={<RechtlichesScreen page="datenschutz" />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}

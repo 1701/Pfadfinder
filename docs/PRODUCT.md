@@ -160,6 +160,7 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 - Schrift: gut lesbare Grundschulschrift (z. B. Andika), Mindestgröße 18 px, hoher Kontrast
 - Maximal 2 Sätze Anweisung pro Aufgabe; Anweisungen stets mit Beispiel beim ersten Auftreten eines Formats
 - Kein Text, den ein Neunjähriger nicht versteht – auch nicht in Buttons ("Weiter", "Nochmal", "Zeig mir")
+- Erklärseite für Eltern `/so-gehts` „So funktioniert Pfadfinder“ (seit 2026-10-22): statisch, Text von Markus, ohne Vorlesen, nur der Text scrollt, „Zurück“ zur Karte im Band. Verlinkt als „So geht’s“ auf `/eltern` (oben rechts) und neben „Für Eltern“ am Ende von Impressum und Datenschutz, nicht auf der Karte (die Zeile unter der Karte bräuchte hoch 723 von 720 px). Seiten für Erwachsene sind von „≤ 2 Sätze“ ausgenommen (CLAUDE.md)
 - Eltern-Bereich nicht hinter Login, erreichbar über die Adresse `/eltern` und über „Für Eltern“ am Ende von Impressum und Datenschutz (seit Aufgabe 11, die installierte App hat keine Adresszeile); kein Kinder-Screen verlinkt ihn, das ist der eigentliche Schutz. Davor steht eine Rechenfrage (Summe zweier zweistelliger Zahlen, Ziffernblock) als Schild „für Eltern“, keine Kindersicherung (ARCHITECTURE §7)
 
 ## 8. Eltern-Sicht (MVP, minimal)
@@ -212,7 +213,7 @@ Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: 
 ## 12. Rechtliches und Datenschutz
 
 - Keine personenbezogenen Daten verlassen das Gerät; kein Analytics, keine Cookies außer technisch notwendigen → Datenschutzerklärung kurz, DSGVO Art. 8 (Einwilligung bei Kindern) greift nicht
-- Impressumspflicht nach DDG gilt trotzdem (Markus privat). Seit Aufgabe 10 (2026-10-18): `/impressum` und `/datenschutz` als statische Seiten, ohne Vorlesen, verlinkt aus `/eltern` (oben rechts, schon vor der Rechenfrage) und seit Aufgabe 11 auch rechts in der Zeile unter der Karte, in jedem Viewport („leicht erkennbar, unmittelbar erreichbar“, DDG); Name, Anschrift und E-Mail stehen dort als Marker `[NAME]`, `[ADRESSE]`, `[E-MAIL]`, bis sie vor der Veröffentlichung ersetzt werden (DEPLOY §6). Die Datenschutzerklärung nennt Cloudflare als Hoster (Zugriffsprotokolle) und die Sprachausgabe des Browsers (Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google)
+- Impressumspflicht nach DDG gilt trotzdem (Markus privat). Seit Aufgabe 10 (2026-10-18): `/impressum` und `/datenschutz` als statische Seiten, ohne Vorlesen, verlinkt aus `/eltern` (oben rechts, schon vor der Rechenfrage) und seit Aufgabe 11 auch rechts in der Zeile unter der Karte, in jedem Viewport („leicht erkennbar, unmittelbar erreichbar“, DDG); Name, Anschrift und E-Mail stehen dort seit 2026-10-22 ausgeschrieben (Markus Steireif, Maisenbachstraße 2, 76359 Marxzell, pfadfinder@steireif.de als mailto-Link). Die Datenschutzerklärung nennt Cloudflare als Hoster (Zugriffsprotokolle) und die Sprachausgabe des Browsers (Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google)
 - Produktname darf "Kompass 4" beschreibend nennen ("Übungen zur Vorbereitung auf Kompass 4"), nicht als Marke führen
 - Alle Items sind Eigenschöpfungen; Originalaufgaben und IQB/VERA-Items dienen nur als Format- und Niveaureferenz, werden nicht übernommen
 - Lizenz: offen – Code MIT, Content CC BY-SA 4.0

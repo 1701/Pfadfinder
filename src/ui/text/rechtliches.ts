@@ -1,6 +1,8 @@
 // Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map and /eltern. Written for
-// adults and in Du like the Eltern page; legal text may be longer than two sentences. The markers
-// [NAME], [ADRESSE] and [E-MAIL] are replaced before Pfadfinder goes public (docs/DEPLOY.md §6).
+// adults and in Du like the Eltern page; legal text may be longer than two sentences. Name, address
+// and e-mail are filled in since 2026-10-22; the e-mail shows as a mailto link (EmailText).
+
+import { EMAIL } from './kontakt';
 
 export interface LegalSection {
   heading: string;
@@ -15,7 +17,8 @@ export interface LegalPage {
 
 export { DATENSCHUTZ_LINK, IMPRESSUM_LINK } from './rechtliches-links';
 
-const CONTACT = '[NAME]\n[ADRESSE]\nE-Mail: [E-MAIL]';
+const NAME = 'Markus Steireif';
+const CONTACT = `${NAME}\nMaisenbachstraße 2, 76359 Marxzell\nE-Mail: ${EMAIL}`;
 
 export const IMPRESSUM: LegalPage = {
   title: 'Impressum',
@@ -23,7 +26,7 @@ export const IMPRESSUM: LegalPage = {
     { heading: 'Angaben nach §\u00a05\u00a0DDG', paragraphs: [CONTACT] },
     {
       heading: 'Verantwortlich für den Inhalt nach §\u00a018\u00a0Abs.\u00a02\u00a0MStV',
-      paragraphs: ['[NAME], Anschrift wie oben'],
+      paragraphs: [`${NAME}, Anschrift wie oben`],
     },
     {
       heading: 'Über Pfadfinder',

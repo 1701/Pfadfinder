@@ -84,6 +84,9 @@
   --container-page: 60rem;
   /* The reading screen: about 60 characters per line. */
   --container-reading: 44rem;
+  /* Running text for adults (/so-gehts): at most 70 characters per line. Measured 2026-10-22 in
+     the app (Andika, 18 px): 30rem gives 67 at most, 32rem already 71. */
+  --container-measure: 30rem;
   /* Rating band (short-answer, "Hast du es getroffen?"), measured 2026-10-19 with Andika:
      Vorlesen 72px, question 230px, "Noch nicht" 165px at least. From this band width Vorlesen
      stands left of question and buttons (72 + 3 × 12 + 3 × 165 = 603px) … */

@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Release-Liste (1)–(11)
+- **(1) /so-gehts** „So funktioniert Pfadfinder“: Text von Markus wörtlich (korrigierte Fassung), Spalte `max-w-measure` 30rem (längste Zeile 67 Zeichen), nur der Text scrollt, „Zurück“ zur Karte im Band. Verlinkt als „So geht’s“ auf /eltern (oben rechts) und neben „Für Eltern“ am Ende von Impressum und Datenschutz. **Nicht auf der Karte:** Die Zeile bräuchte hoch 723 von 720 px (Entscheidung Markus), karte.spec unverändert.
+- **(2)** Name, Anschrift, E-Mail in Impressum und Datenschutz, E-Mail als mailto-Link (`EmailText`); keine Marker mehr in `src`. CLAUDE.md: Seiten für Erwachsene von „≤ 2 Sätze“ ausgenommen.
+- **Lokal:** `npm run check` grün, Chromium-Projekte 39/39, `so-gehts-layout` 4/4, `blatt-layout` 4/4, `karte` 5/5. Screenshots mit Schalter: eltern-frage, eltern-loeschen, impressum, datenschutz, so-gehts (neu).
+
 ## 2026-10-22 – Content: Probetest deutsch-03 eingespielt
 - **Eingespielt:** `content/probetests/deutsch-03.json` unverändert (21 Items, t-sach-004 und t-lit-004), Manifest neu erzeugt. Vorab per Python geprüft: alle IDs vorhanden, nicht retired, keine in deutsch-01/02, niveauMix 9/8/4 und bereichMix stimmen. `content:validate` 0 Fehler, 0 Warnungen.
 - **Zeit:** 1205 s Items + 246 s Lesezeit = 1451 s = 24,18 Min.; geprüfte Untergrenze ≥ 24 Min. (1440 s). Der Validator nennt die Summe nur im Fehlerfall.

@@ -33,11 +33,22 @@ describe('Impressum and Datenschutz', () => {
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
   });
 
-  it('carry the markers for name, address and e-mail until they are filled in', () => {
+  it('name the person responsible with address and e-mail, no markers left', () => {
     for (const page of [IMPRESSUM, DATENSCHUTZ]) {
-      for (const marker of ['[NAME]', '[ADRESSE]', '[E-MAIL]']) {
-        expect(allText(page)).toContain(marker);
-      }
+      const text = allText(page);
+      expect(text).toContain('Markus Steireif\nMaisenbachstraße 2, 76359 Marxzell');
+      expect(text).toContain('E-Mail: pfadfinder@steireif.de');
+      for (const marker of ['[NAME]', '[ADRESSE]', '[E-MAIL]']) expect(text).not.toContain(marker);
+    }
+    expect(allText(IMPRESSUM)).toContain('Markus Steireif, Anschrift wie oben');
+  });
+
+  it('show the e-mail as a mailto link with the address as its text, on both pages', () => {
+    for (const page of ['/impressum', '/datenschutz']) {
+      renderAt([page]);
+      const mail = screen.getByRole('link', { name: 'pfadfinder@steireif.de' });
+      expect(mail.getAttribute('href')).toBe('mailto:pfadfinder@steireif.de');
+      cleanup();
     }
   });
 
@@ -50,12 +61,15 @@ describe('Impressum and Datenschutz', () => {
     expect(text).toContain('Zugriffsprotokollen');
   });
 
-  it('end with a quiet link "Für Eltern" to /eltern, the way there in the installed app', async () => {
+  it('end with quiet links "Für Eltern" (the way there in the installed app) and "So geht’s"', async () => {
     for (const page of ['/impressum', '/datenschutz']) {
       renderAt([page]);
-      const links = screen.getAllByRole('link');
+      const links = screen
+        .getAllByRole('link')
+        .filter((l) => !l.getAttribute('href')!.startsWith('mailto:'));
       expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
         ['Für Eltern', '/eltern'],
+        ['So geht’s', '/so-gehts'],
       ]);
       expect(links[0]!.className).not.toContain('bg-signal');
       await userEvent.click(links[0]!);

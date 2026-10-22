@@ -43,6 +43,8 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - [ ] Funktioniert offline nach erstem Laden
 - [ ] Ziffernblock bietet nur bei allowDecimal ein Komma an, nie einen Punkt.
 
+Seiten für Erwachsene (/so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
+
 ## Definition of Done (je Aufgabe)
 1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`), nicht nur das Layout-Projekt
 2. Betroffene Tests ergänzt/aktualisiert

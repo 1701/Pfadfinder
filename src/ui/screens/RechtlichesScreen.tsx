@@ -1,10 +1,14 @@
 // Routes /impressum and /datenschutz: static text for adults, linked from the map and /eltern.
 // Unlike a task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in the history, or
 // to the map when the page was opened directly. At the end, quietly, "Für Eltern" leads to /eltern:
-// the home-screen app has no address bar, so this is its only way there (task 11).
+// the home-screen app has no address bar, so this is its only way there (task 11). Beside it
+// "So geht’s" (/so-gehts, 2026-10-22).
 
-import { Link, useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { EmailText } from '../components/EmailText';
+import { QuietLinks } from '../components/QuietLinks';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
+import { SO_GEHTS_LINK } from '../text/rechtliches-links';
 import {
   DATENSCHUTZ,
   ELTERN_LINK,
@@ -14,6 +18,12 @@ import {
 } from '../text/rechtliches';
 
 const PAGES = { impressum: IMPRESSUM, datenschutz: DATENSCHUTZ } as const;
+
+// From the map in two taps: Impressum → So geht’s (2026-10-22).
+const END_LINKS = [
+  { to: '/eltern', text: ELTERN_LINK },
+  { to: '/so-gehts', text: SO_GEHTS_LINK },
+] as const;
 
 export function RechtlichesScreen({ page }: { page: keyof typeof PAGES }) {
   return <Rechtliches page={PAGES[page]} />;
@@ -40,15 +50,13 @@ function Rechtliches({ page }: { page: LegalPage }) {
           <h2 className="text-option font-bold">{section.heading}</h2>
           {section.paragraphs.map((text) => (
             <p key={text} className="whitespace-pre-line">
-              {text}
+              <EmailText text={text} />
             </p>
           ))}
         </section>
       ))}
       <footer className="flex">
-        <Link to="/eltern" className={QUIET_ACTION_CLASS}>
-          {ELTERN_LINK}
-        </Link>
+        <QuietLinks label="Für Eltern" links={END_LINKS} />
       </footer>
     </main>
   );

@@ -3,7 +3,8 @@
 // "Sicherung herunterladen" (a file with all data, since 2026-10-16) above the button that
 // deletes everything on this device after asking back. Import and an overview come later
 // (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in.
-// Impressum and Datenschutz top right, already before the sum (task 10); also on the map (task 11).
+// So geht’s, Impressum and Datenschutz top right, already before the sum (task 10, /so-gehts since
+// 2026-10-22); also on the map (task 11).
 // Bottom left, quietly: the build ("Version a1b2c3d · 18.10.2026") and, once a new version
 // waits, "Neue Version – Neu laden" (task 11), also before the sum.
 
@@ -65,7 +66,7 @@ function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
   );
 }
 
-const rechtliches = <RechtlichesLinks />;
+const rechtliches = <RechtlichesLinks soGehts />;
 
 export function ElternScreen({
   downloadBackup,

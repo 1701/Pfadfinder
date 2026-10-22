@@ -57,7 +57,7 @@ describe('ElternScreen', () => {
     expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
   });
 
-  it('links Impressum and Datenschutz before the sum and after it', async () => {
+  it('links So geht’s, Impressum and Datenschutz before the sum and after it', async () => {
     renderScreen();
     const links = () =>
       screen
@@ -65,6 +65,7 @@ describe('ElternScreen', () => {
         .filter((l) => l.closest('nav'))
         .map((l) => [l.textContent, l.getAttribute('href')]);
     const expected = [
+      ['So geht’s', '/so-gehts'],
       ['Impressum', '/impressum'],
       ['Datenschutz', '/datenschutz'],
     ];
