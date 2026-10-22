@@ -21,6 +21,10 @@ import {
 } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
+// The viewports share nothing (each writes its own files), so they run side by side: locally all
+// four in 12.5 min instead of 42 min one after another (layout project 27.7 instead of 43.2 min).
+test.describe.configure({ mode: 'parallel' });
+
 const VIEWPORTS = process.env.CI
   ? ALL_VIEWPORTS.filter((v) => v.name.startsWith('safari-'))
   : ALL_VIEWPORTS;

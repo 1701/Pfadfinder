@@ -22,6 +22,8 @@ jobs:
         run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+        # Two install attempts of 4 min, the wait for the dpkg lock, npm ci.
+        timeout-minutes: 12
         with:
           browser: chromium
       - name: E2E layout project

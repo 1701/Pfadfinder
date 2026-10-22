@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Chore: Browser-Install mit freier dpkg-Sperre, layout.spec parallel
+- **Befund (Run 39866922436, smoke):** `timeout` beendete nach 4 Min. nur npx. `apt-get` lief als root unter sudo weiter und hielt die dpkg-Sperre, der zweite Versuch scheiterte sofort („Could not get lock“), auch beim Rerun.
+- **`setup/action.yml`:** Vor dem zweiten Versuch `sudo pkill apt-get || true`, dann bis zu 60 s warten, bis `fuser` die Sperren frei meldet, danach `dpkg --configure -a` und Retry.
+- **`timeout-minutes: 12`:** Composite-Schritte kennen es nicht. Es steht deshalb am Schritt `uses: ./.github/actions/setup` in ci.yml (check, smoke, webkit) und layout.yml.
+- **`layout.spec`:** `test.describe.configure({ mode: 'parallel' })`. Die vier Viewports liefen lokal in 12,5 statt nacheinander 42 Min. Engpass ist jetzt die probetest-layout.spec (26,8 Min., Viewports nacheinander), nicht gebaut. In CI läuft 1 Worker, dort ändert sich nichts.
+- **Lokal:** `npm run check` grün, Layout-Projekt 52/52 in 27,7 statt 43,2 Min. `karte-budget-*` byte-gleich. `probetest-budget-*` ist ohne den Block deutsch-03 inhaltsgleich. Den fehlt der versionierten Datei seit dem Content-Eintrag vom 22.10. (ohne Schalter), seine Werte stimmen mit jenem Eintrag überein. Keine Screenshots mit Schalter.
+
 ## 2026-10-23 – Aufgabe 17: Satz vor dem ersten Fundstück
 - **Befund (iPad):** Das Kind verstand die Striche, nicht ihren Sinn. Bis zum allerersten Fundstück steht im Tagesziel „Jede Aufgabe, die du übst, bringt dir ein Fundstück.“ (Wortlaut Markus) in Tinte. Quer an Stelle der leeren Wegstriche über „Heute …“, hoch in einer Zeile an Stelle von Strichen und „Heute …“.
 - **Mechanik:** Fundstück = `practice`- oder `review`-Attempt (`isFundstueck`, auch in `todayProgress`). `hasFundstueck` → `MapProgress.foundAny` aus den ohnehin gelesenen Attempts, kein Dexie-Feld, kein Store-Status. Check und Probetest zählen nicht.
