@@ -15,6 +15,9 @@
 // With probetest=deutsch-90 and a sweep item (tests/fixtures/sweep-match) as `item`, the sweep
 // item takes the place of the fixture's match d-lsa-2-952, beside t-sach-901
 // (tests/e2e/sweep-match.spec.ts).
+// Any other item of content/ that is not in the Probetest (with its text) takes the place of the
+// Probetest's first item of the same format, for Durchsehen of new items
+// (tests/e2e/sweep-luft-items.spec.ts).
 
 import { useEffect, useState } from 'react';
 import manifest from '../../../content/manifest.json';
@@ -23,7 +26,7 @@ import { igelText, probetestContentModules } from '../../../tests/fixtures/lesen
 import { SWEEP_MATCH_ITEMS } from '../../../tests/fixtures/sweep-match';
 import { createContentLoader } from '../../content-runtime/loader';
 import { loadProbetestContext, type ProbetestContext } from '../../data/probetest';
-import type { Bereich, Item } from '../../domain/content';
+import type { Bereich, Item, ReadingText } from '../../domain/content';
 import { probetestNumber, type ContentManifest } from '../../domain/content/manifest';
 import type { ProbetestResult } from '../../domain/learner';
 import { probetestReadAloud } from '../../domain/probetest';
@@ -74,6 +77,15 @@ function sampleResult(bereiche: Bereich[], items: Item[], pending: boolean): Pro
   return { byBereich, total };
 }
 
+/** `items` with `item` in place of the first one of its format (or of the first one). */
+function standIn(items: Item[], item: Item): Item[] {
+  const at = Math.max(
+    0,
+    items.findIndex((i) => i.format === item.format),
+  );
+  return items.map((i, n) => (n === at ? item : i));
+}
+
 function filled(item: Item): unknown {
   return item.format === 'short-answer' ? { text: item.solution.model } : previewAnswer(item, true);
 }
@@ -83,7 +95,11 @@ export function ProbetestPage() {
   const zustand = search.get('zustand') ?? 'aufgabe';
   const zeit = Number(search.get('zeit') ?? '45');
   const id = search.get('probetest') ?? 'mathe-01';
+  const itemId = search.get('item');
   const [ctx, setCtx] = useState<ProbetestContext | null | undefined>(undefined);
+  /** The content item `itemId` when it is not in this Probetest (item undefined: not found). */
+  const [foreign, setForeign] = useState<{ id: string; item?: Item; texts: ReadingText[] }>();
+  const outside = !!ctx && !!itemId && id !== FIXTURE && !ctx.items.some((i) => i.id === itemId);
 
   useEffect(() => {
     void preloadFormats();
@@ -92,17 +108,36 @@ export function ProbetestPage() {
     );
   }, [id]);
 
+  useEffect(() => {
+    if (!outside || !itemId) return;
+    void content.loadAllItems().then(async (all) => {
+      const item = all.find((i) => i.id === itemId);
+      const texts = item ? await content.loadTexts(item.fach, item.bereich) : [];
+      setForeign({ id: itemId, item, texts });
+    });
+  }, [outside, itemId]);
+
   if (ctx === undefined) return null;
   if (ctx === null) return <p className="p-lg">{id} nicht gefunden.</p>;
-  const sweep =
-    id === FIXTURE ? SWEEP_MATCH_ITEMS.find((i) => i.id === search.get('item')) : undefined;
-  const items = sweep ? ctx.items.map((i) => (i.id === FIXTURE_MATCH ? sweep : i)) : ctx.items;
-  const texts = sweep ? [...ctx.texts, igelText] : ctx.texts;
+  if (outside && foreign?.id !== itemId) return null;
+  const stranger = outside ? foreign?.item : undefined;
+  if (outside && !stranger) return <p className="p-lg">{itemId} nicht gefunden.</p>;
+  const sweep = id === FIXTURE ? SWEEP_MATCH_ITEMS.find((i) => i.id === itemId) : undefined;
+  const items = sweep
+    ? ctx.items.map((i) => (i.id === FIXTURE_MATCH ? sweep : i))
+    : stranger
+      ? standIn(ctx.items, stranger)
+      : ctx.items;
+  const texts = sweep
+    ? [...ctx.texts, igelText]
+    : stranger
+      ? [...ctx.texts, ...(foreign?.texts ?? [])]
+      : ctx.texts;
   const total = items.length;
   const time = { minutes: zeit, final: zeit <= 5 };
   const index = Math.max(
     0,
-    items.findIndex((i) => i.id === search.get('item')),
+    items.findIndex((i) => i.id === itemId),
   );
   const item = items[index];
   if (!item) return null;
