@@ -48,9 +48,9 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 Seiten für Erwachsene (/so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
 
 ## Definition of Done (je Aufgabe)
-1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`), nicht nur das Layout-Projekt
+1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`). In der GitHub-CI läuft es nicht von selbst (docs/DEPLOY.md, Abschnitt 9)
 2. Betroffene Tests ergänzt/aktualisiert
-3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --workflow=ci.yml --limit 1` lesen (Lint, Content, Unit, Build, Chromium- und WebKit-Smoke) und als Link nennen, nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Bei UI-, Content- oder Layout-Änderungen zusätzlich `gh workflow run layout.yml --ref main` starten und diesen Lauf (`gh run list --workflow=layout.yml --limit 1`) als zweiten Link nennen, als „läuft“, solange er nicht fertig ist. Sonst den letzten nächtlichen Layout-Lauf mit Commit nennen (docs/DEPLOY.md, Abschnitt 9). Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
+3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --workflow=ci.yml --limit 1` lesen (Lint, Content, Unit, Build, Chromium- und WebKit-Smoke) und als Link nennen, nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)
 5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), CI-Link, geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 
@@ -72,5 +72,5 @@ npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/output (mit 
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
 npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
 npm run icons            public/icon.svg → PNG-Icons in public/icons (RGB, ohne Alpha)
-gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI von Hand starten (sonst nur nachts)
+gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI (~40 Min., kostet Minuten; nur auf Bitte von Markus)
 ```

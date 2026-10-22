@@ -112,13 +112,14 @@ Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
 | Workflow | Wann | Was | Dauer |
 |---|---|---|---|
 | `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
-| `Layout` (`.github/workflows/layout.yml`) | nachts (01:00 UTC) und von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nur von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
 
-- **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur `Layout`. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist.
-- **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien oder `tests/e2e/screenshots/**` starten kein `CI`. Der nächtliche `Layout`-Lauf hört nach wenigen Sekunden auf, wenn `main` seit dem letzten grünen `Layout`-Lauf keinen neuen Commit hat. Ein Lauf von Hand läuft immer ganz.
+- **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur das Layout-Projekt. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist; das Layout-Projekt läuft vor jedem UI- oder Content-Commit lokal (CLAUDE.md, DoD 1).
+- **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien oder `tests/e2e/screenshots/**` starten kein `CI`.
+- **Nächtlicher Layout-Lauf ausgesetzt:** Der nächtliche Layout-Lauf ist ausgesetzt, solange das Repo privat ist (Actions-Minuten werden abgerechnet, ~40 Min. je Lauf auf dem 2-Kern-Runner); wird es öffentlich, `schedule: cron '0 1 * * *'` in `layout.yml` wieder aktivieren.
 - **Warum nicht per Pfad:** Das Layout hängt auch an `src/domain` (z. B. `presentation`, Grenzen neben Lesetexten), `src/app`, `index.html`, den Schriften und den Paketen. Ein Pfadfilter auf `src/ui/**` und `content/**` hätte 27 von 219 Commits (8.–22.10.) mit Layout-Wirkung übersehen.
-- **Layout von Hand starten:** `gh workflow run layout.yml --ref main`, danach `gh run list --workflow=layout.yml --limit 1` für den Link. Alternativ auf GitHub unter Actions → Layout → „Run workflow“. Das gehört zu jeder UI-, Content- oder Layout-Änderung (CLAUDE.md, DoD 3).
-- **Status lesen:** `gh run list --workflow=ci.yml --limit 1` bzw. `gh run list --workflow=layout.yml --limit 1`.
+- **Layout von Hand starten** (nur wenn Markus es will, z. B. vor einem Release): `gh workflow run layout.yml --ref main`, danach `gh run list --workflow=layout.yml --limit 1` für den Link. Alternativ auf GitHub unter Actions → Layout → „Run workflow“.
+- **Status lesen:** `gh run list --workflow=ci.yml --limit 1` (CLAUDE.md, DoD 3).
 - **Artefakte:** Jeder E2E-Job lädt `tests/e2e/output/` hoch (gitignored), auch wenn ein Test rot ist: `e2e-output` (Chromium), `e2e-output-webkit`, `e2e-output-layout`. Darin liegen Screenshots, Budget-JSON und `report.json` mit der Dauer jedes Tests.
 - **Caches:** `node_modules` (Schlüssel: `.nvmrc` und `package-lock.json`) und die Playwright-Browser (Schlüssel: Playwright-Version und Browser). Die Systempakete (apt) lädt jeder Job neu; ein langsamer Spiegel kann einen Job um Minuten verlängern.
 - **Kein dist-Artefakt:** `playwright.config.ts` baut im `webServer` selbst (`npm run build && npm run preview`, nie ein alter Server). Jeder E2E-Job baut also einmal, etwa 10 s.
