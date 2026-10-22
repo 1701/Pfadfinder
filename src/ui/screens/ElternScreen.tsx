@@ -36,6 +36,7 @@ import {
   IMPORT_FAILED,
   IMPORT_GO,
   IMPORT_INVALID,
+  IMPORT_NEWER,
   PREMIUM_VOICE,
   gateTitle,
 } from '../text/eltern';
@@ -62,12 +63,13 @@ export interface ElternScreenProps {
 }
 
 type Step = 'frage' | 'offen' | 'rueckfrage' | 'loeschen' | 'import-rueckfrage' | 'einlesen';
-type Failure = 'backup' | 'delete' | 'invalid' | 'import';
+type Failure = 'backup' | 'delete' | 'invalid' | 'newer' | 'import';
 
 const FAILURE_TEXT: Record<Failure, string> = {
   backup: BACKUP_FAILED,
   delete: DELETE_FAILED,
   invalid: IMPORT_INVALID,
+  newer: IMPORT_NEWER,
   import: IMPORT_FAILED,
 };
 
@@ -115,9 +117,11 @@ export function ElternScreen({
       const file = input.files?.[0];
       input.value = ''; // The same file can be picked again.
       if (!file) return;
-      // parseImport takes the file's text as it is (no JSON, wrong version: no backup).
+      // parseImport takes the file's text as it is (no JSON, unknown version: no backup; a newer
+      // version: an update first).
       const text = await file.text();
-      if (!parseImport(text).ok) return setFailed('invalid');
+      const parsed = parseImport(text);
+      if (!parsed.ok) return setFailed(parsed.newerVersion ? 'newer' : 'invalid');
       setFailed(null);
       setBackupText(text);
       setStep('import-rueckfrage');

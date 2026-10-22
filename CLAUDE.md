@@ -27,6 +27,8 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Keine Platzhalter-Items im Code erfinden; nutze `content/` oder frage nach Testdaten
 - Renderer für mark-in-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
 - Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex). Ausnahme: `payload.keepOrder: true` (Optionen benennen Bildbeschriftungen A–D), dann bleibt die Reihenfolge wie im Content.
+- Messungen für Layout-Entscheidungen laufen nur in der App mit geladener Andika, nie mit einem separaten Skript ohne Schrift.
+- Während ein Playwright-Lauf gegen den Dev-Server läuft, werden keine Dateien im Repo bearbeitet.
 
 ## Screenshots
 - Ein normaler Lauf (`npm run e2e`, einzelne Specs, `npm run screenshots`) schreibt Screenshots und Budget-JSON nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Danach ist `git status` sauber.

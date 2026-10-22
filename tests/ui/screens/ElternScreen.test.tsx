@@ -310,6 +310,27 @@ describe('ElternScreen', () => {
       expect(onImported).not.toHaveBeenCalled();
       expect((await loadMapProgress(target, now)).offerSpent).toBe(true);
     });
+
+    it('a backup from a newer version asks for "Neu laden" first and changes nothing', async () => {
+      const { text } = await backupOfPlayedDevice();
+      const newer = JSON.stringify({ ...JSON.parse(text), version: '3' });
+      const target = createMemoryRepositories();
+      const onImported = renderOn(target);
+      await passGate();
+      await upload(newer);
+      expect(
+        await screen.findByText(
+          'Diese Sicherung ist aus einer neueren Version. Warte, bis unter der Karte „Neu laden“ steht, tipp darauf und versuch es dann noch einmal.',
+        ),
+      ).toBeTruthy();
+      expect(screen.queryByText('Das ist keine Pfadfinder-Sicherung.')).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Einlesen' })).toBeNull();
+      // A broken file afterwards gets the old sentence again.
+      await upload('kein JSON');
+      expect(await screen.findByText('Das ist keine Pfadfinder-Sicherung.')).toBeTruthy();
+      expect(onImported).not.toHaveBeenCalled();
+      expect((await loadMapProgress(target, now)).mastery).toEqual([]);
+    });
   });
 
   it('says so when writing the backup fails, and stays', async () => {

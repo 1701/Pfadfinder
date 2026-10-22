@@ -115,12 +115,27 @@ describe('parseImport', () => {
   });
 
   it('explains files from a newer app version', () => {
-    expect(errorsOf(parseImport(exportJson((f) => (f.version = '3' as '2'))))).toEqual([
+    const result = parseImport(exportJson((f) => (f.version = '3' as '2')));
+    expect(errorsOf(result)).toEqual([
       {
         path: 'version',
         message: 'Die Datei stammt aus einer neueren Version der App. Bitte aktualisiere die App.',
       },
     ]);
+    expect(result).toMatchObject({ ok: false, newerVersion: true });
+  });
+
+  it('marks only a newer version as newer, not a missing, older or unknown one', () => {
+    for (const text of [
+      '{}',
+      'kein JSON',
+      exportJson((f) => (f.version = '0' as '2')),
+      exportJson((f) => (f.version = 'x' as '2')),
+    ]) {
+      const result = parseImport(text);
+      expect(result.ok).toBe(false);
+      expect('newerVersion' in result).toBe(false);
+    }
   });
 
   it('lists every schema error with its path', () => {

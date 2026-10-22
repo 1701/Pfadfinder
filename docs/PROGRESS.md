@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Nachtrag Release-Liste: (1), (2), (5); (3)/(4) zurückgehalten
+- **(1) /eltern:** Titel „… sichern, einlesen oder löschen.“ Eine Sicherung aus einer neueren Version (`parseImport` → `newerVersion: true`) zeigt „Diese Sicherung ist aus einer neueren Version. Warte, bis unter der Karte „Neu laden“ steht, tipp darauf und versuch es dann noch einmal.“ (Wortlaut Markus). Kaputte Dateien zeigen weiter „Das ist keine Pfadfinder-Sicherung.“
+- **(2) CLAUDE.md:** Zwei Arbeitsregeln: Messungen nur in der App mit Andika, keine Dateiänderungen während eines Playwright-Laufs.
+- **(5) Datenschutz/Hosting:** Ergänzt um die Übermittlung in die USA auf Grundlage des DPF und, soweit erforderlich, der Standardvertragsklauseln (Cloudflare DPA). Die Anschrift stimmte schon.
+- **(3)/(4) nicht gebaut (Entscheidung Markus):** Item-`readAloud` ersetzt nur den Prompt, `itemSpeech` hängt immer „Antworten: …“ an (Optionen, find-error-Wörter, cloze-Satz). „Nur Prompt“ geht ohne Code- oder Schema-Änderung nicht. Schema bleibt 1.0.18. Die Vorschläge (a)/(b) stehen im Bericht.
+- **Lokal:** `npm run check` grün, Chromium-Projekte 39/39, `blatt-layout` 4/4 in vier Viewports. Screenshots mit Schalter: eltern-loeschen, datenschutz (je 4).
+
 ## 2026-10-22 – Release-Liste (1)–(11)
 - **(1) /so-gehts** „So funktioniert Pfadfinder“: Text von Markus wörtlich (korrigierte Fassung), Spalte `max-w-measure` 30rem (längste Zeile 67 Zeichen), nur der Text scrollt, „Zurück“ zur Karte im Band. Verlinkt als „So geht’s“ auf /eltern und neben „Für Eltern“ am Ende von Impressum und Datenschutz. **Nicht auf der Karte:** Die Zeile bräuchte hoch 723 von 720 px (Entscheidung Markus), karte.spec unverändert.
 - **(2)/(3)** Name, Anschrift, E-Mail (mailto, `EmailText`) in Impressum und Datenschutz, keine Marker mehr in `src`; Impressum: „… gehört zu keinem Pfadfinderverband.“ CLAUDE.md: Seiten für Erwachsene von „≤ 2 Sätze“ ausgenommen.

@@ -68,7 +68,7 @@ export const DATENSCHUTZ: LegalPage = {
       heading: 'Hosting bei Cloudflare',
       paragraphs: [
         'Die Dateien der App liegen bei Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA. Wenn dein Browser sie abruft (beim ersten Laden und wenn er nach einer neuen Version sieht), erhält Cloudflare technisch nötige Angaben: IP-Adresse, Zeitpunkt, die abgerufene Datei und die Kennung des Browsers.',
-        'Cloudflare nutzt diese Angaben, um die Dateien auszuliefern und die Seite vor Angriffen zu schützen, und hält sie in Zugriffsprotokollen fest. Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren Auslieferung (Art. 6 Abs. 1 lit. f DSGVO). Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert.',
+        'Cloudflare nutzt diese Angaben, um die Dateien auszuliefern und die Seite vor Angriffen zu schützen, und hält sie in Zugriffsprotokollen fest. Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren Auslieferung (Art. 6 Abs. 1 lit. f DSGVO). Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert. Die Übermittlung in die USA erfolgt auf Grundlage des EU-US Data Privacy Frameworks und, soweit erforderlich, der Standardvertragsklauseln der EU-Kommission (Cloudflare Data Processing Addendum).',
       ],
     },
     {

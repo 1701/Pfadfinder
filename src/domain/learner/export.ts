@@ -53,7 +53,9 @@ export interface ImportError {
 }
 
 export type ImportResult =
-  { ok: true; data: LearnerData; exportedAt: string } | { ok: false; errors: ImportError[] };
+  | { ok: true; data: LearnerData; exportedAt: string }
+  /** newerVersion: the file comes from a newer app version, an update can read it. */
+  | { ok: false; errors: ImportError[]; newerVersion?: true };
 
 export function serialize(data: LearnerData, exportedAt: string): ExportFile {
   return {
@@ -87,11 +89,18 @@ export function parseImport(json: unknown): ImportResult {
   if (version === '1') {
     raw = migrateV1(raw as Record<string, unknown>);
   } else if (version !== EXPORT_VERSION) {
-    const message =
-      typeof version === 'string' && Number(version) > Number(EXPORT_VERSION)
-        ? 'Die Datei stammt aus einer neueren Version der App. Bitte aktualisiere die App.'
-        : 'Die Datei ist keine gültige Fortschritts-Datei (Version fehlt oder ist unbekannt).';
-    return fail([{ path: 'version', message }]);
+    if (typeof version === 'string' && Number(version) > Number(EXPORT_VERSION)) {
+      const message =
+        'Die Datei stammt aus einer neueren Version der App. Bitte aktualisiere die App.';
+      return { ok: false, errors: [{ path: 'version', message }], newerVersion: true };
+    }
+    return fail([
+      {
+        path: 'version',
+        message:
+          'Die Datei ist keine gültige Fortschritts-Datei (Version fehlt oder ist unbekannt).',
+      },
+    ]);
   }
 
   const parsed = exportFileSchema.safeParse(raw);
