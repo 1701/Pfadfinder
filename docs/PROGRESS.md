@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Aufgabe 18: Vorlesen verrät keine Fehlschreibung
+- **Befund (iPad):** Vorlesen sprach bei Rechtschreib-Items die Fehlerwörter, „Hunt“ klang englisch und verriet die Lösung. Regel: Falsch geschriebene Wörter werden nie vorgelesen.
+- **(1) Code:** `itemSpeech` liest bei find-error und cloze-select in rs-laut-buchstabe und rs-strategien nach dem Prompt-Teil den Satz in richtiger Schreibung aus `solution` (`spelledSentence`), ohne „Antworten“, „Lücke“ und Optionen. Fehlt eine Korrektur oder Lösung, nur der Prompt-Teil. Betroffen genau 15 Items (Test). Mathe- und Lese-cloze-select (12) und andere RS-Formate unverändert. ARCHITECTURE §5 nachgezogen.
+- **Fallback:** `content:validate` lehnt beide Fälle schon heute als Fehler ab (corrections genau je errorId; Lösung je Lücke, Platzhalter = Lücken).
+- **(2) Schema 1.0.19 (§7 Rechtschreibung):** Regel für Optionen und Stimuli mit Fehlschreibung. Option-`readAloud` an d-rsl-1-002, d-rsl-2-005, d-rss-1-005, d-rss-2-003; Item-`readAloud` an d-rsl-3-001, d-rss-3-001. d-rss-1-008, d-rss-2-004 bleiben. Der Validator prüft das nicht. Manifest unverändert.
+- **Lokal:** `npm run check` grün (1057 Tests), `content:validate` 0/0, Chromium-Projekte 39/39. Keine Screenshots.
+
 ## 2026-10-22 – Nachtrag Release-Liste: (1), (2), (5); (3)/(4) zurückgehalten
 - **(1) /eltern:** Titel „… sichern, einlesen oder löschen.“ Eine Sicherung aus einer neueren Version (`parseImport` → `newerVersion: true`) zeigt „Diese Sicherung ist aus einer neueren Version. Warte, bis unter der Karte „Neu laden“ steht, tipp darauf und versuch es dann noch einmal.“ (Wortlaut Markus). Kaputte Dateien zeigen weiter „Das ist keine Pfadfinder-Sicherung.“
 - **(2) CLAUDE.md:** Zwei Arbeitsregeln: Messungen nur in der App mit Andika, keine Dateiänderungen während eines Playwright-Laufs.

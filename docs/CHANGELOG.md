@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.19 – 2026-10-22
+- §7 Deutsch, Rechtschreibung: Falsch geschriebene Wörter werden nie vorgelesen. Bei find-error und cloze-select in den RS-Bereichen liest die App den Satz in richtiger Schreibung aus solution und keine Optionen (Code). Choice-Optionen mit Fehlschreibung tragen ein readAloud mit der korrekten Schreibung. Ein Stimulus mit Fehlschreibung bekommt ein Item-readAloud mit richtiger Schreibung. Grund: iPad-Befund, Vorlesen sprach bei d-rss-1-003 „Hunt“ englisch und verriet die Lösung. Nachgezogen: Optionen von d-rsl-1-002, d-rsl-2-005, d-rss-1-005, d-rss-2-003, Item-`readAloud` an d-rsl-3-001 und d-rss-3-001. Nicht betroffen: kleingeschriebene Nomen (d-rss-1-008, d-rss-2-004), das hört man nicht. Der Validator prüft das nicht. Nur Doku und vorhandene optionale Felder, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.18 – 2026-10-22
 - §7 Mathematik: Mehrere Gleichungen nie durch Komma trennen (Verwechslung mit Dezimalkomma); mit „und“ oder als eigene Sätze. Grund: In m-ms-1-004, m-ms-2-005 und m-ms-1-008 las sich „= 18, 99 + 99“ wie 18,99 (Patch 2 muster-strukturen). Der Validator prüft das nicht. Nur Doku, keine Feldänderung, `schemaVersion` bleibt `"1.0"`.
 

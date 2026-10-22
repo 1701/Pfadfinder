@@ -60,11 +60,13 @@
         },
         {
           "id": "b",
-          "text": "Schpiel"
+          "text": "Schpiel",
+          "readAloud": "Spiel"
         },
         {
           "id": "c",
-          "text": "Spil"
+          "text": "Spil",
+          "readAloud": "Spiel"
         }
       ]
     },
@@ -639,11 +641,13 @@
         },
         {
           "id": "b",
-          "text": "Holtz"
+          "text": "Holtz",
+          "readAloud": "Holz"
         },
         {
           "id": "c",
-          "text": "Hollz"
+          "text": "Hollz",
+          "readAloud": "Holz"
         }
       ]
     },
@@ -846,6 +850,7 @@
       "text": "Leyla schreibt: Schtuhl."
     },
     "prompt": "Erkläre Leyla, warum das Wort mit St beginnt. Schreibe es richtig auf.",
+    "readAloud": "Leyla schreibt: Stuhl. Erkläre Leyla, warum das Wort mit St beginnt. Schreibe es richtig auf.",
     "payload": {
       "maxChars": 120,
       "hint": "Denk an den Wortanfang."

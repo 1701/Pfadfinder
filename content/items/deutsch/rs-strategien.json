@@ -114,8 +114,8 @@
     "payload": {
       "options": [
         { "id": "a", "text": "Hände" },
-        { "id": "b", "text": "Hende" },
-        { "id": "c", "text": "Hänte" }
+        { "id": "b", "text": "Hende", "readAloud": "Hände" },
+        { "id": "c", "text": "Hänte", "readAloud": "Hände" }
       ]
     },
     "solution": { "optionId": "a" },
@@ -277,9 +277,9 @@
     "payload": {
       "options": [
         { "id": "a", "text": "Räuber" },
-        { "id": "b", "text": "Läute" },
-        { "id": "c", "text": "Fräund" },
-        { "id": "d", "text": "Äule" }
+        { "id": "b", "text": "Läute", "readAloud": "Leute" },
+        { "id": "c", "text": "Fräund", "readAloud": "Freund" },
+        { "id": "d", "text": "Äule", "readAloud": "Eule" }
       ]
     },
     "solution": { "optionId": "a" },
@@ -444,6 +444,7 @@
     "status": "draft",
     "stimulus": { "text": "Leyla schreibt: Der Hunt bellt." },
     "prompt": "Erkläre Leyla, wie sie das Wort prüfen kann. Schreibe es richtig auf.",
+    "readAloud": "Leyla schreibt: Der Hund bellt. Erkläre Leyla, wie sie das Wort prüfen kann. Schreibe es richtig auf.",
     "payload": {
       "maxChars": 120,
       "hint": "Mach das Wort länger."
