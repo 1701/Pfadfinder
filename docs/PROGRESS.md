@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Content: Probetest deutsch-03 eingespielt
+- **Eingespielt:** `content/probetests/deutsch-03.json` unverändert (21 Items, t-sach-004 und t-lit-004), Manifest neu erzeugt. Vorab per Python geprüft: alle IDs vorhanden, nicht retired, keine in deutsch-01/02, niveauMix 9/8/4 und bereichMix stimmen. `content:validate` 0 Fehler, 0 Warnungen.
+- **Zeit:** 1205 s Items + 246 s Lesezeit = 1451 s = 24,18 Min.; geprüfte Untergrenze ≥ 24 Min. (1440 s). Der Validator nennt die Summe nur im Fehlerfall.
+- **Gemessen (`probetest-layout`, knappstes deutsch-03-Item; iPad quer, hoch, Safari quer, hoch):** Antworten d-lsa-2-008 222, d-lli-2-008 191, d-rss-2-005 172, d-lsa-1-009 184; Durchsehen d-lsa-2-008 53, d-lsa-3-004 44, d-lsa-2-007 1, d-lsa-3-004 44; Fehlt d-lsa-2-008 145/117/37/105; Vergleichen d-lsa-3-004 209/126/101/126.
+- **Ausnahme (bekannt, kein Patch):** Durchsehen Safari quer d-lsa-2-007 1, d-lli-2-007 1, d-lsa-2-008 15 px (≥ 0); alle anderen Items dort ≥ 19 px.
+- **Lokal:** `npm run check` grün, `probetest-layout` 6/6 in vier Viewports, Chromium-Projekte 39/39. Keine Screenshots mit Schalter.
+
 ## 2026-10-22 – Content: Lese-Batch 004 (t-sach-004, t-lit-004), Sweep „Luft je Item“
 - **Eingespielt:** t-sach-004 „Vom Regen zum Wasserhahn“, t-lit-004 „Die Murmel“ und je 5 Items (d-lsa-1-008, 1-009, 2-007, 2-008, 3-004; d-lli-1-007, 1-008, 2-007, 2-008, 3-004), unverändert angehängt. `content:validate` 0 Fehler, 0 Warnungen. Nichts ausgelassen.
 - **Spec:** `tests/e2e/sweep-luft-items.spec.ts` (Projekt `sweep`, `PFADFINDER_SWEEP=1`, IDs in `PFADFINDER_SWEEP_ITEMS`) ersetzt die temporäre Spec aus muster-strukturen Patch 2, die nicht mehr da war; neu geschrieben, m-ms-1-004 liefert alle 12 Werte gleich. `/dev/probetest` zeigt dafür auch Items außerhalb des Probetests (nur Dev, `dist` byte-gleich).
