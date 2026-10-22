@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-22 – Chore: CI in zwei Workflows (Push ~3 Min., Layout nachts)
+- **Diagnose:** 43–52 Min. je Push. Das Layout-Projekt brauchte 37 Min. davon (layout.spec ~19, probetest-layout.spec ~11). Install und Build < 1,5 Min. Das Repo ist privat: 2-vCPU-Runner, Playwright mit 1 Worker.
+- **`ci.yml`:** Bei jedem Push laufen drei parallele Jobs: check, Chromium-Smoke, WebKit-Smoke. Die Scope-Logik ist entfernt. **`layout.yml`:** nur das Layout-Projekt, nachts um 01:00 UTC (ohne neuen Commit seit dem letzten grünen Lauf kein Lauf) und von Hand.
+- **Gemeinsames Setup** `.github/actions/setup`: Cache für `node_modules` und für die Playwright-Browser. `report.json` (Zeiten je Test) liegt in jedem E2E-Artefakt.
+- **Entscheidungen (Markus):** Layout nicht per Pfad, weil 27 von 219 Commits Layout-Wirkung außerhalb von src/ui, content und tests/e2e hatten. WebKit läuft im Push-Workflow. Kein dist-Artefakt, die Config baut im webServer selbst. Specs, Viewports und `playwright.config.ts` sind unverändert.
+- **Hinweis, nicht gebaut:** layout.spec besteht aus 2 Tests à ~9,5 Min. Auch mit mehr Workern bliebe der Layout-Lauf ≥ 10 Min.
+- **Doku:** DEPLOY.md §9 (welcher Lauf welchen Status liefert, Start von Hand) und CLAUDE.md DoD 3 und Befehle.
+- **Lokal:** `npm run check` grün. Chromium-Projekte mit `--reporter=dot,json` 39/39, `report.json` in tests/e2e/output, `git status` danach sauber.
+
 ## 2026-10-22 – Aufgabe 18: Vorlesen verrät keine Fehlschreibung
 - **Befund (iPad):** Vorlesen sprach bei Rechtschreib-Items die Fehlerwörter, „Hunt“ klang englisch und verriet die Lösung. Regel: Falsch geschriebene Wörter werden nie vorgelesen.
 - **(1) Code:** `itemSpeech` liest bei find-error und cloze-select in rs-laut-buchstabe und rs-strategien nach dem Prompt-Teil den Satz in richtiger Schreibung aus `solution` (`spelledSentence`), ohne „Antworten“, „Lücke“ und Optionen. Fehlt eine Korrektur oder Lösung, nur der Prompt-Teil. Betroffen genau 15 Items (Test). Mathe- und Lese-cloze-select (12) und andere RS-Formate unverändert. ARCHITECTURE §5 nachgezogen.

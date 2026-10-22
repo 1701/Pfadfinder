@@ -1,6 +1,6 @@
 # DEPLOY.md – Auslieferung über Cloudflare Workers (Static Assets)
 
-Pfadfinder ist eine reine Client-App: `dist/` wird als statische Assets eines Workers ausgeliefert, ohne Worker-Code. Cloudflare baut selbst, sobald auf GitHub gepusht wird (Workers Builds). Es gibt dafür keinen eigenen GitHub-Workflow; der bestehende CI-Workflow (Lint, Content, Tests, e2e) läuft unabhängig davon weiter.
+Pfadfinder ist eine reine Client-App: `dist/` wird als statische Assets eines Workers ausgeliefert, ohne Worker-Code. Cloudflare baut selbst, sobald auf GitHub gepusht wird (Workers Builds). Es gibt dafür keinen eigenen GitHub-Workflow; die GitHub-Workflows `CI` und `Layout` (Abschnitt 9) laufen unabhängig davon.
 
 ## 1. Der Ablauf
 
@@ -107,4 +107,19 @@ Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 
 ## 9. GitHub-CI und Screenshots
 
-Die GitHub-CI (`.github/workflows/ci.yml`) läuft neben Workers Builds und liefert nichts aus. Änderungen nur an `docs/**`, Markdown-Dateien oder `tests/e2e/screenshots/**` starten keinen Lauf. Lint, Content-Prüfung, Unit-Tests und Build laufen sonst immer; der Job `e2e` läuft vollständig (Chromium und WebKit) nur bei Änderungen in `src/`, `tests/`, `vite.config.ts`, `playwright.config.ts` oder `package*.json`, bei reinen Content-Änderungen nur das Projekt `layout` (Safari-Viewports) und sonst gar nicht. Ein von Hand gestarteter Lauf (`workflow_dispatch`) ist immer vollständig. Der Job `e2e` lädt Screenshots und Budget-JSON aller Specs als Artefakt `e2e-output` hoch (Ordner `tests/e2e/output/`, gitignored), auch wenn ein Test rot ist. In CI ist `PFADFINDER_UPDATE_SCREENSHOTS` nie gesetzt: Die versionierten Bilder in `tests/e2e/screenshots/` ändern sich nur lokal, bei einer bewussten UI-Änderung (CLAUDE.md, Abschnitt „Screenshots“).
+Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
+
+| Workflow | Wann | Was | Dauer |
+|---|---|---|---|
+| `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nachts (01:00 UTC) und von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
+
+- **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur `Layout`. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist.
+- **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien oder `tests/e2e/screenshots/**` starten kein `CI`. Der nächtliche `Layout`-Lauf hört nach wenigen Sekunden auf, wenn `main` seit dem letzten grünen `Layout`-Lauf keinen neuen Commit hat. Ein Lauf von Hand läuft immer ganz.
+- **Warum nicht per Pfad:** Das Layout hängt auch an `src/domain` (z. B. `presentation`, Grenzen neben Lesetexten), `src/app`, `index.html`, den Schriften und den Paketen. Ein Pfadfilter auf `src/ui/**` und `content/**` hätte 27 von 219 Commits (8.–22.10.) mit Layout-Wirkung übersehen.
+- **Layout von Hand starten:** `gh workflow run layout.yml --ref main`, danach `gh run list --workflow=layout.yml --limit 1` für den Link. Alternativ auf GitHub unter Actions → Layout → „Run workflow“. Das gehört zu jeder UI-, Content- oder Layout-Änderung (CLAUDE.md, DoD 3).
+- **Status lesen:** `gh run list --workflow=ci.yml --limit 1` bzw. `gh run list --workflow=layout.yml --limit 1`.
+- **Artefakte:** Jeder E2E-Job lädt `tests/e2e/output/` hoch (gitignored), auch wenn ein Test rot ist: `e2e-output` (Chromium), `e2e-output-webkit`, `e2e-output-layout`. Darin liegen Screenshots, Budget-JSON und `report.json` mit der Dauer jedes Tests.
+- **Caches:** `node_modules` (Schlüssel: `.nvmrc` und `package-lock.json`) und die Playwright-Browser (Schlüssel: Playwright-Version und Browser). Die Systempakete (apt) lädt jeder Job neu; ein langsamer Spiegel kann einen Job um Minuten verlängern.
+- **Kein dist-Artefakt:** `playwright.config.ts` baut im `webServer` selbst (`npm run build && npm run preview`, nie ein alter Server). Jeder E2E-Job baut also einmal, etwa 10 s.
+- **Screenshots:** In CI ist `PFADFINDER_UPDATE_SCREENSHOTS` nie gesetzt. Die versionierten Bilder in `tests/e2e/screenshots/` ändern sich nur lokal, bei einer bewussten UI-Änderung (CLAUDE.md, Abschnitt „Screenshots“).

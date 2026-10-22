@@ -1,0 +1,60 @@
+name: Layout
+
+# The layout project (every item, Probetest and reading text in four viewports, ~40 min).
+# Not per path: layout also depends on src/domain, src/app, index.html, fonts and packages.
+# Nightly, but only when main has a commit without a green layout run yet; by hand always:
+#   gh workflow run layout.yml --ref main
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.new.outputs.run }}
+    steps:
+      - name: New commit since the last green layout run?
+        id: new
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          run=true
+          if [ "$EVENT" = schedule ]; then
+            last=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/layout.yml/runs?status=success&branch=main&per_page=1" \
+              --jq '.workflow_runs[0].head_sha // ""')
+            echo "HEAD $GITHUB_SHA, last green layout run ${last:-none}"
+            if [ "$last" = "$GITHUB_SHA" ]; then run=false; fi
+          fi
+          echo "run: $run"
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+  layout:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.run == 'true'
+    timeout-minutes: 60
+    env:
+      PLAYWRIGHT_JSON_OUTPUT_FILE: tests/e2e/output/report.json
+    steps:
+      - name: Screenshot switch is never set in CI
+        run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          browser: chromium
+      - name: E2E layout project
+        run: npx playwright test --project=layout --reporter=dot,json
+      - name: Versioned screenshots untouched
+        run: git diff --exit-code --stat -- tests/e2e/screenshots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-output-layout
+          path: tests/e2e/output
