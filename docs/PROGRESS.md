@@ -10,6 +10,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **CLAUDE.md:** keine echten Kompass-Aufgaben, Testhefte oder Scans; Kindernamen ab jetzt als „Tochter“.
 - **layout.yml:** Nachtlauf 01:00 UTC wieder aktiv, mit dem Job „kein neuer Commit, kein Lauf“ aus 8f80fcf^, jetzt mit Playwright-Container. DEPLOY §9 nachgezogen.
 - **Lokal:** `npm run check` grün. Keine UI-Änderung, keine Playwright-Projekte.
+- **Nachtrag:** Layout-Lauf im Container nach dem Umschalten grün in 23 Min. (vorher ~40). CLAUDE.md „Befehle“ ohne „kostet Minuten“, Dauer dort und in DEPLOY §9 ~23 Min.
 
 ## 2026-10-23 – Chore: E2E-Jobs im Playwright-Image, kein apt mehr
 - **Befund (Run 39907709670, webkit):** Für WebKit brauchte apt 181 Pakete mit 80–90 kB/s, beide 6-Min.-Versuche liefen ab.

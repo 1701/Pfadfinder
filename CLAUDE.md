@@ -75,5 +75,5 @@ npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/output (mit 
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
 npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
 npm run icons            public/icon.svg → PNG-Icons in public/icons (RGB, ohne Alpha)
-gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI (~40 Min., kostet Minuten; nur auf Bitte von Markus)
+gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI (~23 Min.; nur auf Bitte von Markus)
 ```

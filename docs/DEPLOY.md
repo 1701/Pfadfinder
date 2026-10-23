@@ -112,7 +112,7 @@ Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
 | Workflow | Wann | Was | Dauer |
 |---|---|---|---|
 | `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
-| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~23 Min. |
 
 - **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur das Layout-Projekt. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist; das Layout-Projekt läuft vor jedem UI- oder Content-Commit lokal (CLAUDE.md, DoD 1).
 - **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien, `tests/e2e/screenshots/**` oder `.github/workflows/layout.yml` starten kein `CI`.
