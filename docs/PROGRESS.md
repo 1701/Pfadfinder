@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Chore: E2E-Jobs im Playwright-Image, kein apt mehr
+- **Befund (Run 39907709670, webkit):** Für WebKit brauchte apt 181 Pakete mit 80–90 kB/s, beide 6-Min.-Versuche liefen ab.
+- **Entscheidung Markus (a):** `smoke` und `webkit` (ci.yml) und der Layout-Job (layout.yml) laufen im Container `mcr.microsoft.com/playwright:v1.63.0-noble`, genau die Version von `@playwright/test` aus package-lock.json. Bei jedem Playwright-Update muss der Tag mitgezogen werden.
+- **Ausgebaut:** Browser-Install, Retry, Warten auf die dpkg-Sperre, Browser-Cache und die `timeout-minutes` am Setup-Schritt. `.github/actions/setup` macht nur noch Node und den `node_modules`-Cache. `check` läuft ohne Container. DEPLOY §9 angepasst, CLAUDE.md DoD 3 nannte den Install nicht.
+- **Lokal im Image geprüft:** Klon von a765eb9, `npm ci`, Chromium- und WebKit-Projekte: 71 grün, 6 übersprungen (Service-Worker-Tests in WebKit, gewollt). Keine Versionsabweichung, Browser liegen unter `/ms-playwright`, git 2.43 ist im Image, versionierte Screenshots blieben unberührt.
+- **Nicht committet (Korrektur):** probetest-layout.spec lief mit Schalter (6/6, 6,6 Min.). Die „knappstes“-Screenshots zeigen Mathe-Items, nicht deutsch-03. Die Unterschiede waren eine Feedback-Animation mitten im Einblenden. `probetest-text-durchsehen-knappstes-ipad-landscape` war diesmal gleich. `probetest-druck.pdf` unterscheidet sich nur im Zeitstempel. Alles zurückgesetzt.
+- **Lokal:** `npm run check` grün. Der Layout-Job im Container ist noch nicht gelaufen (nur von Hand).
+
 ## 2026-10-23 – Chore: WebKit-Install 6 Min., probetest-layout.spec parallel, Budget deutsch-03
 - **Befund (Run 39871704554, webkit):** Der Retry griff, aber der Azure-Spiegel lieferte ~54 kB/s, beide Versuche liefen über 4 Min. Der Rerun war grün.
 - **`setup/action.yml`:** 6 Min. je Versuch für WebKit, Chromium bleibt bei 4. In ci.yml hat der Setup-Schritt des WebKit-Jobs `timeout-minutes: 14`, die anderen behalten 12.

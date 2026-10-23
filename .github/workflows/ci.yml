@@ -21,8 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        # Two install attempts of 4 min, the wait for the dpkg lock, npm ci.
-        timeout-minutes: 12
       - name: Lint
         run: npm run lint
       - name: Validate content
@@ -33,8 +31,14 @@ jobs:
         run: npm run build
 
   # The Playwright config builds and previews dist itself (webServer), so no dist artifact.
+  # Both E2E jobs run in the Playwright image of the exact @playwright/test version in
+  # package-lock.json: browsers and their system libraries come with it, no apt (a slow mirror
+  # failed the install in runs 39866922436, 39871704554 and 39907709670). Update the tag with
+  # every Playwright update.
   smoke:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     timeout-minutes: 20
     env:
       PLAYWRIGHT_JSON_OUTPUT_FILE: tests/e2e/output/report.json
@@ -43,10 +47,6 @@ jobs:
         run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        # Two install attempts of 4 min, the wait for the dpkg lock, npm ci.
-        timeout-minutes: 12
-        with:
-          browser: chromium
       - name: E2E Chromium (iPad landscape and portrait)
         run: npx playwright test --project=chromium-landscape --project=chromium-portrait --reporter=dot,json
       - name: Versioned screenshots untouched
@@ -60,6 +60,8 @@ jobs:
   # Playwright ships WebKit's system libraries only for Ubuntu/Debian; the iPad target needs it.
   webkit:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     timeout-minutes: 20
     env:
       PLAYWRIGHT_JSON_OUTPUT_FILE: tests/e2e/output/report.json
@@ -68,10 +70,6 @@ jobs:
         run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        # Two install attempts of 6 min (WebKit), the wait for the dpkg lock, npm ci.
-        timeout-minutes: 14
-        with:
-          browser: webkit
       - name: E2E WebKit (iPad landscape and portrait)
         run: npx playwright test --project=webkit-landscape --project=webkit-portrait --reporter=dot,json
       - name: Versioned screenshots untouched

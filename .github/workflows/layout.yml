@@ -14,6 +14,9 @@ permissions:
 jobs:
   layout:
     runs-on: ubuntu-latest
+    # The same Playwright image as the E2E jobs in ci.yml (exact version from package-lock.json).
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     timeout-minutes: 60
     env:
       PLAYWRIGHT_JSON_OUTPUT_FILE: tests/e2e/output/report.json
@@ -22,10 +25,6 @@ jobs:
         run: test "${PFADFINDER_UPDATE_SCREENSHOTS:-}" = ""
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        # Two install attempts of 4 min, the wait for the dpkg lock, npm ci.
-        timeout-minutes: 12
-        with:
-          browser: chromium
       - name: E2E layout project
         run: npx playwright test --project=layout --reporter=dot,json
       - name: Versioned screenshots untouched
