@@ -51,7 +51,7 @@ const DEUTSCH = PROBETESTS.filter((p) => p.fach === 'deutsch');
 /** The default of /dev/probetest and the print sheet. */
 const PROBETEST = MATHE.find((p) => p.id === 'mathe-01')!;
 const SHORT_ANSWER = 'm-gm-3-002';
-const LONGEST = 'm-rf-3-004';
+const LONGEST = 'm-rf-3-001';
 const SCREENS = [
   'intro',
   'intro-fertig',

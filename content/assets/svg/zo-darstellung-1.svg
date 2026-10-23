@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="8.0" y="8.0" width="464.0" height="96.0" fill="none" stroke-width="3"/>
+<text x="32.0" y="34.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<line x1="66.0" y1="54.0" x2="422.0" y2="54.0" stroke-width="3" stroke-opacity="1"/>
+<polygon points="424.0,54.0 412.0,47.0 412.0,61.0" fill="currentColor" stroke="none"/>
+<line x1="72.0" y1="42.0" x2="72.0" y2="66.0" stroke-width="3" stroke-opacity="1"/>
+<text x="72.0" y="83.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+<line x1="156.0" y1="47.0" x2="156.0" y2="61.0" stroke-width="2" stroke-opacity="1"/>
+<line x1="240.0" y1="42.0" x2="240.0" y2="66.0" stroke-width="3" stroke-opacity="1"/>
+<text x="240.0" y="83.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">10</text>
+<line x1="324.0" y1="47.0" x2="324.0" y2="61.0" stroke-width="2" stroke-opacity="1"/>
+<line x1="408.0" y1="42.0" x2="408.0" y2="66.0" stroke-width="3" stroke-opacity="1"/>
+<text x="408.0" y="83.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">20</text>
+<path d="M 72.0 44.0 A 42.0 15.0 0 0 1 156.0 44.0" stroke-width="3"/>
+<path d="M 156.0 44.0 A 42.0 15.0 0 0 1 240.0 44.0" stroke-width="3"/>
+<path d="M 240.0 44.0 A 42.0 15.0 0 0 1 324.0 44.0" stroke-width="3"/>
+<path d="M 324.0 44.0 A 42.0 15.0 0 0 1 408.0 44.0" stroke-width="3"/>
+<rect x="8.0" y="112.0" width="200.0" height="140.0" fill="none" stroke-width="3"/>
+<text x="32.0" y="138.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<circle cx="84.0" cy="146.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="108.0" cy="146.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="132.0" cy="146.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="156.0" cy="146.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="180.0" cy="146.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="84.0" cy="170.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="108.0" cy="170.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="132.0" cy="170.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="156.0" cy="170.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="180.0" cy="170.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="84.0" cy="194.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="108.0" cy="194.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="132.0" cy="194.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="156.0" cy="194.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="180.0" cy="194.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="84.0" cy="218.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="108.0" cy="218.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="132.0" cy="218.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="156.0" cy="218.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<circle cx="180.0" cy="218.0" r="8" fill="currentColor" fill-opacity="0.85" stroke-width="2"/>
+<rect x="216.0" y="112.0" width="256.0" height="66.0" fill="none" stroke-width="3"/>
+<text x="240.0" y="138.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<text x="368.0" y="145.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">4 + 5</text>
+<rect x="216.0" y="186.0" width="256.0" height="66.0" fill="none" stroke-width="3"/>
+<text x="240.0" y="212.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+<text x="368.0" y="219.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">5 + 5 + 5 + 5</text>
+</svg>

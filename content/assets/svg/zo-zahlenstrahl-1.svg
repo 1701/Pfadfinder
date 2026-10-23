@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<line x1="34.0" y1="150.0" x2="434.0" y2="150.0" stroke-width="3" stroke-opacity="1"/>
+<polygon points="436.0,150.0 424.0,143.0 424.0,157.0" fill="currentColor" stroke="none"/>
+<line x1="40.0" y1="138.0" x2="40.0" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="40.0" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+<line x1="103.3" y1="138.0" x2="103.3" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="103.3" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">5</text>
+<line x1="166.7" y1="138.0" x2="166.7" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="166.7" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">10</text>
+<line x1="230.0" y1="138.0" x2="230.0" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="230.0" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">15</text>
+<line x1="293.3" y1="138.0" x2="293.3" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="293.3" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">20</text>
+<line x1="356.7" y1="138.0" x2="356.7" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="356.7" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">25</text>
+<line x1="420.0" y1="138.0" x2="420.0" y2="162.0" stroke-width="3" stroke-opacity="1"/>
+<text x="420.0" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">30</text>
+<path d="M 40.0 140.0 A 31.7 36.0 0 0 1 103.3 140.0" stroke-width="3"/>
+<path d="M 103.3 140.0 A 31.7 36.0 0 0 1 166.7 140.0" stroke-width="3"/>
+<path d="M 166.7 140.0 A 31.7 36.0 0 0 1 230.0 140.0" stroke-width="3"/>
+<path d="M 230.0 140.0 A 31.7 36.0 0 0 1 293.3 140.0" stroke-width="3"/>
+<path d="M 293.3 140.0 A 31.7 36.0 0 0 1 356.7 140.0" stroke-width="3"/>
+<path d="M 356.7 140.0 A 31.7 36.0 0 0 1 420.0 140.0" stroke-width="3"/>
+</svg>

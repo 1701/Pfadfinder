@@ -360,7 +360,7 @@
     "bereich": "groessen-messen",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": { "text": "Jonas hat 12,50 € gespart. Er kauft ein Buch für 7,95 €." },
     "prompt": "Wie viel Geld bleibt ihm?",
     "payload": { "maxDigits": 4, "unit": "€", "allowDecimal": true },
@@ -372,7 +372,7 @@
     },
     "tags": ["geld", "subtrahieren", "kommazahlen"],
     "estimatedSeconds": 75,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3" }
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "vera3", "pilotNote": "Patch P2: einschrittige Geld-Subtraktion, Niveau I nach Kompass 4 2025, ersetzt durch m-gm-1-010" }
   },
   {
     "id": "m-gm-2-008",
@@ -560,6 +560,44 @@
       "createdAt": "2026-10-23",
       "calibration": "kompass4-2025",
       "pilotNote": "Patch P: ersetzt m-gm-3-003, Niveau I nach Kompass 4 2025 (Umrechnungen reproduzieren)"
+    }
+  },
+  {
+    "id": "m-gm-1-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas hat 12,50 € gespart. Er kauft ein Buch für 7,95 €."
+    },
+    "prompt": "Wie viel Geld bleibt ihm?",
+    "payload": {
+      "maxDigits": 4,
+      "unit": "€",
+      "allowDecimal": true
+    },
+    "solution": {
+      "value": 4.55
+    },
+    "feedback": {
+      "correct": "Richtig! Von 7,95 € sind es 5 Cent bis 8 €, dann 4,50 € bis 12,50 €: zusammen 4,55 €.",
+      "incorrect": "Rechne in Cent oder in Schritten: Erst von 7,95 € bis 8 €, dann bis 12,50 €.",
+      "misconception": "Wer 5,55 € sagt, hat 12 − 7 = 5 gerechnet und die Cent getrennt behandelt."
+    },
+    "tags": [
+      "geld",
+      "subtrahieren",
+      "kommazahlen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P2: Kopie von m-gm-2-007 auf Niveau I (einschrittige Geld-Subtraktion, Kompass 4 2025), Inhalt unverändert"
     }
   }
 ]

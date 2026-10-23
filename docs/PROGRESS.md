@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Content: Batch B7 zahlen-operationen und Patch P2
+- **Zip b7-p2 (wörtlich):** 6 SVG neu, 20 Items angehängt (m-zo-1-021…023, 2-015…027, 3-007…010), retired mit pilotNote: m-ms-2-001, m-rf-3-004, m-rf-2-005, m-zo-2-007, m-dz-2-004, m-gm-2-007. Kopien m-dz-1-009 und m-gm-1-010 angehängt, mathe-01 ersetzt (drei Tausche). check.py vorher und `--applied`: 0 Fehler.
+- **Schritt 1 (grep):** Treffer nur `m-rf-3-004` als `LONGEST` in probetest-layout.spec.ts. Entscheidung Markus: `m-rf-3-001` (kein Hinweis auf „längstes des ganzen Pools“).
+- **Manifest Mathe I/II/III:** zo 17/20/7, rf 15/16/6, gm 10/7/3, dz 9/7/4, ms 8/8/3 = 140 aktiv, 28 retired. mathe-01 26,92 Min., mathe-02 27,33 Min.
+- **Sweep, 25 Items:** knappste Luft Üben/Durchsehen iPad quer 166/184, iPad hoch 234/298, Safari quer 100/76, Safari hoch 110/174 px, kein Wert unter 18 px, keine Befunde.
+- **Lokal:** content:validate 0/0, Smoke 39/39, Layout mit Schalter 52/52 in 22,9 Min. Committet: probetest-budget-* (Kopf minGap +5, Safari quer Durchsehen mathe-01 jetzt m-zo-3-003), probetest-aufgabe-zeit45/zeit5-* (LONGEST), probetest-druck.pdf. Rauschen und veraltete Knappstes-PNGs zurückgesetzt.
+
 ## 2026-10-23 – Content: B6 Würfelbilder Rahmen und Lücke
 - **Zip b6-schraegbild-2 (wörtlich, Sichtprüfung Markus):** rf-gedreht-1 mit schmalerem Rahmen, der nicht mehr durch das A läuft. rf-wuerfel-1 ohne leere Reihe zwischen vorne und hinten, weiter 7 Würfel, Lösung unverändert. Keine Item-Änderung.
 - **Sweep m-rf-1-012, m-rf-2-013:** knappste Luft Üben/Durchsehen iPad quer 166/198, iPad hoch 237/336, Safari quer 114/146, Safari hoch 113/212 px, keine Befunde. Kein Layout-Projekt.

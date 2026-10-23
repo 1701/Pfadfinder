@@ -1035,7 +1035,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Ein Bus fährt 4 Touren mit je 38 Fahrgästen. Bei der letzten Tour fahren nur 19 mit."
     },
@@ -1060,7 +1060,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-11",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Patch P2: gleiche Struktur wie m-zo-2-002 (zweischrittige Multiplikations-Sachaufgabe mit Ablenkzahl); ohne Ersatz"
     }
   },
   {
@@ -1807,6 +1808,1033 @@
       "createdAt": "2026-10-23",
       "calibration": "kompass4-2025",
       "pilotNote": "Patch P: ersetzt m-zo-3-004, Niveau II nach Kompass 4 2025 (Umkehraufgabe, zwei Schritte)"
+    }
+  },
+  {
+    "id": "m-zo-1-021",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 5 346 + 428",
+    "readAloud": "Rechne aus: 5346 plus 428",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 5774
+    },
+    "feedback": {
+      "correct": "Richtig! 6 + 8 = 14, die 1 wandert zu den Zehnern: 4 + 2 + 1 = 7.",
+      "incorrect": "Schreibe die Zahlen stellenweise untereinander. Rechne von rechts: 6 + 8 = 14, die 1 kommt zu den Zehnern dazu.",
+      "misconception": "Viele vergessen den Übertrag von den Einern zu den Zehnern."
+    },
+    "tags": [
+      "schriftliche-addition",
+      "uebertrag",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-1-022",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Im Freibad waren am Samstag 378 Gäste. Am Sonntag waren es 465 Gäste."
+    },
+    "prompt": "Wie viele Gäste waren an beiden Tagen zusammen im Freibad?",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 843
+    },
+    "feedback": {
+      "correct": "Genau! 378 + 465 = 843.",
+      "incorrect": "Beide Tage zusammen heißt: Rechne die Gäste von Samstag und Sonntag zusammen. 378 + 465.",
+      "misconception": "Wer 87 schreibt, hat den Unterschied gerechnet statt die Summe."
+    },
+    "tags": [
+      "sachaufgabe",
+      "einschrittig",
+      "addition",
+      "zr-1000"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-1-023",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle die beiden Nachbarzehner aus.",
+    "payload": {
+      "template": "Die Nachbarzehner von 6 298 sind {1} und {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "6 290",
+            "6 200",
+            "6 288"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "6 300",
+            "6 299",
+            "6 390"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "6 290",
+        "2": "6 300"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Vor 6 298 kommt die Zehnerzahl 6 290, danach kommt 6 300.",
+      "incorrect": "Nachbarzehner sind die Zehnerzahlen direkt vor und direkt nach der Zahl. Zähle von 6 298 bis zur nächsten Zehnerzahl weiter.",
+      "misconception": "Nach 6 290 kommt als nächste Zehnerzahl 6 300, nicht 6 299. Auf 6 299 enden keine Zehner."
+    },
+    "tags": [
+      "nachbarzahlen",
+      "nachbarzehner",
+      "uebergang",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-015",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia hat 4 Dosen. In jeder Dose sind 5 Murmeln.",
+      "assetId": "zo-darstellung-1",
+      "assetAlt": "Vier Kästen A bis D: ein Zahlenstrahl mit Bögen, ein Feld aus Punkten in Reihen und zwei Rechnungen."
+    },
+    "prompt": "Welche Darstellungen passen zu Mias Murmeln? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "minSelect": 3,
+      "keepOrder": true
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! 4 Bögen mit je 5, 4 Reihen mit je 5 Punkten und 5 + 5 + 5 + 5 zeigen alle 4 · 5.",
+      "incorrect": "Jede Dose ist ein Fünfer. Zähle bei jedem Bild: Wie viele Fünfer siehst du?",
+      "misconception": "4 + 5 passt nicht: Hier werden die Dosen und die Murmeln einfach zusammengezählt."
+    },
+    "tags": [
+      "darstellungswechsel",
+      "multiplikation",
+      "zahlenstrahl",
+      "punktefeld"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-016",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas rechnet 3 · 6.",
+      "assetId": "zo-darstellung-2",
+      "assetAlt": "Vier Kästen A bis D: ein Zahlenstrahl mit Bögen, ein Feld aus Punkten in Reihen und zwei Rechnungen."
+    },
+    "prompt": "Welche Darstellungen zeigen 3 · 6? Wähle 2 aus.",
+    "readAloud": "Jonas rechnet 3 mal 6. Vier Kästen A bis D: ein Zahlenstrahl mit Bögen, ein Feld aus Punkten in Reihen und zwei Rechnungen. Welche Darstellungen zeigen 3 mal 6? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "minSelect": 2,
+      "keepOrder": true
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! 3 Bögen mit je 6 und 6 + 6 + 6 sind beide 3 · 6.",
+      "incorrect": "3 · 6 heißt: 3 mal die 6. Prüfe bei jedem Bild, ob du 3 Sechser siehst.",
+      "misconception": "Im Punktefeld sind 3 Reihen, aber nur 5 Punkte in jeder Reihe. Und 3 + 3 + 3 ist 3 · 3, nicht 3 · 6."
+    },
+    "tags": [
+      "darstellungswechsel",
+      "multiplikation",
+      "zahlenstrahl",
+      "punktefeld"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-017",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "zo-punktefeld-1",
+      "assetAlt": "Ein Feld aus Punkten in Reihen."
+    },
+    "prompt": "Welche Rechnungen passen zum Punktefeld? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "5 · 3",
+          "readAloud": "5 mal 3"
+        },
+        {
+          "id": "b",
+          "text": "5 + 3",
+          "readAloud": "5 plus 3"
+        },
+        {
+          "id": "c",
+          "text": "3 + 3 + 3 + 3 + 3",
+          "readAloud": "3 plus 3 plus 3 plus 3 plus 3"
+        },
+        {
+          "id": "d",
+          "text": "5 + 5 + 5 + 5 + 5",
+          "readAloud": "5 plus 5 plus 5 plus 5 plus 5"
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! 5 Reihen mit je 3 Punkten: 5 · 3 oder 3 + 3 + 3 + 3 + 3.",
+      "incorrect": "Zähle die Reihen und die Punkte in einer Reihe. So viele Reihen, so oft nimmst du die Punkte einer Reihe.",
+      "misconception": "5 + 5 + 5 + 5 + 5 wären 5 Reihen mit je 5 Punkten. Hier hat jede Reihe nur 3."
+    },
+    "tags": [
+      "darstellungswechsel",
+      "multiplikation",
+      "punktefeld"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-018",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "zo-zahlenstrahl-1",
+      "assetAlt": "Ein Zahlenstrahl von 0 bis 30 mit Bögen darüber."
+    },
+    "prompt": "Was zeigt der Zahlenstrahl? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "6 · 5",
+          "readAloud": "6 mal 5"
+        },
+        {
+          "id": "b",
+          "text": "6 Beutel mit je 5 Kugeln"
+        },
+        {
+          "id": "c",
+          "text": "5 + 5 + 5 + 5 + 5",
+          "readAloud": "5 plus 5 plus 5 plus 5 plus 5"
+        },
+        {
+          "id": "d",
+          "text": "6 + 5",
+          "readAloud": "6 plus 5"
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! 6 Bögen, jeder geht 5 weiter: 6 · 5, zum Beispiel 6 Beutel mit je 5 Kugeln.",
+      "incorrect": "Zähle die Bögen. Schau dann, wie weit ein Bogen springt: von 0 bis zu welcher Zahl?",
+      "misconception": "Wer 5 + 5 + 5 + 5 + 5 wählt, hat nur 5 Bögen gezählt. Es sind 6, der letzte endet bei 30."
+    },
+    "tags": [
+      "darstellungswechsel",
+      "multiplikation",
+      "zahlenstrahl"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-019",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "zo-stellentafel-1",
+      "assetAlt": "Eine Stellentafel mit den Spalten T, H, Z und E. Darunter steht in jeder Spalte eine Zahl."
+    },
+    "prompt": "Schreibe als Zahl.",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 3435
+    },
+    "feedback": {
+      "correct": "Richtig! 14 Hunderter sind 1 Tausender und 4 Hunderter. So wird aus 2 T und 14 H 3 T und 4 H.",
+      "incorrect": "14 Hunderter sind mehr als 9. Tausche 10 Hunderter in einen Tausender um. Dann lies die Zahl ab.",
+      "misconception": "Wer 21 435 schreibt, hat die Ziffern nur hintereinandergeschrieben. Die 14 Hunderter müssen gebündelt werden."
+    },
+    "tags": [
+      "stellenwert",
+      "buendeln",
+      "stellentafel",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-020",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla legt eine Zahl mit Plättchen: 6 Hunderter, 15 Zehner und 8 Einer."
+    },
+    "prompt": "Welche Zahl hat Leyla gelegt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "758"
+        },
+        {
+          "id": "b",
+          "text": "6 158"
+        },
+        {
+          "id": "c",
+          "text": "658"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau! 15 Zehner sind 1 Hunderter und 5 Zehner. Also 7 Hunderter, 5 Zehner, 8 Einer.",
+      "incorrect": "15 Zehner sind 150. Rechne 600 + 150 + 8.",
+      "misconception": "6 158 entsteht, wenn man die Zahlen einfach hintereinanderschreibt. 658 lässt den Hunderter aus den 15 Zehnern weg."
+    },
+    "tags": [
+      "stellenwert",
+      "buendeln",
+      "zr-1000"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-021",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben zerlegt die Zahl 4 263 in Tausender, Hunderter, Zehner und Einer. Er nimmt nur 3 Tausender."
+    },
+    "prompt": "Wähle die passende Zahl aus.",
+    "payload": {
+      "template": "4 263 = 3 Tausender + {1} Hunderter + 6 Zehner + 3 Einer",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "12",
+            "2",
+            "13"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "12"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! 3 Tausender sind 3 000. Bis 4 263 fehlen 1 263, das sind 12 Hunderter, 6 Zehner und 3 Einer.",
+      "incorrect": "Rechne 4 263 − 3 000. Wie viele Hunderter stecken in dem Rest, wenn 6 Zehner und 3 Einer schon weg sind?",
+      "misconception": "Wer 2 wählt, liest nur die Hunderterziffer ab. Der fehlende Tausender muss auch in Hunderter getauscht werden."
+    },
+    "tags": [
+      "stellenwert",
+      "buendeln",
+      "zerlegen",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-022",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "zo-mitte-1",
+      "assetAlt": "Eine Linie mit drei Kästchen darunter. Links steht 620, rechts 740, in der Mitte ein Fragezeichen."
+    },
+    "prompt": "Welche Zahl liegt genau in der Mitte?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 680
+    },
+    "feedback": {
+      "correct": "Genau! Von 620 bis 740 sind es 120. Die Hälfte ist 60, und 620 + 60 = 680.",
+      "incorrect": "Rechne den Abstand von 620 bis 740 aus. Nimm die Hälfte davon und zähle sie zu 620 dazu.",
+      "misconception": "Wer 700 schreibt, hat eine runde Zahl dazwischen genommen. Die Mitte muss zu beiden Seiten gleich weit weg sein."
+    },
+    "tags": [
+      "mitte",
+      "halbieren",
+      "zahlenstrahl",
+      "zr-1000"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-023",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Welche Zahl liegt genau in der Mitte zwischen 2 300 und 2 800?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "2 550"
+        },
+        {
+          "id": "b",
+          "text": "2 500"
+        },
+        {
+          "id": "c",
+          "text": "5 100"
+        },
+        {
+          "id": "d",
+          "text": "250"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Der Abstand ist 500, die Hälfte 250. 2 300 + 250 = 2 550.",
+      "incorrect": "Rechne den Abstand der beiden Zahlen aus. Die Hälfte davon kommt zur kleineren Zahl dazu.",
+      "misconception": "5 100 ist die Summe der beiden Zahlen. Die Mitte ist die Hälfte davon."
+    },
+    "tags": [
+      "mitte",
+      "halbieren",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 65,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-024",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Bei welchen Zahlenpaaren liegt 460 genau in der Mitte? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "400 und 520"
+        },
+        {
+          "id": "b",
+          "text": "440 und 490"
+        },
+        {
+          "id": "c",
+          "text": "420 und 500"
+        },
+        {
+          "id": "d",
+          "text": "460 und 920"
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! Von 400 bis 460 sind es 60, von 460 bis 520 auch. Bei 420 und 500 sind es beide Male 40.",
+      "incorrect": "Die Mitte ist von beiden Zahlen gleich weit weg. Rechne bei jedem Paar: Wie weit ist 460 von der kleinen Zahl, wie weit von der großen?",
+      "misconception": "460 und 920: 460 ist die Hälfte von 920, aber nicht die Mitte zwischen den beiden Zahlen. Die wäre 690."
+    },
+    "tags": [
+      "mitte",
+      "halbieren",
+      "abstand",
+      "zr-1000"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-025",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira sucht die Nachbarzahlen von 4 897. Sie schaut auf die Zehner und auf die Hunderter."
+    },
+    "prompt": "Wähle die passenden Zahlen aus.",
+    "payload": {
+      "template": "Der größere Nachbarzehner von 4 897 ist {1}. Der größere Nachbarhunderter ist {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "4 900",
+            "4 890",
+            "4 898"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "4 900",
+            "5 000",
+            "4 800"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "4 900",
+        "2": "4 900"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Nach 4 897 kommt als nächste Zehnerzahl 4 900. Das ist auch gleich die nächste Hunderterzahl.",
+      "incorrect": "Zähle von 4 897 weiter bis zur nächsten Zehnerzahl. Prüfe dann: Ist das schon eine Hunderterzahl?",
+      "misconception": "4 890 ist der kleinere Nachbarzehner. Und 5 000 ist der Nachbartausender, nicht der Nachbarhunderter."
+    },
+    "tags": [
+      "nachbarzahlen",
+      "nachbarzehner",
+      "nachbarhunderter",
+      "uebergang",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-026",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Eine Zahl hat die Nachbarzehner 3 990 und 4 000."
+    },
+    "prompt": "Welche Zahlen können es sein? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "3 994"
+        },
+        {
+          "id": "b",
+          "text": "4 003"
+        },
+        {
+          "id": "c",
+          "text": "3 998"
+        },
+        {
+          "id": "d",
+          "text": "3 980"
+        },
+        {
+          "id": "e",
+          "text": "3 995"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! 3 994, 3 995 und 3 998 liegen alle zwischen 3 990 und 4 000.",
+      "incorrect": "Die Zahl muss zwischen 3 990 und 4 000 liegen. Prüfe jede Zahl: Ist sie größer als 3 990 und kleiner als 4 000?",
+      "misconception": "4 003 liegt hinter 4 000 und hat die Nachbarzehner 4 000 und 4 010. 3 980 liegt vor 3 990."
+    },
+    "tags": [
+      "nachbarzahlen",
+      "nachbarzehner",
+      "uebergang",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-2-027",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben rechnet 536 − 98 im Kopf. Zuerst rechnet er 536 − 100 = 436."
+    },
+    "prompt": "Ergänze Bens zweiten Schritt.",
+    "readAloud": "Ben rechnet 536 minus 98 im Kopf. Zuerst rechnet er 536 minus 100 gleich 436. Ergänze Bens zweiten Schritt.",
+    "payload": {
+      "template": "436 {1} = {2}",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "+ 2",
+            "− 2",
+            "+ 100"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "438",
+            "434",
+            "536"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "+ 2",
+        "2": "438"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! Ben hat 100 abgezogen, das sind 2 zu viel. Die 2 gibt er wieder dazu: 436 + 2 = 438.",
+      "incorrect": "Ben sollte 98 abziehen, hat aber 100 abgezogen. Hat er zu viel oder zu wenig abgezogen? Das muss er ausgleichen.",
+      "misconception": "Wer − 2 wählt, zieht noch einmal ab. Ben hat aber schon 2 zu viel abgezogen."
+    },
+    "tags": [
+      "rechenstrategie",
+      "hilfsaufgabe",
+      "subtraktion",
+      "zr-1000"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-3-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira rechnet 7 · 19. Sie sagt: „Ich rechne zuerst 7 · 20 = 140.“"
+    },
+    "prompt": "Was muss Amira jetzt noch rechnen? Schreibe die Rechnung auf.",
+    "readAloud": "Amira rechnet 7 mal 19. Sie sagt: Ich rechne zuerst 7 mal 20 gleich 140. Was muss Amira jetzt noch rechnen? Schreibe die Rechnung auf.",
+    "payload": {
+      "maxChars": 90,
+      "hint": "Vergleiche 7 · 19 und 7 · 20. Was ist anders?"
+    },
+    "solution": {
+      "model": "140 − 7 = 133. Sie hat 7 · 20 gerechnet, das ist ein Siebener zu viel.",
+      "keyPoints": [
+        "140 − 7",
+        "Ergebnis 133"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! 7 · 20 ist ein Siebener mehr als 7 · 19. Den zieht Amira wieder ab: 140 − 7 = 133.",
+      "incorrect": "7 · 20 heißt zwanzig Siebener. 7 · 19 sind nur neunzehn Siebener. Einer ist also zu viel.",
+      "misconception": "Viele ziehen 1 ab statt 7. Aber 7 · 20 ist nicht um 1 größer als 7 · 19, sondern um einen ganzen Siebener."
+    },
+    "tags": [
+      "rechenstrategie",
+      "hilfsaufgabe",
+      "multiplikation",
+      "fremde-strategie"
+    ],
+    "estimatedSeconds": 110,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-3-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla rechnet 605 − 199 im Kopf. Sie sagt: „Ich rechne 605 − 200 = 405. Dann rechne ich noch etwas.“"
+    },
+    "prompt": "Was rechnet Leyla noch und warum?",
+    "readAloud": "Leyla rechnet 605 minus 199 im Kopf. Sie sagt: Ich rechne 605 minus 200 gleich 405. Dann rechne ich noch etwas. Was rechnet Leyla noch und warum?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "405 + 1, weil sie 1 zu viel abgezogen hat."
+        },
+        {
+          "id": "b",
+          "text": "405 − 1, weil 199 kleiner ist als 200."
+        },
+        {
+          "id": "c",
+          "text": "405 + 200, weil sie die 200 wieder braucht."
+        },
+        {
+          "id": "d",
+          "text": "Nichts mehr, 405 ist schon das Ergebnis."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! 200 ist 1 mehr als 199. Leyla hat also 1 zu viel abgezogen und gibt sie zurück: 406.",
+      "incorrect": "Leyla sollte 199 abziehen. Sie hat 200 abgezogen. Ist das mehr oder weniger als 199? Das muss sie ausgleichen.",
+      "misconception": "Wer 405 − 1 wählt, denkt: 199 ist kleiner, also noch einmal abziehen. Aber zu viel abgezogen heißt: wieder dazugeben."
+    },
+    "tags": [
+      "rechenstrategie",
+      "hilfsaufgabe",
+      "subtraktion",
+      "begruenden",
+      "fremde-strategie"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-3-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas rechnet 48 · 5 mit einem Trick: „Ich rechne 48 · 10 = 480. Die Hälfte davon ist 240.“"
+    },
+    "prompt": "Bei welchen Aufgaben hilft Jonas' Trick genauso? Wähle 2 aus.",
+    "readAloud": "Jonas rechnet 48 mal 5 mit einem Trick: Ich rechne 48 mal 10 gleich 480. Die Hälfte davon ist 240. Bei welchen Aufgaben hilft Jonas' Trick genauso? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "36 · 5",
+          "readAloud": "36 mal 5"
+        },
+        {
+          "id": "b",
+          "text": "48 · 3",
+          "readAloud": "48 mal 3"
+        },
+        {
+          "id": "c",
+          "text": "5 · 14",
+          "readAloud": "5 mal 14"
+        },
+        {
+          "id": "d",
+          "text": "48 : 5",
+          "readAloud": "48 geteilt durch 5"
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! Der Trick klappt immer bei mal 5: erst mal 10, dann halbieren. 36 · 5 = 180 und 5 · 14 = 70.",
+      "incorrect": "Jonas' Trick nutzt aus, dass 5 die Hälfte von 10 ist. Bei welchen Aufgaben wird mit 5 malgenommen?",
+      "misconception": "Bei 48 · 3 hilft mal 10 nicht, 3 ist nicht die Hälfte von 10. Und 48 : 5 ist eine Geteiltaufgabe."
+    },
+    "tags": [
+      "rechenstrategie",
+      "multiplikation",
+      "halbieren",
+      "regel-uebertragen",
+      "fremde-strategie"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-zo-3-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias rechnet schriftlich: 3 857 + 2 468 = 5 325. Das Ergebnis ist nicht richtig."
+    },
+    "prompt": "Welchen Fehler hat Elias gemacht?",
+    "readAloud": "Elias rechnet schriftlich: 3857 plus 2468 gleich 5325. Das Ergebnis ist nicht richtig. Welchen Fehler hat Elias gemacht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Er hat den Übertrag zu den Tausendern vergessen."
+        },
+        {
+          "id": "b",
+          "text": "Er hat bei den Einern 7 + 8 falsch gerechnet."
+        },
+        {
+          "id": "c",
+          "text": "Er hat die Hunderter vergessen."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! 8 + 4 + 1 = 13, also wandert noch eine 1 zu den Tausendern: 3 + 2 + 1 = 6. Richtig ist 6 325.",
+      "incorrect": "Rechne stellenweise nach. Einer, Zehner und Hunderter stimmen bei Elias. Schau bei den Tausendern genau hin.",
+      "misconception": "Die Einer stimmen: 7 + 8 = 15, die 5 steht da. Der Fehler steckt ganz links, wo der letzte Übertrag fehlt."
+    },
+    "tags": [
+      "fehler-finden",
+      "schriftliche-addition",
+      "uebertrag",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
     }
   }
 ]

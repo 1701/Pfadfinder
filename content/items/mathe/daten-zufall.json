@@ -481,7 +481,7 @@
     "bereich": "daten-zufall",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Beim Fußballturnier hat jede Klasse Tore geschossen.",
       "assetId": "dz-saeulen-3",
@@ -508,7 +508,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P2: reines Ablesen, Niveau I nach Kompass 4 2025, ersetzt durch m-dz-1-009"
     }
   },
   {
@@ -962,6 +963,44 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-dz-1-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "daten-zufall",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Beim Fußballturnier hat jede Klasse Tore geschossen.",
+      "assetId": "dz-saeulen-3",
+      "assetAlt": "Ein Säulendiagramm mit den Klassen 4a, 4b, 4c und 4d."
+    },
+    "prompt": "Wie viele Tore hat die Klasse 4b geschossen?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
+    "feedback": {
+      "correct": "Genau! Die Säule endet zwischen 6 und 8, also bei 7.",
+      "incorrect": "Die Säule der 4b endet zwischen zwei Linien. Welche Zahl liegt dazwischen?",
+      "misconception": "Wer 6 oder 8 schreibt, hat die nächste Linie genommen."
+    },
+    "tags": [
+      "saeulendiagramm",
+      "daten-ablesen",
+      "skala"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P2: Kopie von m-dz-2-004 auf Niveau I (reines Ablesen, Kompass 4 2025), Inhalt unverändert"
     }
   }
 ]

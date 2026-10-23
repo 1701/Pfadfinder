@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<line x1="30.0" y1="96.0" x2="450.0" y2="96.0" stroke-width="4" stroke-opacity="1"/>
+<line x1="80.0" y1="96.0" x2="80.0" y2="136.0" stroke-width="3" stroke-opacity="1"/>
+<line x1="240.0" y1="96.0" x2="240.0" y2="136.0" stroke-width="3" stroke-opacity="1"/>
+<line x1="400.0" y1="96.0" x2="400.0" y2="136.0" stroke-width="3" stroke-opacity="1"/>
+<rect x="20.0" y="136.0" width="120.0" height="64.0" fill="none" stroke-width="3"/>
+<text x="80.0" y="168.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">620</text>
+<rect x="180.0" y="136.0" width="120.0" height="64.0" fill="none" stroke-width="3"/>
+<text x="240.0" y="168.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">?</text>
+<rect x="340.0" y="136.0" width="120.0" height="64.0" fill="none" stroke-width="3"/>
+<text x="400.0" y="168.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">740</text>
+</svg>

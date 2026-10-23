@@ -6,7 +6,7 @@
     "bereich": "muster-strukturen",
     "niveau": 2,
     "format": "mark-in-text",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Jonas hat eine Zahlenreihe geschrieben."
     },
@@ -35,7 +35,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-14",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P2: gleiches Muster wie m-ms-2-009 (Reihe prüfen, mark-in-text), durch Patch P entstanden; ohne Ersatz, in mathe-01 ersetzt durch m-ms-2-003"
     }
   },
   {

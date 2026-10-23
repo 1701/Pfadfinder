@@ -8,12 +8,12 @@
     "5": {
       "height": 48,
       "middles": 0,
-      "minGap": 316
+      "minGap": 321
     },
     "45": {
       "height": 48,
       "middles": 0,
-      "minGap": 343
+      "minGap": 348
     }
   },
   "mathe": {
@@ -24,8 +24,8 @@
           "slack": 33
         },
         "durchsehen": {
-          "id": "m-rf-3-004",
-          "slack": 52
+          "id": "m-zo-3-003",
+          "slack": 60
         },
         "fehlt": {
           "id": "m-gm-3-002",

@@ -641,7 +641,7 @@
     "bereich": "raum-form",
     "niveau": 2,
     "format": "single-choice",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "assetId": "rf-rechteck-1",
       "assetAlt": "Ein Rechteck, deutlich breiter als hoch."
@@ -684,7 +684,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Patch P2: Spiegelachsen am Rechteck kommen im Test nicht vor, Duplikat zu m-rf-2-020; ohne Ersatz, in mathe-01 ersetzt durch m-rf-2-019"
     }
   },
   {
@@ -989,7 +990,7 @@
     "bereich": "raum-form",
     "niveau": 3,
     "format": "single-choice",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Mia sagt: „Wenn zwei Figuren gleich viele Kästchen groß sind, haben sie auch den gleichen Umfang.“"
     },
@@ -1031,7 +1032,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Patch P2: gleiche Behauptung wie m-rf-3-005, aber ohne Bild; ohne Ersatz, in mathe-01 ersetzt durch m-rf-3-005"
     }
   },
   {

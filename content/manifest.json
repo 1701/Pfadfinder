@@ -2,11 +2,11 @@
   "bereiche": {
     "zahlen-operationen": {
       "fach": "mathe",
-      "items": 25,
+      "items": 44,
       "byFormat": {
         "cloze-select": {
-          "1": 1,
-          "2": 1,
+          "1": 2,
+          "2": 4,
           "3": 0
         },
         "match": {
@@ -16,12 +16,12 @@
         },
         "multi-choice": {
           "1": 0,
-          "2": 1,
-          "3": 1
+          "2": 7,
+          "3": 2
         },
         "number-input": {
-          "1": 8,
-          "2": 3,
+          "1": 10,
+          "2": 4,
           "3": 0
         },
         "order": {
@@ -32,19 +32,19 @@
         "short-answer": {
           "1": 0,
           "2": 0,
-          "3": 1
+          "3": 2
         },
         "single-choice": {
           "1": 2,
-          "2": 3,
-          "3": 1
+          "2": 5,
+          "3": 3
         }
       },
       "textIds": []
     },
     "raum-form": {
       "fach": "mathe",
-      "items": 39,
+      "items": 37,
       "byFormat": {
         "cloze-select": {
           "1": 1,
@@ -78,8 +78,8 @@
         },
         "single-choice": {
           "1": 6,
-          "2": 11,
-          "3": 6
+          "2": 10,
+          "3": 5
         }
       },
       "textIds": []
@@ -104,8 +104,8 @@
           "3": 0
         },
         "number-input": {
-          "1": 4,
-          "2": 3,
+          "1": 5,
+          "2": 2,
           "3": 1
         },
         "order": {
@@ -141,8 +141,8 @@
           "3": 1
         },
         "number-input": {
-          "1": 3,
-          "2": 4,
+          "1": 4,
+          "2": 3,
           "3": 0
         },
         "short-answer": {
@@ -160,7 +160,7 @@
     },
     "muster-strukturen": {
       "fach": "mathe",
-      "items": 20,
+      "items": 19,
       "byFormat": {
         "cloze-select": {
           "1": 1,
@@ -169,7 +169,7 @@
         },
         "mark-in-text": {
           "1": 0,
-          "2": 2,
+          "2": 1,
           "3": 0
         },
         "match": {
