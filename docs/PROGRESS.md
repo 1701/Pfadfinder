@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Content: B6 Würfelbilder Rahmen und Lücke
+- **Zip b6-schraegbild-2 (wörtlich, Sichtprüfung Markus):** rf-gedreht-1 mit schmalerem Rahmen, der nicht mehr durch das A läuft. rf-wuerfel-1 ohne leere Reihe zwischen vorne und hinten, weiter 7 Würfel, Lösung unverändert. Keine Item-Änderung.
+- **Sweep m-rf-1-012, m-rf-2-013:** knappste Luft Üben/Durchsehen iPad quer 166/198, iPad hoch 237/336, Safari quer 114/146, Safari hoch 113/212 px, keine Befunde. Kein Layout-Projekt.
+- **Lokal:** content:validate 0/0, `npm run check` grün (1070 Tests).
+
 ## 2026-10-23 – Content: B6 Würfelbilder als Schrägbild
 - **Grund (Sichtprüfung Markus):** Die Würfelgebäude waren isometrisch (Grundfläche als Raute), der Bauplan ist ein Quadrat mit „vorne ist unten“. Die Zuordnung verlangte eine 45°-Drehung im Kopf. Jetzt Schrägbild wie im Kompass-Test: vordere Reihe frontal, Tiefe nach rechts oben, verdeckte Flächen entfernt.
 - **Unsichtbare Würfel:** Jeder oberste Würfel eines Stapels ist von vorne sichtbar. Verdeckt sind nur untere Würfel, die man erschließen muss.
