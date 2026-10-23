@@ -107,10 +107,12 @@ describe('NumberInput – money with a comma (groessen-messen, allowDecimal)', (
       i.format === 'number-input' && i.payload.allowDecimal === true && i.status !== 'retired',
   );
 
-  it('exists in the content: 2,20 € and 4,55 €', () => {
+  it('exists in the content: 2,20 €, 4,55 €, 7,50 € and 10 €', () => {
     expect(money.map((i) => [i.solution.value, i.payload.unit])).toEqual([
       [2.2, '€'],
       [4.55, '€'],
+      [7.5, '€'],
+      [10, '€'],
     ]);
   });
 

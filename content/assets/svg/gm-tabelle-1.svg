@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="60.0" y="18.0" width="180.0" height="56.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="150.0" y="46.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Ben</text>
+<rect x="240.0" y="18.0" width="180.0" height="56.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="400.0" y="46.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">4,20 m</text>
+<rect x="60.0" y="74.0" width="180.0" height="56.0" fill="none" stroke-width="2"/>
+<text x="150.0" y="102.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Mia</text>
+<rect x="240.0" y="74.0" width="180.0" height="56.0" fill="none" stroke-width="2"/>
+<text x="400.0" y="102.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">3,85 m</text>
+<rect x="60.0" y="130.0" width="180.0" height="56.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="150.0" y="158.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Leyla</text>
+<rect x="240.0" y="130.0" width="180.0" height="56.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="400.0" y="158.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">4,05 m</text>
+<rect x="60.0" y="186.0" width="180.0" height="56.0" fill="none" stroke-width="2"/>
+<text x="150.0" y="214.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Elias</text>
+<rect x="240.0" y="186.0" width="180.0" height="56.0" fill="none" stroke-width="2"/>
+<text x="400.0" y="214.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">3,60 m</text>
+<rect x="60.0" y="18.0" width="360.0" height="224.0" fill="none" stroke-width="3"/>
+</svg>

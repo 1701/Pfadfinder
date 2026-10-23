@@ -599,5 +599,290 @@
       "calibration": "kompass4-2025",
       "pilotNote": "Patch P2: Kopie von m-gm-2-007 auf Niveau I (einschrittige Geld-Subtraktion, Kompass 4 2025), Inhalt unverändert"
     }
+  },
+  {
+    "id": "m-gm-1-011",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "gm-preisschild-1",
+      "assetAlt": "Ein Schild vom Fahrradverleih. 1 Stunde kostet 2,50 Euro. Bei 2 Stunden und 3 Stunden ist der Preis noch leer."
+    },
+    "prompt": "Was kosten 3 Stunden? Fülle die Lücke aus.",
+    "payload": { "maxDigits": 4, "unit": "€", "allowDecimal": true },
+    "solution": { "value": 7.5 },
+    "feedback": {
+      "correct": "Richtig! 3 mal 2,50 € sind 7,50 €.",
+      "incorrect": "Jede Stunde kostet 2,50 €. Rechne 2,50 € + 2,50 € + 2,50 €.",
+      "misconception": "Wer 6,50 € schreibt, hat nur die Euro verdreifacht und die 50 Cent einmal genommen."
+    },
+    "tags": ["geld", "preisschild", "multiplikation", "kommazahlen"],
+    "estimatedSeconds": 60,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-1-012",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie weit die Papierflieger geflogen sind.",
+      "assetId": "gm-tabelle-1",
+      "assetAlt": "Eine Tabelle mit vier Namen und Weiten: Ben 4,20 m, Mia 3,85 m, Leyla 4,05 m, Elias 3,60 m."
+    },
+    "prompt": "Wessen Flieger ist am weitesten geflogen?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Ben" },
+        { "id": "b", "text": "Mia" },
+        { "id": "c", "text": "Leyla" },
+        { "id": "d", "text": "Elias" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau! 4,20 m ist die größte Weite. 4,20 ist mehr als 4,05, weil 20 mehr ist als 5.",
+      "incorrect": "Vergleiche zuerst die Zahl vor dem Komma. Bei gleicher Zahl vergleiche die Zahl nach dem Komma.",
+      "misconception": "Wer Mia wählt, hat auf die 85 nach dem Komma geschaut. Aber 3 Meter sind weniger als 4 Meter."
+    },
+    "tags": ["laengen", "kommaschreibweise", "vergleichen", "tabelle"],
+    "estimatedSeconds": 55,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira, ihr Bruder und ihre Eltern leihen je ein Rad für 1 Stunde. Sie bezahlen mit einem 20-Euro-Schein.",
+      "assetId": "gm-preisschild-1",
+      "assetAlt": "Ein Schild vom Fahrradverleih. 1 Stunde kostet 2,50 Euro. Bei 2 Stunden und 3 Stunden ist der Preis noch leer."
+    },
+    "prompt": "Wie viel Geld bekommen sie zurück?",
+    "payload": { "maxDigits": 4, "unit": "€", "allowDecimal": true },
+    "solution": { "value": 10 },
+    "feedback": {
+      "correct": "Richtig! Vier Personen, 4 mal 2,50 € sind 10 €. Von 20 € bleiben 10 € übrig.",
+      "incorrect": "Zähle zuerst die Personen: Amira, ihr Bruder, Mutter und Vater. Rechne dann den Preis für alle und ziehe ihn von 20 € ab.",
+      "misconception": "Wer 15 € schreibt, hat nur zwei Räder gerechnet. Die Eltern sind zwei Personen."
+    },
+    "tags": ["geld", "preisschild", "rueckgeld", "implizite-menge", "zweischrittig"],
+    "estimatedSeconds": 95,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas geht mit seinen 3 Freunden ins Schwimmbad. Eine Eintrittskarte kostet 4,50 €. Jonas bezahlt für alle."
+    },
+    "prompt": "Wie viel bezahlt Jonas?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "18,00 €" },
+        { "id": "b", "text": "13,50 €" },
+        { "id": "c", "text": "7,50 €" },
+        { "id": "d", "text": "22,50 €" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau! Jonas und 3 Freunde sind 4 Kinder. 4 mal 4,50 € sind 18 €.",
+      "incorrect": "Zähle die Kinder: Jonas selbst und seine 3 Freunde. So viele Karten braucht er.",
+      "misconception": "13,50 € sind 3 Karten. Jonas hat sich selbst vergessen."
+    },
+    "tags": ["geld", "implizite-menge", "multiplikation", "kommazahlen"],
+    "estimatedSeconds": 80,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-011",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie weit die Papierflieger geflogen sind.",
+      "assetId": "gm-tabelle-1",
+      "assetAlt": "Eine Tabelle mit vier Namen und Weiten: Ben 4,20 m, Mia 3,85 m, Leyla 4,05 m, Elias 3,60 m."
+    },
+    "prompt": "Wie viele Zentimeter ist Bens Flieger weiter geflogen als Elias' Flieger?",
+    "payload": { "maxDigits": 3, "unit": "cm" },
+    "solution": { "value": 60 },
+    "feedback": {
+      "correct": "Richtig! 4,20 m sind 420 cm, 3,60 m sind 360 cm. 420 − 360 = 60.",
+      "incorrect": "Schreibe beide Weiten in Zentimeter: 4,20 m sind 420 cm. Dann rechne den Unterschied aus.",
+      "misconception": "Wer 40 schreibt, hat 60 − 20 gerechnet und den ganzen Meter vergessen."
+    },
+    "tags": ["laengen", "kommaschreibweise", "umrechnen", "unterschied", "tabelle"],
+    "estimatedSeconds": 85,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-012",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Tabelle zeigt, wie weit die Papierflieger geflogen sind.",
+      "assetId": "gm-tabelle-1",
+      "assetAlt": "Eine Tabelle mit vier Namen und Weiten: Ben 4,20 m, Mia 3,85 m, Leyla 4,05 m, Elias 3,60 m."
+    },
+    "prompt": "Wähle die passenden Zahlen aus.",
+    "payload": {
+      "template": "Mias Flieger ist {1} cm geflogen. Das sind {2} cm weniger als bei Ben.",
+      "gaps": [
+        { "key": "1", "options": ["385", "3 085", "358"] },
+        { "key": "2", "options": ["35", "65", "45"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "385", "2": "35" } },
+    "feedback": {
+      "correct": "Genau! 3,85 m sind 385 cm. Bis zu Bens 420 cm fehlen 35 cm.",
+      "incorrect": "3 m sind 300 cm, dazu kommen die 85 cm. Vergleiche dann mit Bens Weite in Zentimetern.",
+      "misconception": "3 085 wäre richtig, wenn hinter dem Komma Millimeter stünden. Hinter dem Komma stehen bei Metern die Zentimeter."
+    },
+    "tags": ["laengen", "kommaschreibweise", "umrechnen", "unterschied", "tabelle"],
+    "estimatedSeconds": 85,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-013",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben geht um 15:35 Uhr vom Sportplatz los. Er braucht 40 Minuten nach Hause."
+    },
+    "prompt": "Um wie viel Uhr kommt Ben zu Hause an?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "16:15 Uhr" },
+        { "id": "b", "text": "15:75 Uhr" },
+        { "id": "c", "text": "16:05 Uhr" },
+        { "id": "d", "text": "16:25 Uhr" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Von 15:35 Uhr sind es 25 Minuten bis 16:00 Uhr. Die restlichen 15 Minuten führen zu 16:15 Uhr.",
+      "incorrect": "Rechne in zwei Schritten: Erst bis zur vollen Stunde, dann den Rest der 40 Minuten.",
+      "misconception": "15:75 Uhr gibt es nicht. Eine Stunde hat nur 60 Minuten, bei 60 springt die Stunde um."
+    },
+    "tags": ["zeit", "zeitspanne", "stundenuebergang", "uhrzeit-berechnen"],
+    "estimatedSeconds": 80,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-014",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leylas Zug fährt um 9:48 Uhr ab. Um 10:20 Uhr kommt er an."
+    },
+    "prompt": "Wähle die passende Zahl aus.",
+    "payload": {
+      "template": "Die Fahrt dauert {1} Minuten.",
+      "gaps": [
+        { "key": "1", "options": ["32", "72", "28"] }
+      ]
+    },
+    "solution": { "gaps": { "1": "32" } },
+    "feedback": {
+      "correct": "Genau! Von 9:48 Uhr bis 10:00 Uhr sind es 12 Minuten, dann noch 20 Minuten. 12 + 20 = 32.",
+      "incorrect": "Rechne erst bis zur vollen Stunde: Wie viele Minuten sind es von 9:48 Uhr bis 10:00 Uhr? Dann die Minuten nach 10:00 Uhr dazu.",
+      "misconception": "Wer 72 wählt, hat 20 + 48 gerechnet statt den Weg über die volle Stunde."
+    },
+    "tags": ["zeit", "zeitspanne", "stundenuebergang", "minuten"],
+    "estimatedSeconds": 75,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-2-015",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia ist 1,40 m groß. Wenn sie die Arme hochstreckt, erreicht sie fast den oberen Rand ihrer Zimmertür."
+    },
+    "prompt": "Wie hoch ist die Tür ungefähr?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "2 m" },
+        { "id": "b", "text": "1 m" },
+        { "id": "c", "text": "14 m" },
+        { "id": "d", "text": "40 cm" }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Richtig! Mia misst 1,40 m, mit den Armen über dem Kopf kommt sie auf etwa 2 m. So hoch ist eine Tür.",
+      "incorrect": "Die Tür ist höher als Mia, aber nicht viel höher. Welche Angabe passt dazu?",
+      "misconception": "1 m ist weniger als Mia selbst, dann käme sie nicht durch die Tür. 14 m wäre so hoch wie ein Haus."
+    },
+    "tags": ["groessenvorstellung", "laengen", "schaetzen"],
+    "estimatedSeconds": 65,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
+  },
+  {
+    "id": "m-gm-3-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias soll 2,05 m in Zentimeter umrechnen. Er schreibt: 2,05 m = 25 cm. Das ist nicht richtig."
+    },
+    "readAloud": "Elias soll 2,05 Meter in Zentimeter umrechnen. Er schreibt: 2,05 Meter sind 25 Zentimeter. Das ist nicht richtig. Welchen Fehler hat Elias gemacht?",
+    "prompt": "Welchen Fehler hat Elias gemacht?",
+    "payload": {
+      "options": [
+        { "id": "a", "text": "Er hat die Null nach dem Komma weggelassen. 2,05 m sind 205 cm." },
+        { "id": "b", "text": "Er hat Meter in Millimeter umgerechnet statt in Zentimeter." },
+        { "id": "c", "text": "Er hat nichts falsch gemacht. 2,05 m sind 25 cm." }
+      ]
+    },
+    "solution": { "optionId": "a" },
+    "feedback": {
+      "correct": "Genau! 2 m sind 200 cm, dazu kommen 5 cm. Die Null nach dem Komma zählt: 2,05 m sind 205 cm.",
+      "incorrect": "Hinter dem Komma stehen bei Metern die Zentimeter, immer zwei Stellen. 2,05 m sind 2 m und 5 cm.",
+      "misconception": "Viele streichen das Komma einfach weg und lesen 2,05 als 25. Dann fehlen 2 Meter."
+    },
+    "tags": ["laengen", "kommaschreibweise", "umrechnen", "fehler-finden"],
+    "estimatedSeconds": 95,
+    "meta": { "author": "claude", "createdAt": "2026-10-23", "calibration": "kompass4-2025" }
   }
 ]

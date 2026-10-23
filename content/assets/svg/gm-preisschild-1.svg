@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="30.0" y="14.0" width="420.0" height="236.0" fill="none" stroke-width="3"/>
+<rect x="30.0" y="14.0" width="420.0" height="56.0" fill="currentColor" fill-opacity="0.12" stroke-width="3"/>
+<text x="240.0" y="42.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">FAHRRADVERLEIH</text>
+<text x="54.0" y="104.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="start" dominant-baseline="central">1 Stunde</text>
+<rect x="300.0" y="82.0" width="128.0" height="44.0" fill="none" stroke-width="2"/>
+<text x="364.0" y="104.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2,50 €</text>
+<text x="54.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="start" dominant-baseline="central">2 Stunden</text>
+<rect x="300.0" y="138.0" width="128.0" height="44.0" fill="none" stroke-width="2"/>
+<text x="396.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">€</text>
+<text x="54.0" y="216.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="start" dominant-baseline="central">3 Stunden</text>
+<rect x="300.0" y="194.0" width="128.0" height="44.0" fill="none" stroke-width="2"/>
+<text x="396.0" y="216.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">€</text>
+</svg>
