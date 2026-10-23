@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Aufgabe 19: Bild hoch unter dem Text, Schema 1.0.21
+- **Befund (B6, auch HEAD):** Hoch stand ein Bild bis 2 : 1 mit 240 px neben dem Text. Für die Spalte blieben 70–107 px, lange Wörter liefen ins Bild (m-dz-1-003, -1-006, -2-001, -2-004, -3-001, m-rf-2-005). screen-checks sah es nicht: SVG war ausgenommen, der `<p>` ragte aus seiner Spalte, nicht der Text aus dem `<p>`.
+- **Gebaut (Variante b, Freigabe Markus):** Das Bild steht einmal im DOM zwischen Stimulus und Frage (`.sheet-body`). Quer setzt ein Grid Bilder bis 2 : 1 daneben. Hoch 200 px wie quer, portrait-Regel und `--spacing-asset-tall` entfallen. `overlapProblems` zählt `.content-asset > svg` als Kasten. Gegenprobe: vorher je 30 Befunde hoch, danach grün.
+- **Validator (integrity.ts, `WITH_PICTURE`):** Bild-Items mit mehr als zwei Sätzen Stimulus → Warnung, short-answer mit Bild → Fehler (Entscheidung Markus: m-rf-3-008 hatte trotz 80/114 Zeichen 2 px in Durchsehen Safari hoch). CONTENT_SCHEMA 1.0.21 §4.9, §7; PRODUCT §11 nennt es beim Umbau des Bands.
+- **Gemessen (Prototyp, 45 Bild-Items):** 240 px unter dem Text: Safari hoch Üben 0 px (m-rf-3-008); 200 px: ≥ 81 px ohne m-rf-3-008. Die 14 Items mit Bild bis 2 : 1 ändern sich hoch, alle ≥ 81 px.
+- **Quer:** Die Luft ist bei allen 24 Bild-Items gleich. Die Textspalte ist etwas breiter: m-dz-3-001 bricht auf dem iPad quer ein Wort später um, m-rf-1-005 hat in Safari quer 1 statt 2 Prompt-Zeilen. Den Screenshot `layout-bild-ipad-landscape` habe ich nicht committet, er ist im Bericht genannt.
+- **Lokal:** `npm run check` grün (1070 Tests), Layout-Projekt mit Schalter 52/52 in 21,0 Min., Chromium-Projekte 39/39. Committet: layout-bild hoch (2), format-multi-choice hoch (4), probetest-aufgabe-knappstes hoch (2), probetest-budget hoch (2).
+
 ## 2026-10-23 – Content-Patch P: Kompass-4-Anker, Schema 1.0.20, mathe-02 neu
 - **Schema 1.0.20 (Doku):** §2 Niveauwechsel nur durch retire + Kopie mit neuer ID, §3 `calibration: "kompass4-2025"`, §7 Block „Kalibrierung Mathe (Kompass 4 2025)“ ersetzt. **Markus:** In der Zeile in §7 Mathematik steht jetzt „Zahlenraum 10 000 (siehe Kalibrierung Mathe)“ statt „bis 1.000.000“. Der Enum-Wert steht auch im Zod-Validator (`schemas.ts`) und hat einen Test. Im CHANGELOG steht deshalb „Doku und Enum-Wert im Zod-Validator“ statt „kein Validator-Code“ (Entscheidung Markus).
 - **Content (Zip patch-p, wörtlich):** 15 Items retired (pilotNote aus retire.json), 9 neue IDs angehängt, mathe-02 neu (24 Items, 27,33 Min., 10/10/4), in mathe-01 wird m-ms-3-001 zu m-ms-2-009 (10/10/4). Mathe hat 104 aktive und 22 zurückgezogene Items. groessen-messen.json bleibt kompakt formatiert, das neue Item steht dort wie in der Zip ausgeklappt.

@@ -181,14 +181,15 @@ export function ItemScreen(props: ItemScreenProps) {
         {props.readAloud && (
           <VorlesenButton key={item.id} text={itemSpeech(item, props.attemptIndex, props.answer)} />
         )}
-        {/* A narrow picture stands beside the text, a wide one below the stimulus. */}
-        <div className="flex min-w-0 flex-1 items-start gap-lg">
-          <div className="grid min-w-0 flex-1 gap-xs">
-            {item.stimulus?.text && <p className="text-option">{nb(item.stimulus.text)}</p>}
-            {!assetBeside && asset}
-            <h1 className="text-prompt font-bold">{nb(item.prompt)}</h1>
-          </div>
-          {assetBeside && asset}
+        {/* The picture stands between stimulus and prompt; in landscape a narrow one moves beside
+            the text (index.css, .sheet-body). */}
+        <div
+          className="sheet-body grid min-w-0 flex-1 gap-xs"
+          data-picture={assetBeside ? 'beside' : undefined}
+        >
+          {item.stimulus?.text && <p className="text-option">{nb(item.stimulus.text)}</p>}
+          {asset}
+          <h1 className="text-prompt font-bold">{nb(item.prompt)}</h1>
         </div>
       </section>
 

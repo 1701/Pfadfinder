@@ -63,8 +63,7 @@
   --spacing-action: 180px; /* width of Prüfen/Weiter: the button never moves between the two */
   --spacing-key: 72px; /* digit pad key width, at least */
   --spacing-key-max: 90px; /* digit pad key width when there is room */
-  --spacing-asset: 200px; /* height of a task picture, landscape */
-  --spacing-asset-tall: 240px; /* height of a task picture, portrait */
+  --spacing-asset: 200px; /* height of a task picture */
   --spacing-asset-reserve: 516px; /* landscape: the rest of the item screen at most; below 716px height the picture shrinks */
   /* Reading text beside an item (task 9, measured in tests/e2e/text-layout.spec.ts). */
   --spacing-reading-column: 34%; /* landscape below 768px height: 36% breaks Safari 1024×660 */

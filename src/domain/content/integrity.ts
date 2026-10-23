@@ -90,6 +90,13 @@ export const WITH_TEXT = {
    */
   match: { maxPairs: 3, maxCardChars: 140, maxPromptChars: 60 },
 } as const;
+/**
+ * Items with a picture (1.0.21, task 19): in portrait the picture stands between stimulus and
+ * prompt, so the stimulus stays short. short-answer with a picture is an error until the band is
+ * rebuilt (PRODUCT §11): m-rf-3-008 kept 2 px in Durchsehen Safari portrait with a model of 80
+ * and feedback of 114 characters.
+ */
+export const WITH_PICTURE = { maxStimulusSentences: 2 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
 
@@ -237,6 +244,22 @@ export function validateContent(
     if ((item.format === 'single-choice' || item.format === 'multi-choice') && !item.payload.keepOrder) {
       if (item.payload.options.every((o) => LABEL_OPTION.test(o.text.trim()))) {
         warn(file, 'Optionen sind Bildbeschriftungen (A, B, …): keepOrder setzen?', item.id, 'payload.keepOrder');
+      }
+    }
+
+    if (item.stimulus?.assetId !== undefined) {
+      if (item.format === 'short-answer') {
+        error(file, 'short-answer mit Bild ist nicht erlaubt (1.0.21), bis das Band umgebaut ist', item.id, 'stimulus.assetId');
+      }
+      const { maxStimulusSentences } = WITH_PICTURE;
+      const sentences = splitSentences(item.stimulus.text ?? '').length;
+      if (sentences > maxStimulusSentences) {
+        warn(
+          file,
+          `Bild-Item: höchstens ${maxStimulusSentences} Sätze stimulus.text, hier ${sentences}`,
+          item.id,
+          'stimulus.text',
+        );
       }
     }
 

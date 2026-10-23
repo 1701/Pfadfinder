@@ -41,12 +41,15 @@ export async function overflowProblems(page: Page): Promise<string[]> {
  * is not one big box. Every rectangle is cut to the ancestors that clip (overflow ≠ visible): text
  * scrolled out of the reading box does not count. An element and its own descendants never count
  * as overlapping; a cut of 0.5 px or less in either direction is a touching edge, not an overlap.
- * SVG content is skipped (see overflowProblems): a diagram is one picture.
+ * SVG content is skipped (see overflowProblems): a diagram is one picture. A task picture
+ * (ContentAsset) counts with its box, so text that runs into it overlaps (task 19: a narrow text
+ * column beside the picture in portrait let its words run into the drawing).
  */
 export async function overlapProblems(page: Page): Promise<string[]> {
   return page.evaluate(() => {
     type Rect = { left: number; top: number; right: number; bottom: number };
     const TARGETS = 'button, a[href], input, textarea, select, [role="button"]';
+    const PICTURE = '.content-asset > svg';
     const ownText = (e: Element) =>
       [...e.childNodes]
         .filter((n) => n.nodeType === Node.TEXT_NODE)
@@ -75,9 +78,9 @@ export async function overlapProblems(page: Page): Promise<string[]> {
 
     const boxes: { el: Element; rects: Rect[] }[] = [];
     for (const e of document.body.querySelectorAll('*')) {
-      const target = e.matches(TARGETS);
+      const target = e.matches(TARGETS) || e.matches(PICTURE);
       if (!target && !ownText(e)) continue;
-      if (e.closest('.sr-only, svg')) continue;
+      if (e.closest('.sr-only') || (e.closest('svg') && !e.matches(PICTURE))) continue;
       if (!e.checkVisibility({ visibilityProperty: true, opacityProperty: true })) continue;
       const inline = !target && getComputedStyle(e).display === 'inline';
       const rects = (inline ? [...e.getClientRects()] : [e.getBoundingClientRect()])

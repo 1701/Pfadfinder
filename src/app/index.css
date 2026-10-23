@@ -45,16 +45,29 @@
     display: flex;
     justify-content: center;
   }
-  /* Landscape: smaller only where the screen is short (Safari bars, 1024×660). */
+  /* Smaller only where the screen is short (landscape with Safari bars, 1024×660); portrait always
+     has room for the full height (task 19: 200 px, as in landscape). */
   .content-asset > svg {
     height: min(var(--spacing-asset), 100vh - var(--spacing-asset-reserve));
     height: min(var(--spacing-asset), 100dvh - var(--spacing-asset-reserve));
     width: auto;
     max-width: 100%;
   }
-  @media (orientation: portrait) {
-    .content-asset > svg {
-      height: var(--spacing-asset-tall);
+
+  /* Stimulus, picture and prompt of the item sheet (ItemScreen), one below the other. Landscape: a
+     picture up to 2 : 1 stands beside stimulus and prompt. Portrait never: beside a 240 px picture
+     70–107 px were left for the text and long words ran into the drawing (task 19). The second row
+     takes the rest, so the prompt stays right under the stimulus when the picture is taller. */
+  @media (orientation: landscape) {
+    .sheet-body[data-picture='beside'] {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto 1fr;
+      column-gap: var(--spacing-lg);
+      align-items: start;
+    }
+    .sheet-body[data-picture='beside'] > .content-asset {
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
   }
 

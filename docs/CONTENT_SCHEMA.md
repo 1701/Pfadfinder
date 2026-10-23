@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.20 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.21 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -166,6 +166,8 @@ solution: { model: string; keyPoints: string[] }                           // Mu
 
 Mit `stimulus.textRef` (seit 1.0.13): `model` höchstens 90 Zeichen, höchstens 2 `keyPoints`, `feedback.incorrect` und `feedback.misconception` zusammen höchstens 150 Zeichen. Beim Vergleichen stehen Musterlösung und Kernpunkte neben dem Kasten; mit 111 Zeichen und 3 Kernpunkten lief der Screen hoch 8 px unter das Band (d-lsa-3-001). Bei „noch nicht“ zählt die Rückmeldung: mit 176 Zeichen lief d-lsa-3-002 Safari quer 20 px unter das Band, mit 158 blieben 22 px. Das Antwortfeld hat immer 3 Zeilen, `maxChars` ändert die Höhe nicht. Der Validator warnt.
 
+Mit Bild (`stimulus.assetId`) nicht erlaubt (seit 1.0.21), bis das Band umgebaut ist (PRODUCT §11). Grund: m-rf-3-008 hatte in Durchsehen Safari hoch nur 2 px Luft, obwohl `model` mit 80 und `incorrect` + `misconception` mit 114 Zeichen unter den Grenzen am Lesetext lagen. Der Validator meldet einen Fehler.
+
 ## 5. ReadingText
 
 ```ts
@@ -243,7 +245,9 @@ Regeln:
 **Bilder (`content/assets/svg`)**
 - Die App bettet jedes SVG direkt in die Seite ein. Deshalb gilt, geprüft von `npm run content:validate`: `<svg>` mit `viewBox`; kein `<script>`, `<foreignObject>`, `<style>`, `<image>`, `<iframe>`; keine Event-Attribute (`onload` …); keine Verweise (`href`, `url()`); kein `style`-Attribut
 - Farben nur `currentColor` oder `none` (Abstufung über `fill-opacity`/`stroke-opacity`), Schrift nur `font-family="inherit"`. So übernimmt das Bild Tinte und Andika und druckt schwarz auf weiß
-- Höhe im Aufgabenblatt: 200 px quer (auf kurzen Bildschirmen bis etwa 144 px), 240 px hoch. Bilder bis zum Seitenverhältnis 2 : 1 stehen neben dem Text, breitere darunter
+- Höhe im Aufgabenblatt: 200 px (quer auf kurzen Bildschirmen bis etwa 144 px). Quer stehen Bilder bis zum Seitenverhältnis 2 : 1 neben dem Text, breitere darunter. Hoch steht jedes Bild zwischen Stimulus und Frage (seit 1.0.21). Grund: Neben einem 240 px hohen Bild blieben hoch 70–107 px für den Text, lange Wörter liefen ins Bild (m-dz-3-001, Batch B6)
+- Bild-Items haben höchstens zwei Sätze `stimulus.text` (seit 1.0.21). Grund: Hoch steht das Bild über der Frage, jeder weitere Satz schiebt Frage und Antworten nach unten (Aufgabe 19, Batch B6: acht Stimuli auf höchstens zwei Sätze gekürzt). Der Validator warnt
+- `short-answer` mit Bild ist nicht erlaubt (seit 1.0.21, §4.9). Der Validator meldet einen Fehler
 - Schrift im Bild: `font-size` mindestens viewBox-Höhe / 8 (seit 1.0.6; Beispiel: Höhe 260 → mindestens 32,5). Ein Bild ist mindestens 144 px hoch, und 144 px × Schriftgröße / viewBox-Höhe ≥ 18 px, die kleinste Schrift der App. Darunter ist es ein Fehler im Validator
 - `assetAlt` beschreibt, was zu sehen ist, und verrät die Lösung nicht: keine Zählhilfe („4 Kästchen und 3 weitere“), keine Nennung der gefragten Eigenschaft („ein Dreieck mit zwei gleich langen Seiten“, wenn nach Symmetrie gefragt ist). Es wird vorgelesen und ist der Name des Bildes für Screenreader
 - Optionen, die auf Beschriftungen im Bild zeigen, bekommen `keepOrder: true` (§4.1)

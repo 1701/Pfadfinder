@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.21 – 2026-10-23
+- §7 Bilder: Hoch steht jedes Bild zwischen Stimulus und Frage, 200 px hoch wie quer (vorher bis 2 : 1 neben dem Text, 240 px). Quer bleibt die Regel. Grund: Neben dem Bild blieben hoch 70–107 px für den Text, lange Wörter liefen ins Bild (m-dz-3-001 und fünf weitere Bestandsitems, Batch B6). Bild-Items haben höchstens zwei Sätze `stimulus.text`, der Validator warnt (`WITH_PICTURE`).
+- §4.9/§7: `short-answer` mit Bild ist nicht erlaubt, bis das Band umgebaut ist (PRODUCT §11), der Validator meldet einen Fehler. Grund: m-rf-3-008 hatte in Durchsehen Safari hoch 2 px Luft mit `model` 80 und Rückmeldung 114 Zeichen, also unter den Grenzen am Lesetext. Kein Bestandsitem betroffen, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.20 – 2026-10-23
 - Kalibrierung Mathe auf den Kompass-4-Test 2025 (§7), Enum `meta.calibration` um `kompass4-2025` ergänzt (§3), Regel „Niveauwechsel nur durch retire + Kopie mit neuer ID“ (§2), §7 Mathematik: Zahlenraum 10 000. Doku und Enum-Wert im Zod-Validator (schemas.ts), alle Items bleiben gültig. Content-Patch P: 15 Items retired, 9 neue IDs, mathe-02 neu, mathe-01 eine ID.
 

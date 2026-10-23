@@ -21,7 +21,7 @@
       "slack": {
         "aufgabe": {
           "id": "m-dz-2-002",
-          "slack": 41
+          "slack": 81
         },
         "durchsehen": {
           "id": "m-gm-3-002",
@@ -36,16 +36,16 @@
     "mathe-02": {
       "slack": {
         "aufgabe": {
-          "id": "m-ms-2-002",
-          "slack": 65
+          "id": "m-rf-2-006",
+          "slack": 81
         },
         "durchsehen": {
-          "id": "m-ms-2-002",
-          "slack": 147
+          "id": "m-rf-2-006",
+          "slack": 163
         },
         "fehlt": {
-          "id": "m-ms-2-002",
-          "slack": 187
+          "id": "m-rf-2-006",
+          "slack": 219
         }
       }
     }
@@ -640,7 +640,7 @@
     "aufgabe": {
       "probetest": "mathe-01",
       "id": "m-dz-2-002",
-      "slack": 41
+      "slack": 81
     },
     "durchsehen": {
       "probetest": "mathe-01",

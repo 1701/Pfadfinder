@@ -125,6 +125,43 @@ describe('validateContent – assets', () => {
   });
 });
 
+describe('validateContent – items with a picture (1.0.21)', () => {
+  const allAssets: ValidateContentOptions = { assetExists: () => true };
+  const picture = { assetId: 'zahlenstrahl-01', assetAlt: 'Ein Zahlenstrahl von 0 bis 100' };
+
+  it('accepts two sentences of stimulus text, a closing quote included', () => {
+    const item: Item = {
+      ...numberInput,
+      stimulus: { text: 'Mia zählt. Sie sagt: „Das sind 100.“', ...picture },
+    };
+    expect(run(toFiles({ items: [item] }), allAssets).issues).toEqual([]);
+  });
+
+  it('warns at a third sentence', () => {
+    const item: Item = { ...numberInput, stimulus: { text: 'Eins. Zwei. Drei.', ...picture } };
+    expect(run(toFiles({ items: [item] }), allAssets).issues).toEqual([
+      expect.objectContaining({
+        severity: 'warning',
+        path: 'stimulus.text',
+        message: 'Bild-Item: höchstens 2 Sätze stimulus.text, hier 3',
+      }),
+    ]);
+  });
+
+  it('does not count sentences without a picture', () => {
+    const item: Item = { ...numberInput, stimulus: { text: 'Eins. Zwei. Drei.' } };
+    expect(run(toFiles({ items: [item] })).issues).toEqual([]);
+  });
+
+  it('reports short-answer with a picture as an error, without a picture it is fine', () => {
+    const item: Item = { ...shortAnswer, stimulus: { ...shortAnswer.stimulus, ...picture } };
+    expect(errors(run(toFiles({ items: [item] }), allAssets).issues)).toEqual([
+      'items/mathe/daten-zufall.json|m-dz-3-901|stimulus.assetId|short-answer mit Bild ist nicht erlaubt (1.0.21), bis das Band umgebaut ist',
+    ]);
+    expect(run(toFiles({ items: [shortAnswer] })).issues).toEqual([]);
+  });
+});
+
 describe('validateContent – reading texts', () => {
   function readingSet() {
     const text = structuredClone(sachtext);
