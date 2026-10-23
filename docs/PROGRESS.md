@@ -2,6 +2,11 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Fix: currentItem bei gleichem Prompt und offener Lücke
+- **Ursache des roten Smoke nach B9:** m-zo-2-025 (seit B7) hat denselben Prompt wie m-zo-1-016 ohne Stimulus. Die Prüfung über den Antwortbereich verlangte die Optionen aller Lücken, sichtbar ist nur die offene. Im Einstieg tritt das in ≈ 5 % der Läufe auf; m-gm-2-012 erreicht diese Spec nie (gm immer falsch, Leiter bleibt auf 1).
+- **Gebaut (nur `tests/e2e/helpers.ts`):** Stimulus = Text und Bildbeschreibung (`aria-label`); das Item mit vollständig sichtbarem Stimulus gewinnt, sonst nur Items ohne Stimulus. Danach entscheidet der Antwortbereich, bei Lückentexten nur mit der offenen Lücke aus dem DOM; alles außer genau einem Treffer schlägt mit den IDs fehl. Die Bildbeschreibung brauchte es für m-rf-1-015/m-rf-2-014 (gleicher Prompt, Optionen A–D).
+- **Lokal:** einstieg `--repeat-each=20` auf beiden Smoke-Projekten 160/160 (m-zo-2-025 zweimal dran), Smoke 39/39, blatt-layout 4/4.
+
 ## 2026-10-23 – Content: Batch B9 groessen-messen, 10 Items, 2 SVG
 - **Zip b9 (wörtlich):** 2 SVG neu (gm-preisschild-1, gm-tabelle-1), 10 Items angehängt (m-gm-1-011, 1-012, 2-009…015, 3-005), textuell ans Dateiende, keine bestehende Zeile geändert. Kein Retire, kein Probetest geändert. check.py vorher und `--applied`: 0 Fehler, 0 Warnungen.
 - **Manifest Mathe I/II/III:** zo 17/20/7, rf 15/16/6, gm 12/14/4, dz 9/7/4, ms 8/8/3 = 150 aktiv, 28 retired. mathe-01 26,92 Min., mathe-02 27,33 Min. unverändert.
