@@ -4,8 +4,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "pfadfinder",
-  // Cloudflare account of Markus (not a secret); lets wrangler run without asking for it.
-  "account_id": "REDACTED-CLOUDFLARE-ACCOUNT-ID",
   // The newest date the installed workerd supports (wrangler 4.142.0 → workerd 1.20260926).
   "compatibility_date": "2026-09-26",
   // pfadfinder.<subdomain>.workers.dev, plus a preview URL for every uploaded version.

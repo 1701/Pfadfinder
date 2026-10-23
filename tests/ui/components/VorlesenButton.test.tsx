@@ -18,7 +18,7 @@ function installSpeech() {
   const synth = {
     speak: vi.fn(),
     cancel: vi.fn(),
-    getVoices: vi.fn(() => [{ lang: 'en-US' }, { lang: 'de-DE', name: 'Tochter' }]),
+    getVoices: vi.fn(() => [{ lang: 'en-US' }, { lang: 'de-DE', name: 'Helena' }]),
   };
   vi.stubGlobal('speechSynthesis', synth);
   vi.stubGlobal('SpeechSynthesisUtterance', FakeUtterance);

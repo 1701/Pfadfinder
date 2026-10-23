@@ -7,7 +7,7 @@ export function sampleLearnerData(): LearnerData {
   return {
     learner: {
       id: learnerId,
-      name: 'Tochter',
+      name: 'Mia',
       createdAt: '2026-10-11T08:00:00.000Z',
       settings: { readAloud: true, bundesland: 'BW' },
     },

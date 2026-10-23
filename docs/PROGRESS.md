@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Chore: Repo wird öffentlich
+- **Historie umgeschrieben (git filter-repo, Go Markus):** Name der Tochter → „Tochter“ (24 Vorkommen in `git log -p`, 0 in Messages), Autor-Adresse → pfadfinder@steireif.de, Cloudflare-Account-ID → `REDACTED-CLOUDFLARE-ACCOUNT-ID`. 227 Commits, Stand des HEAD gleich dem alten bis auf die Ersetzungen, Force-Push auf main. Andere Klone müssen neu geklont werden.
+- **Historienprüfung danach:** keine Tokens, Schlüssel, `.env`, Account- oder Zone-IDs; E-Mails nur pfadfinder@, die Anthropic-Trailer und i@izs.me (npm-Text in package-lock, erlaubt).
+- **Lizenzen:** `LICENSE` (MIT), `content/LICENSE` (CC BY-SA 4.0, Text von creativecommons.org), neues `README.md` mit Zweck, Lizenzabsatz (Andika: `public/fonts/andika/OFL.txt`) und dem Hinweis, dass echte Prüfungsaufgaben nie im Repo liegen. `package.json` hatte „MIT“ schon.
+- **Account-ID:** nicht mehr in `wrangler.jsonc`; `deploy:preview` braucht `CLOUDFLARE_ACCOUNT_ID` (DEPLOY §3). Testnamen: Lerner „Mia“, Stimme „Helena“.
+- **CLAUDE.md:** keine echten Kompass-Aufgaben, Testhefte oder Scans; Kindernamen ab jetzt als „Tochter“.
+- **layout.yml:** Nachtlauf 01:00 UTC wieder aktiv, mit dem Job „kein neuer Commit, kein Lauf“ aus 8f80fcf^, jetzt mit Playwright-Container. DEPLOY §9 nachgezogen.
+- **Lokal:** `npm run check` grün. Keine UI-Änderung, keine Playwright-Projekte.
+
 ## 2026-10-23 – Chore: E2E-Jobs im Playwright-Image, kein apt mehr
 - **Befund (Run 39907709670, webkit):** Für WebKit brauchte apt 181 Pakete mit 80–90 kB/s, beide 6-Min.-Versuche liefen ab.
 - **Entscheidung Markus (a):** `smoke` und `webkit` (ci.yml) und der Layout-Job (layout.yml) laufen im Container `mcr.microsoft.com/playwright:v1.63.0-noble`, genau die Version von `@playwright/test` aus package-lock.json. Bei jedem Playwright-Update muss der Tag mitgezogen werden.

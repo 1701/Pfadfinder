@@ -30,7 +30,7 @@ Warum `npm run check` als Build-Befehl: Cloudflare wartet nicht auf die GitHub-C
 
 ## 3. Wo die URL steht
 
-- **Produktion:** https://pfadfinder.accounts-ea5.workers.dev/ (Konto-Subdomain `accounts-ea5`, Account-ID in `wrangler.jsonc`). Sie steht auch im Dashboard unter Workers & Pages → pfadfinder → Einstellungen → Domains & Routen und in der Ausgabe von `wrangler deploy` im Build-Log.
+- **Produktion:** https://pfadfinder.accounts-ea5.workers.dev/ (Konto-Subdomain `accounts-ea5`; die Account-ID steht nicht im Repo, sondern im Dashboard und wird für `npm run deploy:preview` als `CLOUDFLARE_ACCOUNT_ID` gesetzt). Sie steht auch im Dashboard unter Workers & Pages → pfadfinder → Einstellungen → Domains & Routen und in der Ausgabe von `wrangler deploy` im Build-Log.
 - Eine eigene Domain lässt sich später dort ergänzen; im Code ändert sich nichts, weil alle Pfade relativ zu `/` sind.
 
 ## 4. Vorschau eines Branches finden
@@ -112,11 +112,11 @@ Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
 | Workflow | Wann | Was | Dauer |
 |---|---|---|---|
 | `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
-| `Layout` (`.github/workflows/layout.yml`) | nur von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~40 Min. |
 
 - **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur das Layout-Projekt. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist; das Layout-Projekt läuft vor jedem UI- oder Content-Commit lokal (CLAUDE.md, DoD 1).
 - **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien, `tests/e2e/screenshots/**` oder `.github/workflows/layout.yml` starten kein `CI`.
-- **Nächtlicher Layout-Lauf ausgesetzt:** Der nächtliche Layout-Lauf ist ausgesetzt, solange das Repo privat ist (Actions-Minuten werden abgerechnet, ~40 Min. je Lauf auf dem 2-Kern-Runner); wird es öffentlich, `schedule: cron '0 1 * * *'` in `layout.yml` wieder aktivieren.
+- **Nächtlicher Layout-Lauf:** läuft nachts, Repo ist öffentlich.
 - **Warum nicht per Pfad:** Das Layout hängt auch an `src/domain` (z. B. `presentation`, Grenzen neben Lesetexten), `src/app`, `index.html`, den Schriften und den Paketen. Ein Pfadfilter auf `src/ui/**` und `content/**` hätte 27 von 219 Commits (8.–22.10.) mit Layout-Wirkung übersehen.
 - **Layout von Hand starten** (nur wenn Markus es will, z. B. vor einem Release): `gh workflow run layout.yml --ref main`, danach `gh run list --workflow=layout.yml --limit 1` für den Link. Alternativ auf GitHub unter Actions → Layout → „Run workflow“.
 - **Status lesen:** `gh run list --workflow=ci.yml --limit 1` (CLAUDE.md, DoD 3).

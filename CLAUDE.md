@@ -25,6 +25,8 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Keine Änderung an `docs/CONTENT_SCHEMA.md` ohne Versionssprung und CHANGELOG-Eintrag; im Zweifel Rückfrage
 - Keine Netzwerkaufrufe zur Laufzeit außer dem Laden der eigenen Assets
 - Keine Platzhalter-Items im Code erfinden; nutze `content/` oder frage nach Testdaten
+- Keine echten Kompass-Aufgaben, Testhefte oder Scans ins Repo (das Repo ist öffentlich)
+- Kindernamen in Doku und Commits ab jetzt als „Tochter“; bestehende Einträge bleiben unverändert
 - Renderer für mark-in-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
 - Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex). Ausnahme: `payload.keepOrder: true` (Optionen benennen Bildbeschriftungen A–D), dann bleibt die Reihenfolge wie im Content.
 - Messungen für Layout-Entscheidungen laufen nur in der App mit geladener Andika, nie mit einem separaten Skript ohne Schrift.
