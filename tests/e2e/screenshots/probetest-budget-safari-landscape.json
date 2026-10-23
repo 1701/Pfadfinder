@@ -450,6 +450,190 @@
           "vergleichen": 2
         }
       }
+    },
+    "deutsch-03": {
+      "slack": {
+        "aufgabe": {
+          "id": "d-rss-2-005",
+          "slack": 172
+        },
+        "durchsehen": {
+          "id": "d-lsa-2-007",
+          "slack": 1
+        },
+        "fehlt": {
+          "id": "d-lsa-2-008",
+          "slack": 37
+        },
+        "vergleichen": {
+          "id": "d-lsa-3-004",
+          "slack": 101
+        }
+      },
+      "items": {
+        "d-lsa-1-008": {
+          "aufgabe": 300,
+          "durchsehen": 244,
+          "fehlt": 246
+        },
+        "d-lsa-1-009": {
+          "aufgabe": 188,
+          "durchsehen": 198,
+          "fehlt": 254
+        },
+        "d-lsa-2-007": {
+          "aufgabe": 188,
+          "durchsehen": 1,
+          "fehlt": 57
+        },
+        "d-lsa-2-008": {
+          "aufgabe": 184,
+          "durchsehen": 15,
+          "fehlt": 37
+        },
+        "d-lsa-3-004": {
+          "aufgabe": 231,
+          "durchsehen": 19,
+          "fehlt": 75,
+          "vergleichen": 101
+        },
+        "d-lli-1-007": {
+          "aufgabe": 300,
+          "durchsehen": 180,
+          "fehlt": 236
+        },
+        "d-lli-1-008": {
+          "aufgabe": 188,
+          "durchsehen": 68,
+          "fehlt": 124
+        },
+        "d-lli-2-007": {
+          "aufgabe": 188,
+          "durchsehen": 1,
+          "fehlt": 57
+        },
+        "d-lli-2-008": {
+          "aufgabe": 241,
+          "durchsehen": 121,
+          "fehlt": 177
+        },
+        "d-lli-3-004": {
+          "aufgabe": 231,
+          "durchsehen": 19,
+          "fehlt": 75,
+          "vergleichen": 101
+        },
+        "d-rsl-1-006": {
+          "aufgabe": 332,
+          "durchsehen": 276,
+          "fehlt": 278
+        },
+        "d-rss-1-007": {
+          "aufgabe": 340,
+          "durchsehen": 228,
+          "fehlt": 230
+        },
+        "d-rsl-1-007": {
+          "aufgabe": 332,
+          "durchsehen": 276,
+          "fehlt": 278
+        },
+        "d-rss-1-008": {
+          "aufgabe": 284,
+          "durchsehen": 228,
+          "fehlt": 230
+        },
+        "d-rsl-1-008": {
+          "aufgabe": 340,
+          "durchsehen": 252,
+          "fehlt": 252
+        },
+        "d-rsl-2-001": {
+          "aufgabe": 228,
+          "durchsehen": 172,
+          "fehlt": 174
+        },
+        "d-rss-2-005": {
+          "aufgabe": 172,
+          "durchsehen": 116,
+          "fehlt": 118
+        },
+        "d-rsl-2-007": {
+          "aufgabe": 340,
+          "durchsehen": 204,
+          "fehlt": 204
+        },
+        "d-rss-2-006": {
+          "aufgabe": 332,
+          "durchsehen": 252,
+          "fehlt": 252
+        },
+        "d-rss-3-003": {
+          "aufgabe": 172,
+          "durchsehen": 49,
+          "fehlt": 50
+        },
+        "d-rsl-3-003": {
+          "aufgabe": 215,
+          "durchsehen": 145,
+          "fehlt": 147,
+          "vergleichen": 171
+        }
+      },
+      "promptLines": {
+        "d-lsa-1-008": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-1-009": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-2-007": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-2-008": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-3-004": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2,
+          "vergleichen": 2
+        },
+        "d-lli-1-007": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lli-1-008": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lli-2-007": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lli-2-008": {
+          "aufgabe": 1,
+          "durchsehen": 1,
+          "fehlt": 1
+        },
+        "d-lli-3-004": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2,
+          "vergleichen": 2
+        }
+      }
     }
   },
   "slack": {

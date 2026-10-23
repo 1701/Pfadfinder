@@ -30,6 +30,10 @@ import {
 } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
+// The viewports share nothing (own browser context, own report, files named per viewport), and
+// the print tests write their own files, so they run side by side, like layout.spec.
+test.describe.configure({ mode: 'parallel' });
+
 /** Every Probetest in content (task 16: a new file is measured without touching this spec). */
 const PROBETESTS = readdirSync('content/probetests')
   .filter((f) => /^(mathe|deutsch)-\d{2}\.json$/.test(f))

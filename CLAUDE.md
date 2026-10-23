@@ -34,6 +34,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Ein normaler Lauf (`npm run e2e`, einzelne Specs, `npm run screenshots`) schreibt Screenshots und Budget-JSON nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Danach ist `git status` sauber.
 - `PFADFINDER_UPDATE_SCREENSHOTS=1` nur bei einer bewussten UI-Änderung (sichtbare Oberfläche, Texte oder Layout-Budget): Dann schreiben die Specs ins versionierte `tests/e2e/screenshots/`. Committet werden nur die Dateien, die zur Änderung gehören, und der Abschlussbericht nennt sie. In CI wird der Schalter nie gesetzt
 - Versionierte Screenshots entstehen nur aus einem Lauf mit Schalter, auch wenn ein Lauf ohne Schalter denselben Code hatte: nie Dateien aus `tests/e2e/output/` nach `tests/e2e/screenshots/` kopieren (Entscheidung Markus, 2026-10-21)
+- Ein neu eingespielter Probetest schreibt sein Budget mit Schalter, im selben Commit.
 - Beispiel: `PFADFINDER_UPDATE_SCREENSHOTS=1 npx playwright test --project=layout einstieg-layout`
 
 ## Kinder-UX-Checkliste (vor jedem UI-Commit)

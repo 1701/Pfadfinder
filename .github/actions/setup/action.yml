@@ -39,8 +39,9 @@ runs:
         key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ inputs.browser }}
     # The system libraries (apt) are not cached; a hit only skips the browser download.
     # A slow apt mirror once took 9 min. Composite steps have no timeout-minutes, so `timeout`
-    # ends an attempt after 4 min and one retry follows; the workflows set timeout-minutes on the
-    # step that uses this action. `timeout` cannot end apt-get, which runs as root under sudo, and
+    # ends an attempt after 4 min (WebKit: 6 min, it needs more font packages; run 39871704554
+    # got 54 kB/s) and one retry follows; the workflows set timeout-minutes on the step that uses
+    # this action. `timeout` cannot end apt-get, which runs as root under sudo, and
     # its dpkg lock failed the retry at once (run 39866922436). So apt-get is ended first and the
     # retry waits up to 60 s for the lock.
     - name: Install browser
@@ -52,9 +53,10 @@ runs:
       run: |
         if [ "$HIT" = true ]; then install=(npx playwright install-deps "$BROWSER")
         else install=(npx playwright install --with-deps "$BROWSER"); fi
+        if [ "$BROWSER" = webkit ]; then limit=6; else limit=4; fi
         for attempt in 1 2; do
-          if timeout -k 30s 4m "${install[@]}"; then exit 0; fi
-          echo "::warning::Browser install attempt $attempt failed or took longer than 4 min"
+          if timeout -k 30s "${limit}m" "${install[@]}"; then exit 0; fi
+          echo "::warning::Browser install attempt $attempt failed or took longer than $limit min"
           sudo pkill apt-get || true
           for _ in $(seq 60); do
             sudo fuser /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock >/dev/null 2>&1 || break

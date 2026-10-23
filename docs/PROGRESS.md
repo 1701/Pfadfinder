@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Chore: WebKit-Install 6 Min., probetest-layout.spec parallel, Budget deutsch-03
+- **Befund (Run 39871704554, webkit):** Der Retry griff, aber der Azure-Spiegel lieferte ~54 kB/s, beide Versuche liefen über 4 Min. Der Rerun war grün.
+- **`setup/action.yml`:** 6 Min. je Versuch für WebKit, Chromium bleibt bei 4. In ci.yml hat der Setup-Schritt des WebKit-Jobs `timeout-minutes: 14`, die anderen behalten 12.
+- **`probetest-layout.spec`:** Die Tests teilen keinen Zustand. Jeder Viewport-Test hat einen eigenen Browser-Kontext, eigenes `report`/`red` und Dateien mit dem Viewport im Namen. Die Drucktests schreiben eigene Dateien, auf Modulebene gibt es nur Konstanten. Daher `mode: 'parallel'`, allein 6,5 statt 26,8 Min.
+- **Budget:** probetest-layout.spec einmal mit Schalter. `probetest-budget-*` (4) bekommen den Block deutsch-03 und sind ohne ihn byte-gleich. Nur diese vier Dateien committet. `probetest-druck.pdf` und zwei „knappstes“-PNGs (iPad quer, jetzt ein deutsch-03-Item) habe ich zurückgesetzt.
+- **CLAUDE.md (Markus):** Ein neu eingespielter Probetest schreibt sein Budget mit Schalter, im selben Commit.
+- **Lokal:** `npm run check` grün. Das Layout-Projekt lief 52/52 in 21,4 Min. Vorher waren es 27,7 Min., vor beiden Chores 43,2 Min. Engpass ist jetzt die text-layout.spec (10,3 Min., nicht parallel).
+
 ## 2026-10-23 – Chore: Browser-Install mit freier dpkg-Sperre, layout.spec parallel
 - **Befund (Run 39866922436, smoke):** `timeout` beendete nach 4 Min. nur npx. `apt-get` lief als root unter sudo weiter und hielt die dpkg-Sperre, der zweite Versuch scheiterte sofort („Could not get lock“), auch beim Rerun.
 - **`setup/action.yml`:** Vor dem zweiten Versuch `sudo pkill apt-get || true`, dann bis zu 60 s warten, bis `fuser` die Sperren frei meldet, danach `dpkg --configure -a` und Retry.
