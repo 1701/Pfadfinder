@@ -1,29 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
 <rect x="8.0" y="8.0" width="190.0" height="244.0" fill="none" stroke-width="3"/>
-<polygon points="92.0,112.0 116.2,98.0 140.5,112.0 116.2,126.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,140.0 116.2,154.0 116.2,126.0 92.0,112.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,154.0 140.5,140.0 140.5,112.0 116.2,126.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="92.0,84.0 116.2,70.0 140.5,84.0 116.2,98.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,112.0 116.2,126.0 116.2,98.0 92.0,84.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,126.0 140.5,112.0 140.5,84.0 116.2,98.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="67.8,126.0 92.0,112.0 116.2,126.0 92.0,140.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="67.8,154.0 92.0,168.0 92.0,140.0 67.8,126.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="92.0,168.0 116.2,154.0 116.2,126.0 92.0,140.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="92.0,140.0 116.2,126.0 140.5,140.0 116.2,154.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,168.0 116.2,182.0 116.2,154.0 92.0,140.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,182.0 140.5,168.0 140.5,140.0 116.2,154.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="43.5,140.0 67.8,126.0 92.0,140.0 67.8,154.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="43.5,168.0 67.8,182.0 67.8,154.0 43.5,140.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="67.8,182.0 92.0,168.0 92.0,140.0 67.8,154.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="92.0,168.0 116.2,154.0 140.5,168.0 116.2,182.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,196.0 116.2,210.0 116.2,182.0 92.0,168.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,210.0 140.5,196.0 140.5,168.0 116.2,182.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="92.0,140.0 116.2,126.0 140.5,140.0 116.2,154.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,168.0 116.2,182.0 116.2,154.0 92.0,140.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,182.0 140.5,168.0 140.5,140.0 116.2,154.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
-<polygon points="92.0,112.0 116.2,98.0 140.5,112.0 116.2,126.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
-<polygon points="92.0,140.0 116.2,154.0 116.2,126.0 92.0,112.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
-<polygon points="116.2,154.0 140.5,140.0 140.5,112.0 116.2,126.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="92.8,139.2 92.8,139.2 101.1,139.2 101.1,130.9" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="92.8,139.2 64.8,139.2 64.8,149.1 82.9,149.1 92.8,139.2" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="92.8,111.2 101.1,102.9 101.1,102.9 102.7,101.3 74.7,101.3 64.8,111.2" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="101.1,130.9 101.1,130.9 101.1,102.9 92.8,111.2 92.8,139.2" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="92.8,139.2 92.8,111.2 64.8,111.2 64.8,139.2" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="101.1,149.1 101.1,139.2 92.8,139.2 82.9,149.1" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="101.1,177.1 101.1,158.9 101.1,149.1 82.9,149.1 82.9,177.1" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="73.1,158.9 82.9,149.1 54.9,149.1 45.1,158.9" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="82.9,177.1 82.9,149.1 73.1,158.9 73.1,186.9" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="73.1,186.9 73.1,158.9 45.1,158.9 45.1,186.9" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="138.9,177.1 138.9,149.1 129.1,158.9 129.1,186.9" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="129.1,186.9 129.1,158.9 101.1,158.9 101.1,186.9" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="138.9,149.1 138.9,121.1 129.1,130.9 129.1,158.9" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="129.1,158.9 129.1,130.9 101.1,130.9 101.1,158.9" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<polygon points="101.1,102.9 129.1,102.9 138.9,93.1 110.9,93.1" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="129.1,130.9 138.9,121.1 138.9,93.1 129.1,102.9" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="101.1,130.9 129.1,130.9 129.1,102.9 101.1,102.9" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <polygon points="150.0,130.0 170.0,118.0 170.0,126.0 192.0,126.0 192.0,134.0 170.0,134.0 170.0,142.0" fill="currentColor" fill-opacity="0.5" stroke-width="2"/>
 <text x="242.0" y="46.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
 <rect x="266.0" y="98.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
@@ -44,16 +37,17 @@
 <text x="242.0" y="166.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
 <rect x="266.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="266.0" y="196.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<rect x="266.0" y="174.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="288.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="310.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
-<rect x="310.0" y="196.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
-<rect x="310.0" y="174.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <line x1="262.0" y1="240.0" x2="336.0" y2="240.0" stroke-width="2" stroke-opacity="1"/>
 <text x="372.0" y="166.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
 <rect x="396.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="396.0" y="196.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="396.0" y="174.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="418.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<rect x="418.0" y="196.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <rect x="440.0" y="218.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
+<rect x="440.0" y="196.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.18" stroke-width="2"/>
 <line x1="392.0" y1="240.0" x2="466.0" y2="240.0" stroke-width="2" stroke-opacity="1"/>
 </svg>

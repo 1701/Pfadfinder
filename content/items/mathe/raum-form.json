@@ -1433,7 +1433,7 @@
     "feedback": {
       "correct": "Richtig! Von rechts stehen die vorderen Würfel links. Ganz links siehst du den hohen Turm.",
       "incorrect": "Stell dich in Gedanken beim Pfeil hin und schau auf das Gebäude. Was ist von dort ganz links, was ganz rechts? Wie hoch ist jede Reihe?",
-      "misconception": "B ist die Ansicht von links, also spiegelverkehrt. C ist die Ansicht von vorne."
+      "misconception": "B ist die Ansicht von links, also spiegelverkehrt. C und D haben bei einer Reihe die falsche Höhe."
     },
     "tags": [
       "ansichten",
@@ -1598,8 +1598,8 @@
     },
     "feedback": {
       "correct": "Richtig! A ist das Gebäude um eine Vierteldrehung gedreht. Die Türme stehen noch in derselben Reihenfolge nebeneinander.",
-      "incorrect": "Merke dir, welche Türme nebeneinanderstehen: Der Dreier hat den Einer als Nachbarn, nicht den Zweier. Das bleibt beim Drehen so.",
-      "misconception": "D ist das Spiegelbild, das bekommt man durch Drehen nicht. Bei B und C haben die Türme andere Nachbarn."
+      "incorrect": "Merke dir, welche Türme nebeneinanderstehen: Der Dreier hat den Zweier als Nachbarn, der Einer steht vor dem Zweier. Das bleibt beim Drehen so.",
+      "misconception": "B ist das Spiegelbild, das bekommt man durch Drehen nicht. Bei C und D haben die Türme andere Nachbarn."
     },
     "tags": [
       "drehen",
@@ -1706,9 +1706,9 @@
       "optionId": "a"
     },
     "feedback": {
-      "correct": "Richtig! Der hohe Dreier steht links vorne, der Zweier rechts hinten, rechts vorne ist nichts.",
+      "correct": "Richtig! Der hohe Dreier steht links hinten, davor ein Würfel, rechts vorne ist nichts.",
       "incorrect": "Ein Bauplan ist das Gebäude von oben: vorne ist unten. Suche zuerst die Stelle mit 0 Würfeln, dann den höchsten Turm.",
-      "misconception": "B ist der Plan um eine halbe Drehung gedreht. C hat links und rechts vertauscht. D hat beim hohen Turm einen Würfel zu wenig."
+      "misconception": "B ist der Plan um eine halbe Drehung gedreht. C hat links und rechts vertauscht. D hat rechts vorne einen Würfel, wo keiner steht."
     },
     "tags": [
       "bauplan",

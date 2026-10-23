@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Content: B6 Würfelbilder als Schrägbild
+- **Grund (Sichtprüfung Markus):** Die Würfelgebäude waren isometrisch (Grundfläche als Raute), der Bauplan ist ein Quadrat mit „vorne ist unten“. Die Zuordnung verlangte eine 45°-Drehung im Kopf. Jetzt Schrägbild wie im Kompass-Test: vordere Reihe frontal, Tiefe nach rechts oben, verdeckte Flächen entfernt.
+- **Unsichtbare Würfel:** Jeder oberste Würfel eines Stapels ist von vorne sichtbar. Verdeckt sind nur untere Würfel, die man erschließen muss.
+- **Fehler behoben:** In rf-ansicht-1 waren die Antwortbilder B und C gleich (links = vorne bei diesem Gebäude). Jetzt vier verschiedene Bilder, Lösung weiter A.
+- **Zip b6-schraegbild (wörtlich):** 6 SVG ersetzt (rf-wuerfel-1, rf-ansicht-1, rf-ansicht-2, rf-gedreht-1, rf-bauplan-2, rf-bauplan-3), gleiche viewBox 480 × 260. Feedback-Patch nur an m-rf-2-010 (misconception), m-rf-2-013 (incorrect, misconception), m-rf-2-015 (correct, misconception). Diff-Kontrolle: HEAD plus Patch ist gleich der neuen Datei, Lösungen unverändert.
+- **Sweep, 6 Items:** knappste Luft Üben/Durchsehen iPad quer 166/198, iPad hoch 237/304, Safari quer 114/146, Safari hoch 113/180 px, keine Befunde. Kein Wert unter 30 px, daher kein Layout-Projekt.
+- **Lokal:** content:validate 0/0, `npm run check` grün (1070 Tests).
+
 ## 2026-10-23 – Content: Batch B6 raum-form, 20 Items, 19 SVG
 - **Zip b6 (wörtlich):** 19 SVG, 20 Items angehängt (m-rf-1-012…015, 2-010…021, 3-005…008), an m-rf-2-009 Bild rf-symm-2 und Optionen A–E (sechs Felder). Der erste Lauf war rot (hoch bis −134 px), darauf folgte Aufgabe 19.
 - **Danach (Entscheidungen Markus):** Textpatch b6-texte an acht Items (nur `stimulus.text` und `prompt`, bei m-rf-1-012, 2-012 und 2-021 fällt der Stimulus-Text weg). m-rf-3-008 wird single-choice (format, prompt, payload, solution, feedback, estimatedSeconds 110 → 90), weil short-answer mit Bild seit 1.0.21 ein Fehler ist.
