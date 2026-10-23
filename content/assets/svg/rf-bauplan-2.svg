@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="8.0" y="8.0" width="170.0" height="244.0" fill="none" stroke-width="3"/>
+<polygon points="60.8,130.0 92.0,112.0 123.2,130.0 92.0,148.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="60.8,166.0 92.0,184.0 92.0,148.0 60.8,130.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="92.0,184.0 123.2,166.0 123.2,130.0 92.0,148.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="92.0,148.0 123.2,130.0 154.4,148.0 123.2,166.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="92.0,184.0 123.2,202.0 123.2,166.0 92.0,148.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="123.2,202.0 154.4,184.0 154.4,148.0 123.2,166.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="29.6,148.0 60.8,130.0 92.0,148.0 60.8,166.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="29.6,184.0 60.8,202.0 60.8,166.0 29.6,148.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="60.8,202.0 92.0,184.0 92.0,148.0 60.8,166.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="92.0,112.0 123.2,94.0 154.4,112.0 123.2,130.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="92.0,148.0 123.2,166.0 123.2,130.0 92.0,112.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="123.2,166.0 154.4,148.0 154.4,112.0 123.2,130.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="29.6,112.0 60.8,94.0 92.0,112.0 60.8,130.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="29.6,148.0 60.8,166.0 60.8,130.0 29.6,112.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="60.8,166.0 92.0,148.0 92.0,112.0 60.8,130.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="29.6,76.0 60.8,58.0 92.0,76.0 60.8,94.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="29.6,112.0 60.8,130.0 60.8,94.0 29.6,76.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="60.8,130.0 92.0,112.0 92.0,76.0 60.8,94.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<text x="214.0" y="66.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<rect x="236.0" y="20.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="259.0" y="43.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="282.0" y="20.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="305.0" y="43.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="236.0" y="66.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="259.0" y="89.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">3</text>
+<rect x="282.0" y="66.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="305.0" y="89.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+<text x="360.0" y="66.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<rect x="382.0" y="20.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="405.0" y="43.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+<rect x="428.0" y="20.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="451.0" y="43.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">3</text>
+<rect x="382.0" y="66.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="405.0" y="89.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="428.0" y="66.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="451.0" y="89.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="214.0" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<rect x="236.0" y="140.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="259.0" y="163.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="282.0" y="140.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="305.0" y="163.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="236.0" y="186.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="259.0" y="209.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+<rect x="282.0" y="186.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="305.0" y="209.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="360.0" y="186.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+<rect x="382.0" y="140.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="405.0" y="163.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="428.0" y="140.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="451.0" y="163.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="382.0" y="186.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="405.0" y="209.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="428.0" y="186.0" width="46.0" height="46.0" fill="none" stroke-width="2"/>
+<text x="451.0" y="209.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">0</text>
+</svg>

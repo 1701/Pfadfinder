@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="130.0" y="108.0" width="44.0" height="44.0" fill="currentColor" fill-opacity="0.25" stroke-width="3"/>
+<rect x="174.0" y="108.0" width="44.0" height="44.0" fill="currentColor" fill-opacity="0.25" stroke-width="3"/>
+<rect x="218.0" y="108.0" width="44.0" height="44.0" fill="currentColor" fill-opacity="0.25" stroke-width="3"/>
+<rect x="218.0" y="152.0" width="44.0" height="44.0" fill="currentColor" fill-opacity="0.25" stroke-width="3"/>
+<rect x="262.0" y="152.0" width="44.0" height="44.0" fill="currentColor" fill-opacity="0.25" stroke-width="3"/>
+<rect x="306.0" y="152.0" width="44.0" height="44.0" fill="none" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="328.0" y="174.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<rect x="174.0" y="64.0" width="44.0" height="44.0" fill="none" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="196.0" y="86.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<rect x="262.0" y="196.0" width="44.0" height="44.0" fill="none" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="284.0" y="218.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<rect x="262.0" y="108.0" width="44.0" height="44.0" fill="none" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="284.0" y="130.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+</svg>

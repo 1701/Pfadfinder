@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Content: Batch B6 raum-form, 20 Items, 19 SVG
+- **Zip b6 (wörtlich):** 19 SVG, 20 Items angehängt (m-rf-1-012…015, 2-010…021, 3-005…008), an m-rf-2-009 Bild rf-symm-2 und Optionen A–E (sechs Felder). Der erste Lauf war rot (hoch bis −134 px), darauf folgte Aufgabe 19.
+- **Danach (Entscheidungen Markus):** Textpatch b6-texte an acht Items (nur `stimulus.text` und `prompt`, bei m-rf-1-012, 2-012 und 2-021 fällt der Stimulus-Text weg). m-rf-3-008 wird single-choice (format, prompt, payload, solution, feedback, estimatedSeconds 110 → 90), weil short-answer mit Bild seit 1.0.21 ein Fehler ist.
+- **Ohne `git stash pop`:** Nur Content-Dateien kamen aus dem Stash. Die vier layout-bild-PNGs darin stammten noch aus dem alten Layout.
+- **Manifest raum-form:** 39 Items, I/II/III = 15/17/7. Mathe 124 aktiv, 22 retired.
+- **Sweep, 21 Items:** knappste Luft Üben/Durchsehen iPad quer 166/142, iPad hoch 237/280, Safari quer 114/90, Safari hoch 113/156 px, keine Befunde.
+- **Lokal:** content:validate 0/0, `npm run check` grün (1070 Tests), Layout-Projekt mit Schalter 52/52 in 22,3 Min. Kein Screenshot geändert außer Rauschen und `layout-bild-ipad-landscape` (Umbruch aus Aufgabe 19), alles zurückgesetzt.
+
 ## 2026-10-23 – Aufgabe 19: Bild hoch unter dem Text, Schema 1.0.21
 - **Befund (B6, auch HEAD):** Hoch stand ein Bild bis 2 : 1 mit 240 px neben dem Text. Für die Spalte blieben 70–107 px, lange Wörter liefen ins Bild (m-dz-1-003, -1-006, -2-001, -2-004, -3-001, m-rf-2-005). screen-checks sah es nicht: SVG war ausgenommen, der `<p>` ragte aus seiner Spalte, nicht der Text aus dem `<p>`.
 - **Gebaut (Variante b, Freigabe Markus):** Das Bild steht einmal im DOM zwischen Stimulus und Frage (`.sheet-body`). Quer setzt ein Grid Bilder bis 2 : 1 daneben. Hoch 200 px wie quer, portrait-Regel und `--spacing-asset-tall` entfallen. `overlapProblems` zählt `.content-asset > svg` als Kasten. Gegenprobe: vorher je 30 Befunde hoch, danach grün.

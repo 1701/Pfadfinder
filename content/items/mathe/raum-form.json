@@ -1156,31 +1156,36 @@
     "niveau": 2,
     "format": "multi-choice",
     "status": "draft",
-    "prompt": "Welche Figuren haben mindestens eine Symmetrieachse? Wähle 3 aus.",
+    "stimulus": {
+      "assetId": "rf-symm-2",
+      "assetAlt": "Fünf Figuren mit den Buchstaben A, B, C, D und E."
+    },
+    "prompt": "Welche Figuren haben mindestens eine Spiegelachse? Wähle 3 aus.",
     "payload": {
       "options": [
         {
           "id": "a",
-          "text": "Quadrat"
+          "text": "A"
         },
         {
           "id": "b",
-          "text": "Kreis"
+          "text": "B"
         },
         {
           "id": "c",
-          "text": "schiefes Parallelogramm"
+          "text": "C"
         },
         {
           "id": "d",
-          "text": "Dreieck mit drei verschieden langen Seiten"
+          "text": "D"
         },
         {
           "id": "e",
-          "text": "Herz"
+          "text": "E"
         }
       ],
-      "minSelect": 3
+      "minSelect": 3,
+      "keepOrder": true
     },
     "solution": {
       "optionIds": [
@@ -1191,8 +1196,8 @@
     },
     "feedback": {
       "correct": "Alle drei! Der Kreis hat sogar unendlich viele Achsen, das Herz genau eine.",
-      "incorrect": "Falte jede Figur in Gedanken. Wenn keine Faltlinie beide Hälften zur Deckung bringt, hat sie keine Symmetrieachse.",
-      "misconception": "Das Parallelogramm ist die Falle: Es sieht ordentlich aus, hat aber keine Faltlinie, die passt."
+      "incorrect": "Falte jede Figur in Gedanken. Wenn keine Faltlinie beide Hälften zur Deckung bringt, hat sie keine Spiegelachse.",
+      "misconception": "C ist die Falle: Das schiefe Viereck sieht ordentlich aus, hat aber keine Faltlinie, die passt."
     },
     "tags": [
       "symmetrie",
@@ -1203,7 +1208,1047 @@
       "author": "claude",
       "createdAt": "2026-10-23",
       "calibration": "kompass4-2025",
-      "pilotNote": "Patch P: ersetzt m-rf-3-003, Niveau II nach Kompass 4 2025; bekommt in B6 ein SVG, dann Optionen auf 24 Zeichen kürzen"
+      "pilotNote": "Patch P: ersetzt m-rf-3-003, Niveau II nach Kompass 4 2025; B6: Bild rf-symm-2 und Optionen A–E"
+    }
+  },
+  {
+    "id": "m-rf-1-012",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-wuerfel-1",
+      "assetAlt": "Ein Gebäude aus Würfeln, schräg von oben gesehen."
+    },
+    "prompt": "Wie viele Würfel hat das Gebäude? Kein Würfel schwebt, zähle auch die verdeckten mit.",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 7
+    },
+    "feedback": {
+      "correct": "Richtig! Hinter und unter den sichtbaren Würfeln stecken noch welche. 7 sind es insgesamt.",
+      "incorrect": "Kein Würfel schwebt. Unter jedem Würfel oben muss einer stehen. Zähle Stockwerk für Stockwerk: unten, dann oben.",
+      "misconception": "Wer nur zählt, was er sieht, vergisst die Würfel, die hinten oder unten verdeckt sind."
+    },
+    "tags": [
+      "wuerfelgebaeude",
+      "zaehlen",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-1-013",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Alle drei Seiten des Dreiecks sind gleich lang.",
+      "assetId": "rf-achsen-dreieck-1",
+      "assetAlt": "Ein Dreieck mit der Spitze nach oben."
+    },
+    "prompt": "Wie viele Spiegelachsen hat das Dreieck?",
+    "payload": {
+      "maxDigits": 1
+    },
+    "solution": {
+      "value": 3
+    },
+    "feedback": {
+      "correct": "Richtig! Durch jede Ecke geht eine Spiegelachse zur gegenüberliegenden Seite.",
+      "incorrect": "Falte das Dreieck in Gedanken so, dass beide Hälften genau aufeinanderliegen. Probiere jede Ecke.",
+      "misconception": "Wer nur die senkrechte Linie findet, vergisst die zwei schrägen Achsen durch die anderen Ecken."
+    },
+    "tags": [
+      "symmetrie",
+      "spiegelachse",
+      "dreieck"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-1-014",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die dunkle Figur und eine zweite Figur sollen genau das gestrichelte Rechteck füllen. Drehen ist erlaubt.",
+      "assetId": "rf-puzzle-1",
+      "assetAlt": "Links ein gestricheltes Rechteck und eine dunkle Figur aus Kästchen. Rechts vier Figuren A bis D aus Kästchen."
+    },
+    "prompt": "Welche Figur passt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! B ist die dunkle Figur, um eine halbe Drehung gedreht. Beide zusammen füllen das Rechteck.",
+      "incorrect": "Lege die dunkle Figur in Gedanken in das Rechteck. Welche Form hat die Lücke, die übrig bleibt?",
+      "misconception": "A und D haben zwar auch 4 Kästchen, aber die falsche Form. C ist das Spiegelbild, das passt nur, wenn man es umklappt."
+    },
+    "tags": [
+      "figuren-zusammensetzen",
+      "rechteck",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-1-015",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-gitter-2",
+      "assetAlt": "Links im Kasten eine Figur aus vier Kästchen. Rechts vier Figuren A bis D auf Karopapier."
+    },
+    "prompt": "Welche Figur ist die gleiche wie im Kasten, nur gedreht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Drehst du die Figur im Kasten um eine Vierteldrehung, bekommst du A.",
+      "incorrect": "Drehe die Figur im Kasten in Gedanken: einmal nach rechts, einmal auf den Kopf. Vergleiche nach jeder Drehung.",
+      "misconception": "B und D sehen ähnlich aus, sind aber gespiegelt. Gespiegelt ist nicht gedreht: Das lange Stück steht auf der anderen Seite."
+    },
+    "tags": [
+      "gleiche-figur",
+      "drehen",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-ansicht-1",
+      "assetAlt": "Links ein Gebäude aus Würfeln mit einem Pfeil am rechten Rand. Rechts vier Ansichten A bis D aus Quadraten."
+    },
+    "prompt": "Welche Ansicht zeigt das Gebäude von rechts? Der Pfeil zeigt die Blickrichtung.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Von rechts stehen die vorderen Würfel links. Ganz links siehst du den hohen Turm.",
+      "incorrect": "Stell dich in Gedanken beim Pfeil hin und schau auf das Gebäude. Was ist von dort ganz links, was ganz rechts? Wie hoch ist jede Reihe?",
+      "misconception": "B ist die Ansicht von links, also spiegelverkehrt. C ist die Ansicht von vorne."
+    },
+    "tags": [
+      "ansichten",
+      "wuerfelgebaeude",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-011",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-ansicht-2",
+      "assetAlt": "Links ein Gebäude aus Würfeln mit einem Pfeil am unteren Rand. Rechts vier Ansichten A bis D aus Quadraten."
+    },
+    "prompt": "Welche Ansicht zeigt das Gebäude von vorne? Der Pfeil zeigt die Blickrichtung.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! Von vorne zählt in jeder Spalte nur der höchste Turm, auch wenn er weiter hinten steht.",
+      "incorrect": "Schau vom Pfeil aus. Für jede Spalte von links nach rechts: Wie hoch ist der höchste Würfelstapel in dieser Spalte? Egal, ob vorne oder hinten.",
+      "misconception": "A unterschätzt die rechte Spalte: Der hohe Stapel hinten zählt auch. C ist die Ansicht von rechts."
+    },
+    "tags": [
+      "ansichten",
+      "wuerfelgebaeude",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-012",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-netz-2",
+      "assetAlt": "Fünf graue Quadrate in einer Figur und vier gestrichelte Kästchen A bis D daneben."
+    },
+    "prompt": "Zwei der gestrichelten Kästchen machen die Figur zum Würfelnetz. Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "minSelect": 2,
+      "keepOrder": true
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Mit A entsteht ein Netz aus zwei Dreierreihen, mit B eines aus einer Viererreihe mit zwei Seiten.",
+      "incorrect": "Probiere jedes Kästchen einzeln: Entsteht eine Reihe aus vier Quadraten mit je einem Quadrat links und rechts? Oder zwei versetzte Dreierreihen?",
+      "misconception": "C und D bauen ein Quadrat aus vier Kästchen ein. So ein Viererblock lässt sich nie zum Würfel falten."
+    },
+    "tags": [
+      "wuerfelnetz",
+      "falten",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-013",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-gedreht-1",
+      "assetAlt": "Links im Kasten ein Gebäude aus Würfeln. Rechts vier Gebäude A bis D."
+    },
+    "prompt": "Welches Gebäude ist das Gebäude aus dem Kasten, nur gedreht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! A ist das Gebäude um eine Vierteldrehung gedreht. Die Türme stehen noch in derselben Reihenfolge nebeneinander.",
+      "incorrect": "Merke dir, welche Türme nebeneinanderstehen: Der Dreier hat den Einer als Nachbarn, nicht den Zweier. Das bleibt beim Drehen so.",
+      "misconception": "D ist das Spiegelbild, das bekommt man durch Drehen nicht. Bei B und C haben die Türme andere Nachbarn."
+    },
+    "tags": [
+      "drehen",
+      "wuerfelgebaeude",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-014",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-gitter-1",
+      "assetAlt": "Links im Kasten eine Figur aus fünf Kästchen. Rechts vier Figuren A bis D auf Karopapier."
+    },
+    "prompt": "Welche Figur ist die gleiche wie im Kasten, nur gedreht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! B ist die Figur im Kasten auf den Kopf gestellt.",
+      "incorrect": "Drehe die Figur im Kasten in Gedanken Schritt für Schritt. Achte darauf, auf welcher Seite der Vorsprung sitzt.",
+      "misconception": "A und D sind Spiegelbilder: Der Vorsprung sitzt auf der falschen Seite. Das kommt durch Drehen nie heraus."
+    },
+    "tags": [
+      "gleiche-figur",
+      "drehen",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-015",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jede Zahl im Bauplan sagt, wie viele Würfel übereinanderstehen. Vorne ist im Plan unten.",
+      "assetId": "rf-bauplan-2",
+      "assetAlt": "Links ein Gebäude aus Würfeln. Rechts vier Baupläne A bis D mit je vier Zahlen."
+    },
+    "prompt": "Welcher Bauplan passt zum Gebäude?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Der hohe Dreier steht links vorne, der Zweier rechts hinten, rechts vorne ist nichts.",
+      "incorrect": "Ein Bauplan ist das Gebäude von oben: vorne ist unten. Suche zuerst die Stelle mit 0 Würfeln, dann den höchsten Turm.",
+      "misconception": "B ist der Plan um eine halbe Drehung gedreht. C hat links und rechts vertauscht. D hat beim hohen Turm einen Würfel zu wenig."
+    },
+    "tags": [
+      "bauplan",
+      "wuerfelgebaeude",
+      "darstellungswechsel"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-016",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die dunkle Figur und eine zweite Figur sollen genau das gestrichelte Quadrat füllen. Drehen ist erlaubt.",
+      "assetId": "rf-puzzle-2",
+      "assetAlt": "Links ein gestricheltes Quadrat und eine dunkle Figur aus Kästchen. Rechts vier Figuren A bis D aus Kästchen."
+    },
+    "prompt": "Welche Figur passt?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Das T und das U greifen ineinander und füllen das Quadrat genau aus.",
+      "incorrect": "Das Quadrat hat 9 Kästchen, das T hat 4. Die zweite Figur braucht also 5 Kästchen und muss um das T herumpassen.",
+      "misconception": "B, C und D haben auch 5 Kästchen, aber die falsche Form: Sie lassen Lücken oder ragen über das Quadrat hinaus."
+    },
+    "tags": [
+      "figuren-zusammensetzen",
+      "quadrat",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-017",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-flaechen-1",
+      "assetAlt": "Vier Figuren A bis D auf Karopapier."
+    },
+    "prompt": "Welche zwei Figuren sind gleich groß? Wähle 2 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Figur A"
+        },
+        {
+          "id": "b",
+          "text": "Figur B"
+        },
+        {
+          "id": "c",
+          "text": "Figur C"
+        },
+        {
+          "id": "d",
+          "text": "Figur D"
+        }
+      ],
+      "minSelect": 2,
+      "keepOrder": true
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! A und B haben beide 6 Kästchen, auch wenn sie ganz verschieden aussehen.",
+      "incorrect": "Zähle bei jeder Figur die Kästchen und schreibe die Zahl daneben. Die Form sagt nichts über die Größe.",
+      "misconception": "B sieht wegen der Länge größer aus und D wegen der Stufen. Nur Zählen hilft."
+    },
+    "tags": [
+      "flaecheninhalt",
+      "vergleichen",
+      "kaestchen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-018",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Zwei halbe Kästchen zählen zusammen als ein ganzes.",
+      "assetId": "rf-flaechen-2",
+      "assetAlt": "Vier Figuren A bis D auf Karopapier, einige mit schrägen Seiten."
+    },
+    "prompt": "Welche Figur ist genauso groß wie Figur A?",
+    "payload": {
+      "options": [
+        {
+          "id": "b",
+          "text": "Figur B"
+        },
+        {
+          "id": "c",
+          "text": "Figur C"
+        },
+        {
+          "id": "d",
+          "text": "Figur D"
+        },
+        {
+          "id": "e",
+          "text": "Keine"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "d"
+    },
+    "feedback": {
+      "correct": "Richtig! D hat 8 Kästchen wie A: Die zwei halben Kästchen links und rechts ergeben zusammen ganze.",
+      "incorrect": "Zähle ganze Kästchen und sammle die halben: Zwei halbe sind ein ganzes. A hat 8.",
+      "misconception": "B hat 12 Kästchen, C hat 9. Wer bei D die halben Kästchen weglässt, kommt auf 6 und wählt „Keine“."
+    },
+    "tags": [
+      "flaecheninhalt",
+      "halbe-kaestchen",
+      "vergleichen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-019",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-achsen-trapez-1",
+      "assetAlt": "Eine Figur mit vier Seiten und vier gestrichelte Linien A bis D."
+    },
+    "prompt": "Welche gestrichelte Linie ist eine Spiegelachse der Figur?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Faltest du an A, liegen die beiden schrägen Seiten genau aufeinander.",
+      "incorrect": "Falte die Figur in Gedanken an jeder Linie. Nur wenn beide Hälften genau aufeinanderpassen, ist es eine Spiegelachse.",
+      "misconception": "B teilt die Figur in zwei gleich hohe Teile, aber oben ist sie schmaler als unten. Gleich hoch heißt nicht spiegelgleich."
+    },
+    "tags": [
+      "symmetrie",
+      "spiegelachse",
+      "trapez"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-020",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-achsen-stern-1",
+      "assetAlt": "Ein Stern mit vier Zacken."
+    },
+    "prompt": "Wie viele Spiegelachsen hat der Stern?",
+    "payload": {
+      "maxDigits": 1
+    },
+    "solution": {
+      "value": 4
+    },
+    "feedback": {
+      "correct": "Richtig! Zwei Achsen gehen durch die Zacken, zwei durch die Kerben dazwischen.",
+      "incorrect": "Falte den Stern in Gedanken: senkrecht, waagerecht und dann schräg durch die Einbuchtungen. Zähle jede Faltlinie, bei der die Hälften aufeinanderliegen.",
+      "misconception": "Wer 2 sagt, hat nur senkrecht und waagerecht gefaltet. Die schrägen Achsen durch die Kerben zählen auch."
+    },
+    "tags": [
+      "symmetrie",
+      "spiegelachse",
+      "stern"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-2-021",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "assetId": "rf-netz-1",
+      "assetAlt": "Fünf graue Quadrate in einer Figur und vier gestrichelte Kästchen A bis D daneben."
+    },
+    "prompt": "Welches gestrichelte Kästchen macht die Figur zum Würfelnetz?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "A"
+        },
+        {
+          "id": "b",
+          "text": "B"
+        },
+        {
+          "id": "c",
+          "text": "C"
+        },
+        {
+          "id": "d",
+          "text": "D"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "c"
+    },
+    "feedback": {
+      "correct": "Richtig! Mit C hängt an der Vierer-Reihe links und rechts je ein Quadrat. So lässt sich der Würfel falten.",
+      "incorrect": "Falte in Gedanken: Die vier Quadrate in der Reihe werden Boden, zwei Wände und Deckel. Die zwei anderen müssen die zwei Seiten links und rechts schließen.",
+      "misconception": "Mit A und B lägen beide Seitenquadrate auf derselben Seite, eines bleibt beim Falten übrig. D macht die Reihe zu lang."
+    },
+    "tags": [
+      "wuerfelnetz",
+      "falten",
+      "raumvorstellung"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-3-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Figur A und Figur B sind gleich groß. Mia sagt: „Dann ist auch der Umfang gleich.“",
+      "assetId": "rf-flaechen-1",
+      "assetAlt": "Vier Figuren A bis D auf Karopapier."
+    },
+    "prompt": "Stimmt das?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Umfang von A ist größer"
+        },
+        {
+          "id": "b",
+          "text": "Umfang von B ist größer"
+        },
+        {
+          "id": "c",
+          "text": "Beide gleich lang"
+        },
+        {
+          "id": "d",
+          "text": "Das kann man nicht sagen"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "b"
+    },
+    "feedback": {
+      "correct": "Richtig! Um A herum sind es 10 Kästchenseiten, um B herum 14. Gleiche Fläche, verschiedener Umfang.",
+      "incorrect": "Gehe bei beiden Figuren mit dem Finger außen herum und zähle die Kästchenseiten. Lange, dünne Figuren haben einen längeren Weg außen herum.",
+      "misconception": "Gleich groß heißt nicht gleicher Umfang. Bei B liegen mehr Kästchenseiten außen, weil sich die Kästchen weniger berühren."
+    },
+    "tags": [
+      "umfang",
+      "flaecheninhalt",
+      "begruenden"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-3-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla sagt: „Nur ein Quadrat hat genau 4 Spiegelachsen.“",
+      "assetId": "rf-achsen-stern-1",
+      "assetAlt": "Ein Stern mit vier Zacken."
+    },
+    "prompt": "Stimmt das? Schau dir den Stern an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nein, der Stern hat 4."
+        },
+        {
+          "id": "b",
+          "text": "Ja, der Stern hat 2."
+        },
+        {
+          "id": "c",
+          "text": "Ja, der Stern hat 8."
+        },
+        {
+          "id": "d",
+          "text": "Nein, der Stern hat 0."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Der Stern hat auch genau 4 Spiegelachsen. Leylas Satz gilt also nicht nur für das Quadrat.",
+      "incorrect": "Zähle die Spiegelachsen des Sterns: senkrecht, waagerecht, zwei schräge. Vergleiche mit dem Quadrat.",
+      "misconception": "Wer 2 sagt, übersieht die schrägen Achsen durch die Kerben. 8 wären es nur, wenn jede Zacke selbst noch eine Achse hätte."
+    },
+    "tags": [
+      "symmetrie",
+      "begruenden",
+      "gegenbeispiel"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-3-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia hat zum Gebäude einen Bauplan geschrieben, vorne ist unten. Eine Zahl stimmt nicht.",
+      "assetId": "rf-bauplan-3",
+      "assetAlt": "Links ein Gebäude aus Würfeln. Rechts ein Bauplan mit vier Zahlen."
+    },
+    "prompt": "Welche Zahl ist falsch?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "oben links"
+        },
+        {
+          "id": "b",
+          "text": "oben rechts"
+        },
+        {
+          "id": "c",
+          "text": "unten links"
+        },
+        {
+          "id": "d",
+          "text": "unten rechts"
+        }
+      ],
+      "keepOrder": true
+    },
+    "solution": {
+      "optionId": "c"
+    },
+    "feedback": {
+      "correct": "Richtig! Links vorne stehen zwei Würfel übereinander, im Plan steht aber eine 1.",
+      "incorrect": "Vergleiche Stelle für Stelle: Im Bauplan ist vorne unten. Wie viele Würfel stehen an jeder Stelle wirklich übereinander?",
+      "misconception": "Wer den Plan verkehrt herum liest, vertauscht vorne und hinten und findet den Fehler an der falschen Stelle."
+    },
+    "tags": [
+      "bauplan",
+      "fehler-finden",
+      "wuerfelgebaeude"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-rf-3-008",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jonas sagt: „Jede Figur aus 6 Quadraten ist ein Würfelnetz.“",
+      "assetId": "rf-netz-3",
+      "assetAlt": "Sechs graue Quadrate in zwei Reihen zu je drei."
+    },
+    "prompt": "Stimmt das? Schau dir die Figur an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nein, der Block nicht."
+        },
+        {
+          "id": "b",
+          "text": "Ja, 6 Flächen reichen."
+        },
+        {
+          "id": "c",
+          "text": "Ja, sie hängen zusammen."
+        },
+        {
+          "id": "d",
+          "text": "Nein, 6 ist zu wenig."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! 6 Quadrate braucht jedes Netz, aber die Anordnung entscheidet. Der Block lässt sich nicht falten.",
+      "incorrect": "Falte den Block in Gedanken: Zwei Quadrate liegen doppelt, der Deckel fehlt.",
+      "misconception": "Nicht die Anzahl zählt, die Anordnung."
+    },
+    "tags": [
+      "wuerfelnetz",
+      "begruenden",
+      "gegenbeispiel"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025"
     }
   }
 ]

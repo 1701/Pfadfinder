@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="18.0" y="60.0" width="64.0" height="64.0" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<text x="50.0" y="190.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<circle cx="145" cy="92" r="34" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<text x="145.0" y="190.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<polygon points="200.0,124.0 230.0,60.0 284.0,60.0 254.0,124.0" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<text x="240.0" y="190.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<polygon points="299.0,124.0 327.0,56.0 375.0,110.0" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<text x="335.0" y="190.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+<path d="M 430 128 C 386 94, 390 54, 412 58 C 424 60, 430 70, 430 76 C 430 70, 436 60, 448 58 C 470 54, 474 94, 430 128 Z" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<text x="430.0" y="190.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">E</text>
+</svg>

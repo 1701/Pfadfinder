@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="8.0" y="8.0" width="200.0" height="244.0" fill="none" stroke-width="3"/>
+<polygon points="69.4,130.0 104.0,110.0 138.6,130.0 104.0,150.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="69.4,170.0 104.0,190.0 104.0,150.0 69.4,130.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="104.0,190.0 138.6,170.0 138.6,130.0 104.0,150.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="69.4,90.0 104.0,70.0 138.6,90.0 104.0,110.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="69.4,130.0 104.0,150.0 104.0,110.0 69.4,90.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="104.0,150.0 138.6,130.0 138.6,90.0 104.0,110.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="69.4,50.0 104.0,30.0 138.6,50.0 104.0,70.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="69.4,90.0 104.0,110.0 104.0,70.0 69.4,50.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="104.0,110.0 138.6,90.0 138.6,50.0 104.0,70.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="104.0,150.0 138.6,130.0 173.3,150.0 138.6,170.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="104.0,190.0 138.6,210.0 138.6,170.0 104.0,150.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="138.6,210.0 173.3,190.0 173.3,150.0 138.6,170.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="34.7,150.0 69.4,130.0 104.0,150.0 69.4,170.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="34.7,190.0 69.4,210.0 69.4,170.0 34.7,150.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="69.4,210.0 104.0,190.0 104.0,150.0 69.4,170.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="34.7,110.0 69.4,90.0 104.0,110.0 69.4,130.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="34.7,150.0 69.4,170.0 69.4,130.0 34.7,110.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="69.4,170.0 104.0,150.0 104.0,110.0 69.4,130.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<polygon points="69.4,170.0 104.0,150.0 138.6,170.0 104.0,190.0" fill="currentColor" fill-opacity="0.06" stroke-width="2"/>
+<polygon points="69.4,210.0 104.0,230.0 104.0,190.0 69.4,170.0" fill="currentColor" fill-opacity="0.22" stroke-width="2"/>
+<polygon points="104.0,230.0 138.6,210.0 138.6,170.0 104.0,190.0" fill="currentColor" fill-opacity="0.42" stroke-width="2"/>
+<rect x="300.0" y="44.0" width="64.0" height="64.0" fill="none" stroke-width="2"/>
+<text x="332.0" y="76.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">3</text>
+<rect x="364.0" y="44.0" width="64.0" height="64.0" fill="none" stroke-width="2"/>
+<text x="396.0" y="76.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="300.0" y="108.0" width="64.0" height="64.0" fill="none" stroke-width="2"/>
+<text x="332.0" y="140.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="364.0" y="108.0" width="64.0" height="64.0" fill="none" stroke-width="2"/>
+<text x="396.0" y="140.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="364.0" y="212.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Bauplan</text>
+</svg>

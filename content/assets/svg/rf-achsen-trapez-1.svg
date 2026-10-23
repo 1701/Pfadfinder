@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<polygon points="130.0,60.0 350.0,60.0 430.0,220.0 50.0,220.0" fill="currentColor" fill-opacity="0.1" stroke-width="3"/>
+<line x1="240.0" y1="30.0" x2="240.0" y2="250.0" stroke-width="3" stroke-opacity="1" stroke-dasharray="10 8"/>
+<text x="240.0" y="18.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<line x1="30.0" y1="140.0" x2="450.0" y2="140.0" stroke-width="3" stroke-opacity="1" stroke-dasharray="10 8"/>
+<text x="466.0" y="140.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<line x1="70.0" y1="45.0" x2="410.0" y2="235.0" stroke-width="3" stroke-opacity="1" stroke-dasharray="10 8"/>
+<text x="60.0" y="30.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<line x1="410.0" y1="45.0" x2="70.0" y2="235.0" stroke-width="3" stroke-opacity="1" stroke-dasharray="10 8"/>
+<text x="420.0" y="30.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+</svg>

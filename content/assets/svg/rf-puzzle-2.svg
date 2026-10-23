@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="8.0" y="8.0" width="150.0" height="244.0" fill="none" stroke-width="3"/>
+<text x="82.0" y="32.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Ziel</text>
+<rect x="49.0" y="48.0" width="66.0" height="66.0" fill="none" stroke-width="3" stroke-dasharray="8 6"/>
+<rect x="49.0" y="168.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.35" stroke-width="2"/>
+<rect x="71.0" y="168.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.35" stroke-width="2"/>
+<rect x="71.0" y="190.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.35" stroke-width="2"/>
+<rect x="93.0" y="168.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.35" stroke-width="2"/>
+<rect x="243.0" y="54.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="243.0" y="76.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="265.0" y="76.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="287.0" y="54.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="287.0" y="76.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="196.0" y="76.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">A</text>
+<rect x="393.0" y="65.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="415.0" y="43.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="415.0" y="65.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="415.0" y="87.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="437.0" y="65.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="346.0" y="76.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">B</text>
+<rect x="254.0" y="163.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="254.0" y="185.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="254.0" y="207.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="276.0" y="163.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="276.0" y="185.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="196.0" y="196.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">C</text>
+<rect x="393.0" y="163.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="393.0" y="185.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="393.0" y="207.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="415.0" y="207.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<rect x="437.0" y="207.0" width="22.0" height="22.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="346.0" y="196.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">D</text>
+</svg>
