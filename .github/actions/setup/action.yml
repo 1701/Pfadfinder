@@ -4,6 +4,13 @@ description: Node from .nvmrc and cached node_modules. The E2E jobs run in the P
 runs:
   using: composite
   steps:
+    # In the Playwright image the job runs as root on a checkout owned by the runner user, and
+    # actions/checkout marks it safe only for its own step: git (npm's prepare script, the
+    # screenshot diff) would stop with "not in a git directory" (run 39910965609).
+    - name: Mark the checkout as safe for git
+      shell: bash
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
     - uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
