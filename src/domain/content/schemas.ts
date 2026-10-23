@@ -80,7 +80,7 @@ const feedbackSchema = z.strictObject({
 const metaSchema = z.strictObject({
   author: text,
   createdAt: isoDate,
-  calibration: z.enum(['original-2024', 'iqb', 'vera3', 'none']).optional(),
+  calibration: z.enum(['original-2024', 'iqb', 'vera3', 'kompass4-2025', 'none']).optional(),
   pilotNote: text.optional(),
 });
 

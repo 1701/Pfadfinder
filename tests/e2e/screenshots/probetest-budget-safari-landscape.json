@@ -36,15 +36,15 @@
     "mathe-02": {
       "slack": {
         "aufgabe": {
-          "id": "m-dz-1-001",
-          "slack": 33
+          "id": "m-ms-2-002",
+          "slack": 114
         },
         "durchsehen": {
-          "id": "m-gm-3-003",
+          "id": "m-gm-1-009",
           "slack": 36
         },
         "fehlt": {
-          "id": "m-gm-3-003",
+          "id": "m-gm-1-009",
           "slack": 36
         }
       }
@@ -644,12 +644,12 @@
     },
     "durchsehen": {
       "probetest": "mathe-02",
-      "id": "m-gm-3-003",
+      "id": "m-gm-1-009",
       "slack": 36
     },
     "fehlt": {
       "probetest": "mathe-02",
-      "id": "m-gm-3-003",
+      "id": "m-gm-1-009",
       "slack": 36
     },
     "nur-wartende": {

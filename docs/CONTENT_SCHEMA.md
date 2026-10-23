@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.19 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.20 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -39,7 +39,7 @@ content/
 
 ## 2. Identifikatoren
 
-Item-ID: `{fach}-{bereich}-{niveau}-{laufnr}` – z. B. `m-zo-2-014`, `d-rsl-1-003`. IDs sind stabil und werden nie wiederverwendet (gelöschte Items bekommen `status: "retired"`, bleiben in der Datei).
+Item-ID: `{fach}-{bereich}-{niveau}-{laufnr}` – z. B. `m-zo-2-014`, `d-rsl-1-003`. IDs sind stabil und werden nie wiederverwendet (gelöschte Items bekommen `status: "retired"`, bleiben in der Datei). Das Niveau steckt in der ID. Ein Item wechselt sein Niveau nie durch Umlabeln, sondern durch `retired` plus Kopie mit neuer ID; die `pilotNote` beider Items nennt die jeweils andere ID. Probetests verweisen danach auf die neue ID.
 
 | Fach | Kürzel | Bereich | Kürzel |
 |---|---|---|---|
@@ -88,7 +88,7 @@ type Item = {
   meta: {
     author: "claude" | "markus" | string;
     createdAt: string;              // ISO-Datum
-    calibration?: "original-2024" | "iqb" | "vera3" | "none";  // woran orientiert
+    calibration?: "original-2024" | "iqb" | "vera3" | "kompass4-2025" | "none";  // woran orientiert; kompass4-2025 = Kompass-4-Test 2025 als Anker (seit 1.0.20)
     pilotNote?: string;             // Beobachtung aus dem Papier-Pilot
   };
 };
@@ -208,7 +208,7 @@ Regeln:
 - Vornamen gemischt und alltagsnah (Mia, Elias, Amira, Jonas, Leyla, Ben), keine Marken, keine Religion/Politik/Gewalt, kein Essen als Belohnung
 
 **Mathematik**
-- Zahlenraum bis 1.000.000, schriftliche Verfahren mit Übertrag, Geld in € und ct, Zeit in h/min, Längen mm–km, Gewicht g–kg–t
+- Zahlenraum 10 000 (siehe Kalibrierung Mathe), schriftliche Verfahren mit Übertrag, Geld in € und ct, Zeit in h/min, Längen mm–km, Gewicht g–kg–t
 - Distraktoren sind *echte* Fehlwege (Zahlendreher, vergessener Übertrag, falsche Einheit, "Anzahl statt Position"), nie Zufallszahlen
 - Sachaufgaben enthalten nie überflüssige Zahlen auf Niveau I; ab Niveau II gezielt eine Ablenkzahl
 - Mehrere Gleichungen nie durch Komma trennen (Verwechslung mit Dezimalkomma); mit „und“ oder als eigene Sätze
@@ -226,11 +226,14 @@ Regeln:
 - III: begründen, Fehler in fremder Lösung finden, Regel übertragen
 - Zielverteilung je Bereich im Pool: 12 / 12 / 6 (bei 30 Items)
 
-**Kalibrierung Mathe (Pilot Oktober 2026)**
-- Kompass 4 kommt nach etwa 10 Schulwochen Klasse 4
-- I: sicher bis Ende Klasse 3 unterrichtet: Zahlenraum 1 000, schriftlich dreistellig, Einmaleins, Daten ablesen, sicher/möglich/unmöglich
-- II: vierstellig, Überschlag, zwei Werte verknüpfen
-- III: Zehntausender und größer, Begründen, Fehler in fremder Darstellung finden
+**Kalibrierung Mathe (Kompass 4 2025, seit 1.0.20)**
+- Anker ist der Kompass-4-Test 2025 (liegt nie im Repo). Übernommen werden nur Niveau, Aufgabentypen, Zahlenräume, Textlängen und Fehlerquellen, nie Aufgaben oder Umformulierungen davon. Neue Items tragen `calibration: "kompass4-2025"`; Items mit `vera3` sind am Klasse-3-Stoff kalibriert und in II/III tendenziell zu leicht
+- Zahlenraum **10 000** in allen Niveaus. Zehntausender und größer kommen weder im Test noch bis November in der Klasse vor
+- I (Reproduzieren): schriftlich vierstellig ± dreistellig mit Übertrag, Einmaleins-Erweiterung (5 · 18, 6 · 38, 48 : 4), einschrittige Sachaufgabe dreistellig, Nachbarzehner/-hunderter, Größenvorstellung zuordnen, sicher/möglich/unmöglich
+- II (Zusammenhänge): Darstellungswechsel Situation ↔ Bild ↔ Term, nicht-kanonische Bündelung (H 5 / Z 13 / E 2), Mitte zwischen zwei Zahlen, Zahlenreihe mit Regelwechsel verbalisieren, Zahlenmauer optimieren, räumlich operieren **mit Bild** (Figuren zusammensetzen, Flächen vergleichen, gedrehte Figur erkennen, Ansicht eines Würfelgebäudes, Spiegelachsen jenseits Rechteck, Netz ergänzen), zwei Informationen aus Tabelle oder Preisschild verknüpfen, Uhrzeit mit Minutenübergang über die volle Stunde, Dezimal-Längen in cm umrechnen
+- III (Reflektieren): begründen („Der Deckstein ist am größten, wenn …“), fremde Rechenstrategie fortsetzen, Verhältnis auf eine andere Anzahl übertragen, Fehler in fremder Lösung finden
+- Stimulus 17–30 Wörter; ein Bild trägt die Aufgabe in rund jeder zweiten Teilaufgabe des Tests. Begriffs- und Körperwissen ohne Bild kommt im Test nicht vor und wird nur auf I gepflegt
+- Testmix je 24 Teilaufgaben: zo 8 / rf 6 / gm 5 / ms 3 / dz 2, Niveau 7 / 13 / 4. Der Probetest-Validator verlangt noch 0,4 / 0,4 / 0,2 (§6); die Umstellung kommt mit mathe-03
 
 **Feedback**
 - `incorrect` erklärt den Weg, verrät nicht nur das Ergebnis

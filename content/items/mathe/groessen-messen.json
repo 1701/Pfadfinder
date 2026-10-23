@@ -460,7 +460,7 @@
     "bereich": "groessen-messen",
     "niveau": 3,
     "format": "multi-choice",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Welche Aussagen stimmen? Wähle 3 aus.",
     "payload": {
       "options": [
@@ -480,7 +480,7 @@
     },
     "tags": ["einheiten", "aussagen-pruefen", "umrechnen"],
     "estimatedSeconds": 90,
-    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+    "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb", "pilotNote": "Patch P: ersetzt durch m-gm-1-009 (Kompass-4-Anker)" }
   },
   {
     "id": "m-gm-3-004",
@@ -502,5 +502,64 @@
     "tags": ["laengen", "umfang", "sachaufgabe", "mehrschrittig"],
     "estimatedSeconds": 100,
     "meta": { "author": "claude", "createdAt": "2026-10-12", "calibration": "iqb" }
+  },
+  {
+    "id": "m-gm-1-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "groessen-messen",
+    "niveau": 1,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Aussagen stimmen? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "1 000 g sind genauso schwer wie 1 kg."
+        },
+        {
+          "id": "b",
+          "text": "Ein halber Liter sind 50 ml."
+        },
+        {
+          "id": "c",
+          "text": "Eine Viertelstunde hat 15 Minuten."
+        },
+        {
+          "id": "d",
+          "text": "100 cm und 1 000 mm sind gleich lang."
+        },
+        {
+          "id": "e",
+          "text": "1 t sind 100 kg."
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Alle drei! Ein halber Liter sind 500 ml, und eine Tonne sind 1 000 kg.",
+      "incorrect": "Prüfe jede Aussage mit der Umrechnung: kg → g ist 1 000, l → ml ist 1 000, t → kg ist 1 000, cm → mm ist 10.",
+      "misconception": "Bei Liter und Tonne fehlt oft eine Null: Der Schritt ist 1 000, nicht 100."
+    },
+    "tags": [
+      "einheiten",
+      "aussagen-pruefen",
+      "umrechnen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-gm-3-003, Niveau I nach Kompass 4 2025 (Umrechnungen reproduzieren)"
+    }
   }
 ]

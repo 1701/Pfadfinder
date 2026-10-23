@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.20 – 2026-10-23
+- Kalibrierung Mathe auf den Kompass-4-Test 2025 (§7), Enum `meta.calibration` um `kompass4-2025` ergänzt (§3), Regel „Niveauwechsel nur durch retire + Kopie mit neuer ID“ (§2), §7 Mathematik: Zahlenraum 10 000. Doku und Enum-Wert im Zod-Validator (schemas.ts), alle Items bleiben gültig. Content-Patch P: 15 Items retired, 9 neue IDs, mathe-02 neu, mathe-01 eine ID.
+
 ### 1.0.19 – 2026-10-22
 - §7 Deutsch, Rechtschreibung: Falsch geschriebene Wörter werden nie vorgelesen. Bei find-error und cloze-select in den RS-Bereichen liest die App den Satz in richtiger Schreibung aus solution und keine Optionen (Code). Choice-Optionen mit Fehlschreibung tragen ein readAloud mit der korrekten Schreibung. Ein Stimulus mit Fehlschreibung bekommt ein Item-readAloud mit richtiger Schreibung. Grund: iPad-Befund, Vorlesen sprach bei d-rss-1-003 „Hunt“ englisch und verriet die Lösung. Nachgezogen: Optionen von d-rsl-1-002, d-rsl-2-005, d-rss-1-005, d-rss-2-003, Item-`readAloud` an d-rsl-3-001 und d-rss-3-001. Nicht betroffen: kleingeschriebene Nomen (d-rss-1-008, d-rss-2-004), das hört man nicht. Der Validator prüft das nicht. Nur Doku und vorhandene optionale Felder, `schemaVersion` bleibt `"1.0"`.
 

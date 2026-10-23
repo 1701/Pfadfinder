@@ -7,12 +7,12 @@ import { presentedOrder } from '../../../src/domain/presentation';
 import { ORDER_HIGHLIGHT_MS, Order } from '../../../src/ui/formats/Order';
 import { contentItem } from '../../fixtures/content-items';
 
-const item = contentItem('m-rf-2-008', 'order');
+const item = contentItem('m-rf-1-011', 'order');
 const text = new Map(item.payload.items.map((e) => [e.id, e.text]));
 const shown = () =>
   screen.getAllByRole('listitem').map((li) => li.textContent?.replace(/\s+/g, ' ').trim());
 
-describe('Order (m-rf-2-008)', () => {
+describe('Order (m-rf-1-011)', () => {
   it('starts in the presented order, never solved, and reports nothing before a move', () => {
     const onChange = vi.fn();
     render(

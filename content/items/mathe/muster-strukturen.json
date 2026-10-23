@@ -45,7 +45,7 @@
     "bereich": "muster-strukturen",
     "niveau": 3,
     "format": "mark-in-text",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Mia zählt in Hunderterschritten. Zwei Zahlen hat sie falsch geschrieben."
     },
@@ -76,7 +76,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-14",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Patch P: ersetzt durch m-ms-2-009 (Kompass-4-Anker)"
     }
   },
   {
@@ -960,5 +961,47 @@
       "calibration": "iqb"
     },
     "readAloud": "In dieser Reihe ist jede Zahl die Summe der zwei Zahlen davor: 2, 3, 5, 8, 13 und so weiter. Welche Sätze stimmen? Tippe alle an."
+  },
+  {
+    "id": "m-ms-2-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia zählt in Hunderterschritten. Zwei Zahlen hat sie falsch geschrieben."
+    },
+    "prompt": "Zwei Zahlen passen nicht in die Reihe. Tippe beide an.",
+    "payload": {
+      "text": "100 200 300 350 400 500 650 700",
+      "unit": "word",
+      "maxSelect": 2
+    },
+    "solution": {
+      "indices": [
+        3,
+        6
+      ]
+    },
+    "feedback": {
+      "correct": "Genau! Die Reihe geht immer plus 100. 350 und 650 gehören nicht dazu.",
+      "incorrect": "Die Reihe geht in gleichen Schritten. Welche zwei Zahlen fallen aus dem Takt?",
+      "misconception": "Wer nur eine Zahl findet, hört zu früh auf. Prüfe die Reihe bis zum Ende."
+    },
+    "tags": [
+      "zahlenreihe",
+      "regel-finden",
+      "fehler-finden",
+      "hunderter"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-ms-3-001, Niveau II nach Kompass 4 2025 (Reihe prüfen, zwei Fehler)"
+    }
   }
 ]

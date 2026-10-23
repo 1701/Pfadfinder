@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-23 – Content-Patch P: Kompass-4-Anker, Schema 1.0.20, mathe-02 neu
+- **Schema 1.0.20 (Doku):** §2 Niveauwechsel nur durch retire + Kopie mit neuer ID, §3 `calibration: "kompass4-2025"`, §7 Block „Kalibrierung Mathe (Kompass 4 2025)“ ersetzt. **Markus:** In der Zeile in §7 Mathematik steht jetzt „Zahlenraum 10 000 (siehe Kalibrierung Mathe)“ statt „bis 1.000.000“. Der Enum-Wert steht auch im Zod-Validator (`schemas.ts`) und hat einen Test. Im CHANGELOG steht deshalb „Doku und Enum-Wert im Zod-Validator“ statt „kein Validator-Code“ (Entscheidung Markus).
+- **Content (Zip patch-p, wörtlich):** 15 Items retired (pilotNote aus retire.json), 9 neue IDs angehängt, mathe-02 neu (24 Items, 27,33 Min., 10/10/4), in mathe-01 wird m-ms-3-001 zu m-ms-2-009 (10/10/4). Mathe hat 104 aktive und 22 zurückgezogene Items. groessen-messen.json bleibt kompakt formatiert, das neue Item steht dort wie in der Zip ausgeklappt.
+- **Tests:** m-rf-2-008 ist retired. Order.test.tsx und formate.spec.ts nutzen deshalb das inhaltsgleiche m-rf-1-011 (Entscheidung Markus). speech.test.ts testet weiter am retired m-ms-3-001, unverändert.
+- **Budget:** Das Layout-Projekt lief mit Schalter. Committet sind nur `probetest-budget-*` (4), knappstes mathe-02 Safari quer: Durchsehen m-gm-1-009 mit 36 px.
+- **Sweep, 9 neue Items:** knappste Luft Üben/Durchsehen iPad quer 168/144, iPad hoch 370/360, Safari quer 60/36, Safari hoch 246/236 px.
+- **Lokal:** `npm run check` grün (1066 Tests), content:validate 0 Fehler, 0 Warnungen, check.py der Zip „OK – 0 Fehler“ (nicht im Repo). Layout-Projekt 52/52 in 20,9 Min., Chromium-Projekte 39/39.
+
 ## 2026-10-23 – Chore: Repo wird öffentlich
 - **Historie umgeschrieben (git filter-repo, Go Markus):** Name der Tochter → „Tochter“ (24 Vorkommen in `git log -p`, 0 in Messages), Autor-Adresse → pfadfinder@steireif.de, Cloudflare-Account-ID → `REDACTED-CLOUDFLARE-ACCOUNT-ID`. 227 Commits, Stand des HEAD gleich dem alten bis auf die Ersetzungen, Force-Push auf main. Andere Klone müssen neu geklont werden.
 - **Historienprüfung danach:** keine Tokens, Schlüssel, `.env`, Account- oder Zone-IDs; E-Mails nur pfadfinder@, die Anthropic-Trailer und i@izs.me (npm-Text in package-lock, erlaubt).

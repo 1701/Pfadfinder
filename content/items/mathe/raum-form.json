@@ -546,7 +546,7 @@
     "bereich": "raum-form",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Ein Rechteck ist 8 cm lang und 5 cm breit."
     },
@@ -571,7 +571,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P: Umfang ohne Bild kommt im Test nicht vor, Duplikat von m-rf-1-009 auf I, ohne Ersatz"
     }
   },
   {
@@ -581,7 +582,7 @@
     "bereich": "raum-form",
     "niveau": 2,
     "format": "multi-choice",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Welche Aussagen über einen Quader stimmen? Wähle 3 aus.",
     "payload": {
       "options": [
@@ -629,7 +630,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P: ersetzt durch m-rf-1-010 (Kompass-4-Anker)"
     }
   },
   {
@@ -729,7 +731,7 @@
     "bereich": "raum-form",
     "niveau": 2,
     "format": "single-choice",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Ein Pfeil zeigt nach oben. Du drehst ihn um eine Vierteldrehung nach rechts, also im Uhrzeigersinn."
     },
@@ -771,7 +773,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P: Drehen ohne Bild, ohne Ersatz (räumliches Operieren mit Bild kommt in B6)"
     }
   },
   {
@@ -781,7 +784,7 @@
     "bereich": "raum-form",
     "niveau": 2,
     "format": "order",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Ordne die Körper nach der Anzahl ihrer Ecken. Der Körper mit den wenigsten Ecken zuerst.",
     "payload": {
       "items": [
@@ -825,7 +828,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P: ersetzt durch m-rf-1-011 (Kompass-4-Anker)"
     }
   },
   {
@@ -927,7 +931,7 @@
     "bereich": "raum-form",
     "niveau": 3,
     "format": "multi-choice",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Welche Figuren haben mindestens eine Symmetrieachse? Wähle 3 aus.",
     "payload": {
       "options": [
@@ -974,7 +978,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-12",
-      "calibration": "iqb"
+      "calibration": "iqb",
+      "pilotNote": "Patch P: ersetzt durch m-rf-2-009 (Kompass-4-Anker)"
     }
   },
   {
@@ -1027,6 +1032,178 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "iqb"
+    }
+  },
+  {
+    "id": "m-rf-1-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Aussagen über einen Quader stimmen? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Er hat 6 Flächen."
+        },
+        {
+          "id": "b",
+          "text": "Alle Flächen sind Quadrate."
+        },
+        {
+          "id": "c",
+          "text": "Er hat 12 Kanten."
+        },
+        {
+          "id": "d",
+          "text": "Gegenüberliegende Flächen sind gleich groß."
+        },
+        {
+          "id": "e",
+          "text": "Er hat 6 Ecken."
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Alle drei gefunden! Ein Quader ist wie eine Schuhschachtel: 6 Flächen, 12 Kanten, 8 Ecken.",
+      "incorrect": "Nimm eine Schachtel in die Hand und zähle: Flächen, Kanten, Ecken. Sind alle Flächen gleich?",
+      "misconception": "Nur beim Würfel sind alle Flächen Quadrate. Beim Quader sind es Rechtecke."
+    },
+    "tags": [
+      "koerper",
+      "quader",
+      "eigenschaften"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-rf-2-004, Niveau I nach Kompass 4 2025 (Begriffswissen, kommt im Test nicht vor)"
+    }
+  },
+  {
+    "id": "m-rf-1-011",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 1,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Ordne die Körper nach der Anzahl ihrer Ecken. Der Körper mit den wenigsten Ecken zuerst.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "Würfel"
+        },
+        {
+          "id": "b",
+          "text": "Kugel"
+        },
+        {
+          "id": "c",
+          "text": "Pyramide mit quadratischer Grundfläche"
+        },
+        {
+          "id": "d",
+          "text": "Kegel"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "d",
+        "c",
+        "a"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Kugel 0, Kegel 1, Pyramide 5, Würfel 8 Ecken.",
+      "incorrect": "Zähle bei jedem Körper die Ecken: Die Kugel hat keine, der Kegel hat nur die Spitze. Dann die Pyramide, dann der Würfel.",
+      "misconception": "Die Pyramide hat 4 Ecken unten und 1 Spitze oben, zusammen 5 – weniger als der Würfel."
+    },
+    "tags": [
+      "koerper",
+      "ecken",
+      "ordnen"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-rf-2-008, Niveau I nach Kompass 4 2025 (Begriffswissen, kommt im Test nicht vor)"
+    }
+  },
+  {
+    "id": "m-rf-2-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "raum-form",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Figuren haben mindestens eine Symmetrieachse? Wähle 3 aus.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Quadrat"
+        },
+        {
+          "id": "b",
+          "text": "Kreis"
+        },
+        {
+          "id": "c",
+          "text": "schiefes Parallelogramm"
+        },
+        {
+          "id": "d",
+          "text": "Dreieck mit drei verschieden langen Seiten"
+        },
+        {
+          "id": "e",
+          "text": "Herz"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Alle drei! Der Kreis hat sogar unendlich viele Achsen, das Herz genau eine.",
+      "incorrect": "Falte jede Figur in Gedanken. Wenn keine Faltlinie beide Hälften zur Deckung bringt, hat sie keine Symmetrieachse.",
+      "misconception": "Das Parallelogramm ist die Falle: Es sieht ordentlich aus, hat aber keine Faltlinie, die passt."
+    },
+    "tags": [
+      "symmetrie",
+      "aussagen-pruefen"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-rf-3-003, Niveau II nach Kompass 4 2025; bekommt in B6 ein SVG, dann Optionen auf 24 Zeichen kürzen"
     }
   }
 ]

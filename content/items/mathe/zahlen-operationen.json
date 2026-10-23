@@ -39,7 +39,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Rechne aus: 4 735 + 2 868",
     "readAloud": "Rechne aus: 4735 plus 2868",
     "payload": {
@@ -62,7 +62,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "original-2024",
-      "pilotNote": "Umkalibriert von m-zo-1-001 nach Pilot"
+      "pilotNote": "Patch P: Niveau zu hoch für I-Kaliber des Kompass 4 2025, ersetzt durch m-zo-1-018"
     }
   },
   {
@@ -106,7 +106,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Rechne aus: 7 004 − 2 358",
     "readAloud": "Rechne aus: 7004 minus 2358",
     "payload": {
@@ -130,7 +130,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "original-2024",
-      "pilotNote": "Umkalibriert von m-zo-1-002 nach Pilot"
+      "pilotNote": "Patch P: ersetzt durch m-zo-1-019 (Kompass-4-Anker)"
     }
   },
   {
@@ -193,7 +193,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 3,
     "format": "single-choice",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Schau dir die Zahl 358 214 an."
     },
@@ -236,7 +236,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "iqb",
-      "pilotNote": "Umkalibriert von m-zo-1-003 nach Pilot"
+      "pilotNote": "Patch P: Hunderttausender kommen weder im Test noch in der Klasse vor, ohne Ersatz (I-Variante m-zo-1-012)"
     }
   },
   {
@@ -334,7 +334,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "order",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Ordne die Zahlen. Die kleinste zuerst.",
     "payload": {
       "items": [
@@ -379,7 +379,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "original-2024",
-      "pilotNote": "Umkalibriert von m-zo-1-005 nach Pilot"
+      "pilotNote": "Patch P: Zehntausender kommen im Test nicht vor, ersetzt durch m-zo-1-020 im Zahlenraum 10 000"
     }
   },
   {
@@ -475,7 +475,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "cloze-select",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Wähle die passenden Zahlen aus.",
     "payload": {
       "template": "Die Zahl 40 507 hat {1} Zehntausender, {2} Hunderter und 7 Einer.",
@@ -519,7 +519,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "iqb",
-      "pilotNote": "Umkalibriert von m-zo-1-007 nach Pilot"
+      "pilotNote": "Patch P: Zehntausender kommen weder im Test noch in der Klasse vor, ohne Ersatz (I-Variante m-zo-1-016)"
     }
   },
   {
@@ -579,7 +579,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 2,
     "format": "single-choice",
-    "status": "draft",
+    "status": "retired",
     "prompt": "Welche Zahl ist um 100 kleiner als 20 050?",
     "payload": {
       "options": [
@@ -619,7 +619,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "vera3",
-      "pilotNote": "Umkalibriert von m-zo-1-008 nach Pilot"
+      "pilotNote": "Patch P: Zehntausender kommen weder im Test noch in der Klasse vor, ohne Ersatz (I-Variante m-zo-1-017)"
     }
   },
   {
@@ -948,7 +948,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 3,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Eine Zahl hat 3 Hunderttausender, 0 Zehntausender, 7 Tausender, 2 Hunderter, 0 Zehner und 9 Einer."
     },
@@ -974,7 +974,7 @@
       "author": "claude",
       "createdAt": "2026-10-12",
       "calibration": "original-2024",
-      "pilotNote": "Umkalibriert von m-zo-2-005 nach Pilot"
+      "pilotNote": "Patch P: Hunderttausender kommen weder im Test noch in der Klasse vor, ohne Ersatz (Bündelung kommt in B7)"
     }
   },
   {
@@ -1275,7 +1275,7 @@
     "bereich": "zahlen-operationen",
     "niveau": 3,
     "format": "number-input",
-    "status": "draft",
+    "status": "retired",
     "stimulus": {
       "text": "Elias denkt sich eine Zahl. Er verdoppelt sie und zieht dann 15 ab. Sein Ergebnis ist 61."
     },
@@ -1300,7 +1300,8 @@
     "meta": {
       "author": "claude",
       "createdAt": "2026-10-11",
-      "calibration": "vera3"
+      "calibration": "vera3",
+      "pilotNote": "Patch P: ersetzt durch m-zo-2-014 (Kompass-4-Anker)"
     }
   },
   {
@@ -1646,6 +1647,166 @@
       "createdAt": "2026-10-12",
       "calibration": "vera3",
       "pilotNote": "Zahlenraum 1 000 nach Pilot"
+    }
+  },
+  {
+    "id": "m-zo-1-018",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 2 457 + 386",
+    "readAloud": "Rechne aus: 2457 plus 386",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 2843
+    },
+    "feedback": {
+      "correct": "Richtig! Bei den Einern und bei den Zehnern war ein Übertrag nötig, und du hast beide mitgenommen.",
+      "incorrect": "Rechne stellenweise von rechts: 7 + 6 = 13, die 1 wandert zu den Zehnern. Prüfe jede Stelle so.",
+      "misconception": "Wer 2 733 bekommt, hat die Überträge nicht mitgenommen."
+    },
+    "tags": [
+      "schriftliche-addition",
+      "uebertrag",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-zo-2-009, Niveau I nach Kompass 4 2025 (vierstellig ± dreistellig)"
+    }
+  },
+  {
+    "id": "m-zo-1-019",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "prompt": "Rechne aus: 3 524 − 268",
+    "readAloud": "Rechne aus: 3524 minus 268",
+    "payload": {
+      "maxDigits": 4
+    },
+    "solution": {
+      "value": 3256
+    },
+    "feedback": {
+      "correct": "Richtig! Zweimal ging es nicht auf, und beide Male hast du den Übertrag mitgenommen.",
+      "incorrect": "Rechne von rechts: 4 − 8 geht nicht, also 14 − 8 = 6 und eine 1 wandert weiter. Mach das an jeder Stelle.",
+      "misconception": "Wer 3 344 bekommt, hat an diesen Stellen einfach die kleinere Ziffer von der größeren abgezogen."
+    },
+    "tags": [
+      "schriftliche-subtraktion",
+      "uebertrag",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-zo-2-010, Niveau I nach Kompass 4 2025 (vierstellig ± dreistellig)"
+    }
+  },
+  {
+    "id": "m-zo-1-020",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 1,
+    "format": "order",
+    "status": "draft",
+    "prompt": "Ordne die Zahlen. Die kleinste zuerst.",
+    "payload": {
+      "items": [
+        {
+          "id": "a",
+          "text": "2 109"
+        },
+        {
+          "id": "b",
+          "text": "2 090"
+        },
+        {
+          "id": "c",
+          "text": "2 190"
+        },
+        {
+          "id": "d",
+          "text": "2 099"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Du hast Stelle für Stelle von links verglichen.",
+      "incorrect": "Vergleiche von links: erst die Tausender, dann die Hunderter, dann die Zehner. Erst wenn die gleich sind, schaust du weiter rechts.",
+      "misconception": "2 099 sieht wegen der Neunen groß aus, ist aber kleiner als 2 109."
+    },
+    "tags": [
+      "zahlen-vergleichen",
+      "ordnen",
+      "stellenwert",
+      "zr-10000"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-zo-2-011, Zahlenraum 10 000 nach Kompass 4 2025"
+    }
+  },
+  {
+    "id": "m-zo-2-014",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "zahlen-operationen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias denkt sich eine Zahl. Er verdoppelt sie und zieht dann 15 ab. Sein Ergebnis ist 61."
+    },
+    "prompt": "Welche Zahl hat sich Elias gedacht?",
+    "payload": {
+      "maxDigits": 2
+    },
+    "solution": {
+      "value": 38
+    },
+    "feedback": {
+      "correct": "Richtig! Rückwärts gerechnet: 61 + 15 = 76, und die Hälfte von 76 ist 38.",
+      "incorrect": "Gehe den Weg rückwärts: Zuerst die 15 wieder dazuzählen, dann halbieren. Rückwärts heißt immer: Umkehraufgabe.",
+      "misconception": "Wer 61 : 2 rechnet, hat das Abziehen vergessen. Rückwärts kommt das Abziehen zuerst dran."
+    },
+    "tags": [
+      "zahlenraetsel",
+      "umkehraufgabe",
+      "rueckwaerts-rechnen"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-23",
+      "calibration": "kompass4-2025",
+      "pilotNote": "Patch P: ersetzt m-zo-3-004, Niveau II nach Kompass 4 2025 (Umkehraufgabe, zwei Schritte)"
     }
   }
 ]

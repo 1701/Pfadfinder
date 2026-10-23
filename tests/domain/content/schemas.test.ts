@@ -194,6 +194,12 @@ describe('itemSchema – common fields (§2, §3)', () => {
     );
   });
 
+  it('knows the calibration kompass4-2025 (since 1.0.20) and nothing unlisted', () => {
+    const meta = (calibration: string) => ({ ...numberInput, meta: { ...numberInput.meta, calibration } });
+    expect(issuePaths(itemSchema, meta('kompass4-2025'))).toEqual([]);
+    expect(issuePaths(itemSchema, meta('kompass4-2024'))).toContain('meta.calibration');
+  });
+
   it('rejects empty prompt and non-positive estimatedSeconds', () => {
     expect(issuePaths(itemSchema, { ...numberInput, prompt: '  ' })).toContain('prompt');
     expect(issuePaths(itemSchema, { ...numberInput, estimatedSeconds: 0 })).toContain('estimatedSeconds');

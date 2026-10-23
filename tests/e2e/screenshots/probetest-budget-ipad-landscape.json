@@ -36,16 +36,16 @@
     "mathe-02": {
       "slack": {
         "aufgabe": {
-          "id": "m-dz-1-001",
-          "slack": 85
+          "id": "m-ms-2-002",
+          "slack": 166
         },
         "durchsehen": {
-          "id": "m-gm-3-003",
-          "slack": 144
+          "id": "m-rf-1-008",
+          "slack": 120
         },
         "fehlt": {
-          "id": "m-gm-3-003",
-          "slack": 144
+          "id": "m-rf-1-008",
+          "slack": 120
         }
       }
     }

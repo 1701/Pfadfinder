@@ -18,7 +18,7 @@ import {
 const CASES = [
   ['multi-choice', 'm-dz-2-007'],
   ['match', 'm-rf-1-004'],
-  ['order', 'm-rf-2-008'],
+  ['order', 'm-rf-1-011'],
   ['cloze-select', 'm-gm-2-008'],
   ['mark-in-text', 'd-rss-1-001'],
   ['find-error', 'd-rss-1-002'],
@@ -145,8 +145,8 @@ test('match lässt sich auch ziehen (m-rf-1-004)', async ({ page }) => {
   ).toBeVisible();
 });
 
-test('order lässt sich auch ziehen (m-rf-2-008)', async ({ page }) => {
-  const it = ITEMS.find((i) => i.id === 'm-rf-2-008')!;
+test('order lässt sich auch ziehen (m-rf-1-011)', async ({ page }) => {
+  const it = ITEMS.find((i) => i.id === 'm-rf-1-011')!;
   await page.setViewportSize(VIEWPORTS[0]!);
   await open(page, it);
   const rows = page.locator('[data-region="answer"] li');
