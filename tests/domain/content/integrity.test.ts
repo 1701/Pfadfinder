@@ -583,6 +583,59 @@ describe('validateContent – probetest rules (§6)', () => {
     ]);
   });
 
+  describe('sprache-untersuchen (1.0.22)', () => {
+    /** The Deutsch builder with its last two rs-strategien items as sprache-untersuchen items. */
+    function withSprache() {
+      const built = buildDeutschProbetest();
+      const replaced = built.items.filter((i) => i.bereich === 'rs-strategien').slice(-2);
+      const sprache = replaced.map((item, n) =>
+        cloneItem(findError, 'sprache-untersuchen', item.niveau, 900 + n, { estimatedSeconds: 75 }),
+      );
+      const items = [...built.items.filter((i) => !replaced.includes(i)), ...sprache];
+      const ids = built.probetest.itemIds.filter((id) => !replaced.some((r) => r.id === id));
+      const probetest = { ...built.probetest, ...mixesOf(items) };
+      const check = (order: string[], mix = probetest) =>
+        errors(run(toFiles({ items, texts: built.texts, probetests: [{ ...mix, itemIds: order }] })).issues);
+      return { ids, su: sprache.map((i) => i.id), probetest, check };
+    }
+
+    it('stands after the reading blocks, before or between the spelling items', () => {
+      const { ids, su, check } = withSprache();
+      expect(check([...ids.slice(0, 10), ...su, ...ids.slice(10)])).toEqual([]);
+      expect(check([...ids.slice(0, 13), ...su, ...ids.slice(13)])).toEqual([]);
+    });
+
+    it('never before or between the reading blocks', () => {
+      const { ids, su, check } = withSprache();
+      const between = check([...ids.slice(0, 5), ...su, ...ids.slice(5)]);
+      expect(between.filter((e) => e.includes('steht nach Sprache untersuchen'))).toHaveLength(5);
+      expect(between).toEqual(expect.arrayContaining([expect.stringContaining('ohne Lesetext steht vor')]));
+      const first = check([...su, ...ids]);
+      expect(first).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining('Deutsch-Probetest muss mit Lesen beginnen'),
+          expect.stringContaining('ohne Lesetext steht vor'),
+        ]),
+      );
+      expect(first.filter((e) => e.includes('steht nach Sprache untersuchen'))).toHaveLength(10);
+    });
+
+    it('needs a bereichMix key that matches its items', () => {
+      const { ids, su, probetest, check } = withSprache();
+      const order = [...ids.slice(0, 10), ...su, ...ids.slice(10)];
+      const mix = (bereichMix: Probetest['bereichMix']) => ({ ...probetest, bereichMix });
+      expect(check(order, mix({ ...probetest.bereichMix, 'sprache-untersuchen': 1, 'rs-strategien': 4 }))).toEqual([
+        'probetests/deutsch-01.json|deutsch-01|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 1, die Items ergeben 2',
+        'probetests/deutsch-01.json|deutsch-01|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 4, die Items ergeben 3',
+      ]);
+      const { 'sprache-untersuchen': _, ...without } = probetest.bereichMix;
+      expect(check(order, mix({ ...without, 'rs-strategien': 5 }))).toEqual([
+        'probetests/deutsch-01.json|deutsch-01|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 0, die Items ergeben 2',
+        'probetests/deutsch-01.json|deutsch-01|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 5, die Items ergeben 3',
+      ]);
+    });
+  });
+
   it('Deutsch needs exactly 2 reading texts', () => {
     const { items, texts, probetest } = buildDeutschProbetest();
     // Literary items without textRef: only one text remains in the probetest.

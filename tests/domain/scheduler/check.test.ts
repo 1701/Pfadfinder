@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { BEREICHE_BY_FACH, itemSchema, type Bereich, type Item } from '../../../src/domain/content';
+import {
+  BEREICHE_BY_FACH,
+  isLesenBereich,
+  itemSchema,
+  type Bereich,
+  type Item,
+} from '../../../src/domain/content';
 import { initialMasteryFromCheck } from '../../../src/domain/mastery';
 import {
   CHECK_ITEM_COUNT,
@@ -62,9 +68,10 @@ describe('buildCheck – number of questions', () => {
     expect(counts.every((c) => c === 2 || c === 3)).toBe(true);
   });
 
-  it('Deutsch with 4 Bereiche: 3 each', () => {
+  it('Deutsch with 5 Bereiche: 3 each', () => {
     const plan = buildCheck('deutsch', makePool('deutsch'), opts(DEUTSCH));
-    expect([...perBereich(runCheck(plan, () => false)).values()]).toEqual([3, 3, 3, 3]);
+    expect(plan.total).toBe(15);
+    expect([...perBereich(runCheck(plan, () => false)).values()]).toEqual([3, 3, 3, 3, 3]);
   });
 
   it('checks only the given Bereiche, even when the pool has more', () => {
@@ -301,10 +308,13 @@ describe('buildCheck – a Lesen-Bereich takes its items from one text', () => {
     expect(order).toEqual([
       'rs-laut-buchstabe',
       'rs-strategien',
+      'sprache-untersuchen',
       'rs-laut-buchstabe',
       'rs-strategien',
+      'sprache-untersuchen',
       'rs-laut-buchstabe',
       'rs-strategien',
+      'sprache-untersuchen',
       'lesen-sachtext',
       'lesen-sachtext',
       'lesen-sachtext',
@@ -312,6 +322,36 @@ describe('buildCheck – a Lesen-Bereich takes its items from one text', () => {
       'lesen-literarisch',
       'lesen-literarisch',
     ]);
+  });
+
+  // Guard for CHECK_ITEM_COUNT: the cut to it only ever shortens round 3, never a reading block.
+  it('keeps every place of the Lesen blocks for any set of Deutsch Bereiche and answers', () => {
+    const subsets = (list: readonly Bereich[]): Bereich[][] =>
+      list.reduce<Bereich[][]>((all, b) => [...all, ...all.map((s) => [...s, b])], [[]]);
+    const patterns: ((item: Item, index: number) => boolean)[] = [
+      () => true,
+      () => false,
+      (_, index) => index % 2 === 0,
+    ];
+    for (const bereiche of subsets(DEUTSCH).filter((s) => s.length >= 2)) {
+      for (const pattern of patterns) {
+        const plan = buildCheck('deutsch', makePool('deutsch'), opts(bereiche));
+        const order = runCheck(plan, pattern).map((a) => a.bereich);
+        const label = `${bereiche.join(', ')}: ${order.join(', ')}`;
+        expect(order.length, label).toBe(plan.total);
+        expect(plan.total, label).toBeLessThanOrEqual(CHECK_ITEM_COUNT.deutsch);
+        const lesen = bereiche.filter(isLesenBereich);
+        const block = lesen.flatMap((b) => [b, b, b]);
+        expect(order.slice(order.length - block.length), label).toEqual(block);
+      }
+    }
+  });
+
+  it('has room for rounds 1 and 2 and all Lesen places of every Deutsch Bereich', () => {
+    const lesen = DEUTSCH.filter(isLesenBereich).length;
+    expect(CHECK_ITEM_COUNT.deutsch).toBeGreaterThanOrEqual(
+      2 * (DEUTSCH.length - lesen) + 3 * lesen,
+    );
   });
 
   it('keeps the block of one text together, whatever the answers', () => {

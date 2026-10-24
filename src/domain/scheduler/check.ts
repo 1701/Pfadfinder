@@ -1,5 +1,5 @@
 // Einstiegscheck (PRODUCT.md §5.4, ARCHITECTURE.md §5): 2–3 items per practiceable Bereich,
-// at most 15 in Mathe and 12 in Deutsch, auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a
+// at most 15 in each Fach, auto-check formats only. The niveau ladder is adaptive, so buildCheck returns a
 // plan (Bereiche in round order + candidates) and nextCheckItem picks the item for the current
 // rung. Rounds 1 and 2 serve every Bereich; round 3 gives the remaining places to Bereiche whose
 // first two answers differ, then to the ones answered the same way twice (decision 2026-10-14).
@@ -12,8 +12,12 @@ import { isLesenBereich, type Bereich, type Fach, type Item, type Niveau } from 
 import { CHECK_ITEMS_PER_BEREICH, checkLadderNiveau, type CheckResult } from '../mastery';
 import { seededShuffle } from './shuffle';
 
-/** Mathe: 3 for each of its 5 Bereiche (task 15, before 12); Deutsch: 3 for each of its 4. */
-export const CHECK_ITEM_COUNT: Record<Fach, number> = { mathe: 15, deutsch: 12 };
+/**
+ * 3 for each of the 5 Bereiche of a Fach (Mathe since task 15, Deutsch since sprache-untersuchen,
+ * before 12 each). Never less than rounds 1 and 2 plus all places of the Lesen blocks, so the
+ * cut only ever shortens round 3 (check.test).
+ */
+export const CHECK_ITEM_COUNT: Record<Fach, number> = { mathe: 15, deutsch: 15 };
 
 export interface CheckPlan {
   fach: Fach;

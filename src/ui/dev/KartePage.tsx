@@ -2,7 +2,8 @@
 // Used by tests/e2e/karte.spec.ts for the layout check and the screenshots; ?neu fills the
 // line below the map (both Probetests, new version, Impressum · Datenschutz); ?angebot=deutsch shows
 // the Einstieg offer of Deutsch (the longer title) with no Fundstück yet; ?erstes the map before
-// the very first Fundstück, with its sentence in place of the dashes (task 17, also with ?neu).
+// the very first Fundstück, with its sentence in place of the dashes (task 17, also with ?neu);
+// ?alle every Gebiet with its sign ("neu"), as / shows a new device once every Bereich has items.
 
 import { BEREICHE, type Bereich, type Fach } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
@@ -19,7 +20,10 @@ const DEMO: Record<Bereich, RegionState> = {
   'lesen-literarisch': { kind: 'unerforscht' },
   'rs-laut-buchstabe': { kind: 'unerforscht' },
   'rs-strategien': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
+  'sprache-untersuchen': { kind: 'unterwegs', niveau: 2, erschlossen: [true, false, false] },
 };
+
+const NEU: RegionState = { kind: 'neu', niveau: 1, erschlossen: [false, false, false] };
 
 /** ?neu: the fullest line below the map: both Probetests and a waiting new version. */
 export function KartePage() {
@@ -32,7 +36,9 @@ export function KartePage() {
   return (
     <KartenView
       progress={{
-        states: Object.fromEntries(BEREICHE.map((b) => [b, DEMO[b]])) as typeof DEMO,
+        states: Object.fromEntries(
+          BEREICHE.map((b) => [b, search.has('alle') ? NEU : DEMO[b]]),
+        ) as typeof DEMO,
         today: reached
           ? { count: 10, goal: 10, reached: true }
           : { count: offerFach || erstes ? 0 : 4, goal: 10, reached: false },

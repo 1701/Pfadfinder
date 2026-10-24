@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.21 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.22 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -23,6 +23,7 @@ content/
       lesen-literarisch.json
       rs-laut-buchstabe.json
       rs-strategien.json
+      sprache-untersuchen.json  seit 1.0.22; bis zum ersten Batch ein leeres Array []
   texts/
     deutsch/
       t-sach-001.json          ReadingText
@@ -52,6 +53,7 @@ Item-ID: `{fach}-{bereich}-{niveau}-{laufnr}` – z. B. `m-zo-2-014`, `d-rsl-1-0
 | | | lesen-literarisch | lli |
 | | | rs-laut-buchstabe | rsl |
 | | | rs-strategien | rss |
+| | | sprache-untersuchen | su |
 
 ## 3. Item (gemeinsame Felder)
 
@@ -191,14 +193,15 @@ type Probetest = {
   durationMinutes: 45;
   itemIds: string[];                 // feste Reihenfolge, 18–24 Items; Deutsch mit genau 2 Texten (aus den textRefs, kein eigenes Feld)
   niveauMix: { 1: number; 2: number; 3: number };   // Soll: 0.4 / 0.4 / 0.2, wird validiert (±1 Item)
-  bereichMix: Record<Bereich, number>;              // jeder Bereich ≥ 2 Items
+  bereichMix: Partial<Record<Bereich, number>>;     // jeder Pflichtbereich ≥ 2 Items (seit 1.0.22, s. u.)
 };
 ```
 
 Regeln:
 - Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und genau 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
 - kein `short-answer`-Anteil über 15 %
-- Deutsch beginnt mit Lesen, endet mit Rechtschreibung (wie das Original)
+- Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `lesen-literarisch`, `rs-laut-buchstabe`, `rs-strategien`. Jeder Pflichtbereich hat mindestens 2 Items. `sprache-untersuchen` ist noch nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. Pflicht wird der Bereich, wenn die Deutsch-Probetests neu gemischt sind; vorher wird `bereich` nie ohne Entscheidung über diese Liste erweitert
+- Deutsch beginnt mit Lesen, endet mit Rechtschreibung (wie das Original). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator); ob vor oder nach der Rechtschreibung, legt das Neu-Mischen der Deutsch-Probetests fest
 - Deutsch (seit 1.0.16): Die Texte ergeben sich aus den `textRef`s der Items. Genau 2 Texte, ein Sachtext und ein literarischer (verschiedene `kind`). Die Items eines Textes stehen zusammen, weil der Lese-Screen einmal vor dem ersten Item eines Textes kommt. Kein Item ohne `textRef` steht vor einem Item mit `textRef`. Alles sind Fehler im Validator
 
 ## 7. Autorenregeln (gelten für jeden Batch)

@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.22 – 2026-10-25
+- Fünfter Deutsch-Bereich `sprache-untersuchen` (Kürzel `su`, Item-IDs `d-su-{niveau}-{laufnr}`, Datei `items/deutsch/sprache-untersuchen.json`, bis zum ersten Batch `[]`), §1 und §2. Grund: Im Kompass-4-Deutsch-Test 2025 sind Aufgabe 14–24 (11 von 24) Sprache untersuchen (PRODUCT §5.1, Entscheidung 2026-10-25). Enum `bereich` im Zod-Validator erweitert.
+- §6 Probetest: Die Regel „jeder Bereich ≥ 2 Items“ gilt für die Pflichtbereiche je Fach (Mathe alle 5, Deutsch die bisherigen 4). Ein fehlender Schlüssel eines Nicht-Pflichtbereichs ist kein Fehler, ein vorhandener muss zur Zählung passen. su-Items stehen im Deutsch-Probetest nach den Lesen-Blöcken (Fehler im Validator). deutsch-01/02/03 bleiben unverändert gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.21 – 2026-10-23
 - §7 Bilder: Hoch steht jedes Bild zwischen Stimulus und Frage, 200 px hoch wie quer (vorher bis 2 : 1 neben dem Text, 240 px). Quer bleibt die Regel. Grund: Neben dem Bild blieben hoch 70–107 px für den Text, lange Wörter liefen ins Bild (m-dz-3-001 und fünf weitere Bestandsitems, Batch B6). Bild-Items haben höchstens zwei Sätze `stimulus.text`, der Validator warnt (`WITH_PICTURE`).
 - §4.9/§7: `short-answer` mit Bild ist nicht erlaubt, bis das Band umgebaut ist (PRODUCT §11), der Validator meldet einen Fehler. Grund: m-rf-3-008 hatte in Durchsehen Safari hoch 2 px Luft mit `model` 80 und Rückmeldung 114 Zeichen, also unter den Grenzen am Lesetext. Kein Bestandsitem betroffen, `schemaVersion` bleibt `"1.0"`.

@@ -19,6 +19,7 @@ const STATES: Record<Bereich, RegionState> = {
   'lesen-literarisch': { kind: 'unerforscht' },
   'rs-laut-buchstabe': { kind: 'unerforscht' },
   'rs-strategien': { kind: 'unterwegs', niveau: 1, erschlossen: [true, true, false] },
+  'sprache-untersuchen': { kind: 'unerforscht' },
 };
 const TODAY = { count: 4, goal: 10, reached: false };
 
@@ -82,7 +83,7 @@ describe('Karte', () => {
     });
     expect(blank.closest('a')).toBeNull();
     expect(blank.querySelector('[tabindex]')).toBeNull();
-    expect(within(wide()).getAllByRole('img')).toHaveLength(5);
+    expect(within(wide()).getAllByRole('img')).toHaveLength(6);
   });
 
   it('fills reached Etappen, lightens the current one, and marks them with Wegstriche', () => {
@@ -165,6 +166,7 @@ describe('Karte', () => {
       'Sachtexte lesen, noch keine Aufgaben',
       'Geschichten lesen, noch keine Aufgaben',
       'Laute und Buchstaben, noch keine Aufgaben',
+      'Wörter und Sätze, noch keine Aufgaben',
     ]);
     expect(screen.queryByText(/Gestrichelt/)).toBeNull();
   });

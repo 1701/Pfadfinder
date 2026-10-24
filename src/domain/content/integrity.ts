@@ -445,7 +445,10 @@ export function formatProbetestTime(id: string, { itemSeconds, readingSeconds, s
   return `${id}: ${secondsText(itemSeconds)} s Items + ${secondsText(readingSeconds)} s Lesezeit = ${secondsText(seconds)} s (${minutes} Min.)`;
 }
 
-/** Deutsch starts with reading and ends with spelling; no reading item after the first spelling item. */
+/**
+ * Deutsch starts with reading and ends with spelling; no reading item after the first spelling item,
+ * and none after the first sprache-untersuchen item (1.0.22: those stand after the reading blocks).
+ */
 function checkDeutschOrder(items: readonly Item[], report: (message: string, path: string) => void): void {
   const first = items[0];
   const last = items[items.length - 1];
@@ -454,10 +457,18 @@ function checkDeutschOrder(items: readonly Item[], report: (message: string, pat
     report('Deutsch-Probetest muss mit Rechtschreibung enden', `itemIds[${items.length - 1}]`);
   }
   const firstSpelling = items.findIndex((item) => isRechtschreibungBereich(item.bereich));
-  if (firstSpelling === -1) return;
+  if (firstSpelling !== -1) {
+    items.forEach((item, i) => {
+      if (i > firstSpelling && isLesenBereich(item.bereich)) {
+        report(`Lese-Item "${item.id}" steht nach Rechtschreibung`, `itemIds[${i}]`);
+      }
+    });
+  }
+  const firstSprache = items.findIndex((item) => item.bereich === 'sprache-untersuchen');
+  if (firstSprache === -1) return;
   items.forEach((item, i) => {
-    if (i > firstSpelling && isLesenBereich(item.bereich)) {
-      report(`Lese-Item "${item.id}" steht nach Rechtschreibung`, `itemIds[${i}]`);
+    if (i > firstSprache && isLesenBereich(item.bereich)) {
+      report(`Lese-Item "${item.id}" steht nach Sprache untersuchen`, `itemIds[${i}]`);
     }
   });
 }

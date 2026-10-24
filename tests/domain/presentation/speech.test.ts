@@ -11,6 +11,7 @@ import {
   presentedOptions,
   presentedOrder,
 } from '../../../src/domain/presentation';
+import { cloneItem } from '../../fixtures/builders';
 import {
   clozeSelect,
   findError,
@@ -141,6 +142,15 @@ describe('itemSpeech – misspelled words are never read aloud (2026-10-22)', ()
     const item = byId('d-rsl-1-002');
     expect(itemSpeech(item, 0)).toBe(`${readAloudText(item)} ${answersSpeech(item, 0)}`);
     expect(itemSpeech(item, 0)).toContain('Antworten:');
+  });
+
+  it('reads the options of find-error and cloze-select in sprache-untersuchen (not spelling)', () => {
+    for (const base of [findError, clozeSelect]) {
+      const item = cloneItem(base, 'sprache-untersuchen', base.niveau, 900);
+      expect(itemSpeech(item, 0)).toBe(`${readAloudText(item)} ${answersSpeech(item, 0)}`);
+      // The same item in a spelling area reads the corrected sentence instead.
+      expect(itemSpeech(base, 0)).not.toBe(itemSpeech(item, 0));
+    }
   });
 
   it('drops the sentence when a correction or a gap solution is missing', () => {

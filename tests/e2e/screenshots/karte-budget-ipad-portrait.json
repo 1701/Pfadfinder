@@ -1,52 +1,79 @@
 {
   "/dev/karte": {
     "smallestName": 21.8,
-    "smallestTarget": 163,
+    "smallestTarget": 147,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 120,
     "mapHeight": 816,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 51,
+    "plateToOutline": 19,
+    "labelToIslandName": 38.7
   },
   "/dev/karte?neu": {
     "smallestName": 20.5,
-    "smallestTarget": 154,
+    "smallestTarget": 138,
     "lineRows": 2,
     "lineHeight": 96,
     "headerHeight": 120,
     "mapHeight": 768,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 48.4,
+    "plateToOutline": 18.1,
+    "labelToIslandName": 37.2
   },
   "/dev/karte?erstes": {
     "smallestName": 21.8,
-    "smallestTarget": 163,
+    "smallestTarget": 147,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 120,
     "mapHeight": 816,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 51,
+    "plateToOutline": 19,
+    "labelToIslandName": 38.7
   },
   "/dev/karte?erstes&neu": {
     "smallestName": 20.5,
-    "smallestTarget": 154,
+    "smallestTarget": 138,
     "lineRows": 2,
     "lineHeight": 96,
     "headerHeight": 120,
     "mapHeight": 768,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 48.4,
+    "plateToOutline": 18.1,
+    "labelToIslandName": 37.2
+  },
+  "/dev/karte?alle": {
+    "smallestName": 21.8,
+    "smallestTarget": 147,
+    "lineRows": 1,
+    "lineHeight": 48,
+    "headerHeight": 120,
+    "mapHeight": 816,
+    "air": 12,
+    "minLabelGap": 48.2,
+    "plateToOutline": 14.5,
+    "labelToIslandName": 38.7
   },
   "/": {
     "smallestName": 22.7,
-    "smallestTarget": 161,
+    "smallestTarget": 153,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 850,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 52.7,
+    "plateToOutline": 15.1,
+    "labelToIslandName": 40.9
   },
   "/ nach Später": {
     "smallestName": 21.8,
-    "smallestTarget": 154,
+    "smallestTarget": 147,
     "headerHeight": 120,
     "mapHeight": 816,
     "air": 12

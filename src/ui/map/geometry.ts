@@ -1,5 +1,5 @@
 // The expedition map as data (PRODUCT.md §6): two islands, Mathe and Deutsch, with flat polygons
-// for the nine Gebiete. Two layouts with the same neighbours and reading order: "wide" for
+// for the ten Gebiete. Two layouts with the same neighbours and reading order: "wide" for
 // landscape, "tall" (islands one above the other) for portrait. All coordinates and drawing
 // measures live here, in viewBox units; components only read them.
 // Shared corners keep the Gebiete gap-free: N lies on the edge F–G, so it is part of the
@@ -51,7 +51,8 @@ const W = {
   E: [30, 310], F: [240, 280], N: [310, 290], G: [380, 300], H: [570, 330],
   I: [60, 560], J: [300, 580], K: [540, 545],
   P: [625, 110], Q: [800, 80], R: [980, 120],
-  S: [615, 300], T: [800, 310], U: [985, 290],
+  S1: [618, 250], T1: [800, 258], U1: [984, 245],
+  S2: [625, 400], T2: [800, 400], U2: [975, 400],
   V: [645, 540], X: [965, 520], Y: [805, 560],
 } as const satisfies Record<string, Point>;
 
@@ -62,8 +63,8 @@ const T = {
   E: [20, 265], F: [240, 255], N: [360, 262], G: [480, 258], H: [705, 272],
   I: [50, 445], J: [370, 465], K: [680, 435],
   P: [40, 560], Q: [370, 540], R: [690, 570],
-  S: [30, 715], T: [360, 725], U: [700, 705],
-  V: [60, 875], X: [670, 865], Y: [380, 885],
+  S: [30, 715], Ma: [250, 720], Tm: [360, 720], Mb: [470, 720], U: [700, 705],
+  V: [60, 875], Y1: [260, 882], Y2: [480, 880], X: [670, 865],
 } as const satisfies Record<string, Point>;
 
 export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
@@ -80,10 +81,14 @@ export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
         points: [W.N, W.G, W.H, W.K, W.J],
         label: [420, 401],
       },
-      'lesen-sachtext': { points: [W.P, W.Q, W.T, W.S], label: [710, 200] },
-      'lesen-literarisch': { points: [W.Q, W.R, W.U, W.T], label: [891, 200] },
-      'rs-laut-buchstabe': { points: [W.S, W.T, W.Y, W.V], label: [716, 428] },
-      'rs-strategien': { points: [W.T, W.U, W.X, W.Y], label: [889, 420] },
+      'lesen-sachtext': { points: [W.P, W.Q, W.T1, W.S1], label: [712, 176] },
+      'lesen-literarisch': { points: [W.Q, W.R, W.U1, W.T1], label: [891, 176] },
+      'rs-laut-buchstabe': { points: [W.S1, W.T1, W.T2, W.S2], label: [712, 327] },
+      'rs-strategien': { points: [W.T1, W.U1, W.U2, W.T2], label: [889, 325] },
+      'sprache-untersuchen': {
+        points: [W.S2, W.T2, W.U2, W.X, W.Y, W.V],
+        label: [805, 475],
+      },
     },
   },
   tall: {
@@ -99,10 +104,11 @@ export const MAP_LAYOUTS: Record<'wide' | 'tall', MapLayout> = {
         points: [T.N, T.G, T.H, T.K, T.J],
         label: [519, 338],
       },
-      'lesen-sachtext': { points: [T.P, T.Q, T.T, T.S], label: [200, 635] },
-      'lesen-literarisch': { points: [T.Q, T.R, T.U, T.T], label: [530, 635] },
-      'rs-laut-buchstabe': { points: [T.S, T.T, T.Y, T.V], label: [208, 800] },
-      'rs-strategien': { points: [T.T, T.U, T.X, T.Y], label: [528, 795] },
+      'lesen-sachtext': { points: [T.P, T.Q, T.Tm, T.Ma, T.S], label: [200, 635] },
+      'lesen-literarisch': { points: [T.Q, T.R, T.U, T.Mb, T.Tm], label: [530, 635] },
+      'rs-laut-buchstabe': { points: [T.S, T.Ma, T.Y1, T.V], label: [148, 800] },
+      'rs-strategien': { points: [T.Ma, T.Tm, T.Mb, T.Y2, T.Y1], label: [365, 800] },
+      'sprache-untersuchen': { points: [T.Mb, T.U, T.X, T.Y2], label: [585, 795] },
     },
   },
 };

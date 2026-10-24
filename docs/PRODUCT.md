@@ -67,7 +67,7 @@ Jedes Item ist genau einem **Bereich** zugeordnet. Bereiche sind das Rückgrat v
 2. Lesen – literarischer Text (Figuren, Handlung, Schlussfolgern, Wirkung)
 3. Rechtschreibung – Laut-Buchstaben (Dehnung, Doppelkonsonant, s-Laute, Auslautverhärtung)
 4. Rechtschreibung – Strategien (Groß-/Kleinschreibung, Wortbausteine, Ableiten/Verlängern, Fehler finden)
-5. Sprache untersuchen (Wortarten, Satzglieder, Zeitformen) – **nicht im MVP** (v1.1), da im Test nicht gemessen
+5. Sprache untersuchen (Wortarten, Satzglieder, Zeitformen), auf der Karte „Wörter und Sätze“ – im MVP seit 2026-10-25 (vorher v1.1). Grund: Im Kompass-4-Deutsch-Test 2025 sind Aufgabe 14–24 (11 von 24) Sprache untersuchen. Im Probetest ist der Bereich noch nicht Pflicht, bis die Deutsch-Probetests neu gemischt sind (CONTENT_SCHEMA §6)
 
 ### 5.2 Anforderungsniveaus
 
@@ -100,7 +100,7 @@ Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
 
 1. **Einstiegscheck** (einmalig und freiwillig je Fach, Mathe ~15 Min., Deutsch ~15 Min. mit zwei Lesetexten): bestimmt das Startniveau je Bereich; nur Formate mit Auto-Check, keine Kurzantwort. Rahmung (seit 2026-10-19): Intro "Wir erkunden Mathe." (bzw. "Deutsch.") mit "Ein paar Aufgaben zeigen, wo du startest. Das dauert etwa 15 Minuten." (beide Fächer; Mathe seit Aufgabe 15, vorher 10) – nie "Test". Festlegungen (2026-10-14):
    - *Angebot:* auf der Karte, solange das Fach keinen Mastery-Stand hat und mindestens 2 übbare Bereiche besitzt (Deutsch seit 2026-10-18 mit den beiden Rechtschreib-Bereichen). Angeboten wird immer nur ein Fach, das erste ohne Mastery-Stand (Mathe vor Deutsch). "Unerforscht: Mathe" bzw. "Unerforscht: Deutsch" ist dann die Überschrift der Karte, mit "Erkunden" (gelb) und "Später" daneben; Vorlesen liest Überschrift und Knopf ("Unerforscht: Mathe. Tippe auf Erkunden, oder wähle gleich ein Gebiet: …", ohne offene Gebiete ohne Nebensatz). Angebot und Intro nennen immer das Fach, auch beim ersten (seit 2026-10-18). Die Überschrift ist kurz, weil die Kopfzeile hoch in eine Reihe passen muss (gemessen 2026-10-19, Zeilenende Mathe/Deutsch bei 768 px Breite: "Mathe ist noch unerforscht." 824/849 px, mit kleinerem Abstand 812/837, "Noch unerforscht: Mathe" 768/793, "Unerforscht: Mathe" 686/711, mit normalem Abstand 698/723; vorher "Wo geht’s in Mathe los?"). Gestrichelte Gebiete ohne Aufgaben heißen für Screenreader "…, noch keine Aufgaben" (seit 2026-10-19), damit "unerforscht" nur das Angebot meint; das Tagesziel tritt so lange zurück (eine eigene Zeile hätte die Gebietsnamen in Safari unter 18 px gedrückt). Das Angebot erscheint nur, solange heute noch kein Fundstück gezählt ist: Die Tagesziel-Zeile wird nie durch ein Angebot ersetzt, ein erreichtes Tagesziel lässt das Angebot bis zum nächsten Tag ruhen (seit 2026-10-18). Höchstens ein Angebot pro Tag (seit 2026-10-18, Markus): "Später" gilt für den Tag, nicht für das Fach, und auch ein beendeter Einstieg verbraucht das Angebot des Tages; das nächste Fach kommt am nächsten Tag. Begründung: Ein Angebot ist eine neue Sache pro Tag, ein Einstieg ist eine ganze Sitzung. Ein abgebrochener Einstieg verbraucht nichts. Der Tag endet um Mitternacht (lokale Zeit, dieselbe Grenze wie beim Fortsetzen einer Übungsrunde), auch über Neuladen hinweg; am nächsten Tag ist das Angebot wieder da (seit 2026-10-14, vorher bis zum nächsten Öffnen der App). Läuft eine Übungsrunde über Mitternacht, gilt der Tag bis zu ihrem Ende weiter (seit 2026-10-18). Wer den Check schon gemacht oder im Fach geübt hat, sieht unter `/einstieg/…` nur "Deine Reise hat schon begonnen."
-   - *Umfang:* nur übbare Bereiche, je 2–3 Items, höchstens 15 in Mathe (3 je Bereich bei 5 Bereichen, seit Aufgabe 15, vorher 12) und 12 in Deutsch. Runde 1 und 2 gehen reihum über alle Bereiche; ein dritter Platz geht zuerst an Bereiche mit einer richtigen und einer falschen Antwort, gekürzt würde bei zweimal gleich beantworteten.
+   - *Umfang:* nur übbare Bereiche, je 2–3 Items, höchstens 15 je Fach (3 je Bereich bei 5 Bereichen; Mathe seit Aufgabe 15, Deutsch seit 2026-10-25 mit Sprache untersuchen, vorher je 12). Erwartete Dauer Deutsch mit 15 Plätzen: etwa 17 Minuten (Mittel `estimatedSeconds` je Bereich × 3 plus zwei Texte zum Lesen, Rechnung 2026-10-25). Runde 1 und 2 gehen reihum über alle Bereiche; ein dritter Platz geht zuerst an Bereiche mit einer richtigen und einer falschen Antwort, gekürzt würde bei zweimal gleich beantworteten.
    - *Ablauf:* Item-Niveau 1 → 2 → 3 (richtig: hoch, falsch: bleibt). Kein Richtig/Falsch, nach jeder Antwort nur "Weiter". "Pause" fragt nach ("Wenn du jetzt gehst, fangen wir nächstes Mal von vorn an.", "Zur Karte" links, "Weitermachen" rechts); wer dann geht, beginnt beim nächsten Mal von vorn, nichts wird gespeichert. Das Wort "Check" steht nirgends in der UI.
    - *Ergebnis:* Startniveau = höchstes Niveau mit einer richtigen Antwort, mindestens 1 (ein zu niedriger Start korrigiert sich beim Üben, ein zu hoher schreibt Entdeckungen, die bleiben). Jede Etappe unter dem Startniveau wird Entdeckung. Der Check füllt weder Fehlerkiste noch Tagesziel. Ergebnis-Screen: die Insel des Fachs, "Deine Reise beginnt hier", keine Zahlen, keine Prozent.
    - Bereiche, die erst später Content bekommen, starten auf Niveau 1.
@@ -136,7 +136,7 @@ Die Schwellen sind absichtlich identisch mit den Kompass-Niveaugrenzen. Kein IRT
 
 ## 6. Gamification-Prinzipien
 
-Metapher: **Pfadfinder-Expedition.** Die Kompetenzlandkarte ist eine Karte mit 9 Gebieten (5 Mathe, 4 Deutsch). Jedes Gebiet hat drei Etappen (= Niveaus). Gemeisterte Etappen werden sichtbar "erschlossen".
+Metapher: **Pfadfinder-Expedition.** Die Kompetenzlandkarte ist eine Karte mit 10 Gebieten (5 Mathe, 5 Deutsch; seit 2026-10-25, vorher 9). Jedes Gebiet hat drei Etappen (= Niveaus). Gemeisterte Etappen werden sichtbar "erschlossen".
 
 **Tun**
 - Fortschritt als Fläche auf der Karte, nicht als Prozentzahl
@@ -179,7 +179,7 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 | | MVP (bis Woche 4) | Danach |
 |---|---|---|
 | Mathe-Items | 150 (30 je Bereich, verteilt I/II/III) | 400 |
-| Deutsch-Items | 120 (30 je Bereich 1–4) | 350 |
+| Deutsch-Items | 120 (30 je Bereich 1–4) + 20 Sprache untersuchen (seit 2026-10-25) | 350 |
 | Lesetexte | 6 (3 Sach-, 3 literarische, je 150–250 Wörter) | 20 |
 | Probetests | 2 je Fach | 5 je Fach |
 
@@ -188,7 +188,7 @@ Produktionsweg: Claude generiert Items nach `CONTENT_SCHEMA.md` in Batches à 20
 ## 10. MVP-Scope (harte Liste)
 
 Drin:
-1. Startbildschirm mit Expeditionskarte (9 Gebiete, Fortschritt sichtbar)
+1. Startbildschirm mit Expeditionskarte (10 Gebiete, Fortschritt sichtbar)
 2. Einstiegscheck je Fach
 3. Üben-Modus mit allen 9 Formaten, sofortigem Feedback, Mastery-Logik
 4. Fehlerkiste (Wiederholung nach 1 und 3 Tagen)
@@ -233,6 +233,6 @@ Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: 
 
 1. Arbeitstitel: Pfadfinder
 2. Lizenz: Code MIT, Content CC BY-SA 4.0
-3. "Sprache untersuchen": nicht im MVP
+3. "Sprache untersuchen": nicht im MVP – **revidiert 2026-10-25:** im MVP als fünfter Deutsch-Bereich „Wörter und Sätze“ (§5.1), weil der Kompass-4-Deutsch-Test 2025 ihn mit 11 von 24 Aufgaben prüft
 4. Probetest: volle Länge (45 Min.); kein Kurz-Probetest
 5. Visueller Stil: Flat Illustration, begrenzte Palette, Abenteuerkarte statt "niedlich"; SVG-Karte mit geometrischen Gebieten, Motive austauschbar

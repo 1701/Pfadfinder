@@ -3,10 +3,12 @@
 // /dev/einstieg shows each screen with fixed data (dev build only); / is the real start page,
 // which offers the Einstieg to a new learner (Mathe); /dev/karte?angebot=deutsch shows the longer
 // Deutsch offer. Smallest names go to karte-angebot-budget-*.json. Screenshots for review.
+// The result maps (Mathe, and Deutsch with every Gebiet signed) keep their signs apart, inside
+// their Gebiete and clear of the island name (SU Phase B, see karte.spec).
 
 import { expect, test, type Page } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
-import { SCREENSHOTS, expectFitsScreen } from './helpers';
+import { SCREENSHOTS, expectFitsScreen, expectMapLabels, mapLabels } from './helpers';
 
 const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
@@ -14,7 +16,15 @@ const VIEWPORTS = [
   { name: 'safari-landscape', width: 1024, height: 660 },
   { name: 'safari-portrait', width: 768, height: 900 },
 ];
-const ZUSTAENDE = ['intro', 'intro-deutsch', 'aufgabe', 'pause', 'ergebnis', 'hinweis'] as const;
+const ZUSTAENDE = [
+  'intro',
+  'intro-deutsch',
+  'aufgabe',
+  'pause',
+  'ergebnis',
+  'ergebnis-deutsch',
+  'hinweis',
+] as const;
 /** The offer's title, per Fach (src/ui/text/einstieg.ts). */
 const OFFER_TITLE = (fach: string) => `Unerforscht: ${fach}`;
 
@@ -56,6 +66,7 @@ for (const viewport of VIEWPORTS) {
     page,
   }) => {
     await page.setViewportSize(viewport);
+    const budget: Record<string, unknown> = {};
     for (const zustand of ZUSTAENDE) {
       await page.goto(`/dev/einstieg?zustand=${zustand}`);
       await page.locator('main').waitFor();
@@ -65,8 +76,8 @@ for (const viewport of VIEWPORTS) {
         await expectFitsScreen(page, `${zustand} ${viewport.name}`);
         await expect(page.getByRole('button', { name: 'Weiter' })).toBeEnabled();
       }
-      if (zustand === 'ergebnis')
-        await page.getByRole('group', { name: 'Karte' }).first().waitFor();
+      const ergebnis = zustand === 'ergebnis' || zustand === 'ergebnis-deutsch';
+      if (ergebnis) await page.getByRole('group', { name: 'Karte' }).first().waitFor();
       const m = await measure(page);
       const label = `${zustand} ${viewport.name}`;
       expect(m.overflow, `${label}: page scrolls`).toBeLessThanOrEqual(0);
@@ -75,15 +86,22 @@ for (const viewport of VIEWPORTS) {
       expect(m.bandBottom, `${label}: band leaves the screen`).toBeGreaterThanOrEqual(0);
       expect(m.lastButtonHeight, `${label}: button lower than 56 px`).toBeGreaterThanOrEqual(56);
       expect(m.smallestName, `${label}: names below 18 px`).toBeGreaterThanOrEqual(18);
-      if (zustand === 'ergebnis') {
+      if (ergebnis) {
         expect(m.mapBottom, `${label}: map runs under the band`).toBeLessThanOrEqual(m.bandTop);
+        const labels = await mapLabels(page);
+        expectMapLabels(labels, label, viewport.height > viewport.width);
+        budget[zustand === 'ergebnis' ? 'Ergebnis Mathe' : 'Ergebnis Deutsch'] = {
+          smallestName: Number(m.smallestName.toFixed(1)),
+          minLabelGap: labels.minLabelGap,
+          plateToOutline: labels.plateToOutline,
+          labelToIslandName: labels.labelToIslandName,
+        };
       }
       await page.screenshot({ path: `${SCREENSHOTS}/einstieg-${zustand}-${viewport.name}.png` });
     }
 
     // The real start page of a new learner (Mathe) and the longer Deutsch offer: the offer in
     // the header, the map at full size.
-    const budget: Record<string, unknown> = {};
     for (const [fach, url, shot] of [
       ['Mathe', '/', 'karte-angebot'],
       ['Deutsch', '/dev/karte?angebot=deutsch', 'karte-angebot-deutsch'],

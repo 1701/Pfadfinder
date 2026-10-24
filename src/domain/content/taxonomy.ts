@@ -13,11 +13,33 @@ export const BEREICHE_BY_FACH = {
     'daten-zufall',
     'muster-strukturen',
   ],
-  deutsch: ['lesen-sachtext', 'lesen-literarisch', 'rs-laut-buchstabe', 'rs-strategien'],
+  deutsch: [
+    'lesen-sachtext',
+    'lesen-literarisch',
+    'rs-laut-buchstabe',
+    'rs-strategien',
+    'sprache-untersuchen',
+  ],
 } as const satisfies Record<Fach, readonly string[]>;
 
 export const BEREICHE = [...BEREICHE_BY_FACH.mathe, ...BEREICHE_BY_FACH.deutsch] as const;
 export type Bereich = (typeof BEREICHE)[number];
+
+/**
+ * Bereiche every Probetest of a Fach must cover with at least 2 items (CONTENT_SCHEMA §6, 1.0.22).
+ * Written out, never derived from BEREICHE_BY_FACH: a new Bereich is not required until the
+ * Probetests of its Fach contain it. Never extend the Bereich enum without deciding here.
+ */
+export const PROBETEST_REQUIRED_BEREICHE = {
+  mathe: [
+    'zahlen-operationen',
+    'raum-form',
+    'groessen-messen',
+    'daten-zufall',
+    'muster-strukturen',
+  ],
+  deutsch: ['lesen-sachtext', 'lesen-literarisch', 'rs-laut-buchstabe', 'rs-strategien'],
+} as const satisfies Record<Fach, readonly Bereich[]>;
 
 export const FACH_ABBR = { mathe: 'm', deutsch: 'd' } as const satisfies Record<Fach, string>;
 
@@ -31,6 +53,7 @@ export const BEREICH_ABBR = {
   'lesen-literarisch': 'lli',
   'rs-laut-buchstabe': 'rsl',
   'rs-strategien': 'rss',
+  'sprache-untersuchen': 'su',
 } as const satisfies Record<Bereich, string>;
 
 /** Reading areas: the only ones allowed to reference a ReadingText via `stimulus.textRef`. */

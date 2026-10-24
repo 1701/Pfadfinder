@@ -1,52 +1,79 @@
 {
   "/dev/karte": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 151,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 586,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 26.9,
+    "plateToOutline": 5.8,
+    "labelToIslandName": 45.4
   },
   "/dev/karte?neu": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 151,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 586,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 26.9,
+    "plateToOutline": 5.8,
+    "labelToIslandName": 45.4
   },
   "/dev/karte?erstes": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 151,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 586,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 26.9,
+    "plateToOutline": 5.8,
+    "labelToIslandName": 45.4
   },
   "/dev/karte?erstes&neu": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 151,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 586,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 26.9,
+    "plateToOutline": 5.8,
+    "labelToIslandName": 45.4
+  },
+  "/dev/karte?alle": {
+    "smallestName": 23.4,
+    "smallestTarget": 146,
+    "lineRows": 1,
+    "lineHeight": 48,
+    "headerHeight": 86,
+    "mapHeight": 586,
+    "air": 12,
+    "minLabelGap": 20.1,
+    "plateToOutline": 2,
+    "labelToIslandName": 45.4
   },
   "/": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 146,
     "lineRows": 1,
     "lineHeight": 48,
     "headerHeight": 86,
     "mapHeight": 586,
-    "air": 12
+    "air": 12,
+    "minLabelGap": 20.1,
+    "plateToOutline": 2,
+    "labelToIslandName": 45.4
   },
   "/ nach Später": {
     "smallestName": 23.4,
-    "smallestTarget": 166,
+    "smallestTarget": 146,
     "headerHeight": 86,
     "mapHeight": 586,
     "air": 12

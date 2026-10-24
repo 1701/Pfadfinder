@@ -27,7 +27,7 @@ function inside([x, y]: Point, ps: readonly Point[]): boolean {
 }
 
 describe.each(Object.entries(MAP_LAYOUTS))('map layout %s', (_, layout) => {
-  it('has all nine Gebiete, convex and clockwise, inside the viewBox', () => {
+  it('has all ten Gebiete, convex and clockwise, inside the viewBox', () => {
     expect(Object.keys(layout.regions).sort()).toEqual([...BEREICHE].sort());
     for (const bereich of BEREICHE) {
       const { points } = layout.regions[bereich];

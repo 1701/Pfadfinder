@@ -7,6 +7,7 @@ import { z } from 'zod';
 import {
   BEREICHE,
   BEREICHE_BY_FACH,
+  PROBETEST_REQUIRED_BEREICHE,
   BEREICH_ABBR,
   FACH_ABBR,
   FAECHER,
@@ -462,7 +463,8 @@ export const probetestSchema = z
         fail(ctx, ['bereichMix', bereich], `Bereich "${bereich}" gehört nicht zum Fach "${p.fach}"`);
       }
     }
-    for (const bereich of fachBereiche) {
+    // Only the required Bereiche need 2 items; another Bereich of the Fach may be missing.
+    for (const bereich of PROBETEST_REQUIRED_BEREICHE[p.fach]) {
       const c = p.bereichMix[bereich] ?? 0;
       if (c < PROBETEST_MIN_ITEMS_PER_BEREICH) {
         fail(ctx, ['bereichMix', bereich], `Bereich "${bereich}" braucht mindestens ${PROBETEST_MIN_ITEMS_PER_BEREICH} Items, hat ${c}`);

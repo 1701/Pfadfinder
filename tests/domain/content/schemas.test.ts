@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  BEREICHE_BY_FACH,
   FORMATS,
   formatIssuePath,
   itemSchema,
@@ -21,7 +22,7 @@ import {
   singleChoice,
   validItemsByFormat,
 } from '../../fixtures/items';
-import { buildMatheProbetest } from '../../fixtures/builders';
+import { buildDeutschProbetest, buildMatheProbetest } from '../../fixtures/builders';
 
 /** Returns the formatted paths of all issues, or [] if the data is valid. */
 function issuePaths(schema: { safeParse(d: unknown): { success: boolean; error?: { issues: { path: PropertyKey[] }[] } } }, data: unknown): string[] {
@@ -246,6 +247,25 @@ describe('probetestSchema (§6)', () => {
   it('requires at least 2 items in every bereich of the fach', () => {
     const p = { ...probetest, bereichMix: { ...probetest.bereichMix, 'raum-form': 1, 'zahlen-operationen': 7 } };
     expect(issuePaths(probetestSchema, p)).toContain('bereichMix.raum-form');
+  });
+
+  it.each(BEREICHE_BY_FACH.mathe)('requires every Mathe Bereich, also when %s is missing', (bereich) => {
+    const other = BEREICHE_BY_FACH.mathe.find((b) => b !== bereich)!;
+    const bereichMix = Object.fromEntries(
+      Object.entries(probetest.bereichMix)
+        .filter(([b]) => b !== bereich)
+        .map(([b, c]) => [b, b === other ? c + probetest.bereichMix[bereich]! : c]),
+    );
+    expect(issuePaths(probetestSchema, { ...probetest, bereichMix })).toEqual([`bereichMix.${bereich}`]);
+  });
+
+  it('accepts a Deutsch probetest without the optional Bereich sprache-untersuchen (1.0.22)', () => {
+    const deutsch = buildDeutschProbetest().probetest;
+    expect(deutsch.bereichMix).not.toHaveProperty('sprache-untersuchen');
+    expect(issuePaths(probetestSchema, deutsch)).toEqual([]);
+    // Present, it only counts: 1 item is fine for a Bereich that is not required.
+    const p = { ...deutsch, bereichMix: { ...deutsch.bereichMix, 'rs-strategien': 4, 'sprache-untersuchen': 1 } };
+    expect(issuePaths(probetestSchema, p)).toEqual([]);
   });
 
   it('rejects bereiche of the other fach and sums that do not match the item count', () => {

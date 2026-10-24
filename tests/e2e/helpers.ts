@@ -57,6 +57,107 @@ export async function expectFirstHint(page: Page) {
 }
 
 /** The four viewports: iPad, and the same iPad in Safari with its bars (the tightest). */
+/** The signs of the Gebiete on the visible map (SU Phase B, measuring code of SU Phase A). */
+export interface MapLabels {
+  /** Smallest gap between two signs (or names of unexplored Gebiete), screen px. */
+  minLabelGap: number;
+  minLabelPair: string;
+  /** Smallest distance of a sign to its own outline; negative: it pokes out of its Gebiet. */
+  plateToOutline: number;
+  plateToOutlineName: string;
+  /** Smallest gap between a sign and an island name. */
+  labelToIslandName: number;
+  /** Per Gebiet: accessible name and distance of its sign to its outline. */
+  perRegion: { name: string; toOutline: number }[];
+}
+
+export async function mapLabels(page: Page): Promise<MapLabels> {
+  await page.evaluate(() => document.fonts.ready);
+  return page.evaluate(() => {
+    type P = [number, number];
+    const round = (n: number) => Math.round(n * 10) / 10;
+    const map = [...document.querySelectorAll<SVGSVGElement>('svg[aria-label="Karte"]')].find(
+      (m) => m.getBoundingClientRect().width > 0,
+    )!;
+    const scale = map.getScreenCTM()!.a;
+    const pts = (el: Element): P[] =>
+      (el.getAttribute('points') ?? '')
+        .trim()
+        .split(/\s+/)
+        .map((s) => s.split(',').map(Number) as P);
+    // Signed distance of a point to a convex polygon, clockwise on screen: > 0 inside.
+    const inside = (p: P, poly: P[]) =>
+      Math.min(
+        ...poly.map((a, i) => {
+          const b = poly[(i + 1) % poly.length]!;
+          const [dx, dy] = [b[0] - a[0], b[1] - a[1]];
+          return ((p[0] - a[0]) * -dy + (p[1] - a[1]) * dx) / Math.hypot(dx, dy);
+        }),
+      );
+    const regions = [...map.querySelectorAll(':scope > a, :scope > g[role="img"]')].map((g) => {
+      const outline = g.querySelector('.map-outline') ?? g.querySelector('polygon')!;
+      const plate = g.querySelector('rect[data-plate]');
+      const box = plate
+        ? (['x', 'y', 'width', 'height'] as const).map((k) => Number(plate.getAttribute(k)))
+        : (() => {
+            const b = (g.querySelector('text') as SVGGraphicsElement).getBBox();
+            return [b.x, b.y, b.width, b.height];
+          })();
+      const [x, y, w, h] = box as [number, number, number, number];
+      const corners: P[] = [
+        [x, y],
+        [x + w, y],
+        [x + w, y + h],
+        [x, y + h],
+      ];
+      return {
+        name: g.getAttribute('aria-label')!,
+        screen: (plate ?? g.querySelector('text')!).getBoundingClientRect(),
+        toOutline: Math.min(...corners.map((c) => inside(c, pts(outline)))) * scale,
+      };
+    });
+    const gap = (a: DOMRect, b: DOMRect) =>
+      Math.max(a.left - b.right, b.left - a.right, a.top - b.bottom, b.top - a.bottom);
+    let minGap = Infinity;
+    let minPair = '';
+    regions.forEach((a, i) =>
+      regions.slice(i + 1).forEach((b) => {
+        const g = gap(a.screen, b.screen);
+        if (g < minGap) [minGap, minPair] = [g, `${a.name} | ${b.name}`];
+      }),
+    );
+    const islands = [...map.querySelectorAll(':scope > text')].map((t) =>
+      t.getBoundingClientRect(),
+    );
+    const worst = regions.reduce((a, b) => (b.toOutline < a.toOutline ? b : a));
+    return {
+      minLabelGap: round(minGap),
+      minLabelPair: minPair,
+      plateToOutline: round(worst.toOutline),
+      plateToOutlineName: worst.name,
+      labelToIslandName: round(
+        Math.min(...regions.flatMap((r) => islands.map((n) => gap(r.screen, n)))),
+      ),
+      perRegion: regions.map((r) => ({ name: r.name, toOutline: round(r.toOutline) })),
+    };
+  });
+}
+
+/**
+ * Signs on the map: ≥ 18 px apart in portrait, ≥ 15 px in landscape (decision Markus 2026-10-25,
+ * SU Phase B), inside their own Gebiet and clear of the island names.
+ */
+export function expectMapLabels(m: MapLabels, label: string, portrait: boolean) {
+  const minGap = portrait ? 18 : 15;
+  expect
+    .soft(m.minLabelGap, `${label}: signs closer than ${minGap} px (${m.minLabelPair})`)
+    .toBeGreaterThanOrEqual(minGap);
+  expect
+    .soft(m.plateToOutline, `${label}: sign leaves its Gebiet (${m.plateToOutlineName})`)
+    .toBeGreaterThanOrEqual(0);
+  expect.soft(m.labelToIslandName, `${label}: sign on an island name`).toBeGreaterThan(0);
+}
+
 export const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
   { name: 'ipad-portrait', width: 768, height: 1024 },
@@ -206,7 +307,7 @@ export async function expectFitsScreen(page: Page, label: string) {
 
 /**
  * Texts an item puts into the answer area (options, cards, elements, words, gap options). A
- * L\u00fcckentext shows only the options of its open gap: `openGap` is its number (1 = first gap of
+ * Lückentext shows only the options of its open gap: `openGap` is its number (1 = first gap of
  * the template), null when none is open.
  */
 function answerTexts(item: ContentItem, openGap: number | null): string[] {
@@ -222,9 +323,9 @@ function answerTexts(item: ContentItem, openGap: number | null): string[] {
   ];
 }
 
-/** Number of the open gap of a L\u00fcckentext, from its answer group; null when none is open. */
+/** Number of the open gap of a Lückentext, from its answer group; null when none is open. */
 async function openGapNumber(page: Page): Promise<number | null> {
-  const groups = page.getByRole('group', { name: /^Antworten f\u00fcr L\u00fccke \d+$/ });
+  const groups = page.getByRole('group', { name: /^Antworten für Lücke \d+$/ });
   if ((await groups.count()) === 0) return null;
   const label = (await groups.first().getAttribute('aria-label')) ?? '';
   return Number(/\d+$/.exec(label)![0]);

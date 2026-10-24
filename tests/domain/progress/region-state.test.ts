@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BEREICHE, type Bereich } from '../../../src/domain/content';
+import { BEREICHE, fachOfBereich, type Bereich } from '../../../src/domain/content';
 import type { ContentManifest } from '../../../src/domain/content/manifest';
 import {
   completedEtappe,
@@ -19,7 +19,7 @@ function manifest(
   for (const b of BEREICHE) {
     const n = counts[b] ?? 0;
     bereiche[b] = {
-      fach: b.startsWith('lesen') || b.startsWith('rs') ? 'deutsch' : 'mathe',
+      fach: fachOfBereich(b),
       items: n,
       byFormat: n ? { [format]: { 1: n, 2: 0, 3: 0 } } : {},
       textIds: [],

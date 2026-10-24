@@ -1,6 +1,6 @@
 // Vorlesen in the Probetest (ARCHITECTURE.md §5, decision Markus): on in Mathe, where reading is
-// not what is tested. Deutsch switches it off for reading texts and their items; spelling items
-// keep it, they test writing, not reading.
+// not what is tested. Deutsch switches it off for reading texts and their items; items without a
+// text (spelling, sprache-untersuchen) keep it, they test writing and language, not reading.
 
 import type { Fach, Item, ReadingText } from '../content';
 

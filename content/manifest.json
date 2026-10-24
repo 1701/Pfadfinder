@@ -392,6 +392,12 @@
         }
       },
       "textIds": []
+    },
+    "sprache-untersuchen": {
+      "fach": "deutsch",
+      "items": 0,
+      "byFormat": {},
+      "textIds": []
     }
   },
   "probetests": {

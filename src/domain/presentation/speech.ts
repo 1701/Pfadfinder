@@ -1,13 +1,14 @@
 // What the Vorlesen button reads (ARCHITECTURE.md §5): the task (readAloudText), then the
 // answers in the order on screen ("Antworten: …"). number-input adds nothing. Misspelled words are
 // never read aloud (2026-10-22): find-error and cloze-select in the spelling areas read the
-// sentence in correct spelling instead ("Hunt" spoken by the voice gave the solution away).
+// sentence in correct spelling instead ("Hunt" spoken by the voice gave the solution away). The
+// spelling areas come from the taxonomy; sprache-untersuchen is not one, its options are read.
 
 import {
+  isRechtschreibungBereich,
   readAloudText,
   speakable,
   splitUnits,
-  type Bereich,
   type Item,
   type ItemOf,
   type ReadingText,
@@ -91,8 +92,6 @@ export function answersSpeech(item: Item, attemptIndex: number, answer: unknown 
   return speak(item, attemptIndex, answer);
 }
 
-const SPELLING_BEREICHE: ReadonlySet<Bereich> = new Set(['rs-laut-buchstabe', 'rs-strategien']);
-
 /**
  * find-error and cloze-select in the spelling areas: the sentence in correct spelling from the
  * solution, without speakable(). null when a correction or a gap's solution is missing.
@@ -113,7 +112,7 @@ export function spelledSentence(
 /** Everything the Vorlesen button on the task sheet reads. */
 export function itemSpeech(item: Item, attemptIndex: number, answer: unknown = null): string {
   const spelling =
-    SPELLING_BEREICHE.has(item.bereich) &&
+    isRechtschreibungBereich(item.bereich) &&
     (item.format === 'find-error' || item.format === 'cloze-select');
   const rest = spelling ? (spelledSentence(item) ?? '') : answersSpeech(item, attemptIndex, answer);
   return [readAloudText(item), rest].filter((part) => part.length > 0).join(' ');

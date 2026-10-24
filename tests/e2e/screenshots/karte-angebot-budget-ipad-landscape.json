@@ -1,4 +1,16 @@
 {
+  "Ergebnis Mathe": {
+    "smallestName": 22.7,
+    "minLabelGap": 23,
+    "plateToOutline": 4.5,
+    "labelToIslandName": 75.8
+  },
+  "Ergebnis Deutsch": {
+    "smallestName": 24.9,
+    "minLabelGap": 17.3,
+    "plateToOutline": 2.3,
+    "labelToIslandName": 49.6
+  },
   "Mathe": {
     "smallestName": 23.4,
     "headerRight": 698,

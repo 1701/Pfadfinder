@@ -8,10 +8,13 @@
 // Before the very first Fundstück (task 17, /dev/karte?erstes and / after "Später") one sentence
 // stands in place of the dashes, in portrait also of "Heute …": no Gebietsname and no Gebiet gets
 // smaller than without it.
+// Signs of the Gebiete (SU Phase B): ≥ 18 px apart in portrait, ≥ 15 px in landscape (decision
+// Markus 2026-10-25), inside their Gebiet, clear of the island names. / shows no sign on a Gebiet
+// without items; /dev/karte?alle shows all ten, as / does once every Bereich has items.
 
 import { expect, test, type Page } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
-import { FUNDSTUECK_HINWEIS as HINWEIS, SCREENSHOTS } from './helpers';
+import { FUNDSTUECK_HINWEIS as HINWEIS, SCREENSHOTS, expectMapLabels, mapLabels } from './helpers';
 
 const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
@@ -107,6 +110,7 @@ for (const viewport of VIEWPORTS) {
       '/dev/karte?neu',
       '/dev/karte?erstes',
       '/dev/karte?erstes&neu',
+      '/dev/karte?alle',
       '/',
     ];
     for (const url of urls) {
@@ -124,6 +128,8 @@ for (const viewport of VIEWPORTS) {
       } else {
         expect(m.hint, `${url}: no sentence`).toBeUndefined();
       }
+      const labels = await mapLabels(page);
+      expectMapLabels(labels, url, portrait);
       const minName = neu && viewport.name === 'safari-portrait' ? 17 : 18;
       expect(m.smallestName, `${url}: names below ${minName} px`).toBeGreaterThanOrEqual(minName);
       expect(m.smallestTarget, `${url}: Gebiet smaller than 48 px`).toBeGreaterThanOrEqual(48);
@@ -159,6 +165,9 @@ for (const viewport of VIEWPORTS) {
         headerHeight: Math.round(m.headerHeight),
         mapHeight: Math.round(m.mapHeight),
         air: Math.round(m.air),
+        minLabelGap: labels.minLabelGap,
+        plateToOutline: labels.plateToOutline,
+        labelToIslandName: labels.labelToIslandName,
       };
     }
     // The real start page of a new device after "Später": the sentence instead of the dashes.
@@ -194,6 +203,9 @@ for (const viewport of VIEWPORTS) {
     await page.goto('/dev/karte?geschafft');
     await measure(page);
     await page.screenshot({ path: `${SCREENSHOTS}/karte-geschafft-${viewport.name}.png` });
+    await page.goto('/dev/karte?alle');
+    await measure(page);
+    await page.screenshot({ path: `${SCREENSHOTS}/karte-alle-${viewport.name}.png` });
   });
 }
 
@@ -202,7 +214,7 @@ test('Tastatur: Gebiete in Leserichtung, Fokusring auf der Umrisslinie', async (
   await page.goto('/dev/karte');
   await measure(page);
   const reached: string[] = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 9; i++) {
     await page.keyboard.press('Tab');
     const label = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
     if (label?.includes('Niveau')) reached.push(label);
@@ -214,6 +226,7 @@ test('Tastatur: Gebiete in Leserichtung, Fokusring auf der Umrisslinie', async (
     'Daten und Zufall, Niveau 1',
     'Sachtexte lesen, Niveau 3',
     'Schreibtricks, Niveau 1',
+    'Wörter und Sätze, Niveau 2',
   ]);
   // Back to the last Gebiet: its outline carries the focus ring.
   await page.keyboard.press('Shift+Tab');
@@ -227,7 +240,7 @@ test('Tastatur: Gebiete in Leserichtung, Fokusring auf der Umrisslinie', async (
     };
   });
   expect(ring).toEqual({
-    label: 'Schreibtricks, Niveau 1',
+    label: 'Wörter und Sätze, Niveau 2',
     width: '6px',
     focusVisible: true,
   });

@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-25 – SU Phase B: fünfter Deutsch-Bereich `sprache-untersuchen` im Code (Branch `su`)
+- **Gebaut:** Bereich `sprache-untersuchen` (su, „Wörter und Sätze“), leere Datei `items/deutsch/sprache-untersuchen.json`, Manifest. Schema 1.0.22: `PROBETEST_REQUIRED_BEREICHE` (Mathe alle 5, Deutsch die bisherigen 4), su-Items im Deutsch-Probetest nach den Lesen-Blöcken. `CHECK_ITEM_COUNT.deutsch` 15 mit Schutztest für die Lesen-Blöcke. Vorlesen: Rechtschreib-Bereiche aus der Taxonomie.
+- **Karte:** hoch T1, quer W1b aus Phase A; „Sachtexte lesen“ und „Geschichten lesen“ 6 Einheiten tiefer (Rand quer −3,7 → +2,0). `mapLabels` in `tests/e2e/helpers.ts` prüft Schild-Luft (hoch ≥ 18, quer ≥ 15), Rand ≥ 0 und Inselname in `karte.spec` (neu `/dev/karte?alle`) und `einstieg-layout.spec` (neu `ergebnis-deutsch`).
+- **Entscheidungen (Markus):** Branch `su`, `ci.yml` um `su` erweitert, lokal committet, Push mit dem su-Batch. Intro-Text „etwa 15 Minuten“ bleibt; Rechnung mit 15 Plätzen ≈ 17,2 Min.
+- **Offen:** su wird Pflicht und „endet mit Rechtschreibung“ wird angepasst beim Neu-Mischen der Deutsch-Probetests.
+- **Lokal:** `npm run check` grün (1 069 → 1 083 Tests), Smoke 39/39, Layout mit Schalter 52/52 in 23,8 Min.; committet nur Karten-, Ergebnis-, Probetest-Karte- und Deutsch-Intro-Screenshots samt Karten-Budgets.
+
 ## 2026-10-23 – Fix: currentItem bei gleichem Prompt und offener Lücke
 - **Ursache des roten Smoke nach B9:** m-zo-2-025 (seit B7) hat denselben Prompt wie m-zo-1-016 ohne Stimulus. Die Prüfung über den Antwortbereich verlangte die Optionen aller Lücken, sichtbar ist nur die offene. Im Einstieg tritt das in ≈ 5 % der Läufe auf; m-gm-2-012 erreicht diese Spec nie (gm immer falsch, Leiter bleibt auf 1).
 - **Gebaut (nur `tests/e2e/helpers.ts`):** Stimulus = Text und Bildbeschreibung (`aria-label`); das Item mit vollständig sichtbarem Stimulus gewinnt, sonst nur Items ohne Stimulus. Danach entscheidet der Antwortbereich, bei Lückentexten nur mit der offenen Lücke aus dem DOM; alles außer genau einem Treffer schlägt mit den IDs fehl. Die Bildbeschreibung brauchte es für m-rf-1-015/m-rf-2-014 (gleicher Prompt, Optionen A–D).

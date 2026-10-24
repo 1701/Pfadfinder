@@ -1,13 +1,14 @@
 // Developer preview of the Einstieg screens (dev build only): /dev/einstieg?zustand=
-// intro | intro-deutsch | aufgabe | pause | ergebnis | hinweis (intro-deutsch: the longer Fach
-// name in the intro title). Used by tests/e2e/einstieg-layout.spec.ts for the
+// intro | intro-deutsch | aufgabe | pause | ergebnis | ergebnis-deutsch | hinweis (intro-deutsch:
+// the longer Fach name in the intro title; ergebnis-deutsch: the Deutsch island, every Gebiet with
+// its sign). Used by tests/e2e/einstieg-layout.spec.ts for the
 // layout check and the screenshots in four viewports.
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { createContentLoader } from '../../content-runtime/loader';
 import type { Item } from '../../domain/content';
-import { BEREICHE, type Bereich } from '../../domain/content/taxonomy';
+import type { Bereich } from '../../domain/content/taxonomy';
 import type { RegionState } from '../../domain/progress';
 import { CHECK_ITEM_COUNT } from '../../domain/scheduler';
 import { EinstiegErgebnis } from '../screens/EinstiegErgebnis';
@@ -20,11 +21,17 @@ const content = createContentLoader();
 const TOTAL = CHECK_ITEM_COUNT.mathe;
 
 // A start as the check could set it: Etappen below the start are reached.
-const START: Partial<Record<Bereich, RegionState>> = {
+const START: Record<Bereich, RegionState> = {
   'zahlen-operationen': { kind: 'unterwegs', niveau: 3, erschlossen: [true, true, false] },
   'raum-form': { kind: 'unterwegs', niveau: 2, erschlossen: [true, false, false] },
   'groessen-messen': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
   'daten-zufall': { kind: 'unterwegs', niveau: 2, erschlossen: [true, false, false] },
+  'muster-strukturen': { kind: 'unerforscht' },
+  'lesen-sachtext': { kind: 'unterwegs', niveau: 2, erschlossen: [true, false, false] },
+  'lesen-literarisch': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
+  'rs-laut-buchstabe': { kind: 'unterwegs', niveau: 3, erschlossen: [true, true, false] },
+  'rs-strategien': { kind: 'unterwegs', niveau: 1, erschlossen: [false, false, false] },
+  'sprache-untersuchen': { kind: 'unterwegs', niveau: 2, erschlossen: [true, false, false] },
 };
 
 export function EinstiegPage() {
@@ -50,11 +57,9 @@ export function EinstiegPage() {
     return <EinstiegPause index={3} total={TOTAL} readAloud onContinue={() => {}} />;
   }
   if (zustand === 'hinweis') return <Hinweis text={STARTED_TEXT} readAloud />;
-  if (zustand === 'ergebnis') {
-    const states = Object.fromEntries(
-      BEREICHE.map((b) => [b, START[b] ?? { kind: 'unerforscht' }]),
-    ) as Record<Bereich, RegionState>;
-    return <EinstiegErgebnis fach="mathe" states={states} readAloud />;
+  if (zustand === 'ergebnis' || zustand === 'ergebnis-deutsch') {
+    const fach = zustand === 'ergebnis' ? 'mathe' : 'deutsch';
+    return <EinstiegErgebnis fach={fach} states={START} readAloud />;
   }
   if (!item) return null;
   return (
