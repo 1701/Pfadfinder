@@ -76,7 +76,7 @@ Jedes Item hat ein Niveau nach IQB-Logik:
 - **II – Zusammenhänge herstellen**: mehrschrittig, Information aus Text/Tabelle holen und verarbeiten
 - **III – Verallgemeinern/Reflektieren**: begründen, Fehler in fremder Lösung finden, Strategie übertragen
 
-Zielverteilung im Pool und im Probetest: **40 % I / 40 % II / 20 % III**. (Kalibrierung gegen Originalaufgaben 2024 und IQB-Beispiele; wird nach dem Papier-Pilot mit Tochter angepasst.)
+Zielverteilung im Pool: **40 % I / 40 % II / 20 % III**. Im Probetest gilt seit 2026-10-25 ein Band je Niveau (I 29–44 %, II 38–55 %, III 16–23 %, CONTENT_SCHEMA §6), damit auch der Testmix von Kompass 4 Mathe 2025 (7 / 13 / 4, mathe-03) passt. (Kalibrierung gegen Originalaufgaben 2024 und IQB-Beispiele; wird nach dem Papier-Pilot mit Tochter angepasst.)
 
 ### 5.3 Aufgabenformate
 
@@ -181,7 +181,7 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 | Mathe-Items | 150 (30 je Bereich, verteilt I/II/III) | 400 |
 | Deutsch-Items | 120 (30 je Bereich 1–4) + 20 Sprache untersuchen (seit 2026-10-25) | 350 |
 | Lesetexte | 6 (3 Sach-, 3 literarische, je 150–250 Wörter) | 20 |
-| Probetests | 2 je Fach | 5 je Fach |
+| Probetests | 3 je Fach (seit 2026-10-25) | 5 je Fach |
 
 Produktionsweg: Claude generiert Items nach `CONTENT_SCHEMA.md` in Batches à 20, kalibriert gegen Originalaufgaben 2024 und IQB/VERA-3-Beispiele. **Qualitätssicherung ohne Lehrkraft:** (a) jeder Batch wird auf Niveauverteilung, Sprachniveau (Satzlänge, Fachwörter) und Distraktorqualität geprüft, (b) die ersten 30 Items je Fach werden mit Tochter auf Papier getestet, (c) Items mit auffälliger Trefferquote (<20 % oder >95 %) werden markiert und überarbeitet. Offen: eine Lehrkraft als Gegenleserin nach dem Test gewinnen (Klassenlehrerin der Tochter, Elternbeirat).
 

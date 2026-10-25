@@ -439,7 +439,8 @@
   "probetests": {
     "mathe": [
       "mathe-01",
-      "mathe-02"
+      "mathe-02",
+      "mathe-03"
     ],
     "deutsch": [
       "deutsch-01",

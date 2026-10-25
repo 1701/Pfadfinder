@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-25 – Niveau-Band (Schema 1.0.23) und Probetest mathe-03 (Aufgabe T)
+- **Band-Regel:** `PROBETEST_NIVEAU_BAND` in `taxonomy.ts` statt 40/40/20 ± 1: I 29–44 %, II 38–55 %, III 16–23 %, `min·n ≤ Anzahl ≤ max·n` ohne Rundung. III 23 % statt 22 % (Entscheidung Markus), weil deutsch-90 (7/7/4 bei 18) und der Deutsch-Testaufbau in integrity.test (8/9/5 bei 22) sonst durchfallen. Band-Tests: gültig 10/10/4, 9/8/4, 7/13/4, 7/7/4 (18); ungültig 24/0/0, 12/12/0, 0/12/12, 6/14/4, 11/9/4, 7/6/5 (18).
+- **mathe-03** (Zip t Fassung 2, wörtlich): 24 Items, 29,00 Min., 7/13/4, 12 Bild-Items, Reihenfolge wie Kompass 4 Mathe 2025, keine Überschneidung mit mathe-01/02. check.py vorher und `--applied` 0/0, content:validate 0/0.
+- **Abweichung, Content-Patch m-dz-3-003** (keyPoints 1–2, incorrect, misconception gekürzt, Text aus dem Chat): in Safari quer lief die Lösung im Zustand „fehlt“ 8 px unter das Band, Durchsehen hatte 16 px. Danach fehlt 44, Durchsehen 68 px.
+- **LONGEST** bleibt m-rf-3-001 (engster Kopf-Fall, Entscheidung Markus). Zusatzmessung m-dz-3-003 zeit45/zeit5: Luft ≥ 163 px (m-rf-3-001: 149), Kopf in einer Zeile.
+- **Knappstes:** Ziel-Items unverändert (fehlt iPad quer m-dz-3-002 114, Safari quer m-gm-1-009 36, hoch m-gm-3-002 279/155; Durchsehen Safari quer m-gm-1-009 36); die seit B7 veralteten PNGs nachgezogen. mathe-01/02-Blöcke im Budget unverändert.
+- **Sweep mathe-03 Durchsehen** (24 Items): knappste Luft iPad quer 176, iPad hoch 273, Safari quer 68, Safari hoch 149 px (jeweils m-dz-3-003); kein Item unter 18 px.
+- **Offen:** `layout-bild-*` zeigt seit früheren Batches ein anderes Bild-Item (m-gm-2-009 statt Vogel-Diagramm), nicht committet.
+- **Lokal:** `npm run check` grün (Unit 1 095), Smoke 39/39, Layout mit Schalter 52/52 in 24,6 Min.
+
 ## 2026-10-25 – Content: Batch SU sprache-untersuchen, 20 Items, kein SVG (Branch `su`)
 - **Zip su Fassung 4 (wörtlich):** `items/deutsch/sprache-untersuchen.json` war leer, jetzt der Zip-Inhalt (byte-gleich). Kein Retire, kein Probetest geändert. check.py vorher und `--applied`: 0 Fehler, 1 Warnung (d-su-3-002, bekannt); content:validate 0/0.
 - **Manifest Deutsch I/II/III:** lsa 9/8/4, lli 8/8/4, rsl 8/8/4, rss 8/8/4, su 8/9/3 = 101 aktiv, 0 retired. deutsch-01/02/03 25,98/26,23/24,18 Min. unverändert; Mathe 150/28. CONTENT_SCHEMA §7: Block „Kalibrierung Deutsch – Sprache untersuchen“ (kein Versionssprung).

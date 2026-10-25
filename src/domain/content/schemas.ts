@@ -7,6 +7,7 @@ import { z } from 'zod';
 import {
   BEREICHE,
   BEREICHE_BY_FACH,
+  PROBETEST_NIVEAU_BAND,
   PROBETEST_REQUIRED_BEREICHE,
   BEREICH_ABBR,
   FACH_ABBR,
@@ -412,7 +413,6 @@ export const readingTextSchema = z
 // Probetest (§6)
 
 export const PROBETEST_ITEM_RANGE = { min: 18, max: 24 } as const;
-export const PROBETEST_NIVEAU_TARGET = { 1: 0.4, 2: 0.4, 3: 0.2 } as const;
 /**
  * Time per Fach (§6): Mathe since 1.0.9, Deutsch since 1.0.16. These are app times; the 45-minute
  * timer stays, as on paper children may finish early. Deutsch adds the reading time of each text
@@ -449,9 +449,11 @@ export const probetestSchema = z
     const niveauSum = p.niveauMix[1] + p.niveauMix[2] + p.niveauMix[3];
     if (niveauSum !== n) fail(ctx, ['niveauMix'], `Summe niveauMix (${niveauSum}) ≠ Anzahl Items (${n})`);
     for (const level of [1, 2, 3] as const) {
-      const target = PROBETEST_NIVEAU_TARGET[level] * n;
-      if (Math.abs(p.niveauMix[level] - target) > 1) {
-        fail(ctx, ['niveauMix', String(level)], `Niveau ${level}: ${p.niveauMix[level]} Items, Soll ${target.toFixed(1)} (±1)`);
+      const { min, max } = PROBETEST_NIVEAU_BAND[level];
+      const c = p.niveauMix[level];
+      if (c < min * n || c > max * n) {
+        const range = `${(min * n).toFixed(2)}–${(max * n).toFixed(2)}`;
+        fail(ctx, ['niveauMix', String(level)], `Niveau ${level}: ${c} Items, erlaubt ${range} (${Math.round(min * 100)}–${Math.round(max * 100)} %)`);
       }
     }
 

@@ -41,6 +41,18 @@ export const PROBETEST_REQUIRED_BEREICHE = {
   deutsch: ['lesen-sachtext', 'lesen-literarisch', 'rs-laut-buchstabe', 'rs-strategien'],
 } as const satisfies Record<Fach, readonly Bereich[]>;
 
+/**
+ * Share of the items per Niveau in every Probetest (CONTENT_SCHEMA §6, 1.0.23): min·n ≤ count ≤
+ * max·n, compared as decimals, no rounding, no ±1. Decision 2026-10-25: covers the pool mix
+ * 10/10/4 (and 9/8/4 at 21 items) and the Kompass 4 test mix 7/13/4. III 23 % instead of 22 %, so
+ * that 4 of 18 and 5 of 22 are valid (2026-10-25).
+ */
+export const PROBETEST_NIVEAU_BAND = {
+  1: { min: 0.29, max: 0.44 },
+  2: { min: 0.38, max: 0.55 },
+  3: { min: 0.16, max: 0.23 },
+} as const;
+
 export const FACH_ABBR = { mathe: 'm', deutsch: 'd' } as const satisfies Record<Fach, string>;
 
 export const BEREICH_ABBR = {

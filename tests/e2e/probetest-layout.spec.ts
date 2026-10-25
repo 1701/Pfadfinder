@@ -3,7 +3,7 @@
 //   header       "Übersicht | 7 von 24 | 45 Min." and with "Noch 5 Minuten": one line, apart
 //   screens      intro, overview, questions, result: no scroll, targets ≥ 48 px, band visible
 //   items        every item of every Mathe Probetest in content/probetests (task 16: mathe-01,
-//                mathe-02) while answering and while looking through (wrong answer, no answer),
+//                mathe-02; task T: mathe-03) while answering and while looking through (wrong answer, no answer),
 //                the short answer while comparing: fitProblems, the least room kept per test
 //   texts        the fixture deutsch-90 (task 13): items beside t-sach-900 (single-choice, order,
 //                match, short-answer) while answering and looking through (short answer also

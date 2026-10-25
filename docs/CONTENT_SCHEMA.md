@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.22 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.23 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -192,13 +192,14 @@ type Probetest = {
   fach: "mathe" | "deutsch";
   durationMinutes: 45;
   itemIds: string[];                 // feste Reihenfolge, 18–24 Items; Deutsch mit genau 2 Texten (aus den textRefs, kein eigenes Feld)
-  niveauMix: { 1: number; 2: number; 3: number };   // Soll: 0.4 / 0.4 / 0.2, wird validiert (±1 Item)
+  niveauMix: { 1: number; 2: number; 3: number };   // Band je Niveau (seit 1.0.23, s. u.), wird validiert
   bereichMix: Partial<Record<Bereich, number>>;     // jeder Pflichtbereich ≥ 2 Items (seit 1.0.22, s. u.)
 };
 ```
 
 Regeln:
 - Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und genau 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
+- Niveau-Band (seit 1.0.23, `PROBETEST_NIVEAU_BAND` in `taxonomy.ts`): Anteil je Niveau an der Itemzahl n: **I 29–44 %, II 38–55 %, III 16–23 %**, geprüft als `min·n ≤ Anzahl ≤ max·n`, ohne Rundung und ohne ±1. Bei 24 Items I 7–10, II 10–13, III 4–5; bei 21 Items I 7–9, II 8–11, III 4; bei 18 Items III 3–4. Die Summe ist die Itemzahl, `niveauMix` muss zu den Items passen. Gültig sind der Pool-Mix 10/10/4 (mathe-01/02, deutsch-01/02, deutsch-03 mit 9/8/4) und der Testmix 7/13/4 (mathe-03, wie Kompass 4 Mathe 2025)
 - kein `short-answer`-Anteil über 15 %
 - Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `lesen-literarisch`, `rs-laut-buchstabe`, `rs-strategien`. Jeder Pflichtbereich hat mindestens 2 Items. `sprache-untersuchen` ist noch nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. Pflicht wird der Bereich, wenn die Deutsch-Probetests neu gemischt sind; vorher wird `bereich` nie ohne Entscheidung über diese Liste erweitert
 - Deutsch beginnt mit Lesen, endet mit Rechtschreibung (wie das Original). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator); ob vor oder nach der Rechtschreibung, legt das Neu-Mischen der Deutsch-Probetests fest
@@ -238,7 +239,7 @@ Regeln:
 - II (Zusammenhänge): Darstellungswechsel Situation ↔ Bild ↔ Term, nicht-kanonische Bündelung (H 5 / Z 13 / E 2), Mitte zwischen zwei Zahlen, Zahlenreihe mit Regelwechsel verbalisieren, Zahlenmauer optimieren, räumlich operieren **mit Bild** (Figuren zusammensetzen, Flächen vergleichen, gedrehte Figur erkennen, Ansicht eines Würfelgebäudes, Spiegelachsen jenseits Rechteck, Netz ergänzen), zwei Informationen aus Tabelle oder Preisschild verknüpfen, Uhrzeit mit Minutenübergang über die volle Stunde, Dezimal-Längen in cm umrechnen
 - III (Reflektieren): begründen („Der Deckstein ist am größten, wenn …“), fremde Rechenstrategie fortsetzen, Verhältnis auf eine andere Anzahl übertragen, Fehler in fremder Lösung finden
 - Stimulus 17–30 Wörter; ein Bild trägt die Aufgabe in rund jeder zweiten Teilaufgabe des Tests. Begriffs- und Körperwissen ohne Bild kommt im Test nicht vor und wird nur auf I gepflegt
-- Testmix je 24 Teilaufgaben: zo 8 / rf 6 / gm 5 / ms 3 / dz 2, Niveau 7 / 13 / 4. Der Probetest-Validator verlangt noch 0,4 / 0,4 / 0,2 (§6); die Umstellung kommt mit mathe-03
+- Testmix je 24 Teilaufgaben: zo 8 / rf 6 / gm 5 / ms 3 / dz 2, Niveau 7 / 13 / 4. Seit 1.0.23 prüft der Validator ein Band je Niveau (§6); mathe-03 folgt dem Testmix, mathe-01/02 dem Pool-Mix 10 / 10 / 4
 
 **Kalibrierung Deutsch – Sprache untersuchen (Kompass 4 2025)**
 - Anker ist der Deutsch-Test 2025 (Aufgabe 14–24), `calibration: "kompass4-2025"`

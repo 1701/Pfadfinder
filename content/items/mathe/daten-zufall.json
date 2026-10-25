@@ -882,15 +882,15 @@
     "solution": {
       "model": "4 blaue und 2 rote Felder. Blau hat mehr, Rot hat mindestens eins.",
       "keyPoints": [
-        "Blau hat mehr Felder als Rot (4 und 2, oder 5 und 1)",
-        "Rot hat mindestens ein Feld, sonst wäre Rot unmöglich",
+        "Blau hat mehr Felder als Rot",
+        "Rot hat mindestens ein Feld",
         "Zusammen sind es 6 Felder"
       ]
     },
     "feedback": {
       "correct": "Stark! Du hast beide Bedingungen beachtet: Blau ist wahrscheinlicher, Rot bleibt möglich.",
-      "incorrect": "Wahrscheinlicher heißt mehr Felder. Möglich heißt mindestens ein Feld. Verteile die 6 Felder so, dass beides stimmt.",
-      "misconception": "3 blaue und 3 rote Felder sind gleich wahrscheinlich, nicht „Blau wahrscheinlicher“. Und 6 blaue Felder machen Rot unmöglich."
+      "incorrect": "Wahrscheinlicher heißt mehr Felder. Rot braucht mindestens eins. Verteile die 6 Felder so.",
+      "misconception": "3 und 3 wären gleich wahrscheinlich. 6 blaue Felder machen Rot unmöglich."
     },
     "tags": [
       "zufall",

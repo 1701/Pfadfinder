@@ -4,6 +4,10 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.23 – 2026-10-25
+- §6 Probetest: Statt Punktziel 0,4 / 0,4 / 0,2 (± 1 Item) gilt ein Band je Niveau: I 29–44 %, II 38–55 %, III 16–23 % der Itemzahl, Dezimalvergleich ohne Rundung und ohne ±1 (`PROBETEST_NIVEAU_BAND`). Grund: Der Testmix von Kompass 4 Mathe 2025 (7 / 13 / 4) fiel unter der alten Regel durch, auch beim Laden in der App (Entscheidung Markus 2026-10-25). III bis 23 % statt 22 %, damit 4 von 18 und 5 von 22 gültig sind. Alle fünf bisherigen Probetests bleiben gültig; neu ist mathe-03 mit dem Testmix. `schemaVersion` bleibt `"1.0"`.
+- §7 Kalibrierung Mathe: Hinweis „die Umstellung kommt mit mathe-03“ erledigt.
+
 ### 1.0.22 – 2026-10-25
 - Fünfter Deutsch-Bereich `sprache-untersuchen` (Kürzel `su`, Item-IDs `d-su-{niveau}-{laufnr}`, Datei `items/deutsch/sprache-untersuchen.json`, bis zum ersten Batch `[]`), §1 und §2. Grund: Im Kompass-4-Deutsch-Test 2025 sind Aufgabe 14–24 (11 von 24) Sprache untersuchen (PRODUCT §5.1, Entscheidung 2026-10-25). Enum `bereich` im Zod-Validator erweitert.
 - §6 Probetest: Die Regel „jeder Bereich ≥ 2 Items“ gilt für die Pflichtbereiche je Fach (Mathe alle 5, Deutsch die bisherigen 4). Ein fehlender Schlüssel eines Nicht-Pflichtbereichs ist kein Fehler, ein vorhandener muss zur Zählung passen. su-Items stehen im Deutsch-Probetest nach den Lesen-Blöcken (Fehler im Validator). deutsch-01/02/03 bleiben unverändert gültig, `schemaVersion` bleibt `"1.0"`.

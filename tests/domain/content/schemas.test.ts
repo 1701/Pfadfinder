@@ -239,9 +239,32 @@ describe('probetestSchema (§6)', () => {
     expect(issuePaths(probetestSchema, { ...probetest, itemIds })).toContain('itemIds');
   });
 
-  it('requires the niveau mix within ±1 item of 40/40/20', () => {
-    const p = { ...probetest, niveauMix: { 1: 11, 2: 6, 3: 3 } };
-    expect(issuePaths(probetestSchema, p)).toEqual(expect.arrayContaining(['niveauMix.1', 'niveauMix.2']));
+  // The niveau band (1.0.23): I 29–44 %, II 38–55 %, III 16–23 % of the items, no rounding, no ±1.
+  const niveauIssues = ([n1, n2, n3]: [number, number, number]) => {
+    const itemIds = Array.from({ length: n1 + n2 + n3 }, (_, i) => `m-zo-1-${900 + i}`);
+    const p = { ...probetest, itemIds, niveauMix: { 1: n1, 2: n2, 3: n3 } };
+    return issuePaths(probetestSchema, p).filter((path) => path.startsWith('niveauMix'));
+  };
+
+  it.each([
+    ['10/10/4 (deutsch-01/02, mathe-01/02)', [10, 10, 4]],
+    ['9/8/4 at 21 items (deutsch-03)', [9, 8, 4]],
+    ['7/13/4 (mathe-03, Kompass 4 test mix)', [7, 13, 4]],
+    ['7/7/4 at 18 items (deutsch-90, III 22.2 % under 23 %)', [7, 7, 4]],
+  ] as const)('accepts the niveau mix %s', (_, mix) => {
+    expect(niveauIssues([...mix])).toEqual([]);
+  });
+
+  it.each([
+    [[24, 0, 0], ['niveauMix.1', 'niveauMix.2', 'niveauMix.3']],
+    [[12, 12, 0], ['niveauMix.1', 'niveauMix.3']],
+    [[0, 12, 12], ['niveauMix.1', 'niveauMix.3']],
+    [[6, 14, 4], ['niveauMix.1', 'niveauMix.2']],
+    [[11, 9, 4], ['niveauMix.1', 'niveauMix.2']],
+    // 18 items: III 27.8 % over 23 %, II 33.3 % under 38 %.
+    [[7, 6, 5], ['niveauMix.2', 'niveauMix.3']],
+  ] as const)('rejects the niveau mix %j outside the band', (mix, paths) => {
+    expect(niveauIssues([...mix])).toEqual(paths);
   });
 
   it('requires at least 2 items in every bereich of the fach', () => {

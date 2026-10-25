@@ -48,6 +48,22 @@
           "slack": 36
         }
       }
+    },
+    "mathe-03": {
+      "slack": {
+        "aufgabe": {
+          "id": "m-zo-2-019",
+          "slack": 114
+        },
+        "durchsehen": {
+          "id": "m-dz-3-003",
+          "slack": 68
+        },
+        "fehlt": {
+          "id": "m-dz-3-003",
+          "slack": 44
+        }
+      }
     }
   },
   "deutsch": {

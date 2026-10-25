@@ -453,7 +453,7 @@ describe('validateContent – probetest rules (§6)', () => {
 
   it('reports declared mixes that contradict the items', () => {
     const { items, probetest } = buildMatheProbetest();
-    // Swap a niveau-1 item for a niveau-2 item: still within ±1, but the declaration is now wrong.
+    // Swap a niveau-1 item for a niveau-2 item: still inside the band, but the declaration is now wrong.
     const swapped = cloneItem(numberInput, 'zahlen-operationen', 2, 950, { estimatedSeconds: 120 });
     probetest.itemIds[0] = swapped.id;
     const result = errors(run(toFiles({ items: [...items, swapped], probetests: [probetest] })).issues);
