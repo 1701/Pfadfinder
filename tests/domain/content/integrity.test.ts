@@ -1,5 +1,3 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   formatProbetestTime,
@@ -8,12 +6,14 @@ import {
   type ContentFile,
   type ContentIssue,
   type Item,
+  type ItemOf,
   type Niveau,
   type Probetest,
   type ReadingText,
   type ValidateContentOptions,
 } from '../../../src/domain/content';
 import {
+  clozeSelect,
   findError,
   markInText,
   match,
@@ -56,7 +56,7 @@ describe('validateContent – files and placement', () => {
       expect.objectContaining({
         severity: 'error',
         file: 'items/mathe/zahlen-operationen.json',
-        id: 'm-zo-1-001',
+        id: 'm-zo-1-903',
         path: '[0].solution.value',
       }),
     ]);
@@ -68,7 +68,7 @@ describe('validateContent – files and placement', () => {
       { path: 'items/mathe/raum-form.json', data: [numberInput] },
     ];
     expect(errors(run(files).issues)).toEqual([
-      'items/mathe/raum-form.json|m-zo-1-001||Item gehört nach items/mathe/zahlen-operationen.json',
+      'items/mathe/raum-form.json|m-zo-1-903||Item gehört nach items/mathe/zahlen-operationen.json',
     ]);
   });
 
@@ -86,7 +86,7 @@ describe('validateContent – files and placement', () => {
     const files = toFiles({ items: [numberInput] });
     files.push({ path: 'items/mathe/raum-form.json', data: [numberInput] });
     expect(errors(run(files).issues)).toContain(
-      'items/mathe/raum-form.json|m-zo-1-001||Doppelte Item-ID (auch in items/mathe/zahlen-operationen.json)',
+      'items/mathe/raum-form.json|m-zo-1-903||Doppelte Item-ID (auch in items/mathe/zahlen-operationen.json)',
     );
   });
 
@@ -107,7 +107,7 @@ describe('validateContent – assets', () => {
 
   it('reports a missing SVG for stimulus.assetId', () => {
     expect(errors(run(toFiles({ items: [withAsset] })).issues)).toEqual([
-      'items/mathe/zahlen-operationen.json|m-zo-1-001|stimulus.assetId|Asset fehlt: assets/svg/zahlenstrahl-01.svg',
+      'items/mathe/zahlen-operationen.json|m-zo-1-903|stimulus.assetId|Asset fehlt: assets/svg/zahlenstrahl-01.svg',
     ]);
   });
 
@@ -115,7 +115,7 @@ describe('validateContent – assets', () => {
     const item = structuredClone(singleChoice);
     item.payload.options[1] = { id: 'b', text: 'Würfel', assetId: 'wuerfel' };
     expect(errors(run(toFiles({ items: [item] })).issues)).toEqual([
-      'items/mathe/groessen-messen.json|m-gm-2-004|payload.options[1].assetId|Asset fehlt: assets/svg/wuerfel.svg',
+      'items/mathe/groessen-messen.json|m-gm-2-904|payload.options[1].assetId|Asset fehlt: assets/svg/wuerfel.svg',
     ]);
   });
 
@@ -415,6 +415,59 @@ describe('validateContent – soft checks', () => {
   });
 });
 
+describe('validateContent – money needs allowDecimal (task F)', () => {
+  const money = (overrides: Partial<ItemOf<'number-input'>>): ItemOf<'number-input'> => ({
+    ...numberInput,
+    bereich: 'groessen-messen',
+    id: 'm-gm-1-906',
+    stimulus: { text: 'Ein Heft kostet 1,20 €. Ben kauft zwei.' },
+    prompt: 'Wie viel bezahlt er?',
+    payload: { unit: '€', maxDigits: 4 },
+    solution: { value: 2.4, },
+    ...overrides,
+  });
+  const issuesOf = (item: Item) => run(toFiles({ items: [item] })).issues;
+
+  it('warns for euro and a comma amount in the text without allowDecimal, with id and field', () => {
+    // A whole answer (10 €) still needs the comma when the task counts in cents.
+    const whole = money({ solution: { value: 10 }, stimulus: { text: 'Leyla kauft 4 Stifte für je 2,50 €.' } });
+    expect(issuesOf(whole)).toEqual([
+      expect.objectContaining({ severity: 'warning', id: 'm-gm-1-906', path: 'payload.allowDecimal', message: expect.stringContaining('allowDecimal') }),
+    ]);
+    // "Euro" as a word, no unit.
+    const word = money({ payload: { maxDigits: 4 }, solution: { value: 3 }, stimulus: { text: 'Mia hat 2,50 Euro und bekommt 50 Cent.' } });
+    expect(issuesOf(word)).toHaveLength(1);
+  });
+
+  it('is quiet with allowDecimal, without a comma amount, and without money', () => {
+    expect(issuesOf(money({ payload: { unit: '€', allowDecimal: true, maxDigits: 4 } }))).toEqual([]);
+    expect(issuesOf(money({ stimulus: { text: 'Ein Heft kostet 2 €.' }, solution: { value: 4 } }))).toEqual([]);
+    expect(issuesOf(money({ payload: { unit: 'm', maxDigits: 4 }, stimulus: { text: 'Ein Brett ist 1,20 m lang.' }, solution: { value: 3 } }))).toEqual([]);
+  });
+});
+
+describe('validateContent – spelling items never read a misspelled word (1.0.24)', () => {
+  const issuesOf = (item: Item) => run(toFiles({ items: [item] })).issues;
+
+  it('warns when the misspelled word stands in the prompt, the stimulus or readAloud', () => {
+    const inPrompt = { ...structuredClone(findError), prompt: 'Ist samstag richtig? Tippe das falsche Wort an.' };
+    expect(issuesOf(inPrompt)).toEqual([expect.objectContaining({ severity: 'warning', path: 'prompt', message: expect.stringContaining('"samstag"') })]);
+    const inStimulus = { ...structuredClone(clozeSelect), stimulus: { text: 'Es ist kald draußen.' } };
+    expect(issuesOf(inStimulus)).toEqual([expect.objectContaining({ path: 'stimulus.text', message: expect.stringContaining('"kald"') })]);
+    // readAloud replaces stimulus and prompt when it is set.
+    const spoken = { ...inStimulus, readAloud: 'Wähle das richtige Wort. Es ist kalt draußen.' };
+    expect(issuesOf(spoken)).toEqual([]);
+    expect(issuesOf({ ...spoken, readAloud: 'Hunt oder Hund?' })).toEqual([expect.objectContaining({ path: 'readAloud' })]);
+  });
+
+  it('matches whole words only, and only in the spelling areas', () => {
+    // "Hunde" contains "Hund" but none of the wrong options (Hunt, Hundt).
+    expect(issuesOf({ ...structuredClone(clozeSelect), prompt: 'Denk an die Hunde. Wähle das richtige Wort.' })).toEqual([]);
+    const outside = cloneItem(findError, 'sprache-untersuchen', 1, 907, { prompt: 'Ist samstag richtig?' });
+    expect(issuesOf(outside)).toEqual([]);
+  });
+});
+
 describe('validateContent – readAloud on choice options (since 1.0.12)', () => {
   it('reports an empty readAloud with file, id and path', () => {
     const item = structuredClone(singleChoice);
@@ -446,7 +499,7 @@ describe('validateContent – probetest rules (§6)', () => {
       expect.arrayContaining([
         expect.stringContaining('itemIds[0]|Item "m-zo-1-900" ist retired'),
         expect.stringContaining('itemIds[1]|Item "m-zo-1-999" existiert nicht'),
-        expect.stringContaining('itemIds[2]|Item "d-rss-1-002" gehört zum Fach "deutsch"'),
+        expect.stringContaining('itemIds[2]|Item "d-rss-1-902" gehört zum Fach "deutsch"'),
       ]),
     );
   });
@@ -470,13 +523,13 @@ describe('validateContent – probetest rules (§6)', () => {
     const timed = (seconds: number) =>
       run(toFiles({ items: items.map((i) => ({ ...i, estimatedSeconds: seconds })), probetests: [probetest] })).issues;
     expect(errors(timed(60))).toEqual([
-      'probetests/mathe-01.json|mathe-01|itemIds|Summe estimatedSeconds ist 20.0 Min., erlaubt sind 24–32 Min.',
+      'probetests/mathe-91.json|mathe-91|itemIds|Summe estimatedSeconds ist 20.0 Min., erlaubt sind 24–32 Min.',
     ]);
     // 20 items: 72 s = 24 min, 96 s = 32 min, 97 s = 32.3 min.
     expect(timed(72)).toEqual([]);
     expect(timed(96)).toEqual([]);
     expect(errors(timed(97))).toEqual([
-      'probetests/mathe-01.json|mathe-01|itemIds|Summe estimatedSeconds ist 32.3 Min., erlaubt sind 24–32 Min.',
+      'probetests/mathe-91.json|mathe-91|itemIds|Summe estimatedSeconds ist 32.3 Min., erlaubt sind 24–32 Min.',
     ]);
   });
 
@@ -492,17 +545,17 @@ describe('validateContent – probetest rules (§6)', () => {
       ).issues;
     // 20 items × 60 s = 1200 s; 2 × 152 words × 0.75 s = 228 s; 1428 s < 1440 s.
     expect(errors(timed(60))).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1428 s (23,80 Min.): estimatedSeconds 1200 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Summe ist 1428 s (23,80 Min.): estimatedSeconds 1200 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
     ]);
     // The reading time counts: 2 × 160 words = 240 s reach exactly 24 min, 2 × 159 words fall 3 s short.
     expect(errors(timed(60, 160))).toEqual([]);
     expect(errors(timed(60, 159))).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1438,5 s (23,98 Min.): estimatedSeconds 1200 s + Lesezeit 238,5 s, erlaubt sind 24–32 Min.',
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Summe ist 1438,5 s (23,98 Min.): estimatedSeconds 1200 s + Lesezeit 238,5 s, erlaubt sind 24–32 Min.',
     ]);
     // 84 s: 1680 + 228 = 1908 s; 85 s: 1928 s > 1920 s.
     expect(timed(84)).toEqual([]);
     expect(errors(timed(85))).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Summe ist 1928 s (32,13 Min.): estimatedSeconds 1700 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Summe ist 1928 s (32,13 Min.): estimatedSeconds 1700 s + Lesezeit 228 s, erlaubt sind 24–32 Min.',
     ]);
   });
 
@@ -518,12 +571,12 @@ describe('validateContent – probetest rules (§6)', () => {
     const time = probetestTime(deutsch.probetest, bundle);
     // The same numbers as the rule's message above (1438,5 s = 1200 s + 238,5 s).
     expect(time).toEqual({ itemSeconds: 1200, readingSeconds: 238.5, seconds: 1438.5 });
-    expect(formatProbetestTime('deutsch-01', time)).toBe(
-      'deutsch-01: 1200 s Items + 238,5 s Lesezeit = 1438,5 s (23,98 Min.)',
+    expect(formatProbetestTime('deutsch-91', time)).toBe(
+      'deutsch-91: 1200 s Items + 238,5 s Lesezeit = 1438,5 s (23,98 Min.)',
     );
-    // The example from the release list (deutsch-03).
-    expect(formatProbetestTime('deutsch-03', { itemSeconds: 1205, readingSeconds: 246, seconds: 1451 })).toBe(
-      'deutsch-03: 1205 s Items + 246 s Lesezeit = 1451 s (24,18 Min.)',
+    // The example from the release list (deutsch-93).
+    expect(formatProbetestTime('deutsch-93', { itemSeconds: 1205, readingSeconds: 246, seconds: 1451 })).toBe(
+      'deutsch-93: 1205 s Items + 246 s Lesezeit = 1451 s (24,18 Min.)',
     );
 
     // Mathe has no reading time.
@@ -531,18 +584,9 @@ describe('validateContent – probetest rules (§6)', () => {
     const matheBundle = run(toFiles({ items: mathe.items, probetests: [mathe.probetest] })).bundle;
     const matheTime = probetestTime(mathe.probetest, matheBundle);
     expect(matheTime.readingSeconds).toBe(0);
-    expect(formatProbetestTime('mathe-01', matheTime)).toBe(
-      `mathe-01: ${matheTime.itemSeconds} s Items + 0 s Lesezeit = ${matheTime.itemSeconds} s (${(matheTime.itemSeconds / 60).toFixed(2).replace('.', ',')} Min.)`,
+    expect(formatProbetestTime('mathe-91', matheTime)).toBe(
+      `mathe-91: ${matheTime.itemSeconds} s Items + 0 s Lesezeit = ${matheTime.itemSeconds} s (${(matheTime.itemSeconds / 60).toFixed(2).replace('.', ',')} Min.)`,
     );
-  });
-
-  it('keeps the real mathe-01 and deutsch-01 free of findings', () => {
-    const files: ContentFile[] = readdirSync('content', { recursive: true, encoding: 'utf8' })
-      .filter((f) => f.endsWith('.json') && f !== 'manifest.json')
-      .map((f) => ({ path: f.split(sep).join('/'), data: JSON.parse(readFileSync(`content/${f}`, 'utf8')) as unknown }));
-    const { issues } = run(files, { assetExists: () => true });
-    expect(issues.filter((i) => i.file === 'probetests/mathe-01.json')).toEqual([]);
-    expect(issues.filter((i) => i.file === 'probetests/deutsch-01.json')).toEqual([]);
   });
 
   it('allows at most 15 % short-answer items', () => {
@@ -550,7 +594,7 @@ describe('validateContent – probetest rules (§6)', () => {
     // 4 of 20 = 20 %: replace items keeping id, bereich and niveau.
     const mixed = items.map((item, i) => (i < 4 ? ({ ...shortAnswer, id: item.id, bereich: item.bereich, niveau: item.niveau, estimatedSeconds: 120 } as Item) : item));
     expect(errors(run(toFiles({ items: mixed, probetests: [probetest] })).issues)).toEqual([
-      'probetests/mathe-01.json|mathe-01|itemIds|short-answer-Anteil 4/20 liegt über 15 %',
+      'probetests/mathe-91.json|mathe-91|itemIds|short-answer-Anteil 4/20 liegt über 15 %',
     ]);
     const three = mixed.map((item, i) => (i === 3 ? items[3]! : item));
     expect(run(toFiles({ items: three, probetests: [probetest] })).issues).toEqual([]);
@@ -625,13 +669,13 @@ describe('validateContent – probetest rules (§6)', () => {
       const order = [...ids.slice(0, 10), ...su, ...ids.slice(10)];
       const mix = (bereichMix: Probetest['bereichMix']) => ({ ...probetest, bereichMix });
       expect(check(order, mix({ ...probetest.bereichMix, 'sprache-untersuchen': 1, 'rs-strategien': 4 }))).toEqual([
-        'probetests/deutsch-01.json|deutsch-01|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 1, die Items ergeben 2',
-        'probetests/deutsch-01.json|deutsch-01|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 4, die Items ergeben 3',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 1, die Items ergeben 2',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 4, die Items ergeben 3',
       ]);
       const { 'sprache-untersuchen': _, ...without } = probetest.bereichMix;
       expect(check(order, mix({ ...without, 'rs-strategien': 5 }))).toEqual([
-        'probetests/deutsch-01.json|deutsch-01|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 0, die Items ergeben 2',
-        'probetests/deutsch-01.json|deutsch-01|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 5, die Items ergeben 3',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 0, die Items ergeben 2',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 5, die Items ergeben 3',
       ]);
     });
   });
@@ -642,7 +686,7 @@ describe('validateContent – probetest rules (§6)', () => {
     const unlinked = items.map((i) => (i.bereich === 'lesen-literarisch' ? ({ ...i, stimulus: undefined } as Item) : i));
     const result = errors(run(toFiles({ items: unlinked, texts: texts.slice(0, 1), probetests: [probetest] })).issues);
     expect(result).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: 1',
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: 1',
     ]);
   });
   it('Deutsch keeps the items of a text together (1.0.16)', () => {
@@ -652,8 +696,8 @@ describe('validateContent – probetest rules (§6)', () => {
     [ids[2], ids[5]] = [ids[5]!, ids[2]!];
     probetest.itemIds = ids;
     expect(errors(run(toFiles({ items, texts, probetests: [probetest] })).issues)).toEqual([
-      `probetests/deutsch-01.json|deutsch-01|itemIds[3]|Items zu "t-sach-901" stehen nicht zusammen: "${ids[3]}" folgt nach einem anderen Item`,
-      `probetests/deutsch-01.json|deutsch-01|itemIds[6]|Items zu "t-lit-901" stehen nicht zusammen: "${ids[6]}" folgt nach einem anderen Item`,
+      `probetests/deutsch-91.json|deutsch-91|itemIds[3]|Items zu "t-sach-901" stehen nicht zusammen: "${ids[3]}" folgt nach einem anderen Item`,
+      `probetests/deutsch-91.json|deutsch-91|itemIds[6]|Items zu "t-lit-901" stehen nicht zusammen: "${ids[6]}" folgt nach einem anderen Item`,
     ]);
   });
 
@@ -666,7 +710,7 @@ describe('validateContent – probetest rules (§6)', () => {
     const files = (ids: string[]) =>
       toFiles({ items: unlinked, texts: [sach, texts[1]!], probetests: [{ ...probetest, itemIds: ids }] });
     expect(errors(run(files(probetest.itemIds)).issues)).toEqual([
-      `probetests/deutsch-01.json|deutsch-01|itemIds[1]|Item "${loose.id}" ohne Lesetext steht vor "${probetest.itemIds[1]}" mit Lesetext`,
+      `probetests/deutsch-91.json|deutsch-91|itemIds[1]|Item "${loose.id}" ohne Lesetext steht vor "${probetest.itemIds[1]}" mit Lesetext`,
     ]);
     // Counter-check: the same item after both reading blocks is fine.
     const after = [...probetest.itemIds.slice(1, 10), loose.id, ...probetest.itemIds.slice(10)];
@@ -690,7 +734,7 @@ describe('validateContent – probetest rules (§6)', () => {
     const all = [...items.slice(0, 5), ...secondItems, ...literary, ...spelling];
     const sameKind: Probetest = { ...probetest, itemIds: all.map((i) => i.id), ...mixesOf(all) };
     expect(errors(run(toFiles({ items: all, texts: [texts[0]!, second], probetests: [sameKind] })).issues)).toEqual([
-      'probetests/deutsch-01.json|deutsch-01|itemIds|Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "sachtext"',
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "sachtext"',
     ]);
   });
 });

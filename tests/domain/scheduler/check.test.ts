@@ -1,9 +1,7 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   BEREICHE_BY_FACH,
   isLesenBereich,
-  itemSchema,
   type Bereich,
   type Item,
 } from '../../../src/domain/content';
@@ -17,7 +15,7 @@ import {
   type CheckAnswer,
   type CheckPlan,
 } from '../../../src/domain/scheduler';
-import { OPEN_BEREICHE } from '../../fixtures/content-state';
+import { FIXTURE_ITEMS } from '../../fixtures/content';
 import { item, makePool } from '../../fixtures/pool';
 import { LESEN_ITEMS, LESEN_TEXTS, biberItems, igelItems, igelText } from '../../fixtures/lesen';
 
@@ -254,23 +252,15 @@ describe('nextCheckItem – ladder', () => {
   });
 });
 
-describe('buildCheck with the real content', () => {
+describe('buildCheck with a whole Fach (fixture content)', () => {
   it('Mathe: every practiceable Bereich gets 2–3 items, at most 15', () => {
     const formats = ['single-choice', 'number-input'] as const;
     const pool = practiceableItems(
-      MATHE.flatMap((b) => {
-        let raw: unknown[];
-        try {
-          raw = JSON.parse(readFileSync(`content/items/mathe/${b}.json`, 'utf8')) as unknown[];
-        } catch {
-          return [];
-        }
-        return raw.map((r) => itemSchema.parse(r));
-      }),
+      FIXTURE_ITEMS.filter((i) => i.fach === 'mathe'),
       formats,
     );
     const bereiche = practiceableBereiche(pool, formats);
-    expect(bereiche).toEqual(OPEN_BEREICHE.filter((b) => MATHE.includes(b)));
+    expect(bereiche).toEqual(MATHE);
     const plan = buildCheck('mathe', pool, opts(bereiche));
     expect(plan.total).toBe(Math.min(CHECK_ITEM_COUNT.mathe, 3 * bereiche.length));
     const answers = runCheck(plan, () => true);

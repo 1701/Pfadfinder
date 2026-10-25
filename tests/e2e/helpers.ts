@@ -305,65 +305,27 @@ export async function expectFitsScreen(page: Page, label: string) {
   expect(await fitProblems(page), label).toEqual([]);
 }
 
-/**
- * Texts an item puts into the answer area (options, cards, elements, words, gap options). A
- * Lückentext shows only the options of its open gap: `openGap` is its number (1 = first gap of
- * the template), null when none is open.
- */
-function answerTexts(item: ContentItem, openGap: number | null): string[] {
-  const { payload } = item;
-  const gapKeys = [...(payload.template ?? '').matchAll(/\{([^{}]+)\}/g)].map((m) => m[1]!);
-  const openKey = openGap === null ? undefined : gapKeys[openGap - 1];
-  return [
-    ...[payload.options, payload.left, payload.right, payload.items, payload.words]
-      .flatMap((list) => list ?? [])
-      .map((e) => e.text),
-    ...(payload.gaps ?? []).filter((g) => g.key === openKey).flatMap((g) => g.options),
-    ...(payload.text && payload.unit ? splitUnits(payload.text, payload.unit) : []),
-  ];
-}
-
-/** Number of the open gap of a Lückentext, from its answer group; null when none is open. */
-async function openGapNumber(page: Page): Promise<number | null> {
-  const groups = page.getByRole('group', { name: /^Antworten für Lücke \d+$/ });
-  if ((await groups.count()) === 0) return null;
-  const label = (await groups.first().getAttribute('aria-label')) ?? '';
-  return Number(/\d+$/.exec(label)![0]);
+/** The id on the root node of the item screen (ItemScreen: data-item-id), once there is one. */
+export async function itemIdOnScreen(page: Page): Promise<string> {
+  const root = page.locator('main[data-item-id]');
+  await expect(root).toHaveCount(1);
+  return (await root.getAttribute('data-item-id'))!;
 }
 
 /**
- * The content item on screen, found by its prompt and stimulus. Among items with the same
- * prompt the one whose stimulus (text and picture description) is fully on the sheet wins; with
- * none on the sheet only items without a stimulus remain. Several left ("Ordne die Zahlen. Die
- * kleinste zuerst."): the answer area decides, and anything but exactly one fails with the ids.
+ * The content item on screen, by the id on the item screen's root node (task F). Before, it was
+ * guessed from prompt and stimulus, which items with the same prompt made ambiguous.
  */
 export async function currentItem(page: Page): Promise<ContentItem> {
-  const plain = (text: string | null) => (text ?? '').replace(/\u00a0/g, ' ');
-  const prompt = plain(await page.getByRole('heading', { level: 1 }).textContent());
-  const sheet = plain(await page.locator('main section').first().textContent());
-  const pictures = await page
-    .locator('main [role="img"][aria-label]')
-    .evaluateAll((els) => els.map((e) => e.getAttribute('aria-label')));
-  const samePrompt = ITEMS.filter((i) => i.prompt === prompt);
-  const hasStimulus = (i: ContentItem) => Boolean(i.stimulus?.text || i.stimulus?.assetAlt);
-  const shown = (i: ContentItem) =>
-    sheet.includes(i.stimulus?.text ?? '') &&
-    (!i.stimulus?.assetAlt || pictures.includes(i.stimulus.assetAlt));
-  const withStimulus = samePrompt.filter((i) => hasStimulus(i) && shown(i));
-  let candidates =
-    withStimulus.length > 0 ? withStimulus : samePrompt.filter((i) => !hasStimulus(i));
-  if (candidates.length > 1) {
-    const area = plain(await page.locator('[data-region="answer"]').textContent());
-    const openGap = await openGapNumber(page);
-    const ids = candidates.map((c) => c.id).join(', ');
-    candidates = candidates.filter((c) => answerTexts(c, openGap).every((t) => area.includes(t)));
-    expect(
-      candidates.map((c) => c.id),
-      `one item for "${prompt}" by the answer area among ${ids}`,
-    ).toHaveLength(1);
-  }
-  expect(candidates[0], `item for "${prompt}"`).toBeDefined();
-  return candidates[0]!;
+  const id = await itemIdOnScreen(page);
+  const item = ITEMS.find((i) => i.id === id);
+  expect(item, `active item ${id} in content/`).toBeDefined();
+  return item!;
+}
+
+/** Fails unless the screen shows item `id`: measuring another item would give wrong numbers. */
+export async function expectItemOnScreen(page: Page, id: string, label = 'item on screen') {
+  expect(await itemIdOnScreen(page), label).toBe(id);
 }
 
 function swapFirstTwo<T>(list: T[]): T[] {

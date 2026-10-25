@@ -10,10 +10,13 @@ import type { Repositories } from '../../../src/data/repos';
 import { createSessionStore } from '../../../src/data/session-store';
 import { SessionStoreContext } from '../../../src/ui/session-context';
 import { UebenScreen } from '../../../src/ui/screens/UebenScreen';
-import { thinMatheContent } from '../../fixtures/content-state';
+import { thinMatheContent } from '../../fixtures/content';
 import { answerFor, testDeps } from '../../data/helpers';
 import { answerOnScreen } from '../answer-on-screen';
 import { preloadFormats } from '../../../src/ui/formats/registry';
+
+/** Prüfen, or Vergleichen for a short answer. */
+const SUBMIT = /^(Prüfen|Vergleichen)$/;
 
 function renderAt(path: string, repos?: Repositories, content?: ContentRuntime) {
   const store = createSessionStore({ ...testDeps(repos), ...(content && { content }) });
@@ -82,14 +85,15 @@ describe('UebenScreen', () => {
     it('Fortsetzen goes on at 4 von 10', async () => {
       renderAt('/ueben/mathe/zahlen-operationen', await openRound());
       await userEvent.click(await screen.findByRole('button', { name: 'Fortsetzen' }));
-      expect(await screen.findByRole('button', { name: 'Prüfen' })).toBeTruthy();
+      // The next item may be a short answer: its button says Vergleichen.
+      expect(await screen.findByRole('button', { name: SUBMIT })).toBeTruthy();
       expect(screen.getByText('4 von 10')).toBeTruthy();
     });
 
     it('Neu anfangen starts at 1 von 10 without asking again', async () => {
       renderAt('/ueben/mathe/zahlen-operationen', await openRound());
       await userEvent.click(await screen.findByRole('button', { name: 'Neu anfangen' }));
-      expect(await screen.findByRole('button', { name: 'Prüfen' })).toBeTruthy();
+      expect(await screen.findByRole('button', { name: SUBMIT })).toBeTruthy();
       expect(screen.getByText('1 von 10')).toBeTruthy();
     });
   });

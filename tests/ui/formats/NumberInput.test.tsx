@@ -3,11 +3,11 @@ import '../dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { readFileSync } from 'node:fs';
-import type { Item, ItemOf } from '../../../src/domain/content';
+import type { ItemOf } from '../../../src/domain/content';
 import { evaluate } from '../../../src/domain/evaluation';
 import { NumberInput } from '../../../src/ui/formats/NumberInput';
 import { numberInput } from '../../fixtures/items';
+import { MONEY_ITEMS } from '../../fixtures/variants';
 
 const press = async (...keys: string[]) => {
   for (const key of keys) await userEvent.click(screen.getByRole('button', { name: key }));
@@ -99,22 +99,9 @@ describe('NumberInput', () => {
   });
 });
 
-describe('NumberInput – money with a comma (groessen-messen, allowDecimal)', () => {
-  const money = (
-    JSON.parse(readFileSync('content/items/mathe/groessen-messen.json', 'utf8')) as Item[]
-  ).filter(
-    (i): i is ItemOf<'number-input'> =>
-      i.format === 'number-input' && i.payload.allowDecimal === true && i.status !== 'retired',
-  );
-
-  it('exists in the content: 2,20 €, 4,55 €, 7,50 € and 10 €', () => {
-    expect(money.map((i) => [i.solution.value, i.payload.unit])).toEqual([
-      [2.2, '€'],
-      [4.55, '€'],
-      [7.5, '€'],
-      [10, '€'],
-    ]);
-  });
+// That every money item with cents has allowDecimal is a pool rule (integrity.ts).
+describe('NumberInput – money with a comma (allowDecimal)', () => {
+  const money = MONEY_ITEMS;
 
   it.each([
     ['2', 'Komma', '2', '0'],

@@ -48,16 +48,4 @@ describe('content loader – reading texts', () => {
     await loader.loadReadingText(biberText.id);
     expect(loads).toBe(1);
   });
-
-  it('loads the texts of the app content for their Bereich', async () => {
-    const loader = createContentLoader();
-    const texts = await loader.loadTexts('deutsch', 'lesen-sachtext');
-    expect(texts.map((t) => t.id).sort()).toEqual([
-      't-sach-001',
-      't-sach-002',
-      't-sach-003',
-      't-sach-004',
-    ]);
-    expect(await loader.loadTexts('deutsch', 'rs-strategien')).toEqual([]);
-  });
 });

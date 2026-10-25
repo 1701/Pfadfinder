@@ -16,7 +16,14 @@
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { ITEMS, VIEWPORTS, fitMetrics, promptLines, type ContentItem } from './helpers';
+import {
+  ITEMS,
+  VIEWPORTS,
+  expectItemOnScreen,
+  fitMetrics,
+  promptLines,
+  type ContentItem,
+} from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
 const RUN = process.env.PFADFINDER_SWEEP === '1' && !process.env.CI;
@@ -48,10 +55,10 @@ async function open(page: Page, url: string) {
 }
 
 async function measure(page: Page, item: ContentItem, label: string): Promise<Screen> {
+  // Another item on the screen (Durchsehen without this item): the numbers would be wrong.
+  await expectItemOnScreen(page, item.id, label);
   const fit = await fitMetrics(page);
   const lines = await promptLines(page, item.prompt);
-  // No prompt on the screen: the page shows another item, the numbers would be wrong.
-  if (lines === 0) throw new Error(`${label}: prompt of ${item.id} not on the screen`);
   const scroll = fit && fit.overflow > 0 ? [`page scrolls by ${Math.round(fit.overflow)} px`] : [];
   return {
     air: fit ? Math.round(fit.slack) : -9999,

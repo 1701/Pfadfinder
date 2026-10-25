@@ -2,13 +2,13 @@
 // read of the same storage) and after an import (export v2 into an empty device) it is the same.
 import { describe, expect, it } from 'vitest';
 import { exportLearnerData, importLearnerData } from '../../src/data/backup';
-import { createContentLoader } from '../../src/content-runtime/loader';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { createProbetestStore } from '../../src/data/probetest-store';
 import { loadProbetestList } from '../../src/data/probetest-list';
 import { previewAnswer } from '../../src/ui/dev/preview-answers';
+import { fixtureContent } from '../fixtures/content';
 
-const IDS = ['mathe-01', 'mathe-02'];
+const IDS = ['mathe-91', 'mathe-92'];
 const DONE_AT = '2026-10-15T08:20:00.000Z';
 let lastId = 0;
 
@@ -17,11 +17,11 @@ async function oneDone() {
   const clock = { t: Date.parse('2026-10-15T08:00:00.000Z') };
   const store = createProbetestStore({
     repos,
-    content: createContentLoader(),
+    content: fixtureContent(),
     now: () => new Date(clock.t).toISOString(),
     newId: () => `pl-${++lastId}`,
   });
-  await store.getState().open('mathe-01');
+  await store.getState().open('mathe-91');
   await store.getState().begin();
   const { context } = store.getState();
   store.getState().setAnswer(previewAnswer(context!.items[0]!, true));
@@ -37,8 +37,8 @@ describe('loadProbetestList', () => {
   it('without a learner: nothing done, nothing written', async () => {
     const repos = createMemoryRepositories();
     expect(await loadProbetestList(repos, IDS)).toEqual([
-      { id: 'mathe-01', number: 1, doneAt: null },
-      { id: 'mathe-02', number: 2, doneAt: null },
+      { id: 'mathe-91', number: 1, doneAt: null },
+      { id: 'mathe-92', number: 2, doneAt: null },
     ]);
     expect(await repos.learners.list()).toEqual([]);
   });
@@ -46,8 +46,8 @@ describe('loadProbetestList', () => {
   it('two Probetests, one done: the same Stand after a reload and after an import', async () => {
     const repos = await oneDone();
     const wanted = [
-      { id: 'mathe-01', number: 1, doneAt: DONE_AT },
-      { id: 'mathe-02', number: 2, doneAt: null },
+      { id: 'mathe-91', number: 1, doneAt: DONE_AT },
+      { id: 'mathe-92', number: 2, doneAt: null },
     ];
     expect(await loadProbetestList(repos, IDS)).toEqual(wanted);
     // "Neu laden": a new read of the same storage, nothing kept in memory.

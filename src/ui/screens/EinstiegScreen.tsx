@@ -5,7 +5,6 @@
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router';
-import manifest from '../../../content/manifest.json';
 import { fachSchema, type Fach } from '../../domain/content';
 import type { ContentManifest } from '../../domain/content/manifest';
 import { mapRegionState } from '../../domain/progress';
@@ -32,8 +31,6 @@ import { Blatt } from './Blatt';
 import { EinstiegErgebnis } from './EinstiegErgebnis';
 import { ItemScreen, QUIET_ACTION_CLASS } from './ItemScreen';
 import { LeseScreen } from './LeseScreen';
-
-const MANIFEST = manifest as ContentManifest;
 
 /** "Zur Karte" as a full-size button in the bottom band. */
 function ZurKarte({ variant }: { variant: 'primary' | 'secondary' }) {
@@ -118,17 +115,18 @@ export function EinstiegPause(props: {
   );
 }
 
-function regionStates(result: CheckOutcome) {
-  return mapRegionState(MANIFEST, result.mastery, result.unlocked, SUPPORTED_FORMATS);
+function regionStates(manifest: ContentManifest, result: CheckOutcome) {
+  return mapRegionState(manifest, result.mastery, result.unlocked, SUPPORTED_FORMATS);
 }
 
-export function EinstiegScreen() {
+/** `manifest`: content/manifest.json, passed in like on the map (KartenScreen). */
+export function EinstiegScreen({ manifest }: { manifest: ContentManifest }) {
   const parsed = fachSchema.safeParse(useParams().fach);
   if (!parsed.success) return <Hinweis text={EMPTY_TEXT} readAloud />;
-  return <Einstieg key={parsed.data} fach={parsed.data} />;
+  return <Einstieg key={parsed.data} fach={parsed.data} manifest={manifest} />;
 }
 
-function Einstieg({ fach }: { fach: Fach }) {
+function Einstieg({ fach, manifest }: { fach: Fach; manifest: ContentManifest }) {
   const start = useCheck((s) => s.start);
   const leave = useCheck((s) => s.leave);
   const status = useCheck((s) => s.status);
@@ -216,7 +214,9 @@ function Einstieg({ fach }: { fach: Fach }) {
     );
   }
   if (status === 'finished' && result) {
-    return <EinstiegErgebnis fach={fach} states={regionStates(result)} readAloud={readAloud} />;
+    return (
+      <EinstiegErgebnis fach={fach} states={regionStates(manifest, result)} readAloud={readAloud} />
+    );
   }
   return <main className="screen-fit" aria-busy="true" />;
 }

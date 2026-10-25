@@ -4,6 +4,12 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.24 – 2026-10-25
+- §7 Deutsch, Rechtschreibung: Der Validator warnt bei find-error und cloze-select in den RS-Bereichen, wenn ein falsch geschriebenes Wort (Fehlerwort oder falsche Lückenoption) in `readAloud`, `stimulus` oder `prompt` steht; Choice-Optionen prüft er nicht (vorher: „Der Validator prüft das nicht“, 1.0.19). Grund: Aufgabe F, die Pool-Prüfung stand bisher in einem Unit-Test über alle Rechtschreib-Items. Pool heute 0 Treffer (15 Items). Die Korrektur je Fehlerwort prüft das Schema schon.
+- §4.3 Geld: Nennt die Aufgabe Euro und steht ein Betrag mit Komma im Text, braucht das Item `allowDecimal`, auch bei ganzer Lösung (10 €); der Validator warnt. Grund wie oben, bisher eine Werteliste im NumberInput-Test. Pool heute 0 Treffer.
+- §7 Längen als Richtwerte: Match-Karten 24, order-Elemente 40, Kurzantwort-Stichpunkte 45, incorrect und misconception je 90 Zeichen, keine Validator-Regel (Entscheidung Markus, 2026-10-25). Die Werte stammen aus zwei Layout-Befunden in Safari quer und sagen das Layout nicht voraus: Im Pool lägen 5 Items mit 11 Match-Karten, 1 order-Element, 5 Stichpunkte, 121 incorrect und 86 misconception darüber. Maß bleiben layout.spec und der Sweep (≥ 18 px).
+- Nur Doku und Warnungen, alle Items bleiben gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.23 – 2026-10-25
 - §6 Probetest: Statt Punktziel 0,4 / 0,4 / 0,2 (± 1 Item) gilt ein Band je Niveau: I 29–44 %, II 38–55 %, III 16–23 % der Itemzahl, Dezimalvergleich ohne Rundung und ohne ±1 (`PROBETEST_NIVEAU_BAND`). Grund: Der Testmix von Kompass 4 Mathe 2025 (7 / 13 / 4) fiel unter der alten Regel durch, auch beim Laden in der App (Entscheidung Markus 2026-10-25). III bis 23 % statt 22 %, damit 4 von 18 und 5 von 22 gültig sind. Alle fünf bisherigen Probetests bleiben gültig; neu ist mathe-03 mit dem Testmix. `schemaVersion` bleibt `"1.0"`.
 - §7 Kalibrierung Mathe: Hinweis „die Umstellung kommt mit mathe-03“ erledigt.

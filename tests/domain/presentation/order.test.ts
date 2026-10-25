@@ -1,7 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { Item, ItemOf } from '../../../src/domain/content';
 import {
   clozeParts,
   presentedGapOptions,
@@ -11,14 +8,8 @@ import {
 } from '../../../src/domain/presentation';
 import { presentationSeed, seededShuffle } from '../../../src/domain/scheduler';
 import { clozeSelect, match, multiChoice, order, singleChoice } from '../../fixtures/items';
-
-const content: Item[] = ['mathe', 'deutsch'].flatMap((fach) =>
-  readdirSync(`content/items/${fach}`).flatMap(
-    (file) => JSON.parse(readFileSync(path.join('content/items', fach, file), 'utf8')) as Item[],
-  ),
-);
-const active = <F extends Item['format']>(format: F) =>
-  content.filter((i): i is ItemOf<F> => i.format === format && i.status !== 'retired');
+import { probeOrder } from '../../fixtures/probe';
+import { ORDER_ITEMS } from '../../fixtures/variants';
 
 describe('presentedOptions', () => {
   it('shuffles like single-choice always did (seed itemId#attemptIndex)', () => {
@@ -59,9 +50,9 @@ describe('presentedMatch', () => {
 });
 
 describe('presentedOrder', () => {
-  it('is never the solution, for every real order item and many attempts', () => {
-    const items = [order, ...active('order')];
-    expect(items.length).toBeGreaterThan(1);
+  // Lists of 3, 4 and 5; that no item is delivered solved is a pool rule (integrity.ts).
+  it('is never the solution, for lists of 3 to 5 elements and many attempts', () => {
+    const items = [...ORDER_ITEMS, probeOrder];
     for (const item of items) {
       for (let attempt = 0; attempt < 200; attempt++) {
         const ids = presentedOrder(item, attempt).map((e) => e.id);

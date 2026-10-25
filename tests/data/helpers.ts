@@ -3,7 +3,7 @@
 import type { Format, Item } from '../../src/domain/content';
 import { previewAnswer } from '../../src/ui/dev/preview-answers';
 import { SUPPORTED_FORMATS } from '../../src/ui/formats/supported';
-import { createContentLoader } from '../../src/content-runtime/loader';
+import { fixtureContent } from '../fixtures/content';
 import { createMemoryRepositories } from '../../src/data/memory/repos';
 import type { PracticeDeps } from '../../src/data/practice';
 import type { Repositories } from '../../src/data/repos';
@@ -42,7 +42,7 @@ let lastId = 0;
 export function testDeps(repos: Repositories = createMemoryRepositories()): PracticeDeps {
   return {
     repos,
-    content: createContentLoader(),
+    content: fixtureContent(),
     now: tickingClock(),
     newId: () => `id-${++lastId}`,
     formats: FORMATS,

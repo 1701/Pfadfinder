@@ -15,7 +15,7 @@ export function sampleLearnerData(): LearnerData {
       {
         id: 'att-1',
         learnerId,
-        itemId: 'm-zo-1-001',
+        itemId: 'm-zo-1-903',
         fach: 'mathe',
         bereich: 'zahlen-operationen',
         niveau: 1,
@@ -29,7 +29,7 @@ export function sampleLearnerData(): LearnerData {
       {
         id: 'att-2',
         learnerId,
-        itemId: 'm-gm-2-004',
+        itemId: 'm-gm-2-904',
         fach: 'mathe',
         bereich: 'groessen-messen',
         niveau: 2,
@@ -43,7 +43,7 @@ export function sampleLearnerData(): LearnerData {
       {
         id: 'att-3',
         learnerId,
-        itemId: 'm-zo-3-002',
+        itemId: 'm-zo-3-902',
         fach: 'mathe',
         bereich: 'zahlen-operationen',
         niveau: 3,
@@ -66,7 +66,7 @@ export function sampleLearnerData(): LearnerData {
         updatedAt: '2026-10-11T08:01:00.000Z',
       },
     ],
-    reviews: [{ learnerId, itemId: 'm-gm-2-004', dueAt: '2026-10-12T08:02:30.000Z', stage: 1 }],
+    reviews: [{ learnerId, itemId: 'm-gm-2-904', dueAt: '2026-10-12T08:02:30.000Z', stage: 1 }],
     sessions: [
       {
         id: 'ses-1',
@@ -82,16 +82,16 @@ export function sampleLearnerData(): LearnerData {
       {
         id: 'run-1',
         learnerId,
-        probetestId: 'mathe-01',
+        probetestId: 'mathe-91',
         startedAt: '2026-10-11T08:59:00.000Z',
         status: 'submitted',
         endedAt: '2026-10-11T09:40:00.000Z',
         endReason: 'submit',
         currentIndex: 0,
-        answers: { 'm-zo-3-002': { text: 'Nein, weil …' } },
-        itemMs: { 'm-zo-3-002': 95000 },
-        attemptIndex: { 'm-zo-3-002': 0 },
-        ratings: { 'm-zo-3-002': 0.5 },
+        answers: { 'm-zo-3-902': { text: 'Nein, weil …' } },
+        itemMs: { 'm-zo-3-902': 95000 },
+        attemptIndex: { 'm-zo-3-902': 0 },
+        ratings: { 'm-zo-3-902': 0.5 },
         attemptIds: ['att-3'],
         result: {
           byBereich: { 'zahlen-operationen': { solved: 0, total: 1, pending: 0 } },

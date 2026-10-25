@@ -2,6 +2,13 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-25 – Tests vom Content gelöst (Aufgabe F, Schema 1.0.24)
+- **Drei Orte** (ARCHITECTURE §8 Teststrategie): Pool-Regeln im Validator, Verhalten mit erfundenen Fixtures (`tests/fixtures/` probe, variants, content, assets; IDs -9xx, `mathe-91/92`), Content-Smoke nur `tests/content-smoke/` (manifest, pool, loader). Vitest-Projekt `unit` bricht jedes Laden unter `content/` ab (`noContent`), `content-isolation.test` findet Pfade, Manifest und echte IDs.
+- **Validator** 51 → 53 Meldungsstellen: Geld mit Komma-Betrag braucht `allowDecimal`, RS-Items ohne falsch geschriebenes Wort im Vorlesetext (beide Warnung, Pool 0 Treffer). splitUnits-Indizes, Kommazahl und Korrektur je Fehlerwort prüfte `schemas.ts` schon, order-Reihenfolge `integrity.ts`.
+- **Entscheidungen Markus:** Längengrenzen (Karte 24, order 40, Stichpunkt 45, Feedback 90) dauerhaft keine Regel, nur Richtwerte in §7 (Pool hätte 121 incorrect, 86 misconception, 11 Karten, 5 Stichpunkte, 1 Element darüber). 1.0.24 mit CHANGELOG für RS-Vorlesen und Richtwerte.
+- **data-item-id/data-format** an `<main>` in ItemScreen; `currentItem()` liest nur das Attribut, layout.spec und Sweep prüfen damit das Item. EinstiegScreen bekommt das Manifest als Prop, ContentAsset die SVGs aus `asset-sources` (Unit: erfundene SVGs).
+- **Lokal:** `npm run check` grün (1 095 → 1 103: unit 1 096, smoke 7), Smoke 39/39, Einstieg `--repeat-each=20` 160/160, Layout ohne Schalter 52/52 in 24,8 Min., keine Screenshot-Änderung.
+
 ## 2026-10-25 – Niveau-Band (Schema 1.0.23) und Probetest mathe-03 (Aufgabe T)
 - **Band-Regel:** `PROBETEST_NIVEAU_BAND` in `taxonomy.ts` statt 40/40/20 ± 1: I 29–44 %, II 38–55 %, III 16–23 %, `min·n ≤ Anzahl ≤ max·n` ohne Rundung. III 23 % statt 22 % (Entscheidung Markus), weil deutsch-90 (7/7/4 bei 18) und der Deutsch-Testaufbau in integrity.test (8/9/5 bei 22) sonst durchfallen. Band-Tests: gültig 10/10/4, 9/8/4, 7/13/4, 7/7/4 (18); ungültig 24/0/0, 12/12/0, 0/12/12, 6/14/4, 11/9/4, 7/6/5 (18).
 - **mathe-03** (Zip t Fassung 2, wörtlich): 24 Items, 29,00 Min., 7/13/4, 12 Bild-Items, Reihenfolge wie Kompass 4 Mathe 2025, keine Überschneidung mit mathe-01/02. check.py vorher und `--applied` 0/0, content:validate 0/0.

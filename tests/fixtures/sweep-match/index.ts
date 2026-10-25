@@ -4,7 +4,7 @@
 //
 // Every item stands beside t-sach-901 ("Der Igel im Winter") with the same prompt (74 characters)
 // and the same feedback: incorrect + misconception = 195 characters, the length of the longest
-// match feedback in content/ (m-dz-2-008: 91 + 104, Mathe without a text), so the line
+// match feedback in the pool at the time (task 15: 91 + 104, Mathe without a text), so the line
 // "Richtig ist: …" and the feedback below it are the conservative case. What varies is the sum of
 // all card texts (left and right, the distractor included):
 //   pairs 3 and 4 (each with one distractor) × sum 80, 90, 100, 110, 120, 130, 140, 160, 180

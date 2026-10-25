@@ -1,15 +1,11 @@
-import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   BEREICHE,
   buildContentManifest,
   countItems,
   probetestNumber,
-  type ContentManifest,
   type Item,
-  type Probetest,
 } from '../../../src/domain/content';
-import { practiceableBereicheFromManifest, practiceableBereiche } from '../../../src/domain/scheduler';
 import { item } from '../../fixtures/pool';
 import { findError, numberInput, singleChoice } from '../../fixtures/items';
 
@@ -46,12 +42,12 @@ describe('buildContentManifest', () => {
     const manifest = buildContentManifest(
       [],
       [
-        { id: 'mathe-02', fach: 'mathe' },
-        { id: 'mathe-01', fach: 'mathe' },
-        { id: 'deutsch-01', fach: 'deutsch' },
+        { id: 'mathe-92', fach: 'mathe' },
+        { id: 'mathe-91', fach: 'mathe' },
+        { id: 'deutsch-91', fach: 'deutsch' },
       ],
     );
-    expect(manifest.probetests).toEqual({ mathe: ['mathe-01', 'mathe-02'], deutsch: ['deutsch-01'] });
+    expect(manifest.probetests).toEqual({ mathe: ['mathe-91', 'mathe-92'], deutsch: ['deutsch-91'] });
   });
 
   it('lists the reading texts a Bereich refers to', () => {
@@ -62,32 +58,10 @@ describe('buildContentManifest', () => {
   });
 });
 
-describe('content/manifest.json', () => {
-  const items = readdirSync('content/items', { recursive: true, encoding: 'utf8' })
-    .filter((f) => f.endsWith('.json'))
-    .flatMap((f) => JSON.parse(readFileSync(`content/items/${f}`, 'utf8')) as Item[]);
-  const probetests = readdirSync('content/probetests')
-    .filter((f) => f.endsWith('.json'))
-    .map((f) => JSON.parse(readFileSync(`content/probetests/${f}`, 'utf8')) as Probetest);
-  const committed = JSON.parse(readFileSync('content/manifest.json', 'utf8')) as ContentManifest;
-
-  it('is up to date with the content (run npm run content:validate)', () => {
-    expect(committed).toEqual(buildContentManifest(items, probetests));
-  });
-
-  it('opens the same Bereiche as the item-based rule', () => {
-    for (const formats of [['single-choice', 'number-input'], ['single-choice']] as const) {
-      expect(practiceableBereicheFromManifest(committed, formats)).toEqual(
-        practiceableBereiche(items, formats),
-      );
-    }
-  });
-});
-
 describe('probetestNumber', () => {
   it('is the position in the manifest from 1, never read from the id', () => {
-    expect(probetestNumber(['mathe-01', 'mathe-03'], 'mathe-03')).toBe(2);
-    expect(probetestNumber(['mathe-01'], 'mathe-01')).toBe(1);
-    expect(probetestNumber(['mathe-01'], 'deutsch-90')).toBeNull();
+    expect(probetestNumber(['mathe-91', 'mathe-93'], 'mathe-93')).toBe(2);
+    expect(probetestNumber(['mathe-91'], 'mathe-91')).toBe(1);
+    expect(probetestNumber(['mathe-91'], 'deutsch-90')).toBeNull();
   });
 });

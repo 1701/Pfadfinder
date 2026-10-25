@@ -21,6 +21,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Kleine, vollständige Schritte: jede Aufgabe endet mit grünem `npm run check` (lint + content-validate + test + build)
 - Vor jedem Commit: check && commit, nie getrennt (`npm run check && git commit …` in einem Aufruf)
 - Domain-Logik (`src/domain`) immer mit Tests, bevor UI darauf aufsetzt
+- Unit-Tests lesen nie content/ oder das Manifest; Pool-Regeln gehören in integrity.ts; Item-Screens tragen data-item-id (ARCHITECTURE §8, Teststrategie)
 - Keine neue Laufzeit-Dependency ohne Eintrag unten unter "Dependencies" mit Begründung
 - Keine Änderung an `docs/CONTENT_SCHEMA.md` ohne Versionssprung und CHANGELOG-Eintrag; im Zweifel Rückfrage
 - Keine Netzwerkaufrufe zur Laufzeit außer dem Laden der eigenen Assets

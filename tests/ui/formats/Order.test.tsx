@@ -5,14 +5,14 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { presentedOrder } from '../../../src/domain/presentation';
 import { ORDER_HIGHLIGHT_MS, Order } from '../../../src/ui/formats/Order';
-import { contentItem } from '../../fixtures/content-items';
+import { probeOrder } from '../../fixtures/probe';
 
-const item = contentItem('m-rf-1-011', 'order');
+const item = probeOrder;
 const text = new Map(item.payload.items.map((e) => [e.id, e.text]));
 const shown = () =>
   screen.getAllByRole('listitem').map((li) => li.textContent?.replace(/\s+/g, ' ').trim());
 
-describe('Order (m-rf-1-011)', () => {
+describe('Order (probe: 4 lengths)', () => {
   it('starts in the presented order, never solved, and reports nothing before a move', () => {
     const onChange = vi.fn();
     render(

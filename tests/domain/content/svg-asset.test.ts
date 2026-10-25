@@ -1,4 +1,3 @@
-import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { checkSvgAsset, minSvgFontSize } from '../../../src/domain/content';
 
@@ -45,10 +44,4 @@ describe('checkSvgAsset', () => {
     expect(minSvgFontSize(185) * (144 / 185)).toBe(18);
   });
 
-  it('holds for every asset in content/', () => {
-    const dir = 'content/assets/svg';
-    for (const file of readdirSync(dir).filter((f) => f.endsWith('.svg'))) {
-      expect(checkSvgAsset(readFileSync(`${dir}/${file}`, 'utf8')), file).toEqual([]);
-    }
-  });
 });

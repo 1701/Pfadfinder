@@ -24,8 +24,8 @@ function renderList(entries: ProbetestListEntry[], known = true) {
 }
 
 const TWO: ProbetestListEntry[] = [
-  { id: 'mathe-01', number: 1, doneAt: '2026-10-21T10:00:00' },
-  { id: 'mathe-03', number: 2, doneAt: null },
+  { id: 'mathe-91', number: 1, doneAt: '2026-10-21T10:00:00' },
+  { id: 'mathe-93', number: 2, doneAt: null },
 ];
 
 describe('ProbetestListe', () => {
@@ -38,8 +38,8 @@ describe('ProbetestListe', () => {
       'Probetest Mathe 2noch nicht gemacht',
     ]);
     expect(links.map((l) => l.getAttribute('href'))).toEqual([
-      '/probetest/mathe-01',
-      '/probetest/mathe-03',
+      '/probetest/mathe-91',
+      '/probetest/mathe-93',
     ]);
     expect(document.body.textContent).not.toMatch(/gelöst|Zusammen|\d+ von \d+/);
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
@@ -61,7 +61,7 @@ describe('ProbetestListe', () => {
     const user = userEvent.setup();
     const router = renderList(TWO);
     await user.click(screen.getByRole('link', { name: /Probetest Mathe 2/ }));
-    expect(router.state.location.pathname).toBe('/probetest/mathe-03');
+    expect(router.state.location.pathname).toBe('/probetest/mathe-93');
     await router.navigate('/probetest/mathe');
     await user.click(await screen.findByRole('link', { name: 'Zurück' }));
     expect(router.state.location.pathname).toBe('/');

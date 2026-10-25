@@ -1,8 +1,10 @@
 // The Einstieg route as its own lazy chunk, like the practice route: store, IndexedDB (Dexie),
 // content parsing (Zod) and the renderers load only when a child starts the Einstieg.
 
+import manifest from '../../content/manifest.json';
 import { createContentLoader } from '../content-runtime/loader';
 import { createCheckStore, type CheckStore } from '../data/check-store';
+import type { ContentManifest } from '../domain/content/manifest';
 import { appRepositories } from '../data/dexie/instance';
 import { CheckStoreContext } from '../ui/check-context';
 import { preloadFormats } from '../ui/formats/registry';
@@ -28,7 +30,7 @@ function checkStore(): CheckStore {
 export function CheckRoute() {
   return (
     <CheckStoreContext value={checkStore()}>
-      <EinstiegScreen />
+      <EinstiegScreen manifest={manifest as ContentManifest} />
     </CheckStoreContext>
   );
 }

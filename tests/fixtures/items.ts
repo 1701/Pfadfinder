@@ -7,7 +7,7 @@ import type { Item, ItemOf, ReadingText } from '../../src/domain/content';
 const meta = { author: 'claude', createdAt: '2026-10-11', calibration: 'none' } as const;
 
 export const singleChoice: ItemOf<'single-choice'> = {
-  id: 'm-gm-2-004',
+  id: 'm-gm-2-904',
   schemaVersion: '1.0',
   fach: 'mathe',
   bereich: 'groessen-messen',
@@ -68,7 +68,7 @@ export const multiChoice: ItemOf<'multi-choice'> = {
 };
 
 export const numberInput: ItemOf<'number-input'> = {
-  id: 'm-zo-1-001',
+  id: 'm-zo-1-903',
   schemaVersion: '1.0',
   fach: 'mathe',
   bereich: 'zahlen-operationen',
@@ -209,7 +209,7 @@ export const markInText: ItemOf<'mark-in-text'> = {
 };
 
 export const findError: ItemOf<'find-error'> = {
-  id: 'd-rss-1-002',
+  id: 'd-rss-1-902',
   schemaVersion: '1.0',
   fach: 'deutsch',
   bereich: 'rs-strategien',

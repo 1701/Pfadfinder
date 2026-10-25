@@ -5,14 +5,14 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { presentedGapOptions } from '../../../src/domain/presentation';
 import { ClozeSelect } from '../../../src/ui/formats/ClozeSelect';
-import { contentItem } from '../../fixtures/content-items';
+import { probeClozeSelect } from '../../fixtures/probe';
 
 const NB = ' ';
-const item = contentItem('m-gm-2-008', 'cloze-select');
+const item = probeClozeSelect;
 const gap = (n: number) => screen.getByRole('button', { name: new RegExp(`^Lücke ${n}:`) });
 const optionsOf = (n: number) => screen.getByRole('group', { name: `Antworten für Lücke ${n}` });
 
-describe('ClozeSelect (m-gm-2-008)', () => {
+describe('ClozeSelect (probe: two gaps with numbers)', () => {
   it('opens the first gap with its three options; no native select', () => {
     render(
       <ClozeSelect

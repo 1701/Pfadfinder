@@ -30,7 +30,7 @@ describe('loadMapProgress', () => {
       await repos.attempts.put({
         id: `a${i}`,
         learnerId: 'learner-1',
-        itemId: 'm-zo-1-001',
+        itemId: 'm-zo-1-903',
         fach: 'mathe',
         bereich: 'zahlen-operationen',
         niveau: 1,
@@ -62,7 +62,7 @@ describe('loadMapProgress', () => {
       repos.attempts.put({
         id,
         learnerId: 'learner-1',
-        itemId: 'm-zo-1-001',
+        itemId: 'm-zo-1-903',
         fach: 'mathe',
         bereich: 'zahlen-operationen',
         niveau: 1,

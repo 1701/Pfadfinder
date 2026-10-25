@@ -8,12 +8,15 @@ import { runDeadline, type ProbetestDeps } from '../../src/data/probetest';
 import { createProbetestStore, type ProbetestStore } from '../../src/data/probetest-store';
 import type { Repositories } from '../../src/data/repos';
 import { previewAnswer } from '../../src/ui/dev/preview-answers';
+import { MATHE_91, MATHE_SHORT_ANSWER, fixtureContent } from '../fixtures/content';
 import { probetestContentModules } from '../fixtures/lesen';
 
 const T0 = Date.parse('2026-10-15T08:00:00.000Z');
 const MINUTE = 60_000;
-const ID = 'mathe-01';
-const SHORT = 11; // m-gm-3-002, the short answer of mathe-01
+const ID = MATHE_91.id;
+/** Index of the short answer of mathe-91 (its last item). */
+const SHORT = MATHE_91.itemIds.length - 1;
+const N = MATHE_91.itemIds.length;
 
 let lastId = 0;
 
@@ -21,7 +24,7 @@ let lastId = 0;
 function setup(repos: Repositories = createMemoryRepositories(), clock = { t: T0 }) {
   const deps: ProbetestDeps = {
     repos,
-    content: createContentLoader(),
+    content: fixtureContent(),
     now: () => new Date(clock.t).toISOString(),
     newId: () => `id-${++lastId}`,
   };
@@ -65,10 +68,10 @@ describe('probetest store: a run from start to result', () => {
     s.store.getState().next();
     answerCurrent(s.store, true);
     s.store.getState().showOverview();
-    s.store.getState().goTo(20);
-    expect(s.store.getState()).toMatchObject({ status: 'answering', index: 20 });
+    s.store.getState().goTo(N - 4);
+    expect(s.store.getState()).toMatchObject({ status: 'answering', index: N - 4 });
     s.store.getState().back();
-    expect(s.store.getState().index).toBe(19);
+    expect(s.store.getState().index).toBe(N - 5);
     s.store.getState().showOverview();
 
     await s.store.getState().askSubmit();
@@ -81,10 +84,11 @@ describe('probetest store: a run from start to result', () => {
     const state = s.store.getState();
     expect(state.status).toBe('result');
     // Open items count as not solved.
-    expect(state.run?.result?.total).toEqual({ solved: 2, total: 24, pending: 0 });
+    expect(state.run?.result?.total).toEqual({ solved: 2, total: N, pending: 0 });
+    // The first three items of mathe-91 are zahlen-operationen.
     expect(state.run?.result?.byBereich['zahlen-operationen']).toEqual({
       solved: 2,
-      total: 6,
+      total: MATHE_91.bereichMix['zahlen-operationen'],
       pending: 0,
     });
 
@@ -95,20 +99,20 @@ describe('probetest store: a run from start to result', () => {
 
   it('"Weiter" on the last item opens the overview; all answered submits without asking', async () => {
     const s = await started();
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < N; i++) {
       answerCurrent(s.store);
       s.store.getState().next();
     }
     expect(s.store.getState().status).toBe('overview');
     await s.store.getState().askSubmit();
     expect(s.store.getState().status).toBe('result');
-    // 23 auto-checked items solved, the short answer waits for its self-rating.
-    expect(s.store.getState().run?.result?.total).toEqual({ solved: 23, total: 24, pending: 1 });
+    // All auto-checked items solved, the short answer waits for its self-rating.
+    expect(s.store.getState().run?.result?.total).toEqual({ solved: N - 1, total: N, pending: 1 });
   });
 
   it('probetest attempts touch neither mastery nor Fehlerkiste nor Tagesziel', async () => {
     const s = await started();
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < N; i++) {
       answerCurrent(s.store, i % 2 === 0);
       s.store.getState().next();
     }
@@ -118,7 +122,7 @@ describe('probetest store: a run from start to result', () => {
 
     const { learner } = await storedRun(s.repos);
     const attempts = await s.repos.attempts.listByLearner(learner.id);
-    expect(attempts).toHaveLength(24);
+    expect(attempts).toHaveLength(N);
     expect(new Set(attempts.map((a) => a.mode))).toEqual(new Set(['probetest']));
     expect(await s.repos.mastery.listByLearner(learner.id)).toEqual([]);
     expect(await s.repos.reviews.listByLearner(learner.id)).toEqual([]);
@@ -303,19 +307,19 @@ describe('probetest store: the self-rating while looking through', () => {
 
   it('the result waits for the short answer; Getroffen adds it, Teils does not', async () => {
     const s = await submittedWithShortAnswer();
-    expect(s.store.getState().run?.result?.total).toEqual({ solved: 0, total: 24, pending: 1 });
+    expect(s.store.getState().run?.result?.total).toEqual({ solved: 0, total: N, pending: 1 });
     s.store.getState().review(SHORT);
     await s.store.getState().rate(1);
-    expect(s.store.getState().run?.result?.total).toEqual({ solved: 1, total: 24, pending: 0 });
-    expect((await storedRun(s.repos)).run.ratings).toEqual({ 'm-gm-3-002': 1 });
+    expect(s.store.getState().run?.result?.total).toEqual({ solved: 1, total: N, pending: 0 });
+    expect((await storedRun(s.repos)).run.ratings).toEqual({ [MATHE_SHORT_ANSWER.id]: 1 });
 
     const teils = await submittedWithShortAnswer();
     teils.store.getState().review(SHORT);
     await teils.store.getState().rate(0.5);
-    expect(teils.store.getState().run?.result?.total).toEqual({ solved: 0, total: 24, pending: 0 });
+    expect(teils.store.getState().run?.result?.total).toEqual({ solved: 0, total: N, pending: 0 });
     const { learner } = await storedRun(teils.repos);
     const attempts = await teils.repos.attempts.listByLearner(learner.id);
-    expect(attempts.map((a) => [a.itemId, a.correct])).toEqual([['m-gm-3-002', 0.5]]);
+    expect(attempts.map((a) => [a.itemId, a.correct])).toEqual([[MATHE_SHORT_ANSWER.id, 0.5]]);
   });
 
   it('"Auswertung ansehen" later: the rating can be caught up and changes the result', async () => {
@@ -330,7 +334,7 @@ describe('probetest store: the self-rating while looking through', () => {
     later.store.getState().review(SHORT);
     await later.store.getState().rate(1);
     later.store.getState().showResult();
-    expect(later.store.getState().run?.result?.total).toEqual({ solved: 1, total: 24, pending: 0 });
+    expect(later.store.getState().run?.result?.total).toEqual({ solved: 1, total: N, pending: 0 });
     expect((await storedRun(s.repos)).run.result?.total.solved).toBe(1);
   });
 
@@ -341,7 +345,7 @@ describe('probetest store: the self-rating while looking through', () => {
     expect(s.store.getState().index).toBe(0);
     s.store.getState().next();
     expect(s.store.getState()).toMatchObject({ status: 'review', index: 1 });
-    s.store.getState().review(23);
+    s.store.getState().review(N - 1);
     s.store.getState().next();
     expect(s.store.getState().status).toBe('result');
   });

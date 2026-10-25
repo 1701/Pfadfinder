@@ -16,14 +16,14 @@ function items(bereich: Item['bereich'], count: number, base: Item): Item[] {
 
 describe('practiceableItems', () => {
   it('keeps only items with a renderer and drops retired ones', () => {
-    const retired = { ...item('raum-form', 1, 1, singleChoice), status: 'retired' } as Item;
+    const retired = { ...item('raum-form', 1, 901, singleChoice), status: 'retired' } as Item;
     const pool = [
-      item('raum-form', 1, 2, singleChoice),
-      item('raum-form', 1, 3, numberInput),
-      item('raum-form', 1, 4, order),
+      item('raum-form', 1, 902, singleChoice),
+      item('raum-form', 1, 903, numberInput),
+      item('raum-form', 1, 904, order),
       retired,
     ];
-    expect(practiceableItems(pool, FORMATS).map((i) => i.id)).toEqual(['m-rf-1-002', 'm-rf-1-003']);
+    expect(practiceableItems(pool, FORMATS).map((i) => i.id)).toEqual(['m-rf-1-902', 'm-rf-1-903']);
   });
 });
 

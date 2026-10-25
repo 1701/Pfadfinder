@@ -10,16 +10,16 @@ const MON_NOON = '2026-10-12T10:00:00.000Z'; // 12:00 in Berlin
 
 describe('Fehlerkiste', () => {
   it('enqueueReview: stage 1, due one day later', () => {
-    expect(enqueueReview('learner-1', 'm-zo-1-001', MON_NOON)).toEqual({
+    expect(enqueueReview('learner-1', 'm-zo-1-903', MON_NOON)).toEqual({
       learnerId: 'learner-1',
-      itemId: 'm-zo-1-001',
+      itemId: 'm-zo-1-903',
       stage: 1,
       dueAt: '2026-10-13T10:00:00.000Z',
     });
   });
 
   it('correct at stage 1 → stage 2 due three days later; correct again → done', () => {
-    const entry = enqueueReview('learner-1', 'm-zo-1-001', MON_NOON);
+    const entry = enqueueReview('learner-1', 'm-zo-1-903', MON_NOON);
     const tue = '2026-10-13T15:00:00.000Z';
     const stage2 = onReviewResult(entry, true, tue);
     expect(stage2).toMatchObject({ stage: 2, dueAt: '2026-10-16T15:00:00.000Z' });
@@ -28,7 +28,7 @@ describe('Fehlerkiste', () => {
   });
 
   it('wrong keeps the stage and moves the due date one day', () => {
-    const entry = enqueueReview('learner-1', 'm-zo-1-001', MON_NOON);
+    const entry = enqueueReview('learner-1', 'm-zo-1-903', MON_NOON);
     expect(onReviewResult(entry, false, '2026-10-13T15:00:00.000Z')).toMatchObject({
       stage: 1,
       dueAt: '2026-10-14T15:00:00.000Z',
@@ -41,12 +41,12 @@ describe('Fehlerkiste', () => {
   });
 
   it('a self-rated 0.5 does not advance', () => {
-    const entry = enqueueReview('learner-1', 'm-zo-3-002', MON_NOON);
+    const entry = enqueueReview('learner-1', 'm-zo-3-902', MON_NOON);
     expect(onReviewResult(entry, 0.5, MON_NOON).stage).toBe(1);
   });
 
   it('a done entry stays done', () => {
-    const done = { ...enqueueReview('learner-1', 'm-zo-1-001', MON_NOON), stage: 'done' as const };
+    const done = { ...enqueueReview('learner-1', 'm-zo-1-903', MON_NOON), stage: 'done' as const };
     expect(onReviewResult(done, false, MON_NOON)).toBe(done);
   });
 });
@@ -54,7 +54,7 @@ describe('Fehlerkiste', () => {
 describe('isReviewDue', () => {
   const entry = {
     learnerId: 'learner-1',
-    itemId: 'm-zo-1-001',
+    itemId: 'm-zo-1-903',
     stage: 1 as const,
     dueAt: '2026-10-13T16:00:00.000Z',
   };
@@ -83,7 +83,7 @@ describe('reviewDueCutoff', () => {
     const now = '2026-10-12T10:00:00.000Z';
     const lateToday = {
       learnerId: 'l',
-      itemId: 'm-zo-1-001',
+      itemId: 'm-zo-1-903',
       stage: 1 as const,
       dueAt: '2026-10-12T21:59:00.000Z',
     };

@@ -4,11 +4,11 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { ShortAnswer } from '../../../src/ui/formats/ShortAnswer';
-import { contentItem } from '../../fixtures/content-items';
+import { probeShortAnswer } from '../../fixtures/probe';
 
-const item = contentItem('m-dz-3-003', 'short-answer');
+const item = probeShortAnswer;
 
-describe('ShortAnswer (m-dz-3-003)', () => {
+describe('ShortAnswer (probe: maxChars 80, a tip, 3 key points)', () => {
   it('reports the text, nothing for blanks, and counts up to maxChars', async () => {
     const onChange = vi.fn();
     render(
@@ -59,7 +59,7 @@ describe('ShortAnswer (m-dz-3-003)', () => {
         disabled={false}
       />,
     );
-    expect(screen.getByText(/^Tipp:/).textContent).toContain('Rot muss wenigstens ein Feld haben');
+    expect(screen.getByText(/^Tipp:/).textContent).toContain(item.payload.hint);
     expect(screen.getByRole('textbox').getAttribute('placeholder')).toBeNull();
   });
 

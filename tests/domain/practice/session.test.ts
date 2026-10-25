@@ -68,7 +68,7 @@ describe('recordPracticeAnswer', () => {
     expect(result.attempt).toEqual({
       id: 'att-1',
       learnerId: 'learner-1',
-      itemId: 'm-zo-1-001',
+      itemId: 'm-zo-1-903',
       fach: 'mathe',
       bereich: ZO,
       niveau: 1,
@@ -115,7 +115,7 @@ describe('recordPracticeAnswer', () => {
     const result = recordPracticeAnswer(input({ answer: { value: 1 } }));
     expect(result.review).toEqual({
       learnerId: 'learner-1',
-      itemId: 'm-zo-1-001',
+      itemId: 'm-zo-1-903',
       stage: 1,
       dueAt: '2026-10-12T10:00:00.000Z',
     });
@@ -124,7 +124,7 @@ describe('recordPracticeAnswer', () => {
   it('restarts an existing Fehlerkiste entry when a practice item is wrong again', () => {
     const existing: ReviewEntry = {
       learnerId: 'learner-1',
-      itemId: 'm-zo-1-001',
+      itemId: 'm-zo-1-903',
       stage: 2,
       dueAt: '2026-10-14T10:00:00.000Z',
     };
@@ -139,7 +139,7 @@ describe('recordPracticeAnswer', () => {
   it('moves a review item along the Fehlerkiste and marks the attempt as review', () => {
     const review: ReviewEntry = {
       learnerId: 'learner-1',
-      itemId: 'm-gm-2-004',
+      itemId: 'm-gm-2-904',
       stage: 1,
       dueAt: '2026-10-11T08:00:00.000Z',
     };

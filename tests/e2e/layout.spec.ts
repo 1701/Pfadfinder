@@ -17,6 +17,7 @@ import {
   VIEWPORTS as ALL_VIEWPORTS,
   fitMetrics,
   fitProblems,
+  itemIdOnScreen,
   matchProblems,
 } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
@@ -89,6 +90,9 @@ for (const viewport of VIEWPORTS) {
       await tab.setViewportSize(viewport);
       for (const state of statesOf(item)) {
         await openItem(tab, `/dev/item/${item.id}?state=${state}`);
+        // The same check as currentItem and the sweep: the screen shows this item.
+        const shown = await itemIdOnScreen(tab);
+        if (shown !== item.id) red.push(`${item.id} ${state}: the screen shows ${shown}`);
         for (const problem of [
           ...(await fitProblems(tab)),
           ...(await overflowProblems(tab)),

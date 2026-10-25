@@ -4,7 +4,7 @@ import { createMemoryRepositories } from '../../src/data/memory/repos';
 import { loadMapProgress, postponeOffer } from '../../src/data/map-progress';
 import { loadTodayProgress } from '../../src/data/practice';
 import { createSessionStore, type SessionStore } from '../../src/data/session-store';
-import { thinMatheContent } from '../fixtures/content-state';
+import { thinMatheContent } from '../fixtures/content';
 import { FORMATS, answerFor, settableClock, testDeps, tickingClock } from './helpers';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -18,7 +18,7 @@ async function answer(store: SessionStore, correct: boolean) {
   return store.getState().feedback!;
 }
 
-describe('practice session (store + in-memory repositories + real content)', () => {
+describe('practice session (store + in-memory repositories + fixture content)', () => {
   it('plays 10 items: pickNext → evaluate → updateMastery → enqueueReview', async () => {
     const deps = testDeps();
     const store = createSessionStore(deps);

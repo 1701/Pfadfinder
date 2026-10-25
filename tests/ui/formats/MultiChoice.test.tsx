@@ -5,13 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { presentedOptions } from '../../../src/domain/presentation';
 import { MultiChoice } from '../../../src/ui/formats/MultiChoice';
-import { contentItem } from '../../fixtures/content-items';
+import { probeMultiChoice } from '../../fixtures/probe';
 
-const item = contentItem('m-dz-2-007', 'multi-choice');
+const item = probeMultiChoice;
 const boxes = () => screen.getAllByRole('checkbox') as HTMLInputElement[];
 const box = (name: string | RegExp) => screen.getByRole('checkbox', { name }) as HTMLInputElement;
 
-describe('MultiChoice (m-dz-2-007)', () => {
+describe('MultiChoice (probe: 4 short options, 2 right)', () => {
   it('shows the options in the presented order, two columns for short options', () => {
     const { container } = render(
       <MultiChoice
@@ -38,17 +38,17 @@ describe('MultiChoice (m-dz-2-007)', () => {
         disabled={false}
       />,
     );
-    await userEvent.click(box('Zu Fuß: am meisten.'));
+    await userEvent.click(box('Ida hat die meisten.'));
     expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a'] });
-    await userEvent.click(box('Bus: mehr als Fahrrad.'));
+    await userEvent.click(box('Tom hat die wenigsten.'));
     expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a', 'b'] });
 
     expect(boxes().every((b) => !b.disabled)).toBe(true);
     expect(document.querySelector('.border-dashed')).toBeNull();
-    await userEvent.click(box('Auto: mehr als Fahrrad.'));
+    await userEvent.click(box('Lena hat mehr als Ida.'));
     expect(onChange).toHaveBeenLastCalledWith({ optionIds: ['a', 'b', 'c'] });
 
-    for (const name of ['Zu Fuß: am meisten.', 'Bus: mehr als Fahrrad.', 'Auto: mehr als Fahrrad.'])
+    for (const name of ['Ida hat die meisten.', 'Tom hat die wenigsten.', 'Lena hat mehr als Ida.'])
       await userEvent.click(box(name));
     expect(onChange).toHaveBeenLastCalledWith(null);
   });
@@ -81,10 +81,10 @@ describe('MultiChoice (m-dz-2-007)', () => {
         revealed={{ correct: false, solution: item.solution }}
       />,
     );
-    expect(box(/^Zu Fuß: am meisten\.\s*\(richtige Antwort\)$/)).toBeTruthy();
-    expect(box(/^Bus: mehr als Fahrrad\.\s*\(richtige Antwort\)$/)).toBeTruthy();
-    expect(box(/^Auto: mehr als Fahrrad\.\s*\(deine Wahl\)$/)).toBeTruthy();
-    expect(box('Insgesamt 20 Kinder.')).toBeTruthy();
+    expect(box(/^Ida hat die meisten\.\s*\(richtige Antwort\)$/)).toBeTruthy();
+    expect(box(/^Tom hat die wenigsten\.\s*\(richtige Antwort\)$/)).toBeTruthy();
+    expect(box(/^Lena hat mehr als Ida\.\s*\(deine Wahl\)$/)).toBeTruthy();
+    expect(box('Zusammen sind es 30.')).toBeTruthy();
     expect(boxes().every((b) => b.disabled)).toBe(true);
     expect(document.body.textContent).not.toMatch(/falsch/i);
   });

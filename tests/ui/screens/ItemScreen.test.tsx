@@ -9,7 +9,7 @@ import type { Item } from '../../../src/domain/content';
 import { evaluate, parseAnswer, type Correctness } from '../../../src/domain/evaluation';
 import { ItemScreen } from '../../../src/ui/screens/ItemScreen';
 import { numberInput, singleChoice } from '../../fixtures/items';
-import { contentItem } from '../../fixtures/content-items';
+import { probeFindError, probeMultiChoice, probeShortAnswer } from '../../fixtures/probe';
 
 function Harness({ onSubmit }: { onSubmit(): void }) {
   const [answer, setAnswer] = useState<unknown>(null);
@@ -50,6 +50,17 @@ describe('ItemScreen', () => {
     expect(pruefen.disabled).toBe(false);
     await userEvent.click(pruefen);
     expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
+  // Task F: the e2e tests find the item on screen by this attribute (currentItem), not by text.
+  it('names the item and its format on the root node, while answering and after Prüfen', async () => {
+    const { container } = render(<Harness onSubmit={() => {}} />);
+    const root = () => container.querySelector('main')!;
+    expect(root().dataset).toMatchObject({ itemId: singleChoice.id, format: 'single-choice' });
+    expect(container.querySelectorAll('[data-item-id]')).toHaveLength(1);
+    await userEvent.click(screen.getByRole('radio', { name: '12,10 €' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Prüfen' }));
+    expect(root().dataset.itemId).toBe(singleChoice.id);
   });
 
   it('replaces Prüfen with feedback and Weiter in the same band', async () => {
@@ -147,10 +158,10 @@ describe('ItemScreen', () => {
     );
   }
 
-  // iPad run of deutsch-01 (task 14): Prüfen works from the first pick, like every other format.
+  // iPad run (task 14): Prüfen works from the first pick, like every other format.
   // Too few or too many picks are mistakes: "Noch nicht ganz." with the explanation and the Falle.
-  describe('multi-choice (m-dz-2-007, two right): Prüfen from the first pick', () => {
-    const item = contentItem('m-dz-2-007', 'multi-choice');
+  describe('multi-choice (two right): Prüfen from the first pick', () => {
+    const item = probeMultiChoice;
     const pick = (name: string) => userEvent.click(screen.getByRole('checkbox', { name }));
     const pruefen = () => screen.getByRole('button', { name: 'Prüfen' }) as HTMLButtonElement;
 
@@ -158,7 +169,7 @@ describe('ItemScreen', () => {
       const onSubmit = vi.fn();
       render(<Played item={item} onSubmit={onSubmit} />);
       expect(pruefen().disabled).toBe(true);
-      await pick('Zu Fuß: am meisten.');
+      await pick('Ida hat die meisten.');
       expect(pruefen().disabled).toBe(false);
       await userEvent.click(pruefen());
       expect(onSubmit).toHaveBeenCalledWith({ optionIds: ['a'] });
@@ -171,9 +182,9 @@ describe('ItemScreen', () => {
     it('one too many: all three can be picked, the band says "Noch nicht ganz."', async () => {
       const onSubmit = vi.fn();
       render(<Played item={item} onSubmit={onSubmit} />);
-      await pick('Zu Fuß: am meisten.');
-      await pick('Bus: mehr als Fahrrad.');
-      await pick('Auto: mehr als Fahrrad.');
+      await pick('Ida hat die meisten.');
+      await pick('Tom hat die wenigsten.');
+      await pick('Lena hat mehr als Ida.');
       await userEvent.click(pruefen());
       expect(onSubmit).toHaveBeenCalledWith({ optionIds: ['a', 'b', 'c'] });
       const band = document.querySelector('[data-region="band"]') as HTMLElement;
@@ -182,8 +193,8 @@ describe('ItemScreen', () => {
     });
   });
 
-  describe('short-answer (m-dz-3-003): compare, then rate yourself', () => {
-    const item = contentItem('m-dz-3-003', 'short-answer');
+  describe('short-answer: compare, then rate yourself', () => {
+    const item = probeShortAnswer;
 
     async function compare() {
       const onSubmit = vi.fn();
@@ -240,19 +251,19 @@ describe('ItemScreen', () => {
     });
   });
 
-  describe('find-error (d-rss-1-002): the band names the correct spelling', () => {
-    const item = contentItem('d-rss-1-002', 'find-error');
+  describe('find-error: the band names the correct spelling', () => {
+    const item = probeFindError;
 
     it.each([
-      ['samstag', 'Richtig.'],
-      ['fahren', 'Noch nicht ganz.'],
-    ])('after choosing "%s": %s and "So schreibt man es: Samstag"', async (word, verdict) => {
+      ['montag', 'Richtig.'],
+      ['gehen', 'Noch nicht ganz.'],
+    ])('after choosing "%s": %s and "So schreibt man es: Montag"', async (word, verdict) => {
       render(<Played item={item} />);
       await userEvent.click(screen.getByRole('button', { name: word }));
       await userEvent.click(screen.getByRole('button', { name: 'Prüfen' }));
       const band = document.querySelector('[data-region="band"]') as HTMLElement;
       expect(band.textContent).toContain(verdict);
-      expect(band.textContent).toContain('So schreibt man es: Samstag');
+      expect(band.textContent).toContain('So schreibt man es: Montag');
     });
   });
 
@@ -260,7 +271,7 @@ describe('ItemScreen', () => {
     const { container } = render(
       <MemoryRouter>
         <ItemScreen
-          item={contentItem('m-gm-3-002', 'short-answer')}
+          item={probeShortAnswer}
           attemptIndex={0}
           answer={{ text: 'Weil' }}
           onAnswer={() => {}}

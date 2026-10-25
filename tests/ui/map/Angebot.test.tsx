@@ -4,8 +4,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import manifest from '../../../content/manifest.json';
-import type { ContentManifest } from '../../../src/domain/content/manifest';
 import { loadMapProgress, postponeOffer } from '../../../src/data/map-progress';
 import { createMemoryRepositories } from '../../../src/data/memory/repos';
 import type { Repositories } from '../../../src/data/repos';
@@ -15,7 +13,12 @@ import { KartenScreen, type MapProgressSource } from '../../../src/ui/map/Karten
 import { KartenView } from '../../../src/ui/map/KartenView';
 import { FUNDSTUECK_HINWEIS } from '../../../src/ui/map/Tagesziel';
 import { SUPPORTED_FORMATS } from '../../../src/ui/formats/supported';
+import { BEREICH_NAME } from '../../../src/ui/text/bereiche';
+import { FIXTURE_MANIFEST } from '../../fixtures/content';
 import { masteryFor } from '../../fixtures/pool';
+
+/** The names of all Gebiete in taxonomy order: the fixture content opens every one. */
+const GEBIETE = BEREICHE.map((b) => BEREICH_NAME[b]).join(', ');
 
 const NEW: MapProgressSource = {
   mastery: [],
@@ -29,7 +32,7 @@ function renderScreen(progress: MapProgressSource = NEW) {
   return render(
     <MemoryRouter>
       <KartenScreen
-        manifest={manifest as ContentManifest}
+        manifest={FIXTURE_MANIFEST}
         formats={SUPPORTED_FORMATS}
         loadProgress={() => Promise.resolve(progress)}
         postponeOffer={() => Promise.resolve()}
@@ -43,7 +46,7 @@ function renderStored(repos: Repositories, now: () => string) {
   return render(
     <MemoryRouter>
       <KartenScreen
-        manifest={manifest as ContentManifest}
+        manifest={FIXTURE_MANIFEST}
         formats={SUPPORTED_FORMATS}
         loadProgress={() => loadMapProgress(repos, now())}
         postponeOffer={(fach) => postponeOffer(repos, fach, now())}
@@ -141,7 +144,7 @@ describe('Einstieg offer on the map', () => {
     render(
       <MemoryRouter>
         <KartenScreen
-          manifest={manifest as ContentManifest}
+          manifest={FIXTURE_MANIFEST}
           formats={SUPPORTED_FORMATS}
           loadProgress={() => Promise.resolve(NEW)}
           postponeOffer={() => Promise.reject(new Error('blocked'))}
@@ -174,7 +177,7 @@ describe('Einstieg offer on the map', () => {
       repos.attempts.put({
         id,
         learnerId: 'learner-1',
-        itemId: 'm-zo-1-001',
+        itemId: 'm-zo-1-903',
         fach: 'mathe',
         bereich: 'zahlen-operationen',
         niveau: 1,
@@ -257,8 +260,9 @@ describe('Einstieg offer on the map', () => {
       const synth = installSpeech();
       renderScreen();
       await screen.findByRole('heading', { name: 'Unerforscht: Mathe' });
-      expect(await spoken(synth)).toMatch(
-        /^Unerforscht: Mathe\. Tippe auf Erkunden, oder wähle gleich ein Gebiet: Zahlen und Rechnen, .*Schreibtricks, Wörter und Sätze\.$/,
+      // Every Gebiet of the fixture content is open, in taxonomy order.
+      expect(await spoken(synth)).toBe(
+        `Unerforscht: Mathe. Tippe auf Erkunden, oder wähle gleich ein Gebiet: ${GEBIETE}.`,
       );
     });
 
@@ -266,8 +270,8 @@ describe('Einstieg offer on the map', () => {
       const synth = installSpeech();
       renderScreen({ ...NEW, offerSpent: true });
       await screen.findByText(FUNDSTUECK_HINWEIS);
-      expect(await spoken(synth)).toMatch(
-        /^Wohin geht’s heute\? Heute: 0 von 10 Fundstücken\. Jede Aufgabe, die du übst, bringt dir ein Fundstück\. Du kannst wählen: Zahlen und Rechnen, .*\.$/,
+      expect(await spoken(synth)).toBe(
+        `Wohin geht’s heute? Heute: 0 von 10 Fundstücken. ${FUNDSTUECK_HINWEIS} Du kannst wählen: ${GEBIETE}.`,
       );
     });
 

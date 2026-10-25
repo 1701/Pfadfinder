@@ -13,7 +13,7 @@ import { ProbetestDurchsehenUebersicht } from '../../../src/ui/screens/Probetest
 import { Zeit } from '../../../src/ui/screens/ProbetestKopf';
 import { ProbetestUebersicht } from '../../../src/ui/screens/ProbetestUebersicht';
 import { FALLE_LABEL } from '../../../src/ui/text/feedback';
-import { contentItem } from '../../fixtures/content-items';
+import { probeMultiChoice, probeShortAnswer } from '../../fixtures/probe';
 import { singleChoice } from '../../fixtures/items';
 
 const time = { minutes: 31, final: false };
@@ -138,7 +138,7 @@ describe('the time', () => {
 describe('ProbetestAufgabe', () => {
   // Task 14: a single pick of a multi-choice item is a draft, not "open"; Weiter works as always.
   it('multi-choice: the first pick is kept as the draft', async () => {
-    const item = contentItem('m-dz-2-007', 'multi-choice');
+    const item = probeMultiChoice;
     const onAnswer = vi.fn();
     render(
       <MemoryRouter>
@@ -157,7 +157,7 @@ describe('ProbetestAufgabe', () => {
         />
       </MemoryRouter>,
     );
-    await userEvent.click(screen.getByRole('checkbox', { name: 'Zu Fuß: am meisten.' }));
+    await userEvent.click(screen.getByRole('checkbox', { name: 'Ida hat die meisten.' }));
     expect(onAnswer).toHaveBeenLastCalledWith({ optionIds: ['a'] });
     expect((screen.getByRole('button', { name: 'Weiter' }) as HTMLButtonElement).disabled).toBe(
       false,
@@ -237,7 +237,7 @@ describe('ProbetestDurchsehen', () => {
           {...base}
           current={1}
           total={1}
-          item={contentItem('m-gm-3-002', 'short-answer')}
+          item={probeShortAnswer}
           answer={{ text: 'Es gibt keine 75 Minuten.' }}
           outcome="pending"
         />
@@ -299,7 +299,7 @@ describe('ProbetestDurchsehen', () => {
 
   it('a waiting short answer is compared and rated here', async () => {
     const onRate = vi.fn();
-    const item = contentItem('m-gm-3-002', 'short-answer');
+    const item = probeShortAnswer;
     render(
       <MemoryRouter>
         <ProbetestDurchsehen

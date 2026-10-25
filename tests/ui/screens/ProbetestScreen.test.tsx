@@ -42,7 +42,7 @@ describe('ProbetestScreen – Deutsch with reading texts', () => {
   });
   afterEach(() => vi.unstubAllGlobals());
 
-  // iPad run of deutsch-01 (task 14): the start page said "Probetest Mathe". The Fach comes from
+  // iPad run of deutsch-91 (task 14): the start page said "Probetest Mathe". The Fach comes from
   // the Probetest on every screen of the flow, never from a constant.
   it('names Deutsch, never Mathe: start, reading, item, overview, question, result, review', async () => {
     const user = userEvent.setup();
@@ -93,7 +93,7 @@ describe('ProbetestScreen – the start page names the test by its manifest posi
   // Task 16: the second Mathe Probetest of the manifest is "Probetest Mathe 2", whatever its id.
   it('"Probetest Mathe 2" for the second entry', async () => {
     const { items, probetest } = buildMatheProbetest();
-    const second = { ...probetest, id: 'mathe-07' };
+    const second = { ...probetest, id: 'mathe-97' };
     const byBereich = Map.groupBy(items, (i) => i.bereich);
     const modules: ContentModules = {
       items: Object.fromEntries(
@@ -103,7 +103,7 @@ describe('ProbetestScreen – the start page names the test by its manifest posi
         ]),
       ),
       texts: {},
-      probetests: { 'fixtures/probetests/mathe-07.json': async () => structuredClone(second) },
+      probetests: { 'fixtures/probetests/mathe-97.json': async () => structuredClone(second) },
     };
     const store = createProbetestStore({
       repos: createMemoryRepositories(),
@@ -111,10 +111,10 @@ describe('ProbetestScreen – the start page names the test by its manifest posi
       now: () => new Date().toISOString(),
       newId: () => `id-${++lastId}`,
     });
-    const probetests = { mathe: ['mathe-01', 'mathe-07'], deutsch: [] };
+    const probetests = { mathe: ['mathe-91', 'mathe-97'], deutsch: [] };
     const router = createMemoryRouter(
       [{ path: '/probetest/:id', element: <ProbetestScreen probetests={probetests} /> }],
-      { initialEntries: ['/probetest/mathe-07'] },
+      { initialEntries: ['/probetest/mathe-97'] },
     );
     render(
       <ProbetestStoreContext value={store}>

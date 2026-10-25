@@ -5,7 +5,7 @@ describe('seededShuffle', () => {
   const items = ['a', 'b', 'c', 'd', 'e', 'f'];
 
   it('is reproducible for the same seed', () => {
-    expect(seededShuffle(items, 'm-zo-1-001#0')).toEqual(seededShuffle(items, 'm-zo-1-001#0'));
+    expect(seededShuffle(items, 'm-zo-1-903#0')).toEqual(seededShuffle(items, 'm-zo-1-903#0'));
   });
 
   it('gives different orders for different seeds', () => {
@@ -33,7 +33,7 @@ describe('seededShuffle', () => {
     const first = new Map<string, number>();
     const positions = options.map(() => new Map<string, number>());
     for (let i = 0; i < runs; i++) {
-      const shuffled = seededShuffle(options, presentationSeed('m-zo-1-005', i));
+      const shuffled = seededShuffle(options, presentationSeed('m-zo-1-907', i));
       shuffled.forEach((o, pos) => positions[pos]!.set(o, (positions[pos]!.get(o) ?? 0) + 1));
       first.set(shuffled[0]!, (first.get(shuffled[0]!) ?? 0) + 1);
     }
@@ -55,6 +55,6 @@ describe('createRng / presentationSeed', () => {
   });
 
   it('builds the seed from itemId and attemptIndex', () => {
-    expect(presentationSeed('m-zo-1-001', 2)).toBe('m-zo-1-001#2');
+    expect(presentationSeed('m-zo-1-903', 2)).toBe('m-zo-1-903#2');
   });
 });

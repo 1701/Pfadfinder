@@ -12,6 +12,7 @@ import { EinstiegIntro, EinstiegScreen } from '../../../src/ui/screens/EinstiegS
 import { answerFor, testDeps } from '../../data/helpers';
 import { preloadFormats } from '../../../src/ui/formats/registry';
 import { createContentLoader } from '../../../src/content-runtime/loader';
+import { FIXTURE_MANIFEST } from '../../fixtures/content';
 import { makePool } from '../../fixtures/pool';
 
 function renderEinstieg(store: CheckStore, fach = 'mathe') {
@@ -19,7 +20,7 @@ function renderEinstieg(store: CheckStore, fach = 'mathe') {
     <CheckStoreContext value={store}>
       <MemoryRouter initialEntries={[`/einstieg/${fach}`]}>
         <Routes>
-          <Route path="/einstieg/:fach" element={<EinstiegScreen />} />
+          <Route path="/einstieg/:fach" element={<EinstiegScreen manifest={FIXTURE_MANIFEST} />} />
           <Route path="/" element={<p>Karte</p>} />
         </Routes>
       </MemoryRouter>

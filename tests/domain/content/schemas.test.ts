@@ -158,8 +158,8 @@ describe('itemSchema – common fields (§2, §3)', () => {
   });
 
   it('rejects an id whose prefix contradicts fach/bereich/niveau', () => {
-    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-zo-2-001' })).toContain('id');
-    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-gm-1-001' })).toContain('id');
+    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-zo-2-901' })).toContain('id');
+    expect(issuePaths(itemSchema, { ...numberInput, id: 'm-gm-1-903' })).toContain('id');
   });
 
   it('rejects a bereich that belongs to the other fach', () => {
@@ -184,7 +184,7 @@ describe('itemSchema – common fields (§2, §3)', () => {
 
   it('allows textRef only in reading areas', () => {
     expect(issuePaths(itemSchema, { ...findError, stimulus: { textRef: 't-sach-001' } })).toContain('stimulus.textRef');
-    const reading = { ...findError, id: 'd-lsa-1-002', bereich: 'lesen-sachtext', stimulus: { textRef: 't-sach-001' } };
+    const reading = { ...findError, id: 'd-lsa-1-903', bereich: 'lesen-sachtext', stimulus: { textRef: 't-sach-001' } };
     expect(issuePaths(itemSchema, reading)).toEqual([]);
   });
 
@@ -247,9 +247,9 @@ describe('probetestSchema (§6)', () => {
   };
 
   it.each([
-    ['10/10/4 (deutsch-01/02, mathe-01/02)', [10, 10, 4]],
-    ['9/8/4 at 21 items (deutsch-03)', [9, 8, 4]],
-    ['7/13/4 (mathe-03, Kompass 4 test mix)', [7, 13, 4]],
+    ['10/10/4 (deutsch-91/02, mathe-91/02)', [10, 10, 4]],
+    ['9/8/4 at 21 items (deutsch-93)', [9, 8, 4]],
+    ['7/13/4 (mathe-93, Kompass 4 test mix)', [7, 13, 4]],
     ['7/7/4 at 18 items (deutsch-90, III 22.2 % under 23 %)', [7, 7, 4]],
   ] as const)('accepts the niveau mix %s', (_, mix) => {
     expect(niveauIssues([...mix])).toEqual([]);
@@ -297,7 +297,7 @@ describe('probetestSchema (§6)', () => {
   });
 
   it('rejects an id that does not start with the fach', () => {
-    expect(issuePaths(probetestSchema, { ...probetest, id: 'deutsch-01' })).toContain('id');
+    expect(issuePaths(probetestSchema, { ...probetest, id: 'deutsch-91' })).toContain('id');
   });
 });
 

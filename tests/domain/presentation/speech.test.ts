@@ -1,6 +1,5 @@
-import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { readAloudText, type Item, type ItemOf } from '../../../src/domain/content';
+import { readAloudText, type ItemOf } from '../../../src/domain/content';
 import {
   answersSpeech,
   comparisonSpeech,
@@ -23,19 +22,14 @@ import {
   shortAnswer,
   singleChoice,
 } from '../../fixtures/items';
-
-const musterStrukturen = JSON.parse(
-  readFileSync('content/items/mathe/muster-strukturen.json', 'utf8'),
-) as Item[];
-const lautBuchstabe = JSON.parse(
-  readFileSync('content/items/deutsch/rs-laut-buchstabe.json', 'utf8'),
-) as Item[];
-const allItems = ['mathe', 'deutsch'].flatMap((fach) =>
-  readdirSync(`content/items/${fach}`).flatMap(
-    (file) => JSON.parse(readFileSync(`content/items/${fach}/${file}`, 'utf8')) as Item[],
-  ),
-);
-const byId = (id: string) => allItems.find((i) => i.id === id)!;
+import { probeClozeSelect, probeFindError } from '../../fixtures/probe';
+import {
+  clozeOneGap,
+  clozeReading,
+  findErrorTwo,
+  markNumbers,
+  spellingChoice,
+} from '../../fixtures/variants';
 
 describe('itemSpeech', () => {
   it('reads the task, then the options in the order on screen', () => {
@@ -89,11 +83,10 @@ describe('itemSpeech – readAloud on options (schema 1.0.12)', () => {
     expect(answersSpeech(item, 0)).toBe('Antworten: Kissen. 6 · 40. 6 mal 40.');
   });
 
-  it('d-rsl-2-001 reads whole words: "Kissen", no gap', () => {
-    const item = lautBuchstabe.find((i) => i.id === 'd-rsl-2-001')!;
+  it('a spelling item with gap words reads whole words: "Tasse", no gap', () => {
     for (const attempt of [0, 1, 2, 3]) {
-      const speech = itemSpeech(item, attempt);
-      expect(speech).toContain('Kissen');
+      const speech = itemSpeech(spellingChoice, attempt);
+      expect(speech).toContain('Tasse');
       expect(speech).not.toContain('_');
     }
   });
@@ -101,36 +94,34 @@ describe('itemSpeech – readAloud on options (schema 1.0.12)', () => {
 
 describe('itemSpeech – misspelled words are never read aloud (2026-10-22)', () => {
   it('find-error with one error: the sentence with the correction, no answers', () => {
-    expect(itemSpeech(byId('d-rss-1-003'), 0)).toBe(
-      'In diesem Satz ist ein Wort falsch geschrieben. Tippe es an. Der Hund bellt vor der Tür.',
+    expect(itemSpeech(probeFindError, 0)).toBe(
+      'In diesem Satz ist ein Wort falsch geschrieben. Tippe es an. Am Montag gehen wir schwimmen.',
     );
   });
 
   it('find-error with two errors: both corrections in place', () => {
-    expect(itemSpeech(byId('d-rsl-2-003'), 0)).toBe(
+    expect(itemSpeech(findErrorTwo, 0)).toBe(
       'In diesem Satz sind zwei Wörter falsch geschrieben. Tippe beide an. ' +
-        'Die Katze schläft auf der Decke im Flur.',
+        'Mein Fahrrad steht im Keller.',
     );
   });
 
   it('cloze-select with one gap: the solved sentence, no gap and no options', () => {
-    const item = byId('d-rsl-2-008');
     for (const attempt of [0, 1, 2, 3]) {
-      expect(itemSpeech(item, attempt)).toBe(
-        'Hör auf das a. Wähle das richtig geschriebene Wort. Die Straße ist nach dem Regen nass.',
+      expect(itemSpeech(clozeOneGap, attempt)).toBe(
+        'Wähle das richtig geschriebene Wort. Die Tasse ist voll.',
       );
     }
   });
 
   it('cloze-select with two gaps: both solutions in place', () => {
-    expect(itemSpeech(byId('d-rss-2-001'), 1)).toBe(
-      'Wähle in beiden Lücken das richtig geschriebene Wort. Der Hund rennt durch den Wald.',
+    expect(itemSpeech(clozeSelect, 1)).toBe(
+      'Wähle für jede Lücke das richtig geschriebene Wort. Im Winter ist es oft kalt. Der Hund spielt im Schnee.',
     );
   });
 
   it('cloze-select in maths and reading still reads the gaps and their options', () => {
-    for (const id of ['m-gm-1-007', 'd-lsa-1-006']) {
-      const item = byId(id);
+    for (const item of [probeClozeSelect, clozeReading]) {
       const speech = itemSpeech(item, 0);
       expect(speech).toBe(`${readAloudText(item)} ${answersSpeech(item, 0)}`);
       expect(speech).toContain('Lücke 1');
@@ -139,7 +130,7 @@ describe('itemSpeech – misspelled words are never read aloud (2026-10-22)', ()
   });
 
   it('spelling items of other formats still append their answers', () => {
-    const item = byId('d-rsl-1-002');
+    const item = spellingChoice;
     expect(itemSpeech(item, 0)).toBe(`${readAloudText(item)} ${answersSpeech(item, 0)}`);
     expect(itemSpeech(item, 0)).toContain('Antworten:');
   });
@@ -154,38 +145,20 @@ describe('itemSpeech – misspelled words are never read aloud (2026-10-22)', ()
   });
 
   it('drops the sentence when a correction or a gap solution is missing', () => {
-    const findError = byId('d-rss-1-003') as ItemOf<'find-error'>;
-    const noCorrection = { ...findError, solution: { ...findError.solution, corrections: {} } };
-    expect(itemSpeech(noCorrection, 0)).toBe(readAloudText(findError));
+    const noCorrection = {
+      ...probeFindError,
+      solution: { ...probeFindError.solution, corrections: {} },
+    };
+    expect(itemSpeech(noCorrection, 0)).toBe(readAloudText(probeFindError));
 
-    const cloze = byId('d-rss-2-001') as ItemOf<'cloze-select'>;
-    const noGap = { ...cloze, solution: { gaps: { '1': 'Hund' } } };
-    expect(itemSpeech(noGap, 0)).toBe(readAloudText(cloze));
+    const noGap = { ...clozeSelect, solution: { gaps: { '1': 'kalt' } } };
+    expect(itemSpeech(noGap, 0)).toBe(readAloudText(clozeSelect));
   });
 
-  it('covers exactly the 15 spelling items and none of them speaks a misspelled word', () => {
-    const spelling = allItems.filter(
-      (i): i is ItemOf<'find-error'> | ItemOf<'cloze-select'> =>
-        (i.bereich === 'rs-laut-buchstabe' || i.bereich === 'rs-strategien') &&
-        (i.format === 'find-error' || i.format === 'cloze-select'),
-    );
-    expect(spelling.map((i) => i.id).sort()).toEqual([
-      'd-rsl-1-001',
-      'd-rsl-1-003',
-      'd-rsl-1-006',
-      'd-rsl-1-007',
-      'd-rsl-1-008',
-      'd-rsl-2-002',
-      'd-rsl-2-003',
-      'd-rsl-2-008',
-      'd-rss-1-002',
-      'd-rss-1-003',
-      'd-rss-1-004',
-      'd-rss-2-001',
-      'd-rss-2-002',
-      'd-rss-2-006',
-      'd-rss-2-008',
-    ]);
+  // That every spelling item of the pool has its corrections and no misspelled word in its own
+  // text is a pool rule (integrity.ts); here: the speech of each spelling form.
+  it('none of the spelling forms speaks a misspelled word', () => {
+    const spelling = [findError, probeFindError, findErrorTwo, clozeSelect, clozeOneGap];
     for (const item of spelling) {
       const wrong =
         item.format === 'find-error'
@@ -239,9 +212,8 @@ describe('answersSpeech per format', () => {
     );
   });
 
-  it('mark-in-text: a number row stays separate numbers ("100 200" is not 100200)', () => {
-    const row = musterStrukturen.find((i) => i.id === 'm-ms-3-001')!;
-    expect(answersSpeech(row, 0)).toBe('Antworten: 100, 200, 300, 350, 400, 500, 650, 700.');
+  it('mark-in-text: a number row stays separate numbers ("15 18" is not 1518)', () => {
+    expect(answersSpeech(markNumbers, 0)).toBe('Antworten: 5, 10, 15, 18, 20, 25, 28, 30.');
   });
 
   it('find-error: the words of the sentence', () => {

@@ -3,11 +3,10 @@ import '../dom';
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
-import manifest from '../../../content/manifest.json';
-import type { ContentManifest } from '../../../src/domain/content/manifest';
+import { BEREICHE } from '../../../src/domain/content/taxonomy';
 import { KartenScreen, type MapProgressSource } from '../../../src/ui/map/KartenScreen';
 import { SUPPORTED_FORMATS } from '../../../src/ui/formats/supported';
-import { OPEN_BEREICHE } from '../../fixtures/content-state';
+import { FIXTURE_MANIFEST } from '../../fixtures/content';
 import { BEREICH_NAME } from '../../../src/ui/text/bereiche';
 import { masteryFor } from '../../fixtures/pool';
 
@@ -18,7 +17,7 @@ function renderScreen(
   render(
     <MemoryRouter>
       <KartenScreen
-        manifest={manifest as ContentManifest}
+        manifest={FIXTURE_MANIFEST}
         formats={SUPPORTED_FORMATS}
         loadProgress={loadProgress}
         postponeOffer={() => Promise.resolve()}
@@ -49,9 +48,8 @@ describe('KartenScreen', () => {
         .getAllByRole('link')
         .map((l) => l.getAttribute('aria-label')),
     ).toEqual(
-      OPEN_BEREICHE.map((b) => `${BEREICH_NAME[b]}, Niveau ${b === 'zahlen-operationen' ? 2 : 1}`),
+      BEREICHE.map((b) => `${BEREICH_NAME[b]}, Niveau ${b === 'zahlen-operationen' ? 2 : 1}`),
     );
-    expect(OPEN_BEREICHE).toContain('zahlen-operationen');
     expect(screen.getByText('Heute: 3 von 10 Fundstücken')).toBeTruthy();
   });
 
@@ -88,7 +86,7 @@ describe('KartenScreen', () => {
     const failing = vi.fn().mockRejectedValue(new Error('blocked'));
     renderScreen(failing);
     const map = (await screen.findAllByRole('group', { name: 'Karte' }))[0]!;
-    expect(within(map).getAllByRole('link')).toHaveLength(OPEN_BEREICHE.length);
+    expect(within(map).getAllByRole('link')).toHaveLength(BEREICHE.length);
     expect(screen.getByText('Heute: 0 von 10 Fundstücken')).toBeTruthy();
     // Nothing could be stored, so the sentence before the first Fundstück would never go.
     expect(screen.queryByText(/bringt dir ein Fundstück/)).toBeNull();
@@ -107,13 +105,12 @@ describe('KartenScreen', () => {
     await screen.findAllByRole('group', { name: 'Karte' });
     const link = screen.getByRole('link', { name: 'Probetest Mathe' });
     expect(link.getAttribute('href')).toBe('/probetest/mathe');
-    // deutsch-01 since task 13.
     const deutsch = screen.getByRole('link', { name: 'Probetest Deutsch' });
     expect(deutsch.getAttribute('href')).toBe('/probetest/deutsch');
   });
 
   it('shows no Probetest line without a Probetest in the manifest', async () => {
-    const without = { ...(manifest as ContentManifest), probetests: { mathe: [], deutsch: [] } };
+    const without = { ...FIXTURE_MANIFEST, probetests: { mathe: [], deutsch: [] } };
     render(
       <MemoryRouter>
         <KartenScreen

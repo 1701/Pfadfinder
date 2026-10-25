@@ -21,7 +21,7 @@ import {
   type Bereich,
   type Fach,
 } from './taxonomy';
-import type { Item, Niveau, Probetest, ReadingText } from './types';
+import type { Item, ItemOf, Niveau, Probetest, ReadingText } from './types';
 import { splitSentences, splitWords } from './units';
 
 export type Severity = 'error' | 'warning';
@@ -99,6 +99,10 @@ export const WITH_TEXT = {
 export const WITH_PICTURE = { maxStimulusSentences: 2 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
+/** Money in the task (§4.3, 1.0.24): the euro sign or the word Euro. */
+const EURO = /€|\bEuro\b/;
+/** An amount with a decimal comma: "2,50". */
+const COMMA_AMOUNT = /\d,\d/;
 
 export function formatIssuePath(path: readonly PropertyKey[]): string {
   return path
@@ -286,6 +290,17 @@ export function validateContent(
       if (delivered === item.solution.orderedIds.join(',')) {
         warn(file, 'payload.items steht bereits in Lösungsreihenfolge (sollte gemischt sein)', item.id, 'payload.items');
       }
+    }
+
+    if (item.format === 'number-input' && !item.payload.allowDecimal) {
+      const text = [item.stimulus?.text, item.prompt, item.readAloud].join(' ');
+      if ((item.payload.unit === '€' || EURO.test(text)) && COMMA_AMOUNT.test(text)) {
+        warn(file, 'Geld mit Komma-Betrag: payload.allowDecimal setzen, sonst bietet der Ziffernblock kein Komma an', item.id, 'payload.allowDecimal');
+      }
+    }
+
+    if (isRechtschreibungBereich(item.bereich) && (item.format === 'find-error' || item.format === 'cloze-select')) {
+      for (const [message, path] of spellingFindings(item)) warn(file, message, item.id, path);
     }
   }
 
@@ -502,6 +517,38 @@ function checkDeutschTexts(items: readonly Item[], report: (message: string, pat
 
 function secondsText(seconds: number): string {
   return String(Math.round(seconds * 10) / 10).replace('.', ',');
+}
+
+/**
+ * find-error and cloze-select in the spelling areas never read a misspelled word (1.0.24): the
+ * app reads the sentence from the solution (a correction per error is a schema rule), so what it
+ * reads before (readAloud, or stimulus and prompt, as readAloudText) must not contain a wrong word.
+ */
+function spellingFindings(item: ItemOf<'find-error'> | ItemOf<'cloze-select'>): [string, string][] {
+  const findings: [string, string][] = [];
+  const wrong =
+    item.format === 'find-error'
+      ? item.payload.words.filter((w) => item.solution.errorIds.includes(w.id)).map((w) => w.text)
+      : item.payload.gaps.flatMap((g) => g.options.filter((o) => o !== item.solution.gaps[g.key]));
+  // What Vorlesen reads besides the sentence (readAloudText): readAloud, or stimulus and prompt.
+  const spoken: [string, string | undefined][] =
+    item.readAloud !== undefined
+      ? [['readAloud', item.readAloud]]
+      : [
+          ['stimulus.text', item.stimulus?.text],
+          ['stimulus.assetAlt', item.stimulus?.assetAlt],
+          ['prompt', item.prompt],
+        ];
+  for (const word of new Set(wrong)) {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`(^|[^\\p{L}])${escaped}([^\\p{L}]|$)`, 'u');
+    for (const [path, text] of spoken) {
+      if (text !== undefined && pattern.test(text)) {
+        findings.push([`Vorlesen enthält das falsch geschriebene Wort "${word}"`, path]);
+      }
+    }
+  }
+  return findings;
 }
 
 /** Limits for items beside a reading text (WITH_TEXT): message and path per finding. */

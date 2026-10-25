@@ -2,14 +2,10 @@
 // Andika from the theme: the SVGs use currentColor and font-family="inherit". Printing later
 // needs no change for the same reason. Safety rules for these files: CONTENT_SCHEMA.md §7.
 
-const sources: Record<string, string> = import.meta.glob('../../../content/assets/svg/*.svg', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-});
+import { ASSET_SOURCES } from './asset-sources';
 
 const byId = new Map(
-  Object.entries(sources).map(([path, svg]) => [path.replace(/^.*\/(.+)\.svg$/, '$1'), svg]),
+  Object.entries(ASSET_SOURCES).map(([path, svg]) => [path.replace(/^.*\/(.+)\.svg$/, '$1'), svg]),
 );
 
 /** Pictures wider than this (width : height) go below the text, narrower ones beside it. */

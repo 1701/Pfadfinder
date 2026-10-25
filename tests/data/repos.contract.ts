@@ -45,7 +45,7 @@ export function repositoryContract(
       await repos.attempts.put(attempt('a1', '2026-10-11T08:01:00.000Z'));
       await repos.attempts.put(
         attempt('a2', '2026-10-11T08:02:00.000Z', {
-          itemId: 'm-gm-2-004',
+          itemId: 'm-gm-2-904',
           bereich: 'groessen-messen',
           format: 'single-choice',
           answer: { optionId: 'a' },
@@ -85,18 +85,18 @@ export function repositoryContract(
         dueAt,
         stage: 1,
       });
-      await repos.reviews.put(entry('m-zo-1-002', '2026-10-13T08:00:00.000Z'));
-      await repos.reviews.put(entry('m-zo-1-001', '2026-10-12T09:00:00.000Z'));
-      await repos.reviews.put(entry('m-zo-1-001', '2026-10-12T08:00:00.000Z'));
-      await repos.reviews.put(entry('m-zo-1-003', '2026-10-14T08:00:00.000Z'));
-      await repos.reviews.put(entry('m-zo-1-004', '2026-10-12T07:00:00.000Z', 'x'));
+      await repos.reviews.put(entry('m-zo-1-904', '2026-10-13T08:00:00.000Z'));
+      await repos.reviews.put(entry('m-zo-1-903', '2026-10-12T09:00:00.000Z'));
+      await repos.reviews.put(entry('m-zo-1-903', '2026-10-12T08:00:00.000Z'));
+      await repos.reviews.put(entry('m-zo-1-905', '2026-10-14T08:00:00.000Z'));
+      await repos.reviews.put(entry('m-zo-1-906', '2026-10-12T07:00:00.000Z', 'x'));
 
-      expect(await repos.reviews.get(learnerId, 'm-zo-1-001')).toMatchObject({
+      expect(await repos.reviews.get(learnerId, 'm-zo-1-903')).toMatchObject({
         dueAt: '2026-10-12T08:00:00.000Z',
       });
       expect(await repos.reviews.listByLearner(learnerId)).toHaveLength(3);
       const due = await repos.reviews.listDueBefore(learnerId, '2026-10-14T08:00:00.000Z');
-      expect(due.map((r) => r.itemId)).toEqual(['m-zo-1-001', 'm-zo-1-002']);
+      expect(due.map((r) => r.itemId)).toEqual(['m-zo-1-903', 'm-zo-1-904']);
     });
 
     it('lists sessions and probetest runs oldest first', async () => {

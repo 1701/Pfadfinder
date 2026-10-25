@@ -92,8 +92,8 @@ describe('learner entity schemas', () => {
     expect(
       paths(probetestRunSchema.safeParse({ ...run, result: { ...run.result!, percent: 50 } })),
     ).toEqual(['result']);
-    expect(paths(probetestRunSchema.safeParse({ ...run, ratings: { 'm-zo-3-002': 0.7 } }))).toEqual(
-      ['ratings.m-zo-3-002'],
+    expect(paths(probetestRunSchema.safeParse({ ...run, ratings: { 'm-zo-3-902': 0.7 } }))).toEqual(
+      ['ratings.m-zo-3-902'],
     );
   });
 

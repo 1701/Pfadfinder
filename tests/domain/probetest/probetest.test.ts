@@ -27,7 +27,7 @@ import { multiChoice, numberInput, order, shortAnswer, singleChoice } from '../.
 // zo, gm, zo, dz: two Bereiche with two items, one with a short answer.
 const ITEMS: Item[] = [numberInput, singleChoice, order, shortAnswer];
 const PROBETEST = {
-  id: 'mathe-01',
+  id: 'mathe-91',
   fach: 'mathe',
   durationMinutes: 45,
   itemIds: ITEMS.map((i) => i.id),
@@ -87,7 +87,7 @@ describe('time', () => {
 
 describe('run', () => {
   it('starts running with an option order fixed by earlier attempts', () => {
-    const run = started([{ itemId: order.id }, { itemId: order.id }, { itemId: 'm-xx-1-001' }]);
+    const run = started([{ itemId: order.id }, { itemId: order.id }, { itemId: 'm-xx-1-901' }]);
     expect(probetestRunSchema.parse(run)).toEqual(run);
     expect(run).toMatchObject({ status: 'running', currentIndex: 0, answers: {}, attemptIds: [] });
     expect(run.attemptIndex).toEqual({
@@ -293,12 +293,12 @@ describe('introState', () => {
   const running = { ...base, id: 'run-3' };
 
   it('"schon gemacht" only after a submitted run, not after an aborted one', () => {
-    expect(introState([aborted], 'mathe-01')).toEqual({
+    expect(introState([aborted], 'mathe-91')).toEqual({
       running: null,
       lastSubmitted: null,
       doneBefore: false,
     });
-    expect(introState([submitted, aborted], 'mathe-01')).toEqual({
+    expect(introState([submitted, aborted], 'mathe-91')).toEqual({
       running: null,
       lastSubmitted: submitted,
       doneBefore: true,
@@ -306,8 +306,8 @@ describe('introState', () => {
   });
 
   it('finds the running run and ignores other Probetests', () => {
-    expect(introState([submitted, running], 'mathe-01').running).toEqual(running);
-    expect(introState([submitted, running], 'mathe-02')).toEqual({
+    expect(introState([submitted, running], 'mathe-91').running).toEqual(running);
+    expect(introState([submitted, running], 'mathe-92')).toEqual({
       running: null,
       lastSubmitted: null,
       doneBefore: false,

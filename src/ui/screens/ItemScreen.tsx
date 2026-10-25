@@ -168,7 +168,10 @@ export function ItemScreen(props: ItemScreenProps) {
         'screen-fit mx-auto grid max-w-page gap-sm px-lg py-sm',
         props.text ? 'item-with-text' : 'grid-rows-[auto_auto_1fr_auto]',
       )}
-      data-format={props.text ? item.format : undefined}
+      // Which item is on screen, for the e2e tests (currentItem); the layout uses data-format only
+      // beside a text (.item-with-text in index.css).
+      data-item-id={item.id}
+      data-format={item.format}
     >
       {props.header ?? <ItemKopf pause={props.pause} progress={props.progress} />}
 

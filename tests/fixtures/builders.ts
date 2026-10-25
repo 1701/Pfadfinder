@@ -96,7 +96,7 @@ export function buildMatheProbetest(): { items: Item[]; probetest: Probetest } {
     }),
   );
   const probetest: Probetest = {
-    id: 'mathe-01',
+    id: 'mathe-91',
     fach: 'mathe',
     durationMinutes: 45,
     itemIds: items.map((i) => i.id),
@@ -139,7 +139,7 @@ export function buildDeutschProbetest(): {
     text.itemIds = items.filter((i) => i.stimulus?.textRef === text.id).map((i) => i.id);
   }
   const probetest: Probetest = {
-    id: 'deutsch-01',
+    id: 'deutsch-91',
     fach: 'deutsch',
     durationMinutes: 45,
     itemIds: items.map((i) => i.id),

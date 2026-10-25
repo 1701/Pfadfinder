@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.23 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.24 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -123,6 +123,7 @@ Mit `stimulus.textRef` (seit 1.0.13): 5 Optionen nur mit einem `prompt` von höc
 payload:  { unit?: string; allowDecimal?: boolean; maxDigits: number }     // Ziffernblock, kein Tastaturzwang
 solution: { value: number; tolerance?: number }                           // tolerance nur bei Schätzaufgaben
 ```
+Geld (seit 1.0.24): Nennt die Aufgabe Euro („€“, „Euro“ oder `unit: "€"`) und steht ein Betrag mit Komma im Text, braucht das Item `allowDecimal: true`, auch bei einer ganzen Lösung (10 €). Sonst bietet der Ziffernblock kein Komma an. Der Validator warnt; eine Kommazahl als Lösung ohne `allowDecimal` ist schon ein Fehler.
 
 ### 4.4 `match`
 ```ts
@@ -223,7 +224,7 @@ Regeln:
 - Lesetexte altersgerecht, abgeschlossen, mit klarem Kern; Items dazu steigen im Niveau: Entnehmen (I) → Verknüpfen (II) → Deuten/Begründen (III)
 - Items zu einem Lesetext verweisen auf Absätze („Lies Absatz 3.“), nie auf Zeilen (§5); `mark-in-text` dazu mit höchstens 4 Sätzen und 200 Zeichen (§4.7), `order` mit höchstens 4 Elementen zu je 30 Zeichen (§4.5), `short-answer` mit `model` bis 90 Zeichen, höchstens 2 `keyPoints` und Rückmeldung (incorrect + misconception) bis 150 Zeichen (§4.9), `single-choice` mit zitiertem `stimulus.text` mit höchstens 3 Optionen (§4.1), `multi-choice` mit 5 Optionen nur bei `prompt` bis 60 Zeichen (§4.2), `match` mit höchstens 3 Paaren, Kartentexten zusammen bis 140 Zeichen und `prompt` bis 60 Zeichen (§4.4). Grundlage ist die Luft über dem Band in allen vier Viewports (mindestens 18 px); darüber ist nichts gemessen. Der Validator warnt nur
 - Rechtschreibung nur mit Grundschul-Regelwissen lösbar (Verlängern, Ableiten, Silben, Wortbausteine, Groß-/Kleinschreibung); keine Ausnahmewörter als Fehlerquelle
-- Falsch geschriebene Wörter werden nie vorgelesen. Bei find-error und cloze-select in den RS-Bereichen liest die App den Satz in richtiger Schreibung aus solution und keine Optionen (Code). Choice-Optionen mit Fehlschreibung tragen ein readAloud mit der korrekten Schreibung. Ein Stimulus mit Fehlschreibung bekommt ein Item-readAloud mit richtiger Schreibung. Der Validator prüft das nicht (seit 1.0.19)
+- Falsch geschriebene Wörter werden nie vorgelesen. Bei find-error und cloze-select in den RS-Bereichen liest die App den Satz in richtiger Schreibung aus solution und keine Optionen (Code). Choice-Optionen mit Fehlschreibung tragen ein readAloud mit der korrekten Schreibung. Ein Stimulus mit Fehlschreibung bekommt ein Item-readAloud mit richtiger Schreibung. Der Validator warnt bei find-error und cloze-select in den RS-Bereichen seit 1.0.24, wenn ein falsch geschriebenes Wort in `readAloud`, `stimulus` oder `prompt` steht; Choice-Optionen prüft er nicht
 - `find-error` enthält pro Satz nur Fehlertypen eines Bereichs
 
 **Niveau**
@@ -251,6 +252,9 @@ Regeln:
 - `incorrect` erklärt den Weg, verrät nicht nur das Ergebnis
 - `misconception` benennt den wahrscheinlichsten Fehler des gewählten Distraktors (bei MC) oder des Formats
 - Ton: freundlich, sachlich, nie ironisch, nie "leider"
+
+**Längen (Richtwerte, seit 1.0.24)**
+- Match-Karten bis 24 Zeichen, `order`-Elemente bis 40, Kurzantwort-Stichpunkte (`keyPoints`) bis 45, `feedback.incorrect` und `feedback.misconception` je bis 90: Erfahrungswerte aus Layout-Befunden 25.10., keine Validator-Regel; was zählt, ist der Sweep ≥ 18 px
 
 **Bilder (`content/assets/svg`)**
 - Die App bettet jedes SVG direkt in die Seite ein. Deshalb gilt, geprüft von `npm run content:validate`: `<svg>` mit `viewBox`; kein `<script>`, `<foreignObject>`, `<style>`, `<image>`, `<iframe>`; keine Event-Attribute (`onload` …); keine Verweise (`href`, `url()`); kein `style`-Attribut

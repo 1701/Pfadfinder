@@ -13,14 +13,12 @@ import { ensureLearner } from '../../src/data/practice';
 import type { Repositories } from '../../src/data/repos';
 import { initialMastery } from '../../src/domain/mastery';
 import { createContentLoader } from '../../src/content-runtime/loader';
-import { OPEN_BEREICHE } from '../fixtures/content-state';
 import { lesenContentModules } from '../fixtures/lesen';
 import { makePool } from '../fixtures/pool';
 import { answerFor, FORMATS, testDeps } from './helpers';
 
-const MATHE_OPEN = OPEN_BEREICHE.filter((b) =>
-  (BEREICHE_BY_FACH.mathe as readonly Bereich[]).includes(b),
-);
+// testDeps: the fixture content, every Bereich practiceable.
+const MATHE_OPEN: readonly Bereich[] = BEREICHE_BY_FACH.mathe;
 const TOTAL = Math.min(CHECK_ITEM_COUNT.mathe, 3 * MATHE_OPEN.length);
 
 /** Answers `count` questions (all when omitted); `correct` gets the item and its index in its Bereich. */
@@ -215,10 +213,7 @@ describe('Einstiegscheck (store + in-memory repositories + real content)', () =>
   });
 
   it('plays the Deutsch check over its practiceable Bereiche, without short answers', async () => {
-    const deutschOpen = OPEN_BEREICHE.filter((b) =>
-      (BEREICHE_BY_FACH.deutsch as readonly Bereich[]).includes(b),
-    );
-    expect(deutschOpen.length).toBeGreaterThanOrEqual(2);
+    const deutschOpen: readonly Bereich[] = BEREICHE_BY_FACH.deutsch;
     const store = createCheckStore(testDeps());
     await store.getState().start('deutsch');
     expect(store.getState().status).toBe('intro');

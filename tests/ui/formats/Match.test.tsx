@@ -7,10 +7,10 @@ import { presentedMatch } from '../../../src/domain/presentation';
 import { emptyTileClass } from '../../../src/ui/formats/choice';
 import { ClozeSelect } from '../../../src/ui/formats/ClozeSelect';
 import { Match } from '../../../src/ui/formats/Match';
-import { contentItem } from '../../fixtures/content-items';
 import { clozeSelect } from '../../fixtures/items';
+import { probeMatch } from '../../fixtures/probe';
 
-const item = contentItem('m-rf-1-004', 'match');
+const item = probeMatch;
 const pool = () => screen.getByRole('group', { name: 'Antworten' });
 const row = (name: string) => screen.getByRole('button', { name });
 const card = (name: string) => within(pool()).getByRole('button', { name });
@@ -21,7 +21,7 @@ function setup() {
   return onChange;
 }
 
-describe('Match (m-rf-1-004)', () => {
+describe('Match (probe: 4 pairs, 1 distractor)', () => {
   it('shows rows and cards in the presented order', () => {
     setup();
     const { right } = presentedMatch(item, 0);
@@ -46,27 +46,25 @@ describe('Match (m-rf-1-004)', () => {
     );
     // Not a grid cell of its own: it sits in the first row's slot.
     expect(sizer.parentElement?.parentElement?.parentElement).toBe(rows);
-    await userEvent.click(row('Würfel'));
+    await userEvent.click(row('Quadrat'));
     expect(rows.querySelectorAll('[data-sizer]')).toHaveLength(1);
   });
 
   it('pairs by tapping a row and then a card, or a card and then a row', async () => {
     const onChange = setup();
-    await userEvent.click(row('Würfel'));
-    expect(row('Würfel').getAttribute('aria-pressed')).toBe('true');
-    await userEvent.click(card('6 gleich große Quadrate'));
-    expect(within(pool()).queryByRole('button', { name: '6 gleich große Quadrate' })).toBeNull();
-    expect(
-      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
-    ).toBeTruthy();
+    await userEvent.click(row('Quadrat'));
+    expect(row('Quadrat').getAttribute('aria-pressed')).toBe('true');
+    await userEvent.click(card('4 gleich lange Seiten'));
+    expect(within(pool()).queryByRole('button', { name: '4 gleich lange Seiten' })).toBeNull();
+    expect(screen.getByRole('button', { name: /4 gleich lange Seiten, bei Quadrat/ })).toBeTruthy();
     expect(onChange).toHaveBeenLastCalledWith(null);
 
-    await userEvent.click(card('rund, rollt in alle Richtungen'));
-    await userEvent.click(row('Kugel'));
-    await userEvent.click(row('Zylinder'));
-    await userEvent.click(card('2 Kreisflächen, rollt zur Seite'));
-    await userEvent.click(row('Kegel'));
-    await userEvent.click(card('1 Kreisfläche und eine Spitze'));
+    await userEvent.click(card('rund, ohne Ecke'));
+    await userEvent.click(row('Kreis'));
+    await userEvent.click(row('Dreieck'));
+    await userEvent.click(card('3 Ecken und 3 Seiten'));
+    await userEvent.click(row('Rechteck'));
+    await userEvent.click(card('2 lange und 2 kurze Seiten'));
 
     const pairs = new Map(onChange.mock.lastCall?.[0].pairs);
     expect(pairs).toEqual(new Map(item.solution.pairs));
@@ -75,24 +73,24 @@ describe('Match (m-rf-1-004)', () => {
       within(pool())
         .getAllByRole('button')
         .map((b) => b.textContent),
-    ).toEqual(['4 Dreiecke und 1 Quadrat']);
+    ).toEqual(['5 Ecken und 5 Seiten']);
   });
 
   it('puts a card back when its filled slot is tapped', async () => {
     const onChange = setup();
-    await userEvent.click(row('Würfel'));
-    await userEvent.click(card('6 gleich große Quadrate'));
+    await userEvent.click(row('Quadrat'));
+    await userEvent.click(card('4 gleich lange Seiten'));
     await userEvent.click(
-      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
+      screen.getByRole('button', { name: /4 gleich lange Seiten, bei Quadrat/ }),
     );
-    expect(card('6 gleich große Quadrate')).toBeTruthy();
+    expect(card('4 gleich lange Seiten')).toBeTruthy();
     expect(onChange).toHaveBeenLastCalledWith(null);
   });
 
   // iPad finding (task 14): the empty field looks like the empty gap of cloze-select.
   it('an empty field looks like an empty cloze gap: "…" in a plain tile, solid line', () => {
     setup();
-    const field = row('Feld für Würfel');
+    const field = row('Feld für Quadrat');
     render(
       <ClozeSelect
         item={clozeSelect}
@@ -113,50 +111,44 @@ describe('Match (m-rf-1-004)', () => {
 
   it('the field itself takes the first tap too; a selected card lights every empty field', async () => {
     const onChange = setup();
-    await userEvent.click(row('Feld für Kugel'));
-    expect(row('Kugel').getAttribute('aria-pressed')).toBe('true');
-    expect(row('Feld für Kugel').className).toContain('border-signal-edge');
-    await userEvent.click(card('rund, rollt in alle Richtungen'));
-    expect(
-      screen.getByRole('button', { name: /rund, rollt in alle Richtungen, bei Kugel/ }),
-    ).toBeTruthy();
+    await userEvent.click(row('Feld für Kreis'));
+    expect(row('Kreis').getAttribute('aria-pressed')).toBe('true');
+    expect(row('Feld für Kreis').className).toContain('border-signal-edge');
+    await userEvent.click(card('rund, ohne Ecke'));
+    expect(screen.getByRole('button', { name: /rund, ohne Ecke, bei Kreis/ })).toBeTruthy();
 
-    await userEvent.click(card('6 gleich große Quadrate'));
-    expect(row('Feld für Würfel').className).toContain('border-signal-edge');
-    await userEvent.click(row('Feld für Würfel'));
-    expect(
-      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
-    ).toBeTruthy();
+    await userEvent.click(card('4 gleich lange Seiten'));
+    expect(row('Feld für Quadrat').className).toContain('border-signal-edge');
+    await userEvent.click(row('Feld für Quadrat'));
+    expect(screen.getByRole('button', { name: /4 gleich lange Seiten, bei Quadrat/ })).toBeTruthy();
     expect(onChange).toHaveBeenLastCalledWith(null);
   });
 
   it('a second tap on the same card or row deselects; another one takes the selection', async () => {
     setup();
-    await userEvent.click(card('6 gleich große Quadrate'));
-    expect(card('6 gleich große Quadrate').getAttribute('aria-pressed')).toBe('true');
-    await userEvent.click(card('6 gleich große Quadrate'));
-    expect(card('6 gleich große Quadrate').getAttribute('aria-pressed')).toBe('false');
+    await userEvent.click(card('4 gleich lange Seiten'));
+    expect(card('4 gleich lange Seiten').getAttribute('aria-pressed')).toBe('true');
+    await userEvent.click(card('4 gleich lange Seiten'));
+    expect(card('4 gleich lange Seiten').getAttribute('aria-pressed')).toBe('false');
 
-    await userEvent.click(row('Würfel'));
-    await userEvent.click(row('Kugel'));
-    expect(row('Würfel').getAttribute('aria-pressed')).toBe('false');
-    expect(row('Kugel').getAttribute('aria-pressed')).toBe('true');
-    await userEvent.click(row('Kugel'));
-    expect(row('Kugel').getAttribute('aria-pressed')).toBe('false');
+    await userEvent.click(row('Quadrat'));
+    await userEvent.click(row('Kreis'));
+    expect(row('Quadrat').getAttribute('aria-pressed')).toBe('false');
+    expect(row('Kreis').getAttribute('aria-pressed')).toBe('true');
+    await userEvent.click(row('Kreis'));
+    expect(row('Kreis').getAttribute('aria-pressed')).toBe('false');
   });
 
   it('a selected card on a filled field takes its place; the other goes back to the pool', async () => {
     setup();
-    await userEvent.click(row('Würfel'));
-    await userEvent.click(card('4 Dreiecke und 1 Quadrat'));
-    await userEvent.click(card('6 gleich große Quadrate'));
+    await userEvent.click(row('Quadrat'));
+    await userEvent.click(card('5 Ecken und 5 Seiten'));
+    await userEvent.click(card('4 gleich lange Seiten'));
     await userEvent.click(
-      screen.getByRole('button', { name: /4 Dreiecke und 1 Quadrat, bei Würfel/ }),
+      screen.getByRole('button', { name: /5 Ecken und 5 Seiten, bei Quadrat/ }),
     );
-    expect(
-      screen.getByRole('button', { name: /6 gleich große Quadrate, bei Würfel/ }),
-    ).toBeTruthy();
-    expect(card('4 Dreiecke und 1 Quadrat')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /4 gleich lange Seiten, bei Quadrat/ })).toBeTruthy();
+    expect(card('5 Ecken und 5 Seiten')).toBeTruthy();
   });
 
   it('nothing moves while disabled, not even a placed card', async () => {
@@ -180,13 +172,11 @@ describe('Match (m-rf-1-004)', () => {
 
   it('works with the keyboard: Enter on a row, then Enter on a card', async () => {
     const onChange = setup();
-    row('Kugel').focus();
+    row('Kreis').focus();
     await userEvent.keyboard('{Enter}');
-    card('rund, rollt in alle Richtungen').focus();
+    card('rund, ohne Ecke').focus();
     await userEvent.keyboard('{Enter}');
-    expect(
-      screen.getByRole('button', { name: /rund, rollt in alle Richtungen, bei Kugel/ }),
-    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: /rund, ohne Ecke, bei Kreis/ })).toBeTruthy();
     expect(onChange).toHaveBeenCalled();
   });
 
@@ -207,8 +197,8 @@ describe('Match (m-rf-1-004)', () => {
     expect(screen.queryByRole('group', { name: 'Antworten' })).toBeNull();
     expect(screen.queryAllByRole('button')).toEqual([]);
     expect(screen.getAllByText(/^Richtig ist:/)).toHaveLength(1);
-    expect(screen.getByText('Würfel – 6 gleich große Quadrate')).toBeTruthy();
-    expect(screen.getByText('Kugel – rund, rollt in alle Richtungen')).toBeTruthy();
+    expect(screen.getByText('Quadrat – 4 gleich lange Seiten')).toBeTruthy();
+    expect(screen.getByText('Kreis – rund, ohne Ecke')).toBeTruthy();
     expect(screen.getAllByText(/\(richtige Antwort\)/)).toHaveLength(2);
     expect(screen.getAllByText(/\(deine Wahl\)/)).toHaveLength(2);
   });
