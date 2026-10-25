@@ -67,7 +67,7 @@
     "headerHeight": 86,
     "mapHeight": 850,
     "air": 12,
-    "minLabelGap": 52.7,
+    "minLabelGap": 50.4,
     "plateToOutline": 15.1,
     "labelToIslandName": 40.9
   },

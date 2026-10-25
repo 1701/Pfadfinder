@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-25 – Content: Batch SU sprache-untersuchen, 20 Items, kein SVG (Branch `su`)
+- **Zip su Fassung 4 (wörtlich):** `items/deutsch/sprache-untersuchen.json` war leer, jetzt der Zip-Inhalt (byte-gleich). Kein Retire, kein Probetest geändert. check.py vorher und `--applied`: 0 Fehler, 1 Warnung (d-su-3-002, bekannt); content:validate 0/0.
+- **Manifest Deutsch I/II/III:** lsa 9/8/4, lli 8/8/4, rsl 8/8/4, rss 8/8/4, su 8/9/3 = 101 aktiv, 0 retired. deutsch-01/02/03 25,98/26,23/24,18 Min. unverändert; Mathe 150/28. CONTENT_SCHEMA §7: Block „Kalibrierung Deutsch – Sprache untersuchen“ (kein Versionssprung).
+- **Abweichung:** `tests/ui/map/Angebot.test.tsx:261` Regex endet jetzt auf „Schreibtricks, Wörter und Sätze.“, sonst nichts an der Datei. Unit 1 083 → 1 086 (MarkInText +3; order prüft su in einer Schleife, kein eigener Fall).
+- **Sweep Fassung 2, 20 Items:** knappste Luft Üben/Durchsehen iPad quer 56/56, iPad hoch 284/244, Safari quer −52/−52, Safari hoch 160/120 px; unter 18 px nur Safari quer d-su-1-003 (−52, Match-Karten überlappen, Layout 50/52) und d-su-3-003 (3).
+- **Abweichung, Patch vor dem Commit (Zip Fassung 4, Entscheidung Markus):** nur d-su-1-003 (kurze Match-Karten, Erklärungen im Stimulus) und d-su-3-003 (order-Elemente ≤ 31 Zeichen) ersetzt. Sweep danach Safari quer 156 bzw. 32 px (vorher −52 / 3), kein Wert unter 18, keine Befunde.
+- **Karte `/`:** Schild-Luft quer 20,1 / 15,3, hoch 50,4 / 42,9 px (iPad/Safari), Rand +2,0 / +2,2 / +15,1 / +13,1, kleinstes Gebiet 146 / 119 / 153 / 131.
+- **Lokal:** `npm run check` grün, Smoke 39/39, Layout mit Schalter 52/52 in 24,6 Min. Committet: karte-angebot-*.png, karte-budget-{ipad,safari}-portrait.json, probetest-karte-*.png; einstieg-ergebnis-deutsch-*, karte-*.png und karte-angebot-budget-* unverändert.
+
 ## 2026-10-25 – SU Phase B: fünfter Deutsch-Bereich `sprache-untersuchen` im Code (Branch `su`)
 - **Gebaut:** Bereich `sprache-untersuchen` (su, „Wörter und Sätze“), leere Datei `items/deutsch/sprache-untersuchen.json`, Manifest. Schema 1.0.22: `PROBETEST_REQUIRED_BEREICHE` (Mathe alle 5, Deutsch die bisherigen 4), su-Items im Deutsch-Probetest nach den Lesen-Blöcken. `CHECK_ITEM_COUNT.deutsch` 15 mit Schutztest für die Lesen-Blöcke. Vorlesen: Rechtschreib-Bereiche aus der Taxonomie.
 - **Karte:** hoch T1, quer W1b aus Phase A; „Sachtexte lesen“ und „Geschichten lesen“ 6 Einheiten tiefer (Rand quer −3,7 → +2,0). `mapLabels` in `tests/e2e/helpers.ts` prüft Schild-Luft (hoch ≥ 18, quer ≥ 15), Rand ≥ 0 und Inselname in `karte.spec` (neu `/dev/karte?alle`) und `einstieg-layout.spec` (neu `ergebnis-deutsch`).

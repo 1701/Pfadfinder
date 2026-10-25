@@ -240,6 +240,12 @@ Regeln:
 - Stimulus 17–30 Wörter; ein Bild trägt die Aufgabe in rund jeder zweiten Teilaufgabe des Tests. Begriffs- und Körperwissen ohne Bild kommt im Test nicht vor und wird nur auf I gepflegt
 - Testmix je 24 Teilaufgaben: zo 8 / rf 6 / gm 5 / ms 3 / dz 2, Niveau 7 / 13 / 4. Der Probetest-Validator verlangt noch 0,4 / 0,4 / 0,2 (§6); die Umstellung kommt mit mathe-03
 
+**Kalibrierung Deutsch – Sprache untersuchen (Kompass 4 2025)**
+- Anker ist der Deutsch-Test 2025 (Aufgabe 14–24), `calibration: "kompass4-2025"`
+- I: Wortart erkennen, Grundform, Steigerung, Satz ↔ Zeitform, zusammengesetztes Nomen
+- II: unregelmäßiges Präteritum, Perfekt, Adjektiv-Endung, Bestimmungswort, Satzglieder (Umstellprobe), Kongruenz
+- III: Wortart begründen, Fehler in fremder Einteilung, Prüfschritte ordnen
+
 **Feedback**
 - `incorrect` erklärt den Weg, verrät nicht nur das Ergebnis
 - `misconception` benennt den wahrscheinlichsten Fehler des gewählten Distraktors (bei MC) oder des Formats

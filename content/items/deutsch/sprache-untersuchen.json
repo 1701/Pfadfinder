@@ -1,1 +1,1078 @@
-[]
+[
+  {
+    "id": "d-su-1-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Verben sagen, was jemand tut. Du kannst sie in die Grundform setzen."
+    },
+    "prompt": "Tippe alle Verben an.",
+    "payload": {
+      "text": "Nach dem Lauf trinkt Elias Wasser und isst einen Apfel",
+      "unit": "word",
+      "maxSelect": 2
+    },
+    "solution": {
+      "indices": [
+        3,
+        7
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! trinkt und isst sagen, was Elias tut. Grundform: trinken, essen.",
+      "incorrect": "Frage bei jedem Wort: Kann jemand das tun? Trinken und essen kann man.",
+      "misconception": "Lauf gehört zu laufen, aber hier ist es ein Nomen: der Lauf. Es sagt nicht, was Elias gerade tut."
+    },
+    "tags": [
+      "wortarten",
+      "verb",
+      "grundform"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Adjektive sagen, wie etwas ist. Du kannst sie steigern: groß, größer, am größten."
+    },
+    "prompt": "Welches Wort ist ein Adjektiv?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "leise"
+        },
+        {
+          "id": "b",
+          "text": "Lampe"
+        },
+        {
+          "id": "c",
+          "text": "lachen"
+        },
+        {
+          "id": "d",
+          "text": "gestern"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! leise sagt, wie etwas ist: leise, leiser, am leisesten.",
+      "incorrect": "Probiere die Steigerung mit jedem Wort. Nur bei einem klappt sie: leise, leiser, am leisesten.",
+      "misconception": "gestern ist auch klein geschrieben. Es sagt aber, wann etwas passiert, und steigern geht nicht."
+    },
+    "tags": [
+      "wortarten",
+      "adjektiv",
+      "steigerung"
+    ],
+    "estimatedSeconds": 30,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Zeitformen heißen Präsens (Gegenwart), Präteritum (schriftliche Vergangenheit) und Perfekt (gesprochene Vergangenheit)."
+    },
+    "prompt": "Ordne jedem Satz seine Zeitform zu.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Oma backt."
+        },
+        {
+          "id": "l2",
+          "text": "Oma backte."
+        },
+        {
+          "id": "l3",
+          "text": "Oma hat gebacken."
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Präsens"
+        },
+        {
+          "id": "r2",
+          "text": "Präteritum"
+        },
+        {
+          "id": "r3",
+          "text": "Perfekt"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! backt ist jetzt. backte ist die schriftliche Vergangenheit, hat gebacken die gesprochene.",
+      "incorrect": "Das Perfekt hat zwei Teile: hat und gebacken. Das Präteritum ist ein Wort mit te: backte.",
+      "misconception": "backte und hat gebacken sind beide Vergangenheit. Zwei Teile heißt Perfekt, ein Wort heißt Präteritum."
+    },
+    "tags": [
+      "zeitformen",
+      "praesens",
+      "praeteritum",
+      "perfekt"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Adjektive kann man steigern. Das Adjektiv hier heißt schnell."
+    },
+    "prompt": "Wähle in beiden Lücken die richtige Steigerung.",
+    "payload": {
+      "template": "Ein Hase ist schnell. Ein Auto ist {1}. Ein Flugzeug ist am {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "schneller",
+            "schnellsten",
+            "mehr schnell"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "schnellsten",
+            "schneller",
+            "schnellesten"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "schneller",
+        "2": "schnellsten"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! schnell, schneller, am schnellsten. Das sind die drei Stufen.",
+      "incorrect": "Die erste Stufe endet auf er. Die zweite Stufe heißt am und endet auf sten.",
+      "misconception": "schnellesten mit e wählen viele, weil es länger klingt. Richtig ist am schnellsten."
+    },
+    "tags": [
+      "adjektiv",
+      "steigerung"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Aus zwei Wörtern kann ein neues Nomen werden. Das hintere Wort sagt, was es ist."
+    },
+    "prompt": "Wähle das passende zusammengesetzte Nomen.",
+    "payload": {
+      "template": "Eine Tür zum Keller ist eine {1}. Ein Beet mit Blumen ist ein {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Kellertür",
+            "Türkeller",
+            "Kellerstür"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "Blumenbeet",
+            "Beetblumen",
+            "Blumebeet"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Kellertür",
+        "2": "Blumenbeet"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Hinten steht, was es ist: eine Tür, ein Beet. Vorn steht, wofür oder womit.",
+      "incorrect": "Frage: Was ist es, eine Tür oder ein Keller? Das Wort, das antwortet, steht hinten.",
+      "misconception": "Türkeller und Beetblumen übernehmen die Reihenfolge aus dem Satz. Das Grundwort steht aber immer hinten."
+    },
+    "tags": [
+      "nomen",
+      "zusammengesetzte-nomen",
+      "grundwort"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Im Satz steht das Verb in einer gebeugten Form: Leyla malte ein Pferd."
+    },
+    "prompt": "Wie heißt die Grundform des Verbs?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "malen"
+        },
+        {
+          "id": "b",
+          "text": "malte"
+        },
+        {
+          "id": "c",
+          "text": "gemalt"
+        },
+        {
+          "id": "d",
+          "text": "Maler"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Die Grundform endet auf en: malen.",
+      "incorrect": "Die Grundform ist die Form aus dem Wörterbuch. Sie endet auf en.",
+      "misconception": "Maler ist ein Nomen: der Maler. Die Grundform eines Verbs endet auf en."
+    },
+    "tags": [
+      "verb",
+      "grundform"
+    ],
+    "estimatedSeconds": 30,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Das Prädikat ist das Verb im Satz. Es sagt, was passiert."
+    },
+    "prompt": "Tippe das Prädikat an.",
+    "payload": {
+      "text": "Der große Hund schläft unter dem alten Tisch",
+      "unit": "word",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        3
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! schläft ist das Prädikat. Es antwortet auf: Was tut der Hund?",
+      "incorrect": "Frage: Was tut der Hund? Das Wort, das antwortet, ist das Prädikat.",
+      "misconception": "Hund wählen viele, weil der Satz von ihm handelt. Das ist das Subjekt. Das Prädikat sagt, was er tut."
+    },
+    "tags": [
+      "satzglieder",
+      "praedikat"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "text": "Nomen, Verb und Adjektiv sind drei Wortarten."
+    },
+    "prompt": "Ordne jedem Wort seine Wortart zu.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Brücke"
+        },
+        {
+          "id": "l2",
+          "text": "springen"
+        },
+        {
+          "id": "l3",
+          "text": "mutig"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Nomen"
+        },
+        {
+          "id": "r2",
+          "text": "Verb"
+        },
+        {
+          "id": "r3",
+          "text": "Adjektiv"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! die Brücke ist ein Nomen. springen sagt, was man tut. mutig sagt, wie jemand ist.",
+      "incorrect": "Nomen: der, die oder das davor. Verb: endet auf en und sagt, was man tut. Adjektiv: lässt sich steigern.",
+      "misconception": "springen und mutig verwechseln manche. mutig kann man steigern: mutiger. springen kann man nicht steigern."
+    },
+    "tags": [
+      "wortarten",
+      "nomen",
+      "verb",
+      "adjektiv"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Der Text steht im Präteritum (schriftliche Vergangenheit). Die Verben heißen fahren und essen."
+    },
+    "prompt": "Wähle in beiden Lücken das Verb im Präteritum.",
+    "payload": {
+      "template": "Gestern {1} wir mit dem Zug nach Stuttgart. Dort {2} wir ein Eis.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "fuhren",
+            "fahrten",
+            "fahren"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "aßen",
+            "essten",
+            "essen"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "fuhren",
+        "2": "aßen"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! fahren wird zu fuhren, essen zu aßen. Bei diesen Verben ändert sich der Selbstlaut.",
+      "incorrect": "Sprich den Satz mit gestern. Bei fahren und essen gibt es kein te, der Selbstlaut im Wort ändert sich.",
+      "misconception": "fahrten und essten sind nach dem Muster spielte gebaut. fahren und essen sind unregelmäßig: fuhren, aßen."
+    },
+    "tags": [
+      "zeitformen",
+      "praeteritum",
+      "unregelmaessige-verben"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ein Satzglied kannst du im Satz verschieben, es bleibt zusammen. Der Satz: Nach der Schule spielt Amira mit ihrer Katze im Garten."
+    },
+    "prompt": "Welche Wortgruppen sind ein Satzglied? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nach der Schule"
+        },
+        {
+          "id": "b",
+          "text": "mit ihrer Katze"
+        },
+        {
+          "id": "c",
+          "text": "Schule spielt"
+        },
+        {
+          "id": "d",
+          "text": "Katze im"
+        },
+        {
+          "id": "e",
+          "text": "im Garten"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "b",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Diese drei kannst du verschieben: Im Garten spielt Amira nach der Schule mit ihrer Katze.",
+      "incorrect": "Mach die Umstellprobe: Stelle die Wortgruppe an den Satzanfang. Bleibt der Satz richtig, ist sie ein Satzglied.",
+      "misconception": "Schule spielt klingt zusammengehörig. Am Satzanfang geht es nicht: Schule spielt Amira ist kein Satz."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "text": "Der Satz heißt: Jonas baut am Samstag ein Vogelhaus."
+    },
+    "prompt": "Stelle die Satzglieder so um, dass der Satz mit Am Samstag beginnt.",
+    "payload": {
+      "items": [
+        {
+          "id": "c",
+          "text": "Jonas"
+        },
+        {
+          "id": "a",
+          "text": "Am Samstag"
+        },
+        {
+          "id": "d",
+          "text": "ein Vogelhaus."
+        },
+        {
+          "id": "b",
+          "text": "baut"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Am Samstag baut Jonas ein Vogelhaus. Das Prädikat bleibt an zweiter Stelle.",
+      "incorrect": "In einem Aussagesatz steht das Prädikat an zweiter Stelle. Was kommt also direkt nach Am Samstag?",
+      "misconception": "Am Samstag Jonas baut ein Vogelhaus wählen viele. Beim Umstellen rückt das Verb nach vorn, Jonas dahinter."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "praedikat"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Adjektive heißen müde und warm. Vor einem Nomen bekommen sie eine Endung."
+    },
+    "prompt": "Wähle in beiden Lücken die passende Form.",
+    "payload": {
+      "template": "Die {1} Kinder trinken eine {2} Milch.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "müden",
+            "müde",
+            "müdes"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "warme",
+            "warmen",
+            "warm"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "müden",
+        "2": "warme"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Die müden Kinder, eine warme Milch. Das Adjektiv passt sich dem Nomen an.",
+      "incorrect": "Sprich den Satz mit jeder Form laut. Nur eine klingt richtig: die müden Kinder, eine warme Milch.",
+      "misconception": "warm ohne Endung wählen manche, weil es so im Kasten steht. Vor dem Nomen braucht das Adjektiv eine Endung."
+    },
+    "tags": [
+      "adjektiv",
+      "adjektiv-endung"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Das Wort Waschmaschine besteht aus zwei Teilen. Der vordere Teil Wasch ist das Bestimmungswort."
+    },
+    "prompt": "Zu welcher Wortart gehört das Bestimmungswort?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Verb: waschen"
+        },
+        {
+          "id": "b",
+          "text": "Nomen: die Wäsche"
+        },
+        {
+          "id": "c",
+          "text": "Adjektiv: nass"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Eine Maschine, die wäscht. Im Bestimmungswort steckt das Verb waschen.",
+      "incorrect": "Welches Wort steckt in Wasch? Setze en dran. Wenn ein Verb entsteht, ist es ein Verb.",
+      "misconception": "Wäsche ist ein Nomen aus derselben Wortfamilie. Im Wort steckt aber wasch wie in waschen, nicht Wäsche mit ä."
+    },
+    "tags": [
+      "zusammengesetzte-nomen",
+      "bestimmungswort",
+      "wortarten"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-006",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Jeder Satz soll so enden: holen die Bälle."
+    },
+    "prompt": "Welche Satzanfänge passen dazu? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Die Kinder"
+        },
+        {
+          "id": "b",
+          "text": "Mia"
+        },
+        {
+          "id": "c",
+          "text": "Wir"
+        },
+        {
+          "id": "d",
+          "text": "Der Trainer"
+        },
+        {
+          "id": "e",
+          "text": "Leyla und Ben"
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! holen passt zu mehreren: die Kinder, wir, Leyla und Ben. Mia allein holt.",
+      "incorrect": "Sprich jeden Anfang mit holen die Bälle. Bei einer einzelnen Person heißt es holt.",
+      "misconception": "Leyla und Ben lassen manche weg, weil jeder Name Einzahl ist. Zusammen sind es zwei: sie holen."
+    },
+    "tags": [
+      "satzglieder",
+      "subjekt",
+      "praedikat",
+      "kongruenz"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-007",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Der Satz erzählt von gestern. Ein Verb steht in der Gegenwart, das passt nicht."
+    },
+    "prompt": "Tippe das Verb an, das nicht passt.",
+    "payload": {
+      "text": "Gestern packte Amira ihre Tasche und geht dann zum Bus",
+      "unit": "word",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        6
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! geht ist Gegenwart. Zu gestern passt: ging.",
+      "incorrect": "Suche die beiden Verben: packte und geht. Welches steht in der Gegenwart?",
+      "misconception": "packte tippen manche an, weil es ungewohnt klingt. packte ist aber richtig: Präteritum von packen."
+    },
+    "tags": [
+      "zeitformen",
+      "praeteritum",
+      "praesens",
+      "fehler-finden"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-008",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mit der Umstellprobe findest du die Satzglieder. Der Satz: Am Abend liest Opa den Kindern eine Geschichte."
+    },
+    "prompt": "Wie viele Satzglieder hat der Satz?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "5"
+        },
+        {
+          "id": "b",
+          "text": "4"
+        },
+        {
+          "id": "c",
+          "text": "7"
+        },
+        {
+          "id": "d",
+          "text": "3"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Am Abend, liest, Opa, den Kindern, eine Geschichte: fünf Satzglieder.",
+      "incorrect": "Stelle um: Opa liest den Kindern am Abend eine Geschichte. Jede Gruppe, die zusammen wandert, ist ein Satzglied.",
+      "misconception": "7 zählt jedes Wort einzeln. Am Abend wandert nur zusammen, das ist ein Satzglied."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Das Perfekt hat zwei Teile: haben oder sein und das Verb am Satzende. Das Verb heißt lesen."
+    },
+    "prompt": "Wähle beide Teile des Perfekts.",
+    "payload": {
+      "template": "Ich {1} ein Buch {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "habe",
+            "bin",
+            "hatte"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "gelesen",
+            "gelest",
+            "las"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "habe",
+        "2": "gelesen"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Ich habe gelesen: habe vorn, gelesen am Ende.",
+      "incorrect": "Das Perfekt braucht zwei Teile. Vorn habe, am Ende die Form mit ge.",
+      "misconception": "las ist Präteritum, nur ein Wort. Das Perfekt hat zwei Teile: habe gelesen."
+    },
+    "tags": [
+      "zeitformen",
+      "perfekt"
+    ],
+    "estimatedSeconds": 50,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-3-001",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias sagt: Im Satz Der Weg ist steil ist steil ein Adjektiv."
+    },
+    "prompt": "Erkläre, woran Elias das erkennen kann.",
+    "payload": {
+      "maxChars": 140,
+      "hint": "Was sagt das Wort aus? Was kannst du mit dem Wort machen?"
+    },
+    "solution": {
+      "model": "steil sagt, wie der Weg ist. Man kann es steigern: steil, steiler, am steilsten.",
+      "keyPoints": [
+        "Sagt, wie etwas ist",
+        "Lässt sich steigern"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Adjektive sagen, wie etwas ist, und man kann sie steigern.",
+      "incorrect": "Zwei Proben helfen: Sagt das Wort, wie etwas ist? Kannst du es steigern: steiler, am steilsten?",
+      "misconception": "Viele schreiben nur: Es ist klein geschrieben. Das gilt auch für Verben. Entscheidend ist die Steigerung."
+    },
+    "tags": [
+      "wortarten",
+      "adjektiv",
+      "steigerung",
+      "begruenden"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-3-002",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia teilt den Satz so in Satzglieder: Am Morgen / füttert Ben / die Hühner / im Hof."
+    },
+    "prompt": "Welcher Fehler steckt in Mias Einteilung?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "füttert Ben sind zwei Satzglieder: füttert und Ben."
+        },
+        {
+          "id": "b",
+          "text": "im Hof ist kein Satzglied."
+        },
+        {
+          "id": "c",
+          "text": "Am Morgen gehört zu füttert."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Genau: Ben ist das Subjekt, füttert das Prädikat. Beide wandern getrennt: Ben füttert am Morgen die Hühner im Hof.",
+      "incorrect": "Stelle den Satz um: Ben füttert am Morgen die Hühner im Hof. Welche zwei Wörter sind jetzt getrennt?",
+      "misconception": "im Hof streichen manche, weil der Satz auch ohne es geht. Weglassen können heißt nicht: kein Satzglied."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "subjekt",
+      "praedikat",
+      "fehler-finden"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-3-003",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 3,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben prüft, ob mit dem Fahrrad ein Satzglied ist. Der Satz: Mia fährt mit dem Fahrrad zur Schule."
+    },
+    "prompt": "Bringe seine Schritte in die richtige Reihenfolge.",
+    "payload": {
+      "items": [
+        {
+          "id": "c",
+          "text": "Er prüft: Der Satz stimmt noch."
+        },
+        {
+          "id": "a",
+          "text": "Er wählt: mit dem Fahrrad."
+        },
+        {
+          "id": "d",
+          "text": "Er weiß: Es ist ein Satzglied."
+        },
+        {
+          "id": "b",
+          "text": "Er stellt es an den Satzanfang."
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Wählen, umstellen, prüfen, entscheiden. Mit dem Fahrrad fährt Mia zur Schule.",
+      "incorrect": "Womit fängt Ben an? Erst braucht er die Wortgruppe. Ganz zuletzt weiß er das Ergebnis.",
+      "misconception": "Viele setzen das Prüfen vor das Umstellen. Prüfen kann man aber erst den umgestellten Satz."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "strategie-schritte"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-25",
+      "calibration": "kompass4-2025"
+    }
+  }
+]

@@ -258,7 +258,7 @@ describe('Einstieg offer on the map', () => {
       renderScreen();
       await screen.findByRole('heading', { name: 'Unerforscht: Mathe' });
       expect(await spoken(synth)).toMatch(
-        /^Unerforscht: Mathe\. Tippe auf Erkunden, oder wähle gleich ein Gebiet: Zahlen und Rechnen, .*Schreibtricks\.$/,
+        /^Unerforscht: Mathe\. Tippe auf Erkunden, oder wähle gleich ein Gebiet: Zahlen und Rechnen, .*Schreibtricks, Wörter und Sätze\.$/,
       );
     });
 
