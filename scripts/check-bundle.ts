@@ -34,6 +34,8 @@ for (const file of files) {
     'ProbetestLaufPage',
     '/dev/text',
     'TextPage',
+    '/dev/format',
+    'FormatPage',
     'Baumeister am Bach',
   ]) {
     if (text.includes(marker)) errors.push(`${file}: enthält Entwicklerseite ("${marker}")`);

@@ -4,6 +4,12 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.25 – 2026-10-25
+- Neues Format `segment-text` (§4.10, zehntes Format, §3/§4): Das Kind setzt Trennstriche zwischen die Wörter eines Satzes („Satzglieder“). `payload { text, unit: "word" | "letter" }`, `solution { boundaries }` mit 0-basierten Lücken (Lücke k nach Wort k von `splitUnits(text, "word")`). Grund: Kompass 4 Deutsch 2024 und 2025 enden mit „Kreise alle Satzglieder ein“; `mark-in-text` markiert Wörter, keine Grenzen. Fehler im Validator: `boundaries` nicht aufsteigend, doppelt, außerhalb 0…n−2 oder Anzahl außerhalb 1…n−2 (Schema), `unit: "letter"` (Renderer nicht gebaut), `stimulus.textRef` oder `stimulus.assetId` (integrity). Warnung über dem Richtwert 14 Wörter / 85 Zeichen (gemessen, §4.10). Keine Mischung zur Laufzeit.
+- §5 ReadingText: `itemIds` 4–7 statt 4–6.
+- §6 Deutsch-Probetest: 1 oder 2 Texte statt genau 2 (bei zweien verschiedene `kind`); er endet mit Rechtschreibung **oder** Sprache untersuchen. `PROBETEST_REQUIRED_BEREICHE` bleibt: Ein Probetest mit einem Text braucht bis zum Neu-Mischen weiter 2 Items aus `lesen-literarisch`. Grund: Kompass 4 Deutsch 2024 und 2025 haben je genau einen Lesetext (Sachtext) und enden mit Sprache untersuchen.
+- Nur Lockerungen und ein neues Format: Alle Items und alle sechs Probetests bleiben gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.24 – 2026-10-25
 - §7 Deutsch, Rechtschreibung: Der Validator warnt bei find-error und cloze-select in den RS-Bereichen, wenn ein falsch geschriebenes Wort (Fehlerwort oder falsche Lückenoption) in `readAloud`, `stimulus` oder `prompt` steht; Choice-Optionen prüft er nicht (vorher: „Der Validator prüft das nicht“, 1.0.19). Grund: Aufgabe F, die Pool-Prüfung stand bisher in einem Unit-Test über alle Rechtschreib-Items. Pool heute 0 Treffer (15 Items). Die Korrektur je Fehlerwort prüft das Schema schon.
 - §4.3 Geld: Nennt die Aufgabe Euro und steht ein Betrag mit Komma im Text, braucht das Item `allowDecimal`, auch bei ganzer Lösung (10 €); der Validator warnt. Grund wie oben, bisher eine Werteliste im NumberInput-Test. Pool heute 0 Treffer.

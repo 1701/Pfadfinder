@@ -1,5 +1,5 @@
 // The probe set must stay valid content under every rule of content:validate (0 errors and
-// 0 warnings), one item for each of the seven formats it covers.
+// 0 warnings), one item for each of the eight formats it covers.
 import { describe, expect, it } from 'vitest';
 import { validateContent } from '../../src/domain/content';
 import { toFiles } from './builders';

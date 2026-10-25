@@ -295,6 +295,40 @@ const markInTextItem = z
     });
   });
 
+/**
+ * Since schema 1.0.25: the child sets dividers between the words of a sentence ("Satzglieder").
+ * boundaries[k] = gap after unit k; units come from splitUnits(text, "word") like mark-in-text.
+ * unit "letter" has no splitter and no renderer yet: here only order and duplicates, integrity.ts
+ * reports it as an error.
+ */
+const segmentTextItem = z
+  .strictObject({
+    ...itemBase,
+    format: z.literal('segment-text'),
+    payload: z.strictObject({
+      text,
+      unit: z.enum(['word', 'letter']),
+    }),
+    solution: z.strictObject({ boundaries: z.array(z.number().int().nonnegative()) }),
+  })
+  .superRefine((item, ctx) => {
+    const { boundaries } = item.solution;
+    if (new Set(boundaries).size !== boundaries.length) fail(ctx, ['solution', 'boundaries'], 'Doppelte Lücken');
+    if (boundaries.some((b, i) => i > 0 && b <= (boundaries[i - 1] ?? -1))) {
+      fail(ctx, ['solution', 'boundaries'], 'boundaries müssen aufsteigend sortiert sein');
+    }
+    if (item.payload.unit !== 'word') return;
+    const n = splitUnits(item.payload.text, 'word').length;
+    boundaries.forEach((b, i) => {
+      if (b > n - 2) {
+        fail(ctx, ['solution', 'boundaries', i], `Lücke ${b} liegt außerhalb des Satzes (${n} Wörter, Lücken 0–${n - 2})`);
+      }
+    });
+    if (boundaries.length < 1 || boundaries.length > n - 2) {
+      fail(ctx, ['solution', 'boundaries'], `${boundaries.length} Lücken, erlaubt sind 1–${Math.max(n - 2, 0)} (${n} Wörter)`);
+    }
+  });
+
 const findErrorItem = z
   .strictObject({
     ...itemBase,
@@ -359,6 +393,7 @@ export const FORMATS = [
   'mark-in-text',
   'find-error',
   'short-answer',
+  'segment-text',
 ] as const;
 export const formatSchema = z.enum(FORMATS);
 
@@ -373,6 +408,7 @@ export const itemSchema = z
     markInTextItem,
     findErrorItem,
     shortAnswerItem,
+    segmentTextItem,
   ])
   .superRefine((item, ctx) => {
     if (fachOfBereich(item.bereich) !== item.fach) {
@@ -401,7 +437,7 @@ export const readingTextSchema = z
     wordCount: z.number().int().min(150).max(250),
     paragraphs: z.array(text).min(1),
     readAloud: z.boolean(),
-    itemIds: z.array(z.string().regex(ITEM_ID_PATTERN)).min(4).max(6),
+    itemIds: z.array(z.string().regex(ITEM_ID_PATTERN)).min(4).max(7),
   })
   .superRefine((t, ctx) => {
     const expectedPrefix = t.kind === 'sachtext' ? 't-sach-' : 't-lit-';

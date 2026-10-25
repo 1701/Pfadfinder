@@ -12,6 +12,7 @@ import { FindError } from './FindError';
 import { MarkInText } from './MarkInText';
 import { MultiChoice } from './MultiChoice';
 import { NumberInput } from './NumberInput';
+import { SegmentText } from './SegmentText';
 import { ShortAnswer } from './ShortAnswer';
 import { SingleChoice } from './SingleChoice';
 import type { FormatProps } from './types';
@@ -80,6 +81,7 @@ export const formatRegistry: { [F in Format]: FormatEntry<F> } = {
     bandNote: (item) => ({ label: T.correction, text: corrections(item) }),
   },
   'short-answer': { component: ShortAnswer, selfRated: true, submitLabel: 'Vergleichen' },
+  'segment-text': { component: SegmentText },
 };
 
 /** The entry of an item's format, without a format switch at the call site. */

@@ -7,7 +7,8 @@
 //   zahlen-operationen.
 // - Deutsch: lesen-sachtext with t-sach-900/901 (fixtures/lesen), lesen-literarisch with
 //   t-lit-900 (4 items) and t-lit-902 (6 items), the spelling items of deutsch-90 on top of
-//   makePool in both spelling Bereiche, makePool in sprache-untersuchen.
+//   makePool in both spelling Bereiche, makePool in sprache-untersuchen plus its segment-text
+//   item of deutsch-90.
 // - Probetests: mathe-91 (20 items, 8/8/4, a short answer as item 20), mathe-92 (the same items
 //   backwards) and deutsch-90.
 // Every Bereich has at least MIN_ITEMS_FOR_PRACTICE items, so the map opens all ten.
@@ -31,7 +32,15 @@ import type { ContentManifest } from '../../src/domain/content/manifest';
 import { MIN_ITEMS_FOR_PRACTICE } from '../../src/domain/scheduler';
 import { cloneItem, itemId, mixesOf } from './builders';
 import { findError, numberInput, sachtext, shortAnswer } from './items';
-import { DEUTSCH_90, LESEN_ITEMS, LESEN_TEXTS, litItems, litText, spellingItems } from './lesen';
+import {
+  DEUTSCH_90,
+  LESEN_ITEMS,
+  LESEN_TEXTS,
+  litItems,
+  litText,
+  spellingItems,
+  suSegmentItem,
+} from './lesen';
 import { makePool } from './pool';
 
 const MATHE = BEREICHE_BY_FACH.mathe;
@@ -75,6 +84,7 @@ const deutschItems: Item[] = [
   ...lit2Items,
   ...makePool('deutsch', 4, ['rs-laut-buchstabe', 'rs-strategien', 'sprache-untersuchen']),
   ...spellingItems,
+  suSegmentItem,
 ];
 
 export const FIXTURE_ITEMS: Item[] = [...matheItems, ...deutschItems];

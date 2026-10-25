@@ -84,6 +84,8 @@ const speakers: { [F in Item['format']]: Speaker<F> } = {
       : `${T.answers} ${splitUnits(item.payload.text, 'sentence').join(' ')}`,
   'find-error': (item) => `${T.answers} ${units(item.payload.words.map((w) => w.text))}`,
   'short-answer': (item) => (item.payload.hint ? `${T.hint} ${sentence(item.payload.hint)}` : ''),
+  // The sentence read as a sentence: no "Antworten", no gaps, nothing mixed (its order is the task).
+  'segment-text': (item) => sentence(item.payload.text),
 };
 
 /** The answers part on its own ("Antworten: …"); empty for number-input. */

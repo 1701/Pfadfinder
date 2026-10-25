@@ -99,6 +99,11 @@
   .druck-markieren {
     line-height: 2.2;
   }
+  /* segment-text: wide word spaces, so the child can circle every group of words. */
+  .druck-segmentieren {
+    line-height: 2.4;
+    word-spacing: 6mm;
+  }
   .druck .content-asset > svg {
     height: 40mm;
   }

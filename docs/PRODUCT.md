@@ -64,7 +64,7 @@ Jedes Item ist genau einem **Bereich** zugeordnet. Bereiche sind das Rückgrat v
 
 **Deutsch**
 1. Lesen – Sachtext (Informationen entnehmen, Textsorte erkennen)
-2. Lesen – literarischer Text (Figuren, Handlung, Schlussfolgern, Wirkung)
+2. Lesen – literarischer Text (Figuren, Handlung, Schlussfolgern, Wirkung): ein Übungsbereich ohne Testanteil (seit 2026-10-25). Befund: Die Kompass-4-Deutsch-Tests 2024 und 2025 haben je genau einen Lesetext, beide Male einen Sachtext. Im Probetest bleibt der Bereich Pflicht, bis die Deutsch-Probetests neu gemischt sind (CONTENT_SCHEMA §6)
 3. Rechtschreibung – Laut-Buchstaben (Dehnung, Doppelkonsonant, s-Laute, Auslautverhärtung)
 4. Rechtschreibung – Strategien (Groß-/Kleinschreibung, Wortbausteine, Ableiten/Verlängern, Fehler finden)
 5. Sprache untersuchen (Wortarten, Satzglieder, Zeitformen), auf der Karte „Wörter und Sätze“ – im MVP seit 2026-10-25 (vorher v1.1). Grund: Im Kompass-4-Deutsch-Test 2025 sind Aufgabe 14–24 (11 von 24) Sprache untersuchen. Im Probetest ist der Bereich noch nicht Pflicht, bis die Deutsch-Probetests neu gemischt sind (CONTENT_SCHEMA §6)
@@ -92,6 +92,7 @@ Nur Formate, die im Papiertest tatsächlich vorkommen oder deren Denkweise train
 | Lückentext (Auswahl) | Tap | ja |
 | Im Text markieren (Wort/Satz) | Tap | ja |
 | Fehler finden (Rechtschreibung) | Tap aufs falsche Wort | ja |
+| Satz teilen (Trennstriche, z. B. Satzglieder; seit 2026-10-25, `segment-text`) | Tap auf die Lücke zwischen zwei Wörtern | ja |
 | Kurzantwort / Begründung | Freitext | **nein** – "Vergleichen" zeigt Musterlösung und Kernpunkte, dann "Hast du es getroffen?" Getroffen / Teils / Noch nicht |
 
 Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
@@ -112,6 +113,7 @@ Kein Format darf Tippen auf einer Volltastatur erfordern, außer Kurzantwort.
    - *Zeit:* verbleibende Minuten rechts im Kopf, ohne Sekunden, kein Rot, keine Animation; ab 5 Minuten ersetzt „Noch 5 Minuten“ … „Noch 1 Minute“ die Anzeige. Die Zeit läuft nach Wanduhr ab Start, auch über Neuladen und Hintergrund. Endet sie, während die App genutzt wird, folgt die Auswertung; war die App weg, ist der Lauf ohne Auswertung vorbei und das Intro zeigt sich normal. Keine Pause.
    - *Ablauf:* kein Feedback, kein Band, keine „Falle“. Jedes Item hat „Zurück“ und „Weiter“, der Kopf links leise „Übersicht“, mittig „7 von 24“. „Weiter“ beim letzten Item führt in die Übersicht (Wegstriche antippbar, beantwortet/offen, Ring an der Aufgabe, von der das Kind kommt). Im Band links „Weitermachen“ (zurück zu dieser Aufgabe), rechts „Abgeben“; gelb ist „Weitermachen“, solange Aufgaben offen sind, sonst „Abgeben“. Die Rückfrage bei offenen Items („Noch N Aufgaben sind offen.“) bietet „Abgeben“ und gelb „Weitermachen“ (zurück in die Übersicht). „Zur Karte“ in der Übersicht fragt „Dann ist der Probetest vorbei.“ und bricht ab. Kurzantworten werden nur eingegeben. Vorlesen ist in Mathe an; Deutsch schaltet es für Lesetexte ab.
    - *Auswertung:* je Bereich „gelöst von gesamt“ als Wegstriche und Zahl, darunter gesamt; kein Prozent, keine Note, kein Vergleich. Offene Items zählen als nicht gelöst. Eingetragene Kurzantworten erscheinen als gestrichelter Strich (wie unerforschte Gebiete), darunter die Legende „gestrichelt: noch nicht verglichen“ und ein leiser Knopf „N Antworten vergleichen“ (seit Aufgabe 11), der nur die wartenden Kurzantworten durchsehen lässt; nach der letzten Einschätzung führt „Zur Auswertung“ (gelb) zurück; nach der Selbsteinschätzung zählt „Getroffen“ als gelöst, „Teils“ und „Noch nicht“ nicht. „Durchsehen“ zeigt jedes Item mit eigener Antwort, Lösung und dem normalen Band inkl. „Falle“, mit „Zurück“ links neben „Weiter“ (nicht beim ersten Item) und leise „Zur Auswertung“ oben links, „Übersicht“ oben rechts. Die Übersicht im Durchsehen zeigt alle Striche (gelöst gefüllt, wartend gestrichelt, sonst leer, Legende nur für die ersten beiden); ein Tipp springt hin und beendet den Filter, „Weiter durchsehen“ kehrt zurück. Ein Item ohne Antwort zeigt „Hier fehlt deine Antwort.“ und die Erklärung, ohne „Falle“.
+   - *Aufbau Deutsch* (seit 2026-10-25, CONTENT_SCHEMA 1.0.25): Gültig ist auch der Aufbau des echten Tests: ein Sachtext mit bis zu 7 Aufgaben, kein literarischer Text, dann Rechtschreibung, am Ende Sprache untersuchen (endet mit „Kreise alle Satzglieder ein“). Bis zum Neu-Mischen braucht ein solcher Probetest noch 2 Aufgaben aus „Geschichten lesen“ ohne eigenen Text.
    - Probetest-Antworten verändern weder Niveau noch Fehlerkiste noch Tagesziel.
    - *Druck:* `/probetest/:id/print`, nur per Adresse, kein Link auf Kinder-Screens: Aufgabenblatt wie ein Papiertest (Zahlenaufgaben mit etwa 4 cm Rechenplatz vor dem Ergebniskästchen), Lösungsblatt auf eigener Seite, A4 hoch.
 

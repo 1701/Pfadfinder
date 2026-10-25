@@ -36,8 +36,8 @@ Du gestaltest für Kinder von 9 bis 10 Jahren, die sich auf einen Test vorbereit
 ## Eingabe
 - Touch-Ziele ≥ 48 px, Fokus sichtbar, jedes Bild mit `alt`
 - Zahlen über den Ziffernblock, nie über die Systemtastatur; Komma nur bei `allowDecimal`, nie Punkt
-- Optionen und Elemente werden deterministisch gemischt (Seed: itemId + attemptIndex), außer bei `payload.keepOrder: true` (Bildbeschriftungen A–D)
-- `mark-in-text` nutzt zwingend `splitUnits()` aus `src/domain/content/units.ts`
+- Optionen und Elemente werden deterministisch gemischt (Seed: itemId + attemptIndex), außer bei `payload.keepOrder: true` (Bildbeschriftungen A–D) und bei `segment-text` (die Reihenfolge ist der Satz)
+- `mark-in-text` und `segment-text` nutzen zwingend `splitUnits()` aus `src/domain/content/units.ts`
 
 ## Arbeitsweise bei UI-Aufgaben
 1. Token-Plan oder Wireframe zuerst, gegen dieses Dokument prüfen, dann bauen.

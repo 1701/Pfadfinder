@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.24 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.25 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -64,7 +64,7 @@ type Item = {
   fach: "mathe" | "deutsch";
   bereich: Bereich;                 // Kürzel-Langform, z. B. "zahlen-operationen"
   niveau: 1 | 2 | 3;                // IQB: I Reproduzieren, II Zusammenhänge, III Reflektieren
-  format: Format;                   // s. Abschnitt 4
+  format: Format;                   // eins der 10 Formate aus Abschnitt 4 (segment-text seit 1.0.25)
   status: "draft" | "piloted" | "approved" | "retired";
 
   stimulus?: {                      // optionaler Kontext vor der Frage
@@ -97,6 +97,8 @@ type Item = {
 ```
 
 ## 4. Formate: Payload und Solution
+
+Zehn Formate: `single-choice`, `multi-choice`, `number-input`, `match`, `order`, `cloze-select`, `mark-in-text`, `find-error`, `short-answer`, `segment-text` (seit 1.0.25). Optionen und Elemente mischt die App deterministisch (Seed: Item-ID + Versuch), außer bei `keepOrder: true` (§4.1) und bei `segment-text` (§4.10: Die Reihenfolge ist der Satz).
 
 ### 4.1 `single-choice`
 ```ts
@@ -171,6 +173,30 @@ Mit `stimulus.textRef` (seit 1.0.13): `model` höchstens 90 Zeichen, höchstens 
 
 Mit Bild (`stimulus.assetId`) nicht erlaubt (seit 1.0.21), bis das Band umgebaut ist (PRODUCT §11). Grund: m-rf-3-008 hatte in Durchsehen Safari hoch nur 2 px Luft, obwohl `model` mit 80 und `incorrect` + `misconception` mit 114 Zeichen unter den Grenzen am Lesetext lagen. Der Validator meldet einen Fehler.
 
+### 4.10 `segment-text` (seit 1.0.25)
+```ts
+payload:  { text: string; unit: "word" | "letter" }
+solution: { boundaries: number[] }   // 0-basierte Lückenindizes: Lücke k liegt zwischen Einheit k und k+1
+```
+Das Kind setzt Trennstriche zwischen die Wörter eines Satzes, z. B. für „Kreise alle Satzglieder ein“ (Kompass 4 Deutsch 2024 und 2025). „Am Nachmittag spielt der kleine Hund mit seinem roten Ball.“ mit den Satzgliedern „Am Nachmittag | spielt | der kleine Hund | mit seinem roten Ball.“ hat `boundaries: [1, 2, 5]`.
+- Einheiten bei `unit: "word"` kommen **zwingend** aus `splitUnits(text, "word")` wie bei `mark-in-text`: Satzzeichen bleiben am Wort, nach der letzten Einheit gibt es keine Lücke. n Wörter haben n − 1 Lücken. Ein Wort mit Bindestrich ist eine Einheit, ein Gedankenstrich zwischen Leerzeichen eine eigene (dann zwei Lücken um ihn; solche Sätze vermeiden)
+- Fehler (Schema): `boundaries` aufsteigend, ohne Dubletten, jede im Bereich 0 … n−2, Anzahl 1 … n−2
+- `unit: "letter"` erlaubt das Schema, der Validator meldet aber einen Fehler „Renderer für unit letter nicht gebaut“, bis ein Batch ihn braucht
+- `stimulus.text` erlaubt (ein Satz Kontext); `stimulus.textRef` und `stimulus.assetId` sind Fehler: Das Format steht allein auf dem Screen
+- Keine Mischung zur Laufzeit, `keepOrder` gibt es hier nicht
+- Bewertung: richtig genau dann, wenn die getippten Lücken als Menge gleich `boundaries` sind; kein Teilpunkt
+- Vorlesen liest Stimulus, Prompt und den Satz wie einen Satz, ohne Lücken und ohne „Antworten“
+- **Richtwert** (Warnung, kein Fehler): `text` höchstens 14 Wörter und 85 Zeichen. Gemessen auf `/dev/format/segment-text` (`format-segment-text-layout.spec`) in drei Zuständen (leer, noch nicht mit „Richtig ist“, Durchsehen); Luft über dem Band im knappsten Zustand je Viewport:
+
+  | Viewport | 10 Wörter / 57 Zeichen | 14 Wörter / 85 Zeichen |
+  |---|---|---|
+  | iPad quer 1024 × 768 | 294 px (2 Zeilen) | 265 px (2 Zeilen) |
+  | iPad hoch 768 × 1024 | 457 px (2 Zeilen) | 401 px (3 Zeilen) |
+  | Safari quer 1024 × 660 | 186 px (2 Zeilen) | 157 px (2 Zeilen) |
+  | Safari hoch 768 × 900 | 333 px (2 Zeilen) | 277 px (3 Zeilen) |
+
+  Jede Lücke ist 48 × 48 px, nirgends scrollt die Seite. Längere Sätze sind nicht gemessen, darüber warnt der Validator.
+
 ## 5. ReadingText
 
 ```ts
@@ -181,7 +207,7 @@ type ReadingText = {
   wordCount: number;                 // 150–250 (MVP)
   paragraphs: string[];              // je Absatz ein String; Absätze werden nummeriert; Items verweisen auf Absätze, nie auf Zeilen
   readAloud: boolean;                // true: Vorlesen erlaubt im Üben-Modus; im Probetest immer aus
-  itemIds: string[];                 // 4–6 Items, die diesen Text referenzieren, aufsteigend nach Niveau
+  itemIds: string[];                 // 4–7 Items (seit 1.0.25, vorher 4–6), die diesen Text referenzieren, aufsteigend nach Niveau
 };
 ```
 
@@ -192,19 +218,19 @@ type Probetest = {
   id: string;                        // mathe-01
   fach: "mathe" | "deutsch";
   durationMinutes: 45;
-  itemIds: string[];                 // feste Reihenfolge, 18–24 Items; Deutsch mit genau 2 Texten (aus den textRefs, kein eigenes Feld)
+  itemIds: string[];                 // feste Reihenfolge, 18–24 Items; Deutsch mit 1 oder 2 Texten (aus den textRefs, kein eigenes Feld; seit 1.0.25)
   niveauMix: { 1: number; 2: number; 3: number };   // Band je Niveau (seit 1.0.23, s. u.), wird validiert
   bereichMix: Partial<Record<Bereich, number>>;     // jeder Pflichtbereich ≥ 2 Items (seit 1.0.22, s. u.)
 };
 ```
 
 Regeln:
-- Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und genau 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
+- Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und 1 oder 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
 - Niveau-Band (seit 1.0.23, `PROBETEST_NIVEAU_BAND` in `taxonomy.ts`): Anteil je Niveau an der Itemzahl n: **I 29–44 %, II 38–55 %, III 16–23 %**, geprüft als `min·n ≤ Anzahl ≤ max·n`, ohne Rundung und ohne ±1. Bei 24 Items I 7–10, II 10–13, III 4–5; bei 21 Items I 7–9, II 8–11, III 4; bei 18 Items III 3–4. Die Summe ist die Itemzahl, `niveauMix` muss zu den Items passen. Gültig sind der Pool-Mix 10/10/4 (mathe-01/02, deutsch-01/02, deutsch-03 mit 9/8/4) und der Testmix 7/13/4 (mathe-03, wie Kompass 4 Mathe 2025)
 - kein `short-answer`-Anteil über 15 %
-- Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `lesen-literarisch`, `rs-laut-buchstabe`, `rs-strategien`. Jeder Pflichtbereich hat mindestens 2 Items. `sprache-untersuchen` ist noch nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. Pflicht wird der Bereich, wenn die Deutsch-Probetests neu gemischt sind; vorher wird `bereich` nie ohne Entscheidung über diese Liste erweitert
-- Deutsch beginnt mit Lesen, endet mit Rechtschreibung (wie das Original). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator); ob vor oder nach der Rechtschreibung, legt das Neu-Mischen der Deutsch-Probetests fest
-- Deutsch (seit 1.0.16): Die Texte ergeben sich aus den `textRef`s der Items. Genau 2 Texte, ein Sachtext und ein literarischer (verschiedene `kind`). Die Items eines Textes stehen zusammen, weil der Lese-Screen einmal vor dem ersten Item eines Textes kommt. Kein Item ohne `textRef` steht vor einem Item mit `textRef`. Alles sind Fehler im Validator
+- Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `lesen-literarisch`, `rs-laut-buchstabe`, `rs-strategien`. Jeder Pflichtbereich hat mindestens 2 Items. `sprache-untersuchen` ist noch nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. Pflicht wird der Bereich, wenn die Deutsch-Probetests neu gemischt sind; vorher wird `bereich` nie ohne Entscheidung über diese Liste erweitert. Mit derselben Änderung kann `lesen-literarisch` die Pflicht verlieren: Bis dahin braucht auch ein Deutsch-Probetest mit nur einem Text (einem Sachtext) 2 Items aus `lesen-literarisch`; sie stehen ohne `textRef` direkt nach dem Textblock
+- Deutsch beginnt mit Lesen und endet mit Rechtschreibung oder Sprache untersuchen (seit 1.0.25, vorher nur Rechtschreibung; Kompass 4 Deutsch 2024 und 2025 enden mit Sprache untersuchen). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator), vor, zwischen oder nach den Rechtschreib-Items. Gültig ist damit auch der Aufbau des echten Tests: ein Sachtext mit bis zu 7 Items, Rechtschreibung, Sprache untersuchen (bis zum Neu-Mischen mit den 2 Items aus `lesen-literarisch`, s. Pflichtbereiche)
+- Deutsch (seit 1.0.16, 1.0.25): Die Texte ergeben sich aus den `textRef`s der Items. 1 oder 2 Texte (seit 1.0.25, vorher genau 2); bei zweien ein Sachtext und ein literarischer (verschiedene `kind`). Die Items eines Textes stehen zusammen, weil der Lese-Screen einmal vor dem ersten Item eines Textes kommt. Kein Item ohne `textRef` steht vor einem Item mit `textRef`. Alles sind Fehler im Validator
 
 ## 7. Autorenregeln (gelten für jeden Batch)
 
@@ -245,7 +271,7 @@ Regeln:
 **Kalibrierung Deutsch – Sprache untersuchen (Kompass 4 2025)**
 - Anker ist der Deutsch-Test 2025 (Aufgabe 14–24), `calibration: "kompass4-2025"`
 - I: Wortart erkennen, Grundform, Steigerung, Satz ↔ Zeitform, zusammengesetztes Nomen
-- II: unregelmäßiges Präteritum, Perfekt, Adjektiv-Endung, Bestimmungswort, Satzglieder (Umstellprobe), Kongruenz
+- II: unregelmäßiges Präteritum, Perfekt, Adjektiv-Endung, Bestimmungswort, Satzglieder (Umstellprobe, Format `segment-text` §4.10), Kongruenz
 - III: Wortart begründen, Fehler in fremder Einteilung, Prüfschritte ordnen
 
 **Feedback**
@@ -254,6 +280,7 @@ Regeln:
 - Ton: freundlich, sachlich, nie ironisch, nie "leider"
 
 **Längen (Richtwerte, seit 1.0.24)**
+- `segment-text`-Sätze bis 14 Wörter und 85 Zeichen (gemessen, §4.10; der Validator warnt)
 - Match-Karten bis 24 Zeichen, `order`-Elemente bis 40, Kurzantwort-Stichpunkte (`keyPoints`) bis 45, `feedback.incorrect` und `feedback.misconception` je bis 90: Erfahrungswerte aus Layout-Befunden 25.10., keine Validator-Regel; was zählt, ist der Sweep ≥ 18 px
 
 **Bilder (`content/assets/svg`)**

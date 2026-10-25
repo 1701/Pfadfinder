@@ -94,6 +94,9 @@ const ProbetestListePage = import.meta.env.DEV
       import('../ui/dev/ProbetestListePage').then((m) => ({ default: m.ProbetestListePage })),
     )
   : null;
+const FormatPage = import.meta.env.DEV
+  ? lazy(() => import('../ui/dev/FormatPage').then((m) => ({ default: m.FormatPage })))
+  : null;
 const ItemPage = import.meta.env.DEV
   ? lazy(() => import('../ui/dev/ItemPage').then((m) => ({ default: m.ItemPage })))
   : null;
@@ -123,6 +126,7 @@ export function AppRouter() {
           <Route path="/datenschutz" element={<RechtlichesScreen page="datenschutz" />} />
           {TokensPage && <Route path="/dev/tokens" element={<TokensPage />} />}
           {ItemPage && <Route path="/dev/item/:id" element={<ItemPage />} />}
+          {FormatPage && <Route path="/dev/format/:format" element={<FormatPage />} />}
           {TextPage && <Route path="/dev/text/:id" element={<TextPage />} />}
           {KartePage && <Route path="/dev/karte" element={<KartePage />} />}
           {EinstiegPage && <Route path="/dev/einstieg" element={<EinstiegPage />} />}

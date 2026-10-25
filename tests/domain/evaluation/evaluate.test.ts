@@ -8,6 +8,7 @@ import {
   multiChoice,
   numberInput,
   order,
+  segmentText,
   shortAnswer,
   singleChoice,
 } from '../../fixtures/items';
@@ -283,5 +284,37 @@ describe('correctnessScore', () => {
     expect([true, 0.5, false].map((c) => correctnessScore(c as boolean | 0.5))).toEqual([
       1, 0.5, 0,
     ]);
+  });
+});
+
+// Am Morgen | packt | der Junge | seinen Rucksack.  (solution: gaps 1, 2, 4)
+describe('segment-text', () => {
+  it('is correct for exactly the solution gaps, in any order', () => {
+    expect(evaluate(segmentText, { boundaries: [4, 1, 2] })).toEqual({
+      correct: true,
+      detail: { format: 'segment-text', missing: [], extra: [] },
+    });
+  });
+
+  it('a subset is not correct, no partial credit', () => {
+    expect(evaluate(segmentText, { boundaries: [1, 2] })).toEqual({
+      correct: false,
+      detail: { format: 'segment-text', missing: [4], extra: [] },
+    });
+  });
+
+  it('a superset is not correct', () => {
+    expect(evaluate(segmentText, { boundaries: [1, 2, 3, 4] })).toEqual({
+      correct: false,
+      detail: { format: 'segment-text', missing: [], extra: [3] },
+    });
+  });
+
+  it('edge: no divider is not correct', () => {
+    expect(evaluate(segmentText, { boundaries: [] }).detail).toEqual({
+      format: 'segment-text',
+      missing: [1, 2, 4],
+      extra: [],
+    });
   });
 });

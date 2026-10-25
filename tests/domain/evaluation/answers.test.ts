@@ -17,6 +17,7 @@ describe('answer schemas', () => {
     ['mark-in-text', { indices: [1, 4] }],
     ['find-error', { errorIds: ['w2'] }],
     ['short-answer', { text: 'Nein.', rating: 0.5 }],
+    ['segment-text', { boundaries: [1, 2, 4] }],
   ])('accepts a valid %s answer', (format, answer) => {
     expect(parseAnswer(format as (typeof FORMATS)[number], answer).success).toBe(true);
   });
@@ -31,6 +32,7 @@ describe('answer schemas', () => {
     ['mark-in-text', { indices: [-1] }],
     ['find-error', { errorIds: ['w2'], extra: true }],
     ['short-answer', { rating: 0.7 }],
+    ['segment-text', { boundaries: [1.5] }],
   ])('rejects an invalid %s answer', (format, answer) => {
     expect(parseAnswer(format as (typeof FORMATS)[number], answer).success).toBe(false);
   });

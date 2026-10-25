@@ -1,0 +1,23 @@
+{
+  "leer": {
+    "air": 392,
+    "overflow": 0,
+    "smallestGap": 48,
+    "smallestTarget": 48,
+    "rows": 2
+  },
+  "noch-nicht": {
+    "air": 294,
+    "overflow": 0,
+    "smallestGap": 48,
+    "smallestTarget": 48,
+    "rows": 2
+  },
+  "durchsehen": {
+    "air": 294,
+    "overflow": 0,
+    "smallestGap": 48,
+    "smallestTarget": 48,
+    "rows": 2
+  }
+}

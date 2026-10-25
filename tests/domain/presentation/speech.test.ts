@@ -19,6 +19,7 @@ import {
   multiChoice,
   numberInput,
   order,
+  segmentText,
   shortAnswer,
   singleChoice,
 } from '../../fixtures/items';
@@ -214,6 +215,13 @@ describe('answersSpeech per format', () => {
 
   it('mark-in-text: a number row stays separate numbers ("15 18" is not 1518)', () => {
     expect(answersSpeech(markNumbers, 0)).toBe('Antworten: 5, 10, 15, 18, 20, 25, 28, 30.');
+  });
+
+  it('segment-text: the sentence as a sentence, no "Antworten", no gaps', () => {
+    expect(answersSpeech(segmentText, 0)).toBe('Am Morgen packt der Junge seinen Rucksack.');
+    expect(itemSpeech(segmentText, 3)).toBe(
+      'Trenne die Satzglieder mit Strichen. Am Morgen packt der Junge seinen Rucksack.',
+    );
   });
 
   it('find-error: the words of the sentence', () => {

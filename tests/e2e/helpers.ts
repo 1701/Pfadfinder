@@ -31,11 +31,12 @@ export interface ContentItem {
     indices?: number[];
     errorIds?: string[];
     model?: string;
+    boundaries?: number[];
   };
   feedback: { correct: string; incorrect: string; misconception?: string };
 }
 
-/** Every active item of every format (all nine have a renderer since task 7). */
+/** Every active item of every format (all have a renderer; the tenth, segment-text, since 1.0.25). */
 export const ITEMS: ContentItem[] = readdirSync('content/items', { recursive: true })
   .map(String)
   .filter((file) => file.endsWith('.json'))
@@ -455,6 +456,17 @@ export async function answer(page: Page, item: ContentItem, correct: boolean) {
       for (const id of correct ? wanted : [...wanted.slice(0, -1), other]) {
         await button(page, words.get(id)!).click();
       }
+      return;
+    }
+    case 'segment-text': {
+      // Gap k lies after word k; a wrong answer swaps the last divider for another gap.
+      const wanted = solution.boundaries!;
+      const count = splitUnits(payload.text!, 'word').length - 1;
+      const other = Array.from({ length: count }, (_, k) => k).find((k) => !wanted.includes(k))!;
+      const gaps = page
+        .getByRole('group', { name: 'Satz mit Lücken zum Antippen' })
+        .getByRole('button');
+      for (const k of correct ? wanted : [...wanted.slice(0, -1), other]) await gaps.nth(k).click();
       return;
     }
     case 'short-answer':

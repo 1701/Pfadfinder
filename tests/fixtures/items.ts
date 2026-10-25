@@ -265,6 +265,28 @@ export const shortAnswer: ItemOf<'short-answer'> = {
   meta,
 };
 
+export const segmentText: ItemOf<'segment-text'> = {
+  id: 'd-su-2-910',
+  schemaVersion: '1.0',
+  fach: 'deutsch',
+  bereich: 'sprache-untersuchen',
+  niveau: 2,
+  format: 'segment-text',
+  status: 'draft',
+  prompt: 'Trenne die Satzglieder mit Strichen.',
+  // Am Morgen | packt | der Junge | seinen Rucksack.
+  payload: { text: 'Am Morgen packt der Junge seinen Rucksack.', unit: 'word' },
+  solution: { boundaries: [1, 2, 4] },
+  feedback: {
+    correct: 'Genau. Jede Wortgruppe bleibt beim Umstellen zusammen.',
+    incorrect: 'Stelle den Satz um. Was dabei zusammen bleibt, ist ein Satzglied.',
+    misconception: 'Oft wird „der Junge“ geteilt, aber beides wandert zusammen.',
+  },
+  tags: ['satzglieder', 'umstellprobe'],
+  estimatedSeconds: 60,
+  meta,
+};
+
 export const validItemsByFormat: { [F in Item['format']]: ItemOf<F> } = {
   'single-choice': singleChoice,
   'multi-choice': multiChoice,
@@ -275,6 +297,7 @@ export const validItemsByFormat: { [F in Item['format']]: ItemOf<F> } = {
   'mark-in-text': markInText,
   'find-error': findError,
   'short-answer': shortAnswer,
+  'segment-text': segmentText,
 };
 
 export const sachtext: ReadingText = {

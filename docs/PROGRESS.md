@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-25 – Format segment-text und Deutsch-Probetest-Regeln (D-Code, Schema 1.0.25, Branch `d`)
+- **Gebaut:** zehntes Format `segment-text` (Trennstriche zwischen Wörtern, Satzglieder): Schema mit `boundaries` gegen `splitUnits()`, Bewertung als Menge ohne Teilpunkt, Vorlesen liest den Satz, Renderer (Wortkacheln, Lücken 48 × 48 px, „Richtig ist“), Druck mit weiten Wortabständen, Messseite `/dev/format/segment-text` (nur Dev). Kein Mischen.
+- **Validator:** Fehler bei `unit: "letter"` sowie `textRef`/`assetId` an segment-text; Warnung über 14 Wörter / 85 Zeichen. ReadingText 4–7 Items; Deutsch-Probetest mit 1 oder 2 Texten, Ende mit RS oder su. `PROBETEST_REQUIRED_BEREICHE` unverändert (mit einem Text braucht ein Probetest weiter 2 lli-Items).
+- **Messung (Luft im knappsten Zustand, 10 / 14 Wörter):** iPad quer 294 / 265, iPad hoch 457 / 401, Safari quer 186 / 157, Safari hoch 333 / 277 px; kein Scrollen, jede Lücke 48 px. Daraus der Richtwert 14 / 85 (§4.10).
+- **Entscheidungen (Markus):** boundaries-Struktur in `schemas.ts`. deutsch-90: d-rss-2-901 durch das su-Item d-su-2-920 ersetzt (18 Items, 7/7/4), das Item steht zusätzlich im Fixture-Pool. Testaufbau 8/9/5 bei 22 (`buildDeutschTestaufbau`) ist **neu**: Der frühere Eintrag (Aufgabe T) nannte ihn fälschlich als vorhanden.
+- **Abweichung:** Lösung der Messseite 1, 2, 5 statt 1, 2, 5, 7 (Lücke 7 hätte „mit seinem | roten Ball“ getrennt).
+- **Offen:** Pflichtliste und Neu-Mischen der Deutsch-Probetests; Content-Batch mit segment-text-Items; Gedankenstrich zwischen Leerzeichen ist bei `splitUnits` ein eigenes Wort (nicht erweitert).
+- **Lokal:** `npm run check` grün (1 103 → 1 152: unit 1 145, smoke 7), Smoke 39 → 41, Einstieg `--repeat-each=20` 160/160, Layout mit Schalter 52 → 60 in 25,3 Min.; committet nur die 16 `format-segment-text-*`-Dateien.
+
 ## 2026-10-25 – Tests vom Content gelöst (Aufgabe F, Schema 1.0.24)
 - **Drei Orte** (ARCHITECTURE §8 Teststrategie): Pool-Regeln im Validator, Verhalten mit erfundenen Fixtures (`tests/fixtures/` probe, variants, content, assets; IDs -9xx, `mathe-91/92`), Content-Smoke nur `tests/content-smoke/` (manifest, pool, loader). Vitest-Projekt `unit` bricht jedes Laden unter `content/` ab (`noContent`), `content-isolation.test` findet Pfade, Manifest und echte IDs.
 - **Validator** 51 → 53 Meldungsstellen: Geld mit Komma-Betrag braucht `allowDecimal`, RS-Items ohne falsch geschriebenes Wort im Vorlesetext (beide Warnung, Pool 0 Treffer). splitUnits-Indizes, Kommazahl und Korrektur je Fehlerwort prüfte `schemas.ts` schon, order-Reihenfolge `integrity.ts`.

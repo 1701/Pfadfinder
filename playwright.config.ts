@@ -27,12 +27,12 @@ export default defineConfig({
     {
       name: 'chromium-landscape',
       // update.spec builds a second version; it runs here only (service workers, one run).
-      testMatch: /(ueben|pwa|einstieg|eltern|probetest|update)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest|update|segment-text)\.spec\.ts/,
       use: { ...landscape, browserName: 'chromium', baseURL: PREVIEW },
     },
     {
       name: 'chromium-portrait',
-      testMatch: /(ueben|pwa|einstieg|eltern|probetest)\.spec\.ts/,
+      testMatch: /(ueben|pwa|einstieg|eltern|probetest|segment-text)\.spec\.ts/,
       use: { ...portrait, browserName: 'chromium', baseURL: PREVIEW },
     },
     // The target device is an iPad: Safari's engine for the smoke flow (h-dvh, IndexedDB).

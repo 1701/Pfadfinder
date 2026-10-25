@@ -1,10 +1,11 @@
 // Invented variants of the format fixtures for cases the base items do not show: sentences and a
-// number row to mark, order lists of 3 and 5, money with a comma, and spelling items for
-// Vorlesen. NOT app content – never copy into content/. variants.test.ts keeps them valid.
+// number row to mark, order lists of 3 and 5, money with a comma, spelling items for Vorlesen,
+// and segment-text sentences of 4 and 14 words (plus unit "letter", outside VARIANT_ITEMS: the
+// validator reports it until its renderer exists). NOT app content – never copy into content/. variants.test.ts keeps them valid.
 
 import type { Item, ItemOf } from '../../src/domain/content';
 import { cloneItem } from './builders';
-import { clozeSelect, markInText, numberInput, order, singleChoice } from './items';
+import { clozeSelect, markInText, numberInput, order, segmentText, singleChoice } from './items';
 
 const meta = { author: 'claude', createdAt: '2026-10-25', calibration: 'none' } as const;
 
@@ -184,6 +185,45 @@ export const spellingChoice: ItemOf<'single-choice'> = {
 /** cloze-select outside spelling: in reading it reads its gaps and options as always. */
 export const clozeReading: Item = cloneItem(clozeSelect, 'lesen-sachtext', 1, 903);
 
+/** The shortest useful sentence: Mia | liest | ein Buch. (n = 4, so 2 dividers at most.) */
+export const segmentShort: ItemOf<'segment-text'> = {
+  ...segmentText,
+  id: 'd-su-1-911',
+  niveau: 1,
+  payload: { text: 'Mia liest ein Buch.', unit: 'word' },
+  solution: { boundaries: [0, 1] },
+  meta,
+};
+
+/** 14 words, 85 characters, the guide value of §4.10: Am späten Nachmittag | spielt | … */
+export const segmentLong: ItemOf<'segment-text'> = {
+  ...segmentText,
+  id: 'd-su-2-912',
+  payload: {
+    text: 'Am späten Nachmittag spielt der kleine braune Hund mit seinem neuen Ball im Garten.',
+    unit: 'word',
+  },
+  solution: { boundaries: [2, 3, 7, 11] },
+  meta,
+};
+
+/** unit "letter": valid for the schema, an error in integrity.ts until a renderer exists. */
+export const segmentLetter: ItemOf<'segment-text'> = {
+  ...segmentText,
+  id: 'd-su-1-913',
+  niveau: 1,
+  prompt: 'Trenne das Wort in Silben.',
+  payload: { text: 'Sonnenblume', unit: 'letter' },
+  solution: { boundaries: [2, 5, 7] },
+  meta,
+};
+
+export const SEGMENT_TEXT_ITEMS: ItemOf<'segment-text'>[] = [
+  segmentText,
+  segmentShort,
+  segmentLong,
+];
+
 export const VARIANT_ITEMS: Item[] = [
   ...MARK_IN_TEXT_ITEMS.slice(1),
   orderThree,
@@ -193,4 +233,6 @@ export const VARIANT_ITEMS: Item[] = [
   clozeOneGap,
   spellingChoice,
   clozeReading,
+  segmentShort,
+  segmentLong,
 ];

@@ -52,5 +52,13 @@ export function previewAnswer(item: Item, correct: boolean): unknown {
     }
     case 'short-answer':
       return { text: item.solution.model, rating: correct ? 1 : 0.5 };
+    case 'segment-text': {
+      const wanted = item.solution.boundaries;
+      if (correct) return { boundaries: wanted };
+      const other =
+        Array.from({ length: wanted.length + 2 }, (_, i) => i).find((i) => !wanted.includes(i)) ??
+        0;
+      return { boundaries: [...wanted.slice(0, -1), other].sort((a, b) => a - b) };
+    }
   }
 }

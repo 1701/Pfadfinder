@@ -19,6 +19,8 @@ export const answerSchemaByFormat = {
   'find-error': z.strictObject({ errorIds: z.array(id) }),
   /** No auto-check: the child compares with the model answer and rates itself. */
   'short-answer': z.strictObject({ text: z.string().optional(), rating: selfRatingSchema }),
+  /** The gaps the child marked with a divider (0-based, gap k after word k). */
+  'segment-text': z.strictObject({ boundaries: z.array(z.number().int().nonnegative()) }),
 } as const satisfies Record<Format, z.ZodType>;
 
 export type AnswerOf<F extends Format> = z.infer<(typeof answerSchemaByFormat)[F]>;

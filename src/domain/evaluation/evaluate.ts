@@ -19,6 +19,8 @@ interface DetailByFormat {
   /** corrections are passed through for the feedback panel only. */
   'find-error': { missing: string[]; extra: string[]; corrections: Record<string, string> };
   'short-answer': { rating: SelfRating };
+  /** missing: dividers of the solution not set; extra: dividers set where none belongs. */
+  'segment-text': { missing: number[]; extra: number[] };
 }
 
 export type EvaluationDetail<F extends Format = Format> = {
@@ -133,6 +135,15 @@ const evaluators: { [F in Format]: Evaluator<F> } = {
     correct: answer.rating === 0.5 ? 0.5 : answer.rating === 1,
     detail: { format: 'short-answer', rating: answer.rating },
   }),
+
+  // Right only with exactly the solution's dividers; no partial credit.
+  'segment-text': (item, answer) => {
+    const { missing, extra } = setDiff(item.solution.boundaries, answer.boundaries);
+    return {
+      correct: missing.length === 0 && extra.length === 0,
+      detail: { format: 'segment-text', missing, extra },
+    };
+  },
 };
 
 export function evaluate<F extends Format>(

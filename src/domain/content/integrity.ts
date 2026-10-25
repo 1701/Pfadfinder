@@ -97,6 +97,13 @@ export const WITH_TEXT = {
  * and feedback of 114 characters.
  */
 export const WITH_PICTURE = { maxStimulusSentences: 2 } as const;
+/**
+ * segment-text (1.0.25): a sentence of word tiles with a 48 px gap between every two words. Guide
+ * value from /dev/format/segment-text (format-segment-text-layout.spec, four viewports, 2026-10-25):
+ * 10 words / 57 characters kept ≥ 186 px air, 14 words / 85 characters ≥ 157 px (Safari landscape,
+ * noch nicht); nothing longer was measured. A warning, never an error.
+ */
+export const SEGMENT_TEXT_GUIDE = { maxWords: 14, maxChars: 85 } as const;
 /** An option that only names a label of the picture: "A", "Figur B". */
 const LABEL_OPTION = /^(?:Figur |Dreieck |Netz )?[A-F]$/;
 /** Money in the task (§4.3, 1.0.24): the euro sign or the word Euro. */
@@ -299,6 +306,21 @@ export function validateContent(
       }
     }
 
+    if (item.format === 'segment-text') {
+      for (const [message, path] of segmentTextFindings(item)) error(file, message, item.id, path);
+      const { maxWords, maxChars } = SEGMENT_TEXT_GUIDE;
+      const words = splitWords(item.payload.text).length;
+      const chars = item.payload.text.length;
+      if (words > maxWords || chars > maxChars) {
+        warn(
+          file,
+          `segment-text: Richtwert höchstens ${maxWords} Wörter und ${maxChars} Zeichen, hier ${words} Wörter und ${chars} Zeichen`,
+          item.id,
+          'payload.text',
+        );
+      }
+    }
+
     if (isRechtschreibungBereich(item.bereich) && (item.format === 'find-error' || item.format === 'cloze-select')) {
       for (const [message, path] of spellingFindings(item)) warn(file, message, item.id, path);
     }
@@ -409,9 +431,9 @@ export function validateContent(
       const report = (message: string, path: string) => error(file, message, probetest.id, path);
       checkDeutschOrder(items, report);
       checkDeutschTexts(items, report);
-      if (textRefs.length !== 2) {
-        report(`Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: ${textRefs.length}`, 'itemIds');
-      } else {
+      if (textRefs.length < 1 || textRefs.length > 2) {
+        report(`Deutsch-Probetest braucht 1 oder 2 Lesetexte, gefunden: ${textRefs.length}`, 'itemIds');
+      } else if (textRefs.length === 2) {
         const [first, second] = texts;
         if (first && second && first.kind === second.kind) {
           report(`Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "${first.kind}"`, 'itemIds');
@@ -461,15 +483,16 @@ export function formatProbetestTime(id: string, { itemSeconds, readingSeconds, s
 }
 
 /**
- * Deutsch starts with reading and ends with spelling; no reading item after the first spelling item,
- * and none after the first sprache-untersuchen item (1.0.22: those stand after the reading blocks).
+ * Deutsch starts with reading and ends with spelling or sprache-untersuchen (1.0.25, like Kompass 4);
+ * no reading item after the first spelling item, and none after the first sprache-untersuchen item
+ * (1.0.22: those stand after the reading blocks).
  */
 function checkDeutschOrder(items: readonly Item[], report: (message: string, path: string) => void): void {
   const first = items[0];
   const last = items[items.length - 1];
   if (first && !isLesenBereich(first.bereich)) report('Deutsch-Probetest muss mit Lesen beginnen', 'itemIds[0]');
-  if (last && !isRechtschreibungBereich(last.bereich)) {
-    report('Deutsch-Probetest muss mit Rechtschreibung enden', `itemIds[${items.length - 1}]`);
+  if (last && !isRechtschreibungBereich(last.bereich) && last.bereich !== 'sprache-untersuchen') {
+    report('Deutsch-Probetest muss mit Rechtschreibung oder Sprache untersuchen enden', `itemIds[${items.length - 1}]`);
   }
   const firstSpelling = items.findIndex((item) => isRechtschreibungBereich(item.bereich));
   if (firstSpelling !== -1) {
@@ -547,6 +570,22 @@ function spellingFindings(item: ItemOf<'find-error'> | ItemOf<'cloze-select'>): 
         findings.push([`Vorlesen enthält das falsch geschriebene Wort "${word}"`, path]);
       }
     }
+  }
+  return findings;
+}
+
+/**
+ * segment-text stands alone on the screen (1.0.25): no reading text, no picture beside the
+ * sentence. unit "letter" is allowed by the schema but has no renderer yet.
+ */
+function segmentTextFindings(item: ItemOf<'segment-text'>): [string, string][] {
+  const findings: [string, string][] = [];
+  if (item.payload.unit === 'letter') findings.push(['Renderer für unit letter nicht gebaut', 'payload.unit']);
+  if (item.stimulus?.textRef !== undefined) {
+    findings.push(['segment-text steht allein: kein stimulus.textRef', 'stimulus.textRef']);
+  }
+  if (item.stimulus?.assetId !== undefined) {
+    findings.push(['segment-text steht allein: kein stimulus.assetId', 'stimulus.assetId']);
   }
   return findings;
 }

@@ -11,7 +11,7 @@ import {
   type Probetest,
   type ReadingText,
 } from '../../src/domain/content';
-import { findError, numberInput, sachtext } from './items';
+import { findError, numberInput, sachtext, segmentText } from './items';
 
 export function itemId(bereich: Bereich, niveau: Niveau, n: number): string {
   const fach = fachOfBereich(bereich);
@@ -146,4 +146,46 @@ export function buildDeutschProbetest(): {
     ...mixesOf(items),
   };
   return { items, texts, probetest };
+}
+
+/**
+ * The layout of a Kompass 4 Deutsch test (1.0.25): one Sachtext with 7 items, then the spelling
+ * items, then Sprache untersuchen at the end; 22 items 8/9/5. lesen-literarisch stays a required
+ * Bereich until the Deutsch Probetests are mixed anew (CONTENT_SCHEMA §6), so its 2 items stand
+ * without a text right after the Sachtext block. 65 s each = 1430 s plus 152 words × 0.75 s =
+ * 114 s: 1544 s = 25.7 min.
+ */
+export function buildDeutschTestaufbau(): {
+  items: Item[];
+  texts: ReadingText[];
+  probetest: Probetest;
+} {
+  const sach: ReadingText = { ...structuredClone(sachtext), id: 't-sach-930' };
+  const group = (bereich: Bereich, ladder: Niveau[], textRef?: string) =>
+    ladder.map((niveau, i) =>
+      cloneItem(findError, bereich, niveau, 930 + i, {
+        estimatedSeconds: 65,
+        ...(textRef && { stimulus: { textRef } }),
+      }),
+    );
+  const su = [
+    ...group('sprache-untersuchen', [1, 1, 2, 2, 2, 3, 3, 3]),
+    cloneItem(segmentText, 'sprache-untersuchen', 2, 940, { estimatedSeconds: 65 }),
+  ];
+  const items = [
+    ...group('lesen-sachtext', [1, 1, 1, 2, 2, 2, 3], sach.id),
+    ...group('lesen-literarisch', [1, 2]),
+    ...group('rs-laut-buchstabe', [1, 2]),
+    ...group('rs-strategien', [1, 3]),
+    ...su,
+  ];
+  sach.itemIds = items.filter((i) => i.stimulus?.textRef === sach.id).map((i) => i.id);
+  const probetest: Probetest = {
+    id: 'deutsch-94',
+    fach: 'deutsch',
+    durationMinutes: 45,
+    itemIds: items.map((i) => i.id),
+    ...mixesOf(items),
+  };
+  return { items, texts: [sach], probetest };
 }

@@ -216,6 +216,28 @@ export const probeShortAnswer: ItemOf<'short-answer'> = {
   meta,
 };
 
+/** Satzglieder: Nach der Schule | fährt | Amira | mit dem Fahrrad | nach Hause. */
+export const probeSegmentText: ItemOf<'segment-text'> = {
+  id: 'd-su-2-902',
+  schemaVersion: '1.0',
+  fach: 'deutsch',
+  bereich: 'sprache-untersuchen',
+  niveau: 2,
+  format: 'segment-text',
+  status: 'draft',
+  prompt: 'Trenne die Satzglieder mit Strichen.',
+  payload: { text: 'Nach der Schule fährt Amira mit dem Fahrrad nach Hause.', unit: 'word' },
+  solution: { boundaries: [2, 3, 4, 7] },
+  feedback: {
+    correct: 'Genau. Jedes Satzglied bleibt beim Umstellen zusammen.',
+    incorrect: 'Stelle den Satz um. Was dabei zusammen bleibt, ist ein Satzglied.',
+    misconception: '„mit dem Fahrrad“ gehört zusammen, auch wenn es drei Wörter sind.',
+  },
+  tags: ['satzglieder', 'umstellprobe'],
+  estimatedSeconds: 65,
+  meta,
+};
+
 export const PROBE_ITEMS = [
   probeMultiChoice,
   probeMatch,
@@ -224,4 +246,5 @@ export const PROBE_ITEMS = [
   probeMarkInText,
   probeFindError,
   probeShortAnswer,
+  probeSegmentText,
 ] as const;

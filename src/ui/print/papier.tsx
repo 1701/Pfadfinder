@@ -1,7 +1,8 @@
 // Paper forms per format for the printed Probetest: what a child fills in with a pencil, and the
 // line on the solution sheet. One entry per format, like the screen registry (no format switch in
 // the sheet). Option order is the screen order of a first attempt (attemptIndex 0), so the
-// solution sheet names the solution as text, never as a letter. mark-in-text uses splitUnits.
+// solution sheet names the solution as text, never as a letter. mark-in-text and segment-text use
+// splitUnits; segment-text stands with wide word spaces, so a child can circle the groups.
 
 import type { ReactNode } from 'react';
 import { splitUnits } from '../../domain/content/units';
@@ -153,6 +154,15 @@ const PAPIER: { [F in Format]: Papierform<F> } = {
       item.solution.errorIds
         .map((id) => `${textOf(item.payload.words, id)} → ${item.solution.corrections[id] ?? ''}`)
         .join(' · '),
+  },
+  'segment-text': {
+    aufgabe: (item) => (
+      <p className="druck-segmentieren">{splitUnits(item.payload.text, 'word').join(' ')}</p>
+    ),
+    loesung: (item) => {
+      const words = splitUnits(item.payload.text, 'word');
+      return words.map((w, k) => (item.solution.boundaries.includes(k) ? `${w} |` : w)).join(' ');
+    },
   },
   'short-answer': {
     aufgabe: (item) => (

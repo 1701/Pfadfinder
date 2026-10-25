@@ -6,7 +6,13 @@ import { describe, expect, it } from 'vitest';
 import type { Item, ItemOf } from '../../../src/domain/content';
 import { Druckansicht } from '../../../src/ui/print/Druckansicht';
 import { MATHE_91 } from '../../fixtures/content';
-import { numberInput, shortAnswer, singleChoice, validItemsByFormat } from '../../fixtures/items';
+import {
+  numberInput,
+  segmentText,
+  shortAnswer,
+  singleChoice,
+  validItemsByFormat,
+} from '../../fixtures/items';
 import { DEUTSCH_90, PROBETEST_ITEMS, PROBETEST_TEXTS, biberText } from '../../fixtures/lesen';
 
 const probetest = MATHE_91;
@@ -16,8 +22,8 @@ describe('Druckansicht', () => {
     const items = Object.values(validItemsByFormat) as Item[];
     const { container } = render(<Druckansicht probetest={probetest} items={items} />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Probetest Mathe 91');
-    expect(container.querySelectorAll('[data-item]')).toHaveLength(9);
-    expect(container.querySelectorAll('[data-loesung]')).toHaveLength(9);
+    expect(container.querySelectorAll('[data-item]')).toHaveLength(items.length);
+    expect(container.querySelectorAll('[data-loesung]')).toHaveLength(items.length);
     // No Vorlesen and no input on paper; the only button prints and hides in print.
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
     expect(container.querySelectorAll('input, textarea')).toHaveLength(0);
@@ -53,6 +59,16 @@ describe('Druckansicht', () => {
     expect(
       container.querySelector('[data-loesung] span')!.textContent!.replace(/\u00a0/g, ' '),
     ).toBe('7,90 €');
+  });
+
+  it('segment-text: the sentence with wide word spaces to circle, the solution with dividers', () => {
+    const { container } = render(<Druckansicht probetest={probetest} items={[segmentText]} />);
+    expect(container.querySelector('.druck-segmentieren')!.textContent).toBe(
+      'Am Morgen packt der Junge seinen Rucksack.',
+    );
+    expect(container.querySelector('[data-loesung]')!.textContent).toContain(
+      'Am Morgen | packt | der Junge | seinen Rucksack.',
+    );
   });
 
   it('a short answer gets lines, the solution sheet the model answer and key points', () => {

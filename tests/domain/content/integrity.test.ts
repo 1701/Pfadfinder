@@ -21,11 +21,20 @@ import {
   numberInput,
   order,
   sachtext,
+  segmentText,
   shortAnswer,
   singleChoice,
   validItemsByFormat,
 } from '../../fixtures/items';
-import { buildDeutschProbetest, buildMatheProbetest, cloneItem, mixesOf, toFiles } from '../../fixtures/builders';
+import {
+  buildDeutschProbetest,
+  buildDeutschTestaufbau,
+  buildMatheProbetest,
+  cloneItem,
+  mixesOf,
+  toFiles,
+} from '../../fixtures/builders';
+import { segmentLetter, segmentLong } from '../../fixtures/variants';
 
 const noAssets: ValidateContentOptions = { assetExists: () => false };
 
@@ -41,7 +50,7 @@ describe('validateContent – files and placement', () => {
   it('accepts all format fixtures placed in their files', () => {
     const { issues, bundle } = run(toFiles({ items: Object.values(validItemsByFormat) }));
     expect(issues).toEqual([]);
-    expect(bundle.items.size).toBe(9);
+    expect(bundle.items.size).toBe(10);
   });
 
   it('reports a missing schema-version.json', () => {
@@ -600,14 +609,14 @@ describe('validateContent – probetest rules (§6)', () => {
     expect(run(toFiles({ items: three, probetests: [probetest] })).issues).toEqual([]);
   });
 
-  it('Deutsch must start with reading and end with spelling', () => {
+  it('Deutsch must start with reading and end with spelling or Sprache untersuchen', () => {
     const { items, texts, probetest } = buildDeutschProbetest();
     probetest.itemIds = [...probetest.itemIds].reverse();
     const result = errors(run(toFiles({ items, texts, probetests: [probetest] })).issues);
     expect(result).toEqual(
       expect.arrayContaining([
         expect.stringContaining('Deutsch-Probetest muss mit Lesen beginnen'),
-        expect.stringContaining('Deutsch-Probetest muss mit Rechtschreibung enden'),
+        expect.stringContaining('Deutsch-Probetest muss mit Rechtschreibung oder Sprache untersuchen enden'),
       ]),
     );
   });
@@ -680,13 +689,28 @@ describe('validateContent – probetest rules (§6)', () => {
     });
   });
 
-  it('Deutsch needs exactly 2 reading texts', () => {
+  it('Deutsch needs 1 or 2 reading texts (1.0.25, before: exactly 2)', () => {
     const { items, texts, probetest } = buildDeutschProbetest();
-    // Literary items without textRef: only one text remains in the probetest.
+    // Literary items without textRef right after the Sachtext block: one text is enough now.
     const unlinked = items.map((i) => (i.bereich === 'lesen-literarisch' ? ({ ...i, stimulus: undefined } as Item) : i));
-    const result = errors(run(toFiles({ items: unlinked, texts: texts.slice(0, 1), probetests: [probetest] })).issues);
-    expect(result).toEqual([
-      'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht genau 2 Lesetexte, gefunden: 1',
+    expect(run(toFiles({ items: unlinked, texts: texts.slice(0, 1), probetests: [probetest] })).issues).toEqual([]);
+
+    // No text at all: Lesen items without textRef still start the test, but there is no text.
+    const none = items.map((i) => (i.stimulus?.textRef ? ({ ...i, stimulus: undefined } as Item) : i));
+    expect(errors(run(toFiles({ items: none, probetests: [probetest] })).issues)).toEqual([
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht 1 oder 2 Lesetexte, gefunden: 0',
+    ]);
+
+    // Three texts: a second literary text with 4 more items (24 items 9/10/5, 60 s each).
+    const third: ReadingText = { ...structuredClone(sachtext), id: 't-lit-902', kind: 'literarisch' };
+    const thirdItems = ([1, 2, 2, 3] as Niveau[]).map((niveau, i) =>
+      cloneItem(findError, 'lesen-literarisch', niveau, 920 + i, { stimulus: { textRef: third.id } }),
+    );
+    third.itemIds = thirdItems.map((i) => i.id);
+    const all = [...items.slice(0, 10), ...thirdItems, ...items.slice(10)].map((i) => ({ ...i, estimatedSeconds: 60 }) as Item);
+    const three: Probetest = { ...probetest, itemIds: all.map((i) => i.id), ...mixesOf(all) };
+    expect(errors(run(toFiles({ items: all, texts: [...texts, third], probetests: [three] })).issues)).toEqual([
+      'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht 1 oder 2 Lesetexte, gefunden: 3',
     ]);
   });
   it('Deutsch keeps the items of a text together (1.0.16)', () => {
@@ -735,6 +759,114 @@ describe('validateContent – probetest rules (§6)', () => {
     const sameKind: Probetest = { ...probetest, itemIds: all.map((i) => i.id), ...mixesOf(all) };
     expect(errors(run(toFiles({ items: all, texts: [texts[0]!, second], probetests: [sameKind] })).issues)).toEqual([
       'probetests/deutsch-91.json|deutsch-91|itemIds|Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "sachtext"',
+    ]);
+  });
+
+  describe('the layout of a Kompass 4 Deutsch test (1.0.25)', () => {
+    const files = (built: ReturnType<typeof buildDeutschTestaufbau>, itemIds = built.probetest.itemIds) =>
+      toFiles({ items: built.items, texts: built.texts, probetests: [{ ...built.probetest, itemIds }] });
+
+    it('one Sachtext with 7 items, then spelling, then Sprache untersuchen: valid, 22 items 8/9/5', () => {
+      const built = buildDeutschTestaufbau();
+      expect(built.probetest.niveauMix).toEqual({ 1: 8, 2: 9, 3: 5 });
+      expect(built.texts[0]!.itemIds).toHaveLength(7);
+      const { issues, bundle } = run(files(built));
+      expect(issues).toEqual([]);
+      expect(probetestTime(built.probetest, bundle)).toEqual({ itemSeconds: 1430, readingSeconds: 114, seconds: 1544 });
+    });
+
+    it('also valid when Sprache untersuchen stands before the spelling items', () => {
+      const built = buildDeutschTestaufbau();
+      const ids = built.probetest.itemIds;
+      // 7 Sachtext + 2 literary items, 4 spelling items, 9 su items.
+      expect(errors(run(files(built, [...ids.slice(0, 9), ...ids.slice(13), ...ids.slice(9, 13)])).issues)).toEqual([]);
+    });
+
+    it('two Sachtexte are not valid', () => {
+      const built = buildDeutschTestaufbau();
+      const second: ReadingText = { ...structuredClone(sachtext), id: 't-sach-931' };
+      // Four su items become Lesen items of a second Sachtext (same Niveaus, ascending).
+      const su = built.items.filter((i) => i.bereich === 'sprache-untersuchen' && i.format === 'find-error');
+      const moved = [su[0]!, su[2]!, su[3]!, su[5]!];
+      const secondItems = moved.map((item, i) =>
+        cloneItem(findError, 'lesen-sachtext', item.niveau, 950 + i, { estimatedSeconds: 65, stimulus: { textRef: second.id } }),
+      );
+      second.itemIds = secondItems.map((i) => i.id);
+      const rest = built.items.filter((i) => !moved.includes(i));
+      const all = [...rest.slice(0, 7), ...secondItems, ...rest.slice(7)];
+      const probetest: Probetest = { ...built.probetest, itemIds: all.map((i) => i.id), ...mixesOf(all) };
+      expect(errors(run(toFiles({ items: all, texts: [...built.texts, second], probetests: [probetest] })).issues)).toEqual([
+        'probetests/deutsch-94.json|deutsch-94|itemIds|Deutsch-Probetest braucht einen Sachtext und einen literarischen Text, beide sind "sachtext"',
+      ]);
+    });
+
+    it('Sprache untersuchen before reading is not valid', () => {
+      const built = buildDeutschTestaufbau();
+      const ids = built.probetest.itemIds;
+      const result = errors(run(files(built, [...ids.slice(13), ...ids.slice(0, 13)])).issues);
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining('Deutsch-Probetest muss mit Lesen beginnen'),
+          expect.stringContaining('ohne Lesetext steht vor'),
+          expect.stringContaining('steht nach Sprache untersuchen'),
+        ]),
+      );
+    });
+
+    it('ending with reading is not valid', () => {
+      const built = buildDeutschTestaufbau();
+      const ids = built.probetest.itemIds;
+      // The two literary items (without a text) at the end.
+      const result = errors(run(files(built, [...ids.slice(0, 7), ...ids.slice(9), ...ids.slice(7, 9)])).issues);
+      expect(result).toEqual(
+        expect.arrayContaining([
+          'probetests/deutsch-94.json|deutsch-94|itemIds[21]|Deutsch-Probetest muss mit Rechtschreibung oder Sprache untersuchen enden',
+        ]),
+      );
+    });
+  });
+});
+
+describe('validateContent – segment-text (1.0.25)', () => {
+  const SU = 'items/deutsch/sprache-untersuchen.json';
+
+  it('accepts the format fixtures and the 14-word sentence without findings', () => {
+    expect(run(toFiles({ items: [segmentText, segmentLong] })).issues).toEqual([]);
+  });
+
+  it('reports unit "letter" as an error: no renderer yet', () => {
+    expect(errors(run(toFiles({ items: [segmentLetter] })).issues)).toEqual([
+      `${SU}|d-su-1-913|payload.unit|Renderer für unit letter nicht gebaut`,
+    ]);
+  });
+
+  it('stands alone: no picture, no reading text', () => {
+    const withPicture = { ...segmentText, stimulus: { assetId: 'bild', assetAlt: 'Ein Hund.' } } as Item;
+    expect(errors(run(toFiles({ items: [withPicture] }), { assetExists: () => true }).issues)).toEqual([
+      `${SU}|d-su-2-910|stimulus.assetId|segment-text steht allein: kein stimulus.assetId`,
+    ]);
+    const inReading = cloneItem(segmentText, 'lesen-sachtext', 2, 960, { stimulus: { textRef: sachtext.id } });
+    expect(errors(run(toFiles({ items: [inReading] })).issues)).toEqual(
+      expect.arrayContaining([
+        'items/deutsch/lesen-sachtext.json|d-lsa-2-960|stimulus.textRef|segment-text steht allein: kein stimulus.textRef',
+      ]),
+    );
+  });
+
+  it('warns above the guide value of 14 words and 85 characters, never an error', () => {
+    const warnings = (text: string) => {
+      const item = { ...segmentLong, payload: { text, unit: 'word' as const } };
+      const { issues } = run(toFiles({ items: [item] }));
+      expect(errors(issues)).toEqual([]);
+      return issues.map((i) => i.message);
+    };
+    // 15 words, 78 characters.
+    expect(warnings('Am Abend spielt der kleine braune Hund mit seinem neuen Ball im Garten am See.')).toEqual([
+      'segment-text: Richtwert höchstens 14 Wörter und 85 Zeichen, hier 15 Wörter und 78 Zeichen',
+    ]);
+    // 14 words, 90 characters.
+    expect(warnings('Am späten Nachmittag spielt der kleine braune Hund mit seinem neuen Ballon im Schulgarten.')).toEqual([
+      'segment-text: Richtwert höchstens 14 Wörter und 85 Zeichen, hier 14 Wörter und 90 Zeichen',
     ]);
   });
 });

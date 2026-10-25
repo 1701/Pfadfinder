@@ -13,4 +13,5 @@ export const SUPPORTED_FORMATS = [
   'mark-in-text',
   'find-error',
   'short-answer',
+  'segment-text',
 ] as const satisfies readonly Format[];

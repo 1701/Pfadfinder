@@ -18,10 +18,12 @@ import {
   numberInput,
   order,
   sachtext,
+  segmentText,
   shortAnswer,
   singleChoice,
   validItemsByFormat,
 } from '../../fixtures/items';
+import { segmentLetter, segmentShort } from '../../fixtures/variants';
 import { buildDeutschProbetest, buildMatheProbetest } from '../../fixtures/builders';
 
 /** Returns the formatted paths of all issues, or [] if the data is valid. */
@@ -38,7 +40,7 @@ function mutate<T extends Item>(item: T, fn: (draft: T) => void): T {
 }
 
 describe('itemSchema – one valid example per format', () => {
-  it('covers all 9 formats', () => {
+  it('covers all 10 formats', () => {
     expect(Object.keys(validItemsByFormat).sort()).toEqual([...FORMATS].sort());
   });
 
@@ -58,6 +60,7 @@ describe('itemSchema – one invalid example per format', () => {
     ['mark-in-text: index outside the text', mutate(markInText, (d) => (d.solution.indices = [1, 4, 7])), 'solution.indices[2]'],
     ['find-error: errorId does not exist', mutate(findError, (d) => { d.solution.errorIds = ['w9']; d.solution.corrections = { w9: 'See' }; }), 'solution.errorIds[0]'],
     ['short-answer: no key points', mutate(shortAnswer, (d) => (d.solution.keyPoints = [])), 'solution.keyPoints'],
+    ['segment-text: gap after the last word', mutate(segmentText, (d) => (d.solution.boundaries = [1, 2, 6])), 'solution.boundaries[2]'],
   ];
 
   it('has a case for every format', () => {
@@ -212,10 +215,15 @@ describe('readingTextSchema (§5)', () => {
     expect(issuePaths(readingTextSchema, sachtext)).toEqual([]);
   });
 
+  it('accepts 7 items (1.0.25: one Sachtext carries the reading part of a Deutsch test)', () => {
+    const itemIds = [...sachtext.itemIds, 'd-lsa-3-902', 'd-lsa-3-903'];
+    expect(issuePaths(readingTextSchema, { ...sachtext, itemIds })).toEqual([]);
+  });
+
   it.each<[string, object, string]>([
     ['wordCount below 150', { wordCount: 120 }, 'wordCount'],
     ['fewer than 4 items', { itemIds: sachtext.itemIds.slice(0, 3) }, 'itemIds'],
-    ['more than 6 items', { itemIds: [...sachtext.itemIds, 'd-lsa-3-902', 'd-lsa-3-903'] }, 'itemIds'],
+    ['more than 7 items (1.0.25)', { itemIds: [...sachtext.itemIds, 'd-lsa-3-902', 'd-lsa-3-903', 'd-lsa-3-904'] }, 'itemIds'],
     ['id prefix does not match kind', { kind: 'literarisch' }, 'id'],
     ['malformed id', { id: 'igel' }, 'id'],
   ])('rejects %s', (_name, patch, expectedPath) => {
@@ -251,6 +259,7 @@ describe('probetestSchema (§6)', () => {
     ['9/8/4 at 21 items (deutsch-93)', [9, 8, 4]],
     ['7/13/4 (mathe-93, Kompass 4 test mix)', [7, 13, 4]],
     ['7/7/4 at 18 items (deutsch-90, III 22.2 % under 23 %)', [7, 7, 4]],
+    ['8/9/5 at 22 items (Deutsch test layout, III 22.7 %)', [8, 9, 5]],
   ] as const)('accepts the niveau mix %s', (_, mix) => {
     expect(niveauIssues([...mix])).toEqual([]);
   });
@@ -305,5 +314,53 @@ describe('schemaVersionFileSchema (§1)', () => {
   it('accepts version 1.0 only', () => {
     expect(issuePaths(schemaVersionFileSchema, { version: '1.0' })).toEqual([]);
     expect(issuePaths(schemaVersionFileSchema, { version: '2.0' })).toContain('version');
+  });
+});
+
+// segment-text (1.0.25): boundaries[k] is the gap after word k of splitUnits(text, "word").
+describe('itemSchema – segment-text boundaries (§4.10)', () => {
+  // "Am Morgen packt der Junge seinen Rucksack." has 7 words, gaps 0–5, at most 5 dividers.
+  const withBoundaries = (boundaries: number[]) =>
+    issuePaths(itemSchema, mutate(segmentText, (d) => (d.solution.boundaries = boundaries)));
+
+  it.each([
+    ['the Satzglieder', [1, 2, 4]],
+    ['one divider', [3]],
+    ['n − 2 dividers', [0, 1, 2, 3, 4]],
+    ['the first and the last gap', [0, 5]],
+  ])('accepts %s', (_name, boundaries) => {
+    expect(withBoundaries(boundaries)).toEqual([]);
+  });
+
+  it.each<[string, number[], string[]]>([
+    ['no divider', [], ['solution.boundaries']],
+    ['every gap (n − 1)', [0, 1, 2, 3, 4, 5], ['solution.boundaries']],
+    ['a gap after the last word', [1, 6], ['solution.boundaries[1]']],
+    ['a duplicate', [1, 1, 4], ['solution.boundaries', 'solution.boundaries']],
+    ['descending', [4, 2, 1], ['solution.boundaries']],
+    ['a negative gap', [-1, 2], ['solution.boundaries[0]']],
+  ])('rejects %s', (_name, boundaries, paths) => {
+    expect(withBoundaries(boundaries)).toEqual(paths);
+  });
+
+  it('counts the gaps of a short sentence: 4 words, at most 2 dividers', () => {
+    expect(issuePaths(itemSchema, segmentShort)).toEqual([]);
+    expect(issuePaths(itemSchema, { ...segmentShort, solution: { boundaries: [0, 1, 2] } })).toEqual([
+      'solution.boundaries',
+    ]);
+  });
+
+  it('checks only order and duplicates for unit "letter" (integrity.ts reports the unit)', () => {
+    expect(issuePaths(itemSchema, segmentLetter)).toEqual([]);
+    expect(issuePaths(itemSchema, { ...segmentLetter, solution: { boundaries: [5, 2] } })).toEqual([
+      'solution.boundaries',
+    ]);
+  });
+
+  it('rejects other units and a maxSelect', () => {
+    expect(issuePaths(itemSchema, mutate(segmentText, (d) => ((d.payload as { unit: string }).unit = 'sentence')))).toEqual([
+      'payload.unit',
+    ]);
+    expect(issuePaths(itemSchema, { ...segmentText, payload: { ...segmentText.payload, maxSelect: 3 } })).toEqual(['payload']);
   });
 });
