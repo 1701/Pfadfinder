@@ -70,16 +70,16 @@
     "deutsch-01": {
       "slack": {
         "aufgabe": {
-          "id": "d-rsl-2-004",
-          "slack": 224
+          "id": "d-su-2-003",
+          "slack": 258
         },
         "durchsehen": {
           "id": "d-lsa-2-002",
           "slack": 85
         },
         "fehlt": {
-          "id": "d-rsl-2-004",
-          "slack": 132
+          "id": "d-lsa-2-002",
+          "slack": 149
         },
         "vergleichen": {
           "id": "d-lsa-3-001",
@@ -96,11 +96,6 @@
           "aufgabe": 329,
           "durchsehen": 209,
           "fehlt": 249
-        },
-        "d-lsa-1-003": {
-          "aufgabe": 261,
-          "durchsehen": 271,
-          "fehlt": 311
         },
         "d-lsa-2-001": {
           "aufgabe": 261,
@@ -153,21 +148,6 @@
           "durchsehen": 384,
           "fehlt": 386
         },
-        "d-rsl-1-004": {
-          "aufgabe": 448,
-          "durchsehen": 392,
-          "fehlt": 394
-        },
-        "d-rss-1-002": {
-          "aufgabe": 448,
-          "durchsehen": 360,
-          "fehlt": 360
-        },
-        "d-rss-1-006": {
-          "aufgabe": 336,
-          "durchsehen": 280,
-          "fehlt": 282
-        },
         "d-rsl-2-005": {
           "aufgabe": 392,
           "durchsehen": 336,
@@ -183,22 +163,6 @@
           "durchsehen": 360,
           "fehlt": 360
         },
-        "d-rss-2-004": {
-          "aufgabe": 336,
-          "durchsehen": 280,
-          "fehlt": 282
-        },
-        "d-rsl-2-004": {
-          "aufgabe": 224,
-          "durchsehen": 130,
-          "fehlt": 132
-        },
-        "d-rss-3-001": {
-          "aufgabe": 301,
-          "durchsehen": 232,
-          "fehlt": 234,
-          "vergleichen": 258
-        },
         "d-rss-2-008": {
           "aufgabe": 392,
           "durchsehen": 304,
@@ -208,6 +172,41 @@
           "aufgabe": 336,
           "durchsehen": 280,
           "fehlt": 282
+        },
+        "d-su-1-001": {
+          "aufgabe": 448,
+          "durchsehen": 336,
+          "fehlt": 338
+        },
+        "d-su-1-009": {
+          "aufgabe": 448,
+          "durchsehen": 350,
+          "fehlt": 352
+        },
+        "d-su-2-001": {
+          "aufgabe": 424,
+          "durchsehen": 338,
+          "fehlt": 370
+        },
+        "d-su-2-003": {
+          "aufgabe": 258,
+          "durchsehen": 165,
+          "fehlt": 167
+        },
+        "d-su-2-011": {
+          "aufgabe": 392,
+          "durchsehen": 294,
+          "fehlt": 296
+        },
+        "d-su-2-007": {
+          "aufgabe": 448,
+          "durchsehen": 336,
+          "fehlt": 338
+        },
+        "d-su-3-002": {
+          "aufgabe": 320,
+          "durchsehen": 240,
+          "fehlt": 240
         }
       },
       "promptLines": {
@@ -220,11 +219,6 @@
           "aufgabe": 2,
           "durchsehen": 2,
           "fehlt": 2
-        },
-        "d-lsa-1-003": {
-          "aufgabe": 3,
-          "durchsehen": 3,
-          "fehlt": 3
         },
         "d-lsa-2-001": {
           "aufgabe": 3,
@@ -272,8 +266,8 @@
     "deutsch-02": {
       "slack": {
         "aufgabe": {
-          "id": "d-rsl-2-006",
-          "slack": 280
+          "id": "d-su-2-014",
+          "slack": 224
         },
         "durchsehen": {
           "id": "d-lli-2-002",
@@ -351,26 +345,6 @@
           "durchsehen": 392,
           "fehlt": 394
         },
-        "d-rsl-1-003": {
-          "aufgabe": 448,
-          "durchsehen": 360,
-          "fehlt": 360
-        },
-        "d-rss-1-003": {
-          "aufgabe": 448,
-          "durchsehen": 334,
-          "fehlt": 334
-        },
-        "d-rsl-1-005": {
-          "aufgabe": 392,
-          "durchsehen": 336,
-          "fehlt": 338
-        },
-        "d-rss-1-005": {
-          "aufgabe": 392,
-          "durchsehen": 336,
-          "fehlt": 338
-        },
         "d-rsl-2-003": {
           "aufgabe": 448,
           "durchsehen": 334,
@@ -378,35 +352,55 @@
         },
         "d-rss-2-001": {
           "aufgabe": 440,
-          "durchsehen": 360,
-          "fehlt": 360
-        },
-        "d-rsl-2-006": {
-          "aufgabe": 280,
-          "durchsehen": 224,
-          "fehlt": 226
-        },
-        "d-rss-2-002": {
-          "aufgabe": 448,
-          "durchsehen": 360,
-          "fehlt": 360
+          "durchsehen": 384,
+          "fehlt": 386
         },
         "d-rsl-2-008": {
           "aufgabe": 440,
           "durchsehen": 384,
           "fehlt": 386
         },
-        "d-rss-2-007": {
-          "aufgabe": 392,
-          "durchsehen": 336,
-          "fehlt": 338
+        "d-rss-2-002": {
+          "aufgabe": 448,
+          "durchsehen": 360,
+          "fehlt": 360
         },
         "d-rsl-3-004": {
           "aufgabe": 280,
           "durchsehen": 133,
           "fehlt": 133
         },
-        "d-rss-3-002": {
+        "d-su-1-002": {
+          "aufgabe": 392,
+          "durchsehen": 336,
+          "fehlt": 338
+        },
+        "d-su-1-011": {
+          "aufgabe": 448,
+          "durchsehen": 392,
+          "fehlt": 394
+        },
+        "d-su-2-002": {
+          "aufgabe": 320,
+          "durchsehen": 240,
+          "fehlt": 240
+        },
+        "d-su-2-009": {
+          "aufgabe": 424,
+          "durchsehen": 368,
+          "fehlt": 370
+        },
+        "d-su-2-014": {
+          "aufgabe": 224,
+          "durchsehen": 168,
+          "fehlt": 170
+        },
+        "d-su-2-005": {
+          "aufgabe": 376,
+          "durchsehen": 320,
+          "fehlt": 322
+        },
+        "d-su-3-005": {
           "aufgabe": 336,
           "durchsehen": 256,
           "fehlt": 256
@@ -470,184 +464,183 @@
     "deutsch-03": {
       "slack": {
         "aufgabe": {
-          "id": "d-lsa-2-008",
-          "slack": 222
+          "id": "d-lsa-2-010",
+          "slack": 277
         },
         "durchsehen": {
-          "id": "d-lsa-2-008",
-          "slack": 53
+          "id": "d-lsa-2-010",
+          "slack": 108
         },
         "fehlt": {
-          "id": "d-lsa-2-008",
-          "slack": 145
+          "id": "d-lsa-2-010",
+          "slack": 114
         },
         "vergleichen": {
-          "id": "d-lsa-3-004",
-          "slack": 209
+          "id": "d-lsa-2-012",
+          "slack": 201
         }
       },
       "items": {
-        "d-lsa-1-008": {
-          "aufgabe": 385,
-          "durchsehen": 329,
-          "fehlt": 331
+        "d-lsa-1-010": {
+          "aufgabe": 408,
+          "durchsehen": 352,
+          "fehlt": 354
         },
-        "d-lsa-1-009": {
-          "aufgabe": 261,
-          "durchsehen": 271,
-          "fehlt": 311
+        "d-lsa-1-011": {
+          "aufgabe": 491,
+          "durchsehen": 341,
+          "fehlt": 427
         },
-        "d-lsa-2-007": {
-          "aufgabe": 296,
-          "durchsehen": 109,
-          "fehlt": 165
-        },
-        "d-lsa-2-008": {
-          "aufgabe": 222,
-          "durchsehen": 53,
-          "fehlt": 145
-        },
-        "d-lsa-3-004": {
-          "aufgabe": 339,
-          "durchsehen": 127,
-          "fehlt": 167,
-          "vergleichen": 209
-        },
-        "d-lli-1-007": {
-          "aufgabe": 385,
-          "durchsehen": 265,
-          "fehlt": 321
-        },
-        "d-lli-1-008": {
+        "d-lsa-2-009": {
           "aufgabe": 296,
           "durchsehen": 176,
-          "fehlt": 232
+          "fehlt": 216
         },
-        "d-lli-2-007": {
+        "d-lsa-2-010": {
+          "aufgabe": 277,
+          "durchsehen": 108,
+          "fehlt": 114
+        },
+        "d-lsa-2-011": {
           "aufgabe": 296,
           "durchsehen": 109,
           "fehlt": 165
         },
-        "d-lli-2-008": {
-          "aufgabe": 326,
-          "durchsehen": 206,
-          "fehlt": 246
+        "d-lsa-2-012": {
+          "aufgabe": 304,
+          "durchsehen": 118,
+          "fehlt": 158,
+          "vergleichen": 201
         },
-        "d-lli-3-004": {
-          "aufgabe": 339,
-          "durchsehen": 127,
-          "fehlt": 167,
-          "vergleichen": 209
+        "d-lsa-3-005": {
+          "aufgabe": 352,
+          "durchsehen": 232,
+          "fehlt": 272
         },
-        "d-rsl-1-006": {
+        "d-rsl-1-009": {
           "aufgabe": 440,
           "durchsehen": 384,
           "fehlt": 386
         },
-        "d-rss-1-007": {
-          "aufgabe": 448,
-          "durchsehen": 336,
-          "fehlt": 338
-        },
-        "d-rsl-1-007": {
-          "aufgabe": 440,
-          "durchsehen": 384,
-          "fehlt": 386
-        },
-        "d-rss-1-008": {
+        "d-rss-2-010": {
           "aufgabe": 392,
           "durchsehen": 336,
           "fehlt": 338
-        },
-        "d-rsl-1-008": {
-          "aufgabe": 448,
-          "durchsehen": 360,
-          "fehlt": 360
-        },
-        "d-rsl-2-001": {
-          "aufgabe": 336,
-          "durchsehen": 280,
-          "fehlt": 282
-        },
-        "d-rss-2-005": {
-          "aufgabe": 280,
-          "durchsehen": 224,
-          "fehlt": 226
-        },
-        "d-rsl-2-007": {
-          "aufgabe": 448,
-          "durchsehen": 312,
-          "fehlt": 312
         },
         "d-rss-2-006": {
           "aufgabe": 440,
           "durchsehen": 360,
           "fehlt": 360
         },
-        "d-rss-3-003": {
-          "aufgabe": 280,
-          "durchsehen": 157,
-          "fehlt": 158
+        "d-rsl-3-001": {
+          "aufgabe": 301,
+          "durchsehen": 206,
+          "fehlt": 208,
+          "vergleichen": 232
         },
-        "d-rsl-3-003": {
+        "d-rss-2-009": {
+          "aufgabe": 440,
+          "durchsehen": 384,
+          "fehlt": 386
+        },
+        "d-rss-3-005": {
+          "aufgabe": 336,
+          "durchsehen": 280,
+          "fehlt": 282
+        },
+        "d-rss-2-007": {
+          "aufgabe": 392,
+          "durchsehen": 336,
+          "fehlt": 338
+        },
+        "d-su-1-005": {
+          "aufgabe": 424,
+          "durchsehen": 312,
+          "fehlt": 370
+        },
+        "d-su-3-004": {
           "aufgabe": 323,
           "durchsehen": 253,
           "fehlt": 255,
           "vergleichen": 279
+        },
+        "d-su-1-006": {
+          "aufgabe": 392,
+          "durchsehen": 336,
+          "fehlt": 338
+        },
+        "d-su-2-004": {
+          "aufgabe": 424,
+          "durchsehen": 368,
+          "fehlt": 370
+        },
+        "d-su-1-004": {
+          "aufgabe": 440,
+          "durchsehen": 328,
+          "fehlt": 386
+        },
+        "d-su-1-003": {
+          "aufgabe": 320,
+          "durchsehen": 264,
+          "fehlt": 266
+        },
+        "d-su-2-013": {
+          "aufgabe": 285,
+          "durchsehen": 229,
+          "fehlt": 231
+        },
+        "d-su-2-012": {
+          "aufgabe": 440,
+          "durchsehen": 328,
+          "fehlt": 386
+        },
+        "d-su-2-006": {
+          "aufgabe": 336,
+          "durchsehen": 280,
+          "fehlt": 282
+        },
+        "d-su-2-010": {
+          "aufgabe": 392,
+          "durchsehen": 294,
+          "fehlt": 296
         }
       },
       "promptLines": {
-        "d-lsa-1-008": {
+        "d-lsa-1-010": {
           "aufgabe": 2,
           "durchsehen": 2,
           "fehlt": 2
         },
-        "d-lsa-1-009": {
-          "aufgabe": 3,
-          "durchsehen": 3,
-          "fehlt": 3
-        },
-        "d-lsa-2-007": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2
-        },
-        "d-lsa-2-008": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2
-        },
-        "d-lsa-3-004": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2,
-          "vergleichen": 2
-        },
-        "d-lli-1-007": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2
-        },
-        "d-lli-1-008": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2
-        },
-        "d-lli-2-007": {
-          "aufgabe": 2,
-          "durchsehen": 2,
-          "fehlt": 2
-        },
-        "d-lli-2-008": {
+        "d-lsa-1-011": {
           "aufgabe": 1,
           "durchsehen": 1,
           "fehlt": 1
         },
-        "d-lli-3-004": {
+        "d-lsa-2-009": {
           "aufgabe": 2,
           "durchsehen": 2,
-          "fehlt": 2,
-          "vergleichen": 2
+          "fehlt": 2
+        },
+        "d-lsa-2-010": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-2-011": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
+        },
+        "d-lsa-2-012": {
+          "aufgabe": 3,
+          "durchsehen": 3,
+          "fehlt": 3,
+          "vergleichen": 3
+        },
+        "d-lsa-3-005": {
+          "aufgabe": 2,
+          "durchsehen": 2,
+          "fehlt": 2
         }
       }
     }

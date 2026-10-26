@@ -1074,5 +1074,493 @@
       "createdAt": "2026-10-25",
       "calibration": "kompass4-2025"
     }
+  },
+  {
+    "id": "d-su-1-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "segment-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ein Satzglied kann man als Ganzes umstellen. Es hat ein Wort oder mehrere."
+    },
+    "prompt": "Setze zwischen die Satzglieder einen Trennstrich.",
+    "payload": {
+      "text": "Im Garten pflückt Mia Erdbeeren.",
+      "unit": "word"
+    },
+    "solution": {
+      "boundaries": [
+        1,
+        2,
+        3
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Im Garten, pflückt, Mia, Erdbeeren: vier Satzglieder.",
+      "incorrect": "Stelle um: Mia pflückt im Garten Erdbeeren. Was zusammen wandert, ist ein Satzglied.",
+      "misconception": "Im und Garten trennen manche. Im Garten wandert nur zusammen, also ist es ein Satzglied."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "trennstriche"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-010",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "prompt": "Welcher Satz steht im Präteritum (schriftliche Vergangenheit)?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Leyla malte einen Fuchs."
+        },
+        {
+          "id": "b",
+          "text": "Leyla malt einen Fuchs."
+        },
+        {
+          "id": "c",
+          "text": "Leyla hat einen Fuchs gemalt."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! malte ist das Präteritum. Es steht in Geschichten und Berichten.",
+      "incorrect": "Präteritum hat ein Verb: malte. Perfekt hat zwei Teile: hat gemalt. Präsens: malt.",
+      "misconception": "hat gemalt wählen viele, weil es auch Vergangenheit ist. Zwei Teile heißen aber Perfekt."
+    },
+    "tags": [
+      "zeitformen",
+      "praeteritum",
+      "perfekt",
+      "praesens"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-1-011",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 1,
+    "format": "mark-in-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Das Subjekt sagt, wer etwas tut. Frage: Wer oder was?"
+    },
+    "prompt": "Tippe das Subjekt an.",
+    "payload": {
+      "text": "Am Morgen füttert Leyla die Hühner im Garten",
+      "unit": "word",
+      "maxSelect": 1
+    },
+    "solution": {
+      "indices": [
+        3
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Leyla ist das Subjekt. Sie füttert die Hühner.",
+      "incorrect": "Frage: Wer oder was füttert? Die Antwort ist das Subjekt.",
+      "misconception": "Hühner wählen manche, weil sie wichtig scheinen. Wer füttert? Leyla, nicht die Hühner."
+    },
+    "tags": [
+      "satzglieder",
+      "subjekt"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-010",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "segment-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Prüfe mit der Umstellprobe, was zusammenbleibt."
+    },
+    "prompt": "Setze zwischen die Satzglieder einen Trennstrich.",
+    "payload": {
+      "text": "Die beiden Kinder bauen am Nachmittag im Garten eine Hütte.",
+      "unit": "word"
+    },
+    "solution": {
+      "boundaries": [
+        2,
+        3,
+        5,
+        7
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Die beiden Kinder, bauen, am Nachmittag, im Garten, eine Hütte: fünf Satzglieder.",
+      "incorrect": "Stelle den Satz um. Was beim Umstellen zusammenbleibt, ist ein Satzglied.",
+      "misconception": "Am Nachmittag im Garten nehmen viele als eins. Beide können allein nach vorn, also sind es zwei."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "trennstriche"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-011",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "segment-text",
+    "status": "draft",
+    "stimulus": {
+      "text": "Prüfe mit der Umstellprobe, was zusammenbleibt."
+    },
+    "prompt": "Setze zwischen die Satzglieder einen Trennstrich.",
+    "payload": {
+      "text": "Die Freundin meiner Schwester wohnt seit einem Jahr in Berlin.",
+      "unit": "word"
+    },
+    "solution": {
+      "boundaries": [
+        3,
+        4,
+        7
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Die Freundin meiner Schwester, wohnt, seit einem Jahr, in Berlin: vier Satzglieder.",
+      "incorrect": "Stelle den Satz um. Was zusammen nach vorn wandert, ist ein Satzglied.",
+      "misconception": "Viele trennen nach Freundin. Meiner Schwester kann nicht allein nach vorn, es gehört dazu."
+    },
+    "tags": [
+      "satzglieder",
+      "umstellprobe",
+      "trennstriche",
+      "subjekt"
+    ],
+    "estimatedSeconds": 60,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-012",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Die Grundform heißt laufen."
+    },
+    "prompt": "Wähle in beiden Lücken die passende Form von laufen.",
+    "payload": {
+      "template": "Präsens (Gegenwart): er {1}. Präteritum (schriftliche Vergangenheit): er {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "läuft",
+            "lauft",
+            "lief"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "lief",
+            "laufte",
+            "läuft"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "läuft",
+        "2": "lief"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! er läuft, er lief. laufen ist unregelmäßig: Der Selbstlaut ändert sich.",
+      "incorrect": "Sprich die Form mit heute und mit gestern: Heute läuft er, gestern lief er.",
+      "misconception": "laufte ist nach dem Muster spielte gebaut. laufen ist unregelmäßig, es heißt lief."
+    },
+    "tags": [
+      "zeitformen",
+      "praesens",
+      "praeteritum",
+      "unregelmaessige-verben",
+      "grundform"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-013",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ein zusammengesetztes Nomen hat vorn ein Bestimmungswort und hinten ein Grundwort."
+    },
+    "prompt": "Ordne jedem Nomen die Wortart seines Bestimmungsworts zu.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Rotkehlchen"
+        },
+        {
+          "id": "l2",
+          "text": "Katzenkorb"
+        },
+        {
+          "id": "l3",
+          "text": "Bratpfanne"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "Adjektiv"
+        },
+        {
+          "id": "r2",
+          "text": "Nomen"
+        },
+        {
+          "id": "r3",
+          "text": "Verb"
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! rot ist ein Adjektiv, die Katze ein Nomen, braten ein Verb.",
+      "incorrect": "Das Bestimmungswort steht vorn. Frage: Was ist das für ein Wort allein? rot, Katze, braten.",
+      "misconception": "Katzenkorb ordnen manche dem Verb zu. Katzen ist aber die Mehrzahl von die Katze, ein Nomen."
+    },
+    "tags": [
+      "zusammengesetzte-nomen",
+      "bestimmungswort",
+      "wortarten"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-2-014",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "prompt": "Welche Sätze stehen im Perfekt (gesprochene Vergangenheit)? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Wir haben im See gebadet."
+        },
+        {
+          "id": "b",
+          "text": "Mia badete im See."
+        },
+        {
+          "id": "c",
+          "text": "Opa hat den Zaun gestrichen."
+        },
+        {
+          "id": "d",
+          "text": "Der Hund schläft im Korb."
+        },
+        {
+          "id": "e",
+          "text": "Ben ist nach Hause gelaufen."
+        }
+      ],
+      "minSelect": 3
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c",
+        "e"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Das Perfekt hat zwei Teile: haben oder sein und das Verb am Ende, wie hat gestrichen.",
+      "incorrect": "Suche Sätze mit zwei Verbteilen: haben oder sein vorn, das Verb mit ge hinten.",
+      "misconception": "badete nehmen viele dazu, weil es Vergangenheit ist. Es hat nur einen Teil, das ist Präteritum."
+    },
+    "tags": [
+      "zeitformen",
+      "perfekt",
+      "praeteritum"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-3-004",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia und Ben klettern auf den Baum."
+    },
+    "prompt": "Erkläre, warum klettern in diesem Satz ein Verb ist.",
+    "payload": {
+      "maxChars": 140,
+      "hint": "Was sagt das Wort aus? Was kannst du mit dem Wort machen?"
+    },
+    "solution": {
+      "model": "klettern sagt, was Mia und Ben tun. Man kann es in eine andere Zeit setzen: kletterten.",
+      "keyPoints": [
+        "Sagt, was jemand tut",
+        "Lässt sich in eine Zeitform setzen"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Verben sagen, was jemand tut, und man kann sie in Zeitformen setzen.",
+      "incorrect": "Zwei Proben: Sagt das Wort, was jemand tut? Geht es mit gestern: kletterten?",
+      "misconception": "Klein geschrieben reicht nicht, das gilt auch für Adjektive. Entscheidend ist die Zeitform."
+    },
+    "tags": [
+      "wortarten",
+      "verb",
+      "zeitformen",
+      "begruenden"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-su-3-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "sprache-untersuchen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Leyla sagt: Im Satz Ich bin gestern gelaufen steht das Verb im Präteritum."
+    },
+    "prompt": "Welcher Fehler steckt in Leylas Aussage?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Es ist Perfekt: bin und gelaufen sind zwei Teile."
+        },
+        {
+          "id": "b",
+          "text": "Es ist Präsens, weil bin in der Gegenwart steht."
+        },
+        {
+          "id": "c",
+          "text": "Leyla hat recht: gestern zeigt das Präteritum."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! bin gelaufen hat zwei Teile. Das ist das Perfekt, die gesprochene Vergangenheit.",
+      "incorrect": "Zähle die Verbteile. Einer wie lief heißt Präteritum, zwei wie bin gelaufen heißen Perfekt.",
+      "misconception": "gestern verführt zum Präteritum. Die Zeitform erkennt man am Verb, nicht am Wort gestern."
+    },
+    "tags": [
+      "zeitformen",
+      "perfekt",
+      "praeteritum",
+      "fehler-finden",
+      "begruenden"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
   }
 ]

@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.25 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.26 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -226,10 +226,10 @@ type Probetest = {
 
 Regeln:
 - Zeit (Mathe seit 1.0.9, Deutsch seit 1.0.16): **Mathe 24–32 Min.** Summe `estimatedSeconds` bei 18–24 Items. **Deutsch 24–32 Min.** bei 18–24 Items und 1 oder 2 Texten: Summe `estimatedSeconds` der Items plus Lesezeit je referenziertem Text = `wordCount` × 0,75 s (80 Wörter/Min.). Grund: Die Item-Uhr startet nach dem Lese-Screen, die Lesezeit steckt in keinem Item. Der Timer bleibt 45 Min.: Die `estimatedSeconds` sind App-Zeiten, das Papier-Original rechnet zusätzlich mit Lesen und Schreiben auf Papier (etwa 110 s je Aufgabe). Wer früher fertig ist, gibt früher ab, wie im Original.
-- Niveau-Band (seit 1.0.23, `PROBETEST_NIVEAU_BAND` in `taxonomy.ts`): Anteil je Niveau an der Itemzahl n: **I 29–44 %, II 38–55 %, III 16–23 %**, geprüft als `min·n ≤ Anzahl ≤ max·n`, ohne Rundung und ohne ±1. Bei 24 Items I 7–10, II 10–13, III 4–5; bei 21 Items I 7–9, II 8–11, III 4; bei 18 Items III 3–4. Die Summe ist die Itemzahl, `niveauMix` muss zu den Items passen. Gültig sind der Pool-Mix 10/10/4 (mathe-01/02, deutsch-01/02, deutsch-03 mit 9/8/4) und der Testmix 7/13/4 (mathe-03, wie Kompass 4 Mathe 2025)
+- Niveau-Band (seit 1.0.23, `PROBETEST_NIVEAU_BAND` in `taxonomy.ts`): Anteil je Niveau an der Itemzahl n: **I 29–44 %, II 38–55 %, III 16–23 %**, geprüft als `min·n ≤ Anzahl ≤ max·n`, ohne Rundung und ohne ±1. Bei 24 Items I 7–10, II 10–13, III 4–5; bei 21 Items I 7–9, II 8–11, III 4; bei 18 Items III 3–4. Die Summe ist die Itemzahl, `niveauMix` muss zu den Items passen. Gültig sind der Pool-Mix 10/10/4 (mathe-01/02), 8/12/4 (deutsch-01/02, seit 1.0.26) und der Testmix 7/13/4 (mathe-03, wie Kompass 4 Mathe 2025; deutsch-03 seit 1.0.26)
 - kein `short-answer`-Anteil über 15 %
-- Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `lesen-literarisch`, `rs-laut-buchstabe`, `rs-strategien`. Jeder Pflichtbereich hat mindestens 2 Items. `sprache-untersuchen` ist noch nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. Pflicht wird der Bereich, wenn die Deutsch-Probetests neu gemischt sind; vorher wird `bereich` nie ohne Entscheidung über diese Liste erweitert. Mit derselben Änderung kann `lesen-literarisch` die Pflicht verlieren: Bis dahin braucht auch ein Deutsch-Probetest mit nur einem Text (einem Sachtext) 2 Items aus `lesen-literarisch`; sie stehen ohne `textRef` direkt nach dem Textblock
-- Deutsch beginnt mit Lesen und endet mit Rechtschreibung oder Sprache untersuchen (seit 1.0.25, vorher nur Rechtschreibung; Kompass 4 Deutsch 2024 und 2025 enden mit Sprache untersuchen). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator), vor, zwischen oder nach den Rechtschreib-Items. Gültig ist damit auch der Aufbau des echten Tests: ein Sachtext mit bis zu 7 Items, Rechtschreibung, Sprache untersuchen (bis zum Neu-Mischen mit den 2 Items aus `lesen-literarisch`, s. Pflichtbereiche)
+- Pflichtbereiche je Fach (seit 1.0.22, `PROBETEST_REQUIRED_BEREICHE` in `taxonomy.ts`): Mathe alle 5 Bereiche, Deutsch `lesen-sachtext`, `rs-laut-buchstabe`, `rs-strategien`, `sprache-untersuchen` (seit 1.0.26; vorher `lesen-literarisch` statt `sprache-untersuchen`). Jeder Pflichtbereich hat mindestens 2 Items. `lesen-literarisch` ist erlaubt, aber nicht Pflicht; fehlt sein Schlüssel, ist das kein Fehler. Ein vorhandener Schlüssel muss zur Zählung der Items passen wie jeder andere. `bereich` wird nie ohne Entscheidung über diese Liste erweitert
+- Deutsch beginnt mit Lesen und endet mit Rechtschreibung oder Sprache untersuchen (seit 1.0.25, vorher nur Rechtschreibung; Kompass 4 Deutsch 2024 und 2025 enden mit Sprache untersuchen). Items aus `sprache-untersuchen` stehen nach den Lesen-Blöcken, nie davor oder dazwischen (seit 1.0.22, Fehler im Validator), vor, zwischen oder nach den Rechtschreib-Items. Gültig ist damit auch der Aufbau des echten Tests: ein Sachtext mit bis zu 7 Items, Rechtschreibung, Sprache untersuchen (deutsch-03 seit 1.0.26)
 - Deutsch (seit 1.0.16, 1.0.25): Die Texte ergeben sich aus den `textRef`s der Items. 1 oder 2 Texte (seit 1.0.25, vorher genau 2); bei zweien ein Sachtext und ein literarischer (verschiedene `kind`). Die Items eines Textes stehen zusammen, weil der Lese-Screen einmal vor dem ersten Item eines Textes kommt. Kein Item ohne `textRef` steht vor einem Item mit `textRef`. Alles sind Fehler im Validator
 
 ## 7. Autorenregeln (gelten für jeden Batch)
@@ -268,11 +268,11 @@ Regeln:
 - Stimulus 17–30 Wörter; ein Bild trägt die Aufgabe in rund jeder zweiten Teilaufgabe des Tests. Begriffs- und Körperwissen ohne Bild kommt im Test nicht vor und wird nur auf I gepflegt
 - Testmix je 24 Teilaufgaben: zo 8 / rf 6 / gm 5 / ms 3 / dz 2, Niveau 7 / 13 / 4. Seit 1.0.23 prüft der Validator ein Band je Niveau (§6); mathe-03 folgt dem Testmix, mathe-01/02 dem Pool-Mix 10 / 10 / 4
 
-**Kalibrierung Deutsch – Sprache untersuchen (Kompass 4 2025)**
-- Anker ist der Deutsch-Test 2025 (Aufgabe 14–24), `calibration: "kompass4-2025"`
-- I: Wortart erkennen, Grundform, Steigerung, Satz ↔ Zeitform, zusammengesetztes Nomen
-- II: unregelmäßiges Präteritum, Perfekt, Adjektiv-Endung, Bestimmungswort, Satzglieder (Umstellprobe, Format `segment-text` §4.10), Kongruenz
-- III: Wortart begründen, Fehler in fremder Einteilung, Prüfschritte ordnen
+**Kalibrierung Deutsch (Kompass 4 2024/2025)**
+- Anker sind die Deutsch-Tests 2024 und 2025 (Lesen 1–7 an einem Sachtext, RS 8–13 und 17, SU 14–24), `calibration: "kompass4-2025"`
+- Lesen: Entnehmen, Aussagen prüfen, Satzteile verbinden, zwei Gründe nennen, Ablauf ordnen, Überschrift zum Absatz, Wortbedeutung – nur Sachtexte, literarische Texte kommen im Test nicht vor
+- RS: Wortfamilien-Lücke ss/ß, Großschreibung mit Satzanfang, Verlängern/Ableiten mit Begründung, Fehler finden und berichtigen, wörtliche Rede, Wortstamm
+- SU: I Wortart erkennen, Grundform, Steigerung, Satz ↔ Zeitform, zusammengesetztes Nomen; II unregelmäßiges Präteritum, Perfekt, Adjektiv-Endung, Bestimmungswort, Satzglieder (Umstellprobe), Kongruenz; III Wortart begründen, Fehler in fremder Einteilung, Prüfschritte ordnen; dazu Satzglieder trennen (Format `segment-text` §4.10), Verbformen-Tabelle, Perfekt erkennen
 
 **Feedback**
 - `incorrect` erklärt den Weg, verrät nicht nur das Ergebnis

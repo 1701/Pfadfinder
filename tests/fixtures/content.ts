@@ -7,8 +7,8 @@
 //   zahlen-operationen.
 // - Deutsch: lesen-sachtext with t-sach-900/901 (fixtures/lesen), lesen-literarisch with
 //   t-lit-900 (4 items) and t-lit-902 (6 items), the spelling items of deutsch-90 on top of
-//   makePool in both spelling Bereiche, makePool in sprache-untersuchen plus its segment-text
-//   item of deutsch-90.
+//   makePool in both spelling Bereiche, makePool in sprache-untersuchen plus the two su items of
+//   deutsch-90 (segment-text, cloze-select).
 // - Probetests: mathe-91 (20 items, 8/8/4, a short answer as item 20), mathe-92 (the same items
 //   backwards) and deutsch-90.
 // Every Bereich has at least MIN_ITEMS_FOR_PRACTICE items, so the map opens all ten.
@@ -39,6 +39,7 @@ import {
   litItems,
   litText,
   spellingItems,
+  suClozeItem,
   suSegmentItem,
 } from './lesen';
 import { makePool } from './pool';
@@ -85,6 +86,7 @@ const deutschItems: Item[] = [
   ...makePool('deutsch', 4, ['rs-laut-buchstabe', 'rs-strategien', 'sprache-untersuchen']),
   ...spellingItems,
   suSegmentItem,
+  suClozeItem,
 ];
 
 export const FIXTURE_ITEMS: Item[] = [...matheItems, ...deutschItems];

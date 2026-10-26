@@ -2,6 +2,17 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-26 – Content: Batch D Deutsch, Probetests neu gemischt, su Pflicht (Schema 1.0.26, Branch `d`)
+- **Eingespielt (Zip d Fassung 3, wörtlich):** 23 Items (lsa 7 an t-sach-005, rsl 2, rss 4, su 10), Text t-sach-005 „Vom Nektar zum Honig“ (244 Wörter), Patch d-rss-2-001 (Pferd/Feld), deutsch-01/02/03 ersetzt. Pool Deutsch 124 aktiv, 0 retired: lsa 11/12/5, lli 8/8/4, rsl 9/9/4, rss 9/10/5, su 11/14/5; 9 Texte; Mathe unverändert 150 / 28 retired.
+- **Probetests:** deutsch-01 25,89, deutsch-02 26,73, deutsch-03 25,97 Min. (App = Zip). deutsch-03 im Testaufbau (ein Sachtext, Lesen → RS → SU, 7/13/4, kein lli).
+- **Code-Teil (Regel 26):** `PROBETEST_REQUIRED_BEREICHE.deutsch` = lsa, rsl, rss, su (lli erlaubt, nicht Pflicht). Fixtures: deutsch-90 mit d-su-2-921 (cloze-select) statt d-rsl-2-900; deutsch-91 mit 2 su (cloze-select) statt der letzten 2 rss; neuer gültiger Fall „ein Sachtext, kein lli“.
+- **Sweep-Befunde:** d-lsa-2-011 Durchsehen Safari quer 1 px → Fassung 2 (Prompt eine Zeile, kürzere Elemente) 36 px. d-su-3-003 in deutsch-02 Durchsehen/fehlt Safari quer 8 px (ohne Text, Platz 24) → Fassung 3 tauscht es gegen d-su-3-005 (148 px). Item unverändert.
+- **Sweep 24 Items danach:** knappste Luft Üben/Durchsehen iPad quer 105/109, iPad hoch 18/18, Safari quer 39/36, Safari hoch 18/18 px; keine Befunde.
+- **§5-Ausnahme (Durchsehen neben Text, Safari quer, ≥ 0):** 1 px bei d-lsa-2-002, d-lli-2-005 (deutsch-01), d-lsa-2-004, d-lli-2-002 (deutsch-02), wie im Budget vorher.
+- **Abweichung:** MarkInText-/order-Tests sehen seit F keine Content-Items; die neuen Items prüfen content:validate und content-smoke.
+- **Screenshots:** committet nur `probetest-budget-*.json` (4, nur Deutsch-Blöcke geändert) und `probetest-druck-deutsch-seite1.png`.
+- **Lokal:** `npm run check` grün (unit 1 148, smoke 7), Smoke 41/41, Einstieg `--repeat-each=20` 160/160, Layout mit Schalter 59/60 (text-layout ipad-landscape „Execution context destroyed“, einzeln 3/3 grün), `layout-laengstes-*` unverändert.
+
 ## 2026-10-25 – Format segment-text und Deutsch-Probetest-Regeln (D-Code, Schema 1.0.25, Branch `d`)
 - **Gebaut:** zehntes Format `segment-text` (Trennstriche zwischen Wörtern, Satzglieder): Schema mit `boundaries` gegen `splitUnits()`, Bewertung als Menge ohne Teilpunkt, Vorlesen liest den Satz, Renderer (Wortkacheln, Lücken 48 × 48 px, „Richtig ist“), Druck mit weiten Wortabständen, Messseite `/dev/format/segment-text` (nur Dev). Kein Mischen.
 - **Validator:** Fehler bei `unit: "letter"` sowie `textRef`/`assetId` an segment-text; Warnung über 14 Wörter / 85 Zeichen. ReadingText 4–7 Items; Deutsch-Probetest mit 1 oder 2 Texten, Ende mit RS oder su. `PROBETEST_REQUIRED_BEREICHE` unverändert (mit einem Text braucht ein Probetest weiter 2 lli-Items).

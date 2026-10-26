@@ -15,28 +15,29 @@
     "d-lli-3-001",
     "d-rsl-1-001",
     "d-rss-1-001",
-    "d-rsl-1-003",
-    "d-rss-1-003",
-    "d-rsl-1-005",
-    "d-rss-1-005",
     "d-rsl-2-003",
     "d-rss-2-001",
-    "d-rsl-2-006",
-    "d-rss-2-002",
     "d-rsl-2-008",
-    "d-rss-2-007",
+    "d-rss-2-002",
     "d-rsl-3-004",
-    "d-rss-3-002"
+    "d-su-1-002",
+    "d-su-1-011",
+    "d-su-2-002",
+    "d-su-2-009",
+    "d-su-2-014",
+    "d-su-2-005",
+    "d-su-3-005"
   ],
   "niveauMix": {
-    "1": 10,
-    "2": 10,
+    "1": 8,
+    "2": 12,
     "3": 4
   },
   "bereichMix": {
     "lesen-sachtext": 5,
     "lesen-literarisch": 5,
-    "rs-laut-buchstabe": 7,
-    "rs-strategien": 7
+    "rs-laut-buchstabe": 4,
+    "rs-strategien": 3,
+    "sprache-untersuchen": 7
   }
 }

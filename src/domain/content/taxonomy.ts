@@ -26,9 +26,10 @@ export const BEREICHE = [...BEREICHE_BY_FACH.mathe, ...BEREICHE_BY_FACH.deutsch]
 export type Bereich = (typeof BEREICHE)[number];
 
 /**
- * Bereiche every Probetest of a Fach must cover with at least 2 items (CONTENT_SCHEMA §6, 1.0.22).
- * Written out, never derived from BEREICHE_BY_FACH: a new Bereich is not required until the
- * Probetests of its Fach contain it. Never extend the Bereich enum without deciding here.
+ * Bereiche every Probetest of a Fach must cover with at least 2 items (CONTENT_SCHEMA §6, 1.0.22;
+ * Deutsch since 1.0.26: sprache-untersuchen in, lesen-literarisch out, as in Kompass 4 Deutsch
+ * 2024 and 2025). Written out, never derived from BEREICHE_BY_FACH: a new Bereich is not required
+ * until the Probetests of its Fach contain it. Never extend the Bereich enum without deciding here.
  */
 export const PROBETEST_REQUIRED_BEREICHE = {
   mathe: [
@@ -38,7 +39,7 @@ export const PROBETEST_REQUIRED_BEREICHE = {
     'daten-zufall',
     'muster-strukturen',
   ],
-  deutsch: ['lesen-sachtext', 'lesen-literarisch', 'rs-laut-buchstabe', 'rs-strategien'],
+  deutsch: ['lesen-sachtext', 'rs-laut-buchstabe', 'rs-strategien', 'sprache-untersuchen'],
 } as const satisfies Record<Fach, readonly Bereich[]>;
 
 /**

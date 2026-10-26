@@ -11,7 +11,7 @@ import {
   type Probetest,
   type ReadingText,
 } from '../../src/domain/content';
-import { findError, numberInput, sachtext, segmentText } from './items';
+import { clozeSelect, findError, numberInput, sachtext, segmentText } from './items';
 
 export function itemId(bereich: Bereich, niveau: Niveau, n: number): string {
   const fach = fachOfBereich(bereich);
@@ -106,8 +106,10 @@ export function buildMatheProbetest(): { items: Item[]; probetest: Probetest } {
 }
 
 /**
- * Two texts (5 items each), then 5 + 5 spelling items; 8/8/4 niveaus. 75 s each = 1500 s plus
- * the reading time of both texts (2 × 152 words × 0.75 s = 228 s) = 28.8 min (§6, 1.0.16).
+ * Two texts (5 items each), then 5 + 3 spelling items and 2 Sprache untersuchen items (cloze-select,
+ * in place of the last two rs-strategien items: required since 1.0.26); 8/8/4 niveaus. 75 s each =
+ * 1500 s plus the reading time of both texts (2 × 152 words × 0.75 s = 228 s) = 28.8 min (§6,
+ * 1.0.16).
  */
 export function buildDeutschProbetest(): {
   items: Item[];
@@ -129,11 +131,18 @@ export function buildDeutschProbetest(): {
         ...(textRef && { stimulus: { textRef } }),
       }),
     );
+  const strategien = group('rs-strategien', 900);
+  const sprache = strategien
+    .slice(3)
+    .map((item, i) =>
+      cloneItem(clozeSelect, 'sprache-untersuchen', item.niveau, 903 + i, { estimatedSeconds: 75 }),
+    );
   const items = [
     ...group('lesen-sachtext', 900, sach.id),
     ...group('lesen-literarisch', 900, literarisch.id),
     ...group('rs-laut-buchstabe', 900),
-    ...group('rs-strategien', 900),
+    ...strategien.slice(0, 3),
+    ...sprache,
   ];
   for (const text of texts) {
     text.itemIds = items.filter((i) => i.stimulus?.textRef === text.id).map((i) => i.id);
@@ -150,10 +159,9 @@ export function buildDeutschProbetest(): {
 
 /**
  * The layout of a Kompass 4 Deutsch test (1.0.25): one Sachtext with 7 items, then the spelling
- * items, then Sprache untersuchen at the end; 22 items 8/9/5. lesen-literarisch stays a required
- * Bereich until the Deutsch Probetests are mixed anew (CONTENT_SCHEMA §6), so its 2 items stand
- * without a text right after the Sachtext block. 65 s each = 1430 s plus 152 words × 0.75 s =
- * 114 s: 1544 s = 25.7 min.
+ * items, then Sprache untersuchen at the end; 22 items 8/9/5. Its 2 lesen-literarisch items stand
+ * without a text right after the Sachtext block: allowed, but no longer required since 1.0.26
+ * (CONTENT_SCHEMA §6). 65 s each = 1430 s plus 152 words × 0.75 s = 114 s: 1544 s = 25.7 min.
  */
 export function buildDeutschTestaufbau(): {
   items: Item[];

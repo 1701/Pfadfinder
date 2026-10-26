@@ -4,6 +4,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.26 – 2026-10-25
+- §6 Pflichtbereiche Deutsch: `lesen-sachtext`, `rs-laut-buchstabe`, `rs-strategien`, `sprache-untersuchen` (je ≥ 2 Items). `sprache-untersuchen` wird Pflicht, `lesen-literarisch` ist erlaubt, aber nicht mehr Pflicht. Grund: Die Deutsch-Probetests sind neu gemischt (Batch D); Kompass 4 Deutsch 2024 und 2025 haben keinen literarischen Text und 11 von 24 Aufgaben Sprache untersuchen. Die Übergangssätze („bis zum Neu-Mischen …“) in §6 entfallen.
+- §6 Niveau-Band: Beispiele auf die neuen Probetests (deutsch-01/02 8/12/4, deutsch-03 7/13/4 im Testaufbau). §7: Kalibrierung Deutsch (Kompass 4 2024/2025) ersetzt den Block „Sprache untersuchen“.
+- Regelwechsel: Ein Deutsch-Probetest ohne 2 su-Items ist jetzt ungültig; alle drei Deutsch-Probetests im Repo sind im selben Commit ersetzt. Items bleiben gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.25 – 2026-10-25
 - Neues Format `segment-text` (§4.10, zehntes Format, §3/§4): Das Kind setzt Trennstriche zwischen die Wörter eines Satzes („Satzglieder“). `payload { text, unit: "word" | "letter" }`, `solution { boundaries }` mit 0-basierten Lücken (Lücke k nach Wort k von `splitUnits(text, "word")`). Grund: Kompass 4 Deutsch 2024 und 2025 enden mit „Kreise alle Satzglieder ein“; `mark-in-text` markiert Wörter, keine Grenzen. Fehler im Validator: `boundaries` nicht aufsteigend, doppelt, außerhalb 0…n−2 oder Anzahl außerhalb 1…n−2 (Schema), `unit: "letter"` (Renderer nicht gebaut), `stimulus.textRef` oder `stimulus.assetId` (integrity). Warnung über dem Richtwert 14 Wörter / 85 Zeichen (gemessen, §4.10). Keine Mischung zur Laufzeit.
 - §5 ReadingText: `itemIds` 4–7 statt 4–6.

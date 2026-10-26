@@ -291,13 +291,22 @@ describe('probetestSchema (§6)', () => {
     expect(issuePaths(probetestSchema, { ...probetest, bereichMix })).toEqual([`bereichMix.${bereich}`]);
   });
 
-  it('accepts a Deutsch probetest without the optional Bereich sprache-untersuchen (1.0.22)', () => {
+  it('accepts a Deutsch probetest without the optional Bereich lesen-literarisch (1.0.26)', () => {
     const deutsch = buildDeutschProbetest().probetest;
-    expect(deutsch.bereichMix).not.toHaveProperty('sprache-untersuchen');
     expect(issuePaths(probetestSchema, deutsch)).toEqual([]);
+    const { 'lesen-literarisch': lli, ...rest } = deutsch.bereichMix;
+    const without = { ...deutsch, bereichMix: { ...rest, 'lesen-sachtext': rest['lesen-sachtext']! + lli! } };
+    expect(issuePaths(probetestSchema, without)).toEqual([]);
     // Present, it only counts: 1 item is fine for a Bereich that is not required.
-    const p = { ...deutsch, bereichMix: { ...deutsch.bereichMix, 'rs-strategien': 4, 'sprache-untersuchen': 1 } };
+    const p = { ...deutsch, bereichMix: { ...rest, 'lesen-sachtext': rest['lesen-sachtext']! + lli! - 1, 'lesen-literarisch': 1 } };
     expect(issuePaths(probetestSchema, p)).toEqual([]);
+  });
+
+  it('requires sprache-untersuchen in a Deutsch probetest (1.0.26, before: optional)', () => {
+    const deutsch = buildDeutschProbetest().probetest;
+    const { 'sprache-untersuchen': su, ...rest } = deutsch.bereichMix;
+    const without = { ...deutsch, bereichMix: { ...rest, 'rs-strategien': rest['rs-strategien']! + su! } };
+    expect(issuePaths(probetestSchema, without)).toEqual(['bereichMix.sprache-untersuchen']);
   });
 
   it('rejects bereiche of the other fach and sums that do not match the item count', () => {

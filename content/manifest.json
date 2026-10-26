@@ -202,10 +202,10 @@
     },
     "lesen-sachtext": {
       "fach": "deutsch",
-      "items": 21,
+      "items": 28,
       "byFormat": {
         "cloze-select": {
-          "1": 1,
+          "1": 2,
           "2": 0,
           "3": 0
         },
@@ -216,12 +216,12 @@
         },
         "match": {
           "1": 0,
-          "2": 2,
+          "2": 3,
           "3": 0
         },
         "multi-choice": {
           "1": 0,
-          "2": 2,
+          "2": 3,
           "3": 0
         },
         "number-input": {
@@ -231,25 +231,26 @@
         },
         "order": {
           "1": 0,
-          "2": 3,
+          "2": 4,
           "3": 0
         },
         "short-answer": {
           "1": 0,
-          "2": 0,
+          "2": 1,
           "3": 3
         },
         "single-choice": {
-          "1": 3,
+          "1": 4,
           "2": 1,
-          "3": 1
+          "3": 2
         }
       },
       "textIds": [
         "t-sach-001",
         "t-sach-002",
         "t-sach-003",
-        "t-sach-004"
+        "t-sach-004",
+        "t-sach-005"
       ]
     },
     "lesen-literarisch": {
@@ -301,11 +302,11 @@
     },
     "rs-laut-buchstabe": {
       "fach": "deutsch",
-      "items": 20,
+      "items": 22,
       "byFormat": {
         "cloze-select": {
-          "1": 3,
-          "2": 2,
+          "1": 4,
+          "2": 3,
           "3": 0
         },
         "find-error": {
@@ -348,11 +349,11 @@
     },
     "rs-strategien": {
       "fach": "deutsch",
-      "items": 20,
+      "items": 24,
       "byFormat": {
         "cloze-select": {
-          "1": 1,
-          "2": 2,
+          "1": 2,
+          "2": 3,
           "3": 0
         },
         "find-error": {
@@ -362,7 +363,7 @@
         },
         "mark-in-text": {
           "1": 2,
-          "2": 1,
+          "2": 2,
           "3": 0
         },
         "match": {
@@ -388,33 +389,33 @@
         "single-choice": {
           "1": 2,
           "2": 1,
-          "3": 1
+          "3": 2
         }
       },
       "textIds": []
     },
     "sprache-untersuchen": {
       "fach": "deutsch",
-      "items": 20,
+      "items": 30,
       "byFormat": {
         "cloze-select": {
           "1": 2,
-          "2": 3,
+          "2": 4,
           "3": 0
         },
         "mark-in-text": {
-          "1": 2,
+          "1": 3,
           "2": 1,
           "3": 0
         },
         "match": {
           "1": 2,
-          "2": 0,
+          "2": 1,
           "3": 0
         },
         "multi-choice": {
           "1": 0,
-          "2": 2,
+          "2": 3,
           "3": 0
         },
         "order": {
@@ -422,15 +423,20 @@
           "2": 1,
           "3": 1
         },
+        "segment-text": {
+          "1": 1,
+          "2": 2,
+          "3": 0
+        },
         "short-answer": {
           "1": 0,
           "2": 0,
-          "3": 1
+          "3": 2
         },
         "single-choice": {
-          "1": 2,
+          "1": 3,
           "2": 2,
-          "3": 1
+          "3": 2
         }
       },
       "textIds": []

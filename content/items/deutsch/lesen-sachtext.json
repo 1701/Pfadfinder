@@ -1035,5 +1035,381 @@
       "createdAt": "2026-10-21",
       "calibration": "vera3"
     }
+  },
+  {
+    "id": "d-lsa-1-010",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Was saugen die Bienen an den Blüten auf? Lies im 1. Absatz nach.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nektar"
+        },
+        {
+          "id": "b",
+          "text": "Honig"
+        },
+        {
+          "id": "c",
+          "text": "Wachs"
+        },
+        {
+          "id": "d",
+          "text": "Wasser"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Nektar ist der süße Saft aus den Blüten.",
+      "incorrect": "Lies den 1. Absatz. Dort steht, was die Biene mit dem Rüssel aufsaugt.",
+      "misconception": "Honig entsteht erst im Bienenstock. An der Blüte holt die Biene Nektar."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-1"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-1-011",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Wähle, was im 4. Absatz steht.",
+    "payload": {
+      "template": "Der Imker stellt die Waben in eine {1}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "Schleuder",
+            "Presse",
+            "Tonne"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "Schleuder"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Die Schleuder dreht sich schnell, und der Honig fliegt an den Rand.",
+      "incorrect": "Lies den 4. Absatz. Das Gerät dreht sich schnell.",
+      "misconception": "Eine Presse drückt. Der Honig wird aber geschleudert, nicht gepresst."
+    },
+    "tags": [
+      "entnehmen",
+      "absatz-4"
+    ],
+    "estimatedSeconds": 40,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-2-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "multi-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Welche Aussagen stimmen? Tippe alle an.",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Bienen fächeln über den Waben."
+        },
+        {
+          "id": "b",
+          "text": "Der Imker nimmt alle Waben."
+        },
+        {
+          "id": "c",
+          "text": "Honig verdirbt nicht."
+        },
+        {
+          "id": "d",
+          "text": "Rapshonig ist dunkel."
+        }
+      ],
+      "minSelect": 2
+    },
+    "solution": {
+      "optionIds": [
+        "a",
+        "c"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Das Fächeln steht im 2. Absatz, das Wasser im 5. Absatz.",
+      "incorrect": "Prüfe jede Aussage im Text. Suche das wichtigste Wort: Flügel, alle, Wasser, Raps.",
+      "misconception": "Der Imker nimmt nur die vollen Waben, nicht alle. Das Wort nur im 4. Absatz entscheidet."
+    },
+    "tags": [
+      "verknuepfen",
+      "aussagen-pruefen",
+      "absatz-2",
+      "absatz-4",
+      "absatz-5"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-2-010",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "match",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Verbinde die Satzteile. Einer bleibt übrig.",
+    "payload": {
+      "left": [
+        {
+          "id": "l1",
+          "text": "Bienen sammeln …"
+        },
+        {
+          "id": "l2",
+          "text": "Im Stock wird …"
+        },
+        {
+          "id": "l3",
+          "text": "Der Imker schleudert …"
+        }
+      ],
+      "right": [
+        {
+          "id": "r1",
+          "text": "… Nektar an Blüten."
+        },
+        {
+          "id": "r2",
+          "text": "… aus Nektar Honig."
+        },
+        {
+          "id": "r3",
+          "text": "… Honig aus den Waben."
+        },
+        {
+          "id": "r4",
+          "text": "… Wachs ins Glas."
+        }
+      ]
+    },
+    "solution": {
+      "pairs": [
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "l2",
+          "r2"
+        ],
+        [
+          "l3",
+          "r3"
+        ]
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Sammeln, dicker werden, schleudern. So steht es in den Absätzen 1, 2 und 4.",
+      "incorrect": "Lies jeden Satzanfang zu Ende. Welches Ende ergibt einen Satz aus dem Text?",
+      "misconception": "Wachs kommt in kein Glas. Der Imker kratzt es ab, ins Glas kommt der Honig."
+    },
+    "tags": [
+      "verknuepfen",
+      "satzteile-verbinden"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-2-011",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "order",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Bringe die Schritte in die Reihenfolge.",
+    "payload": {
+      "items": [
+        {
+          "id": "c",
+          "text": "Waben schleudern"
+        },
+        {
+          "id": "a",
+          "text": "Nektar sammeln"
+        },
+        {
+          "id": "d",
+          "text": "In Gläser füllen"
+        },
+        {
+          "id": "b",
+          "text": "In Waben füllen"
+        }
+      ]
+    },
+    "solution": {
+      "orderedIds": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    "feedback": {
+      "correct": "Richtig! Sammeln, in die Waben, schleudern, ins Glas.",
+      "incorrect": "Geh die Absätze 1, 2 und 4 der Reihe nach durch.",
+      "misconception": "Geschleudert wird erst, wenn die Waben voll sind. Das Füllen kommt also vorher."
+    },
+    "tags": [
+      "reihenfolge",
+      "verknuepfen"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-2-012",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 2,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Warum machen Bienen Honig? Nenne zwei Gründe aus dem 3. Absatz.",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Lies den 3. Absatz. Dort stehen zwei Gründe."
+    },
+    "solution": {
+      "model": "Im Winter gibt es keine Blüten, der Honig ist ihr Vorrat. Sie füttern damit ihre Jungen.",
+      "keyPoints": [
+        "Vorrat für den Winter",
+        "Futter für die Jungen"
+      ]
+    },
+    "feedback": {
+      "correct": "Genau: Vorrat für den Winter und Futter für die Jungen.",
+      "incorrect": "Lies den 3. Absatz. Ein Grund hat mit dem Winter zu tun, einer mit den Jungen.",
+      "misconception": "Für den Imker machen Bienen keinen Honig. Das steht nicht im Text."
+    },
+    "tags": [
+      "begruenden",
+      "verknuepfen",
+      "absatz-3"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-lsa-3-005",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "lesen-sachtext",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "textRef": "t-sach-005"
+    },
+    "prompt": "Welche Überschrift passt am besten zum 5. Absatz?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Jeder Honig ist anders."
+        },
+        {
+          "id": "b",
+          "text": "Der Imker füllt Gläser."
+        },
+        {
+          "id": "c",
+          "text": "Bienen fliegen zu Blüten."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Der 5. Absatz vergleicht Farbe, Geschmack und Haltbarkeit von Honig.",
+      "incorrect": "Lies den 5. Absatz noch einmal. Worum geht es in allen Sätzen zusammen?",
+      "misconception": "Gläser und Blüten stehen in anderen Absätzen. Die Überschrift muss zu diesem passen."
+    },
+    "tags": [
+      "hauptgedanke",
+      "absatz-5"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
   }
 ]

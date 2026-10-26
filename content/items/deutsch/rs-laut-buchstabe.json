@@ -1015,5 +1015,103 @@
       "createdAt": "2026-10-17",
       "calibration": "vera3"
     }
+  },
+  {
+    "id": "d-rsl-1-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 1,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle das richtig geschriebene Wort aus der Wortfamilie wissen.",
+    "payload": {
+      "template": "Ich {1}, wo der Schlüssel liegt.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "weiß",
+            "weiss",
+            "weis"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "weiß"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! Nach ei schreibt man ß: weiß, wie in Fleiß.",
+      "incorrect": "Hör auf den Selbstlaut vor dem s-Laut. Nach ei und nach langem Selbstlaut steht ß.",
+      "misconception": "weiss mit ss passt nur nach kurzem Selbstlaut, wie in wissen. ei ist ein Zwielaut, also ß."
+    },
+    "tags": [
+      "ss-ß",
+      "zwielaut",
+      "wortfamilie"
+    ],
+    "estimatedSeconds": 35,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "d-rsl-2-009",
+    "schemaVersion": "1.0",
+    "fach": "deutsch",
+    "bereich": "rs-laut-buchstabe",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "prompt": "Wähle in beiden Lücken das richtig geschriebene Wort aus der Wortfamilie messen.",
+    "payload": {
+      "template": "Ben {1} den Tisch. Das {2} stimmt.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "misst",
+            "mißt",
+            "mist"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "Maß",
+            "Mass",
+            "Maas"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "misst",
+        "2": "Maß"
+      }
+    },
+    "feedback": {
+      "correct": "Richtig! misst hat ein kurzes i, also ss. Maß hat ein langes a, also ß.",
+      "incorrect": "Hör auf den Selbstlaut: kurz wie in misst heißt ss, lang wie in Maß heißt ß.",
+      "misconception": "Mass mit ss nehmen viele, weil messen ss hat. Das a in Maß ist aber lang, also ß."
+    },
+    "tags": [
+      "ss-ß",
+      "kurzer-selbstlaut",
+      "langer-selbstlaut",
+      "wortfamilie"
+    ],
+    "estimatedSeconds": 55,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
   }
 ]

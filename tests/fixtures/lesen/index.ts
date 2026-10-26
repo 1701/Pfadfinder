@@ -57,7 +57,8 @@ export function lesenContentModules(): ContentModules {
 // The Deutsch fixture Probetest deutsch-90 (task 13): valid content (§6, 1.0.16) from fixtures only,
 // the smallest the schema loads (18 items): t-sach-900 with all 6 items, t-lit-900 (a literary
 // clone of the igel text; t-sach-901 stays a Sachtext elsewhere) with 4, then 8 spelling items,
-// one of them replaced by the su segment-text item (suSegmentItem).
+// two of them replaced by su items (suSegmentItem, suClozeItem): sprache-untersuchen is a required
+// Bereich since 1.0.26 (2 items), lesen-literarisch stays allowed.
 // Time: 650 s + 8 × 65 s + reading (250 + 152 words) × 0.75 s = 1471.5 s = 24.5 min.
 // Drives the reading screen in the dev build (/dev/probetest, /dev/probetest-lauf) and the specs.
 
@@ -99,10 +100,21 @@ export const spellingItems: Item[] = SPELLING_LADDER.map(([base, bereich, niveau
 export const suSegmentItem: Item = cloneItem(segmentText, 'sprache-untersuchen', 2, 920, {
   estimatedSeconds: 65,
 });
-const REPLACED_BY_SU = 'd-rss-2-901';
+/**
+ * The second su item of deutsch-90 (1.0.26: sprache-untersuchen needs 2 items), cloze-select, in
+ * place of d-rsl-2-900 (same Niveau and time, still 18 items 7/7/4; no screenshot or spec shows
+ * that place, item 11 d-rsl-1-900 stays the first spelling item; decision Markus, Batch D).
+ */
+export const suClozeItem: Item = cloneItem(clozeSelect, 'sprache-untersuchen', 2, 921, {
+  estimatedSeconds: 65,
+});
+const REPLACED_BY_SU = new Map([
+  ['d-rss-2-901', suSegmentItem],
+  ['d-rsl-2-900', suClozeItem],
+]);
 
-const deutsch90Items = [...biberItems, ...litItems, ...spellingItems].map((item) =>
-  item.id === REPLACED_BY_SU ? suSegmentItem : item,
+const deutsch90Items = [...biberItems, ...litItems, ...spellingItems].map(
+  (item) => REPLACED_BY_SU.get(item.id) ?? item,
 );
 
 export const DEUTSCH_90: Probetest = {

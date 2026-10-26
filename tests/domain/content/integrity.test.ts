@@ -636,20 +636,15 @@ describe('validateContent – probetest rules (§6)', () => {
     ]);
   });
 
-  describe('sprache-untersuchen (1.0.22)', () => {
-    /** The Deutsch builder with its last two rs-strategien items as sprache-untersuchen items. */
+  describe('sprache-untersuchen (1.0.22, required since 1.0.26)', () => {
+    /** The Deutsch builder: its two sprache-untersuchen items and the 18 others in their order. */
     function withSprache() {
-      const built = buildDeutschProbetest();
-      const replaced = built.items.filter((i) => i.bereich === 'rs-strategien').slice(-2);
-      const sprache = replaced.map((item, n) =>
-        cloneItem(findError, 'sprache-untersuchen', item.niveau, 900 + n, { estimatedSeconds: 75 }),
-      );
-      const items = [...built.items.filter((i) => !replaced.includes(i)), ...sprache];
-      const ids = built.probetest.itemIds.filter((id) => !replaced.some((r) => r.id === id));
-      const probetest = { ...built.probetest, ...mixesOf(items) };
+      const { items, texts, probetest } = buildDeutschProbetest();
+      const su = items.filter((i) => i.bereich === 'sprache-untersuchen').map((i) => i.id);
+      const ids = probetest.itemIds.filter((id) => !su.includes(id));
       const check = (order: string[], mix = probetest) =>
-        errors(run(toFiles({ items, texts: built.texts, probetests: [{ ...mix, itemIds: order }] })).issues);
-      return { ids, su: sprache.map((i) => i.id), probetest, check };
+        errors(run(toFiles({ items, texts, probetests: [{ ...mix, itemIds: order }] })).issues);
+      return { ids, su, probetest, check };
     }
 
     it('stands after the reading blocks, before or between the spelling items', () => {
@@ -673,18 +668,18 @@ describe('validateContent – probetest rules (§6)', () => {
       expect(first.filter((e) => e.includes('steht nach Sprache untersuchen'))).toHaveLength(10);
     });
 
-    it('needs a bereichMix key that matches its items', () => {
+    it('needs a bereichMix key that matches its items, and since 1.0.26 at least 2', () => {
       const { ids, su, probetest, check } = withSprache();
       const order = [...ids.slice(0, 10), ...su, ...ids.slice(10)];
       const mix = (bereichMix: Probetest['bereichMix']) => ({ ...probetest, bereichMix });
-      expect(check(order, mix({ ...probetest.bereichMix, 'sprache-untersuchen': 1, 'rs-strategien': 4 }))).toEqual([
-        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 1, die Items ergeben 2',
-        'probetests/deutsch-91.json|deutsch-91|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 4, die Items ergeben 3',
+      expect(check(order, mix({ ...probetest.bereichMix, 'sprache-untersuchen': 3, 'rs-strategien': 2 }))).toEqual([
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 3, die Items ergeben 2',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 2, die Items ergeben 3',
       ]);
+      // A required Bereich: without its key the schema stops first.
       const { 'sprache-untersuchen': _, ...without } = probetest.bereichMix;
       expect(check(order, mix({ ...without, 'rs-strategien': 5 }))).toEqual([
-        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|bereichMix["sprache-untersuchen"] ist 0, die Items ergeben 2',
-        'probetests/deutsch-91.json|deutsch-91|bereichMix.rs-strategien|bereichMix["rs-strategien"] ist 5, die Items ergeben 3',
+        'probetests/deutsch-91.json|deutsch-91|bereichMix.sprache-untersuchen|Bereich "sprache-untersuchen" braucht mindestens 2 Items, hat 0',
       ]);
     });
   });
@@ -773,6 +768,22 @@ describe('validateContent – probetest rules (§6)', () => {
       const { issues, bundle } = run(files(built));
       expect(issues).toEqual([]);
       expect(probetestTime(built.probetest, bundle)).toEqual({ itemSeconds: 1430, readingSeconds: 114, seconds: 1544 });
+    });
+
+    it('one Sachtext without lesen-literarisch: valid since 1.0.26, 22 items 8/9/5', () => {
+      const built = buildDeutschTestaufbau();
+      // The two literary items become spelling items of the same Niveaus, in the same place.
+      const items = built.items.map((item) =>
+        item.bereich === 'lesen-literarisch'
+          ? cloneItem(findError, 'rs-laut-buchstabe', item.niveau, 950 + item.niveau, { estimatedSeconds: 65 })
+          : item,
+      );
+      const probetest: Probetest = { ...built.probetest, itemIds: items.map((i) => i.id), ...mixesOf(items) };
+      expect(probetest.bereichMix).not.toHaveProperty('lesen-literarisch');
+      expect(probetest.niveauMix).toEqual({ 1: 8, 2: 9, 3: 5 });
+      const { issues, bundle } = run(toFiles({ items, texts: built.texts, probetests: [probetest] }));
+      expect(issues).toEqual([]);
+      expect(probetestTime(probetest, bundle)).toEqual({ itemSeconds: 1430, readingSeconds: 114, seconds: 1544 });
     });
 
     it('also valid when Sprache untersuchen stands before the spelling items', () => {

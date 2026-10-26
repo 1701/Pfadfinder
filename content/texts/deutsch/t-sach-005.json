@@ -1,0 +1,23 @@
+{
+  "id": "t-sach-005",
+  "kind": "sachtext",
+  "title": "Vom Nektar zum Honig",
+  "wordCount": 244,
+  "paragraphs": [
+    "Bienen fliegen im Sommer von Blüte zu Blüte. Dort saugen sie mit ihrem Rüssel Nektar auf. Nektar ist ein süßer Saft, den viele Blüten bilden. Eine Biene trägt den Nektar in ihrem Honigmagen nach Hause. Für eine Füllung braucht sie bis zu hundert Blüten.",
+    "Im Bienenstock gibt die Biene den Nektar an andere Bienen weiter. Von Mund zu Mund wird er dicker. Dann füllen die Bienen ihn in kleine Zellen aus Wachs. Diese Zellen heißen Waben. Viele Bienen fächeln mit den Flügeln über den Waben. So trocknet der Nektar, und aus ihm wird Honig. Zum Schluss verschließen die Bienen jede Wabe mit einem Deckel aus Wachs.",
+    "Warum machen Bienen überhaupt Honig? Im Winter gibt es keine Blüten. Der Honig ist dann der Vorrat für das ganze Volk. Außerdem füttern die Bienen damit ihre Jungen. Ein Volk braucht im Jahr viele Kilogramm davon.",
+    "Der Imker nimmt im Sommer nur die vollen Waben aus dem Stock. Zuerst kratzt er die Wachsdeckel ab. Dann stellt er die Waben in eine Schleuder. Sie dreht sich schnell, und der Honig fliegt an den Rand. Dort fließt er durch ein Sieb in einen Eimer. Am Ende füllt der Imker den Honig in Gläser. Den Bienen lässt er genug Honig für den Winter.",
+    "Honig schmeckt nicht immer gleich. Die Farbe und der Geschmack hängen von den Blüten ab. Rapshonig ist hell, Waldhonig dunkel und kräftig. Weil Honig fast kein Wasser enthält, verdirbt er nicht. Ein Glas Honig hält sich viele Jahre."
+  ],
+  "readAloud": true,
+  "itemIds": [
+    "d-lsa-1-010",
+    "d-lsa-1-011",
+    "d-lsa-2-009",
+    "d-lsa-2-010",
+    "d-lsa-2-011",
+    "d-lsa-2-012",
+    "d-lsa-3-005"
+  ]
+}
