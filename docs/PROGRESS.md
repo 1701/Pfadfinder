@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-26 – Content: Probetest mathe-03 Fassung 2 (sechs Tausche)
+- **Zip t2 Fassung 2 (wörtlich):** `content/probetests/mathe-03.json` ersetzt. Platz 2 m-zo-2-002 → m-zo-1-022, 5 m-ms-1-003 → m-ms-2-010, 6 m-ms-2-006 → m-ms-2-012, 7 m-ms-1-001 → m-ms-3-005, 17 m-rf-3-008 → m-rf-2-021, 23 m-dz-2-006 → m-dz-1-008. check.py vorher und `--applied` 0/0, content:validate 0/0, Manifest unverändert (enthält keine Probetest-Zusammensetzung).
+- **mathe-03:** 30,00 Min. (vorher 29,00), 7/13/4 unverändert, 11 Bild-Items, 2 Kurzantworten, Bereiche und Blockfolge unverändert. Andere Probetests, Pool, Schema und Doku außer PROGRESS unverändert. LONGEST der Spec bleibt m-rf-3-001. grep-Treffer `integrity.ts:96` (m-rf-3-008 als Messgrundlage von `WITH_PICTURE`) freigegeben (Markus), nicht geändert.
+- **Budget:** nur der Block mathe-03 geändert. Durchsehen iPad quer m-rf-2-021 172 (vorher m-dz-3-003 176), iPad hoch und Safari hoch Durchsehen/fehlt m-ms-2-012 239/279 und 115/155 (vorher m-dz-3-003). Safari quer unverändert.
+- **Knappstes-Bilder** folgen dem globalen `slack`-Block (knappster Fall über alle Mathe-Probetests). Ziele liegen weiter in mathe-01/02 (z. B. Durchsehen m-dz-3-002, m-gm-3-002, m-gm-1-009), unverändert, Bilder auf der Platte identisch. zeit45/zeit5 und Druck unverändert.
+- **Sweep 7 Items (sechs neue und Platz 24):** knappste Luft Üben/Durchsehen iPad quer 176/172, iPad hoch 279/239, Safari quer 68/68 (m-dz-3-003), Safari hoch 155/115 px (m-ms-2-012). Kein Item unter 18 px.
+- **B8:** Sichtprüfung der drei Bilder (auch neben ms-mauer-1) und Vorlesen am iPad am 26.10. abgenommen, kein Befund.
+- **Flakes:** „Execution context was destroyed“ ist der dritte lokale Fall (Phase A, D, T2) → Ticket. ERR_INSUFFICIENT_RESOURCES ist ein neuer Typ (Lauf 36,8 statt ~28 Min.), die drei probetest-layout-Timeouts gehen darauf zurück.
+- **Lokal:** `npm run check` grün (unit 1 148, smoke 7), Smoke 41/41. Layout mit Schalter 55/60, einzeln mit Schalter probetest-layout 6/6, layout.spec und text-layout 2/2, die drei Viewports noch einmal 3/3 ohne Budget-Änderung. Committet nur 3 `probetest-budget-*.json`.
+
 ## 2026-10-26 – Content: Batch B8 muster-strukturen, 10 Items, 3 SVG
 - **Zip b8 (wörtlich):** 10 Items (I 1-009, 1-010 · II 2-010…2-014 · III 3-005…3-007) an `muster-strukturen.json` angehängt, SVG ms-mauer-2, ms-mauer-3, ms-paeckchen-1. Kein Retire, kein Probetest, kein Unit-Test geändert. check.py vorher und `--applied` 0/0, content:validate 0/0.
 - **Manifest Mathe I/II/III:** zo 17/20/7, rf 15/16/6, gm 12/14/4, dz 9/7/4, ms 10/13/6 (vorher 8/8/3) = 160 aktiv, 28 retired. Deutsch unverändert 124/0. Probetests unverändert (mathe 26,92/27,33/29,00, deutsch 25,89/26,73/25,97 Min.).
