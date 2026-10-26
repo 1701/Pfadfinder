@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="64.0" y="190.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="120.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">15</text>
+<rect x="184.0" y="190.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="240.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">40</text>
+<rect x="304.0" y="190.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="360.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">20</text>
+<rect x="124.0" y="120.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="180.0" y="150.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">55</text>
+<rect x="244.0" y="120.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="300.0" y="150.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">60</text>
+<rect x="184.0" y="50.0" width="112.0" height="60.0" fill="none" stroke-width="3" rx="6" ry="6"/>
+<text x="240.0" y="80.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">?</text>
+</svg>

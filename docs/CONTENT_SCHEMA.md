@@ -261,6 +261,7 @@ Regeln:
 
 **Kalibrierung Mathe (Kompass 4 2025, seit 1.0.20)**
 - Anker ist der Kompass-4-Test 2025 (liegt nie im Repo). Übernommen werden nur Niveau, Aufgabentypen, Zahlenräume, Textlängen und Fehlerquellen, nie Aufgaben oder Umformulierungen davon. Neue Items tragen `calibration: "kompass4-2025"`; Items mit `vera3` sind am Klasse-3-Stoff kalibriert und in II/III tendenziell zu leicht
+- Für muster-strukturen ist der Kompass-4-Test 2024 zweite Typquelle (Regel mit Malwechsel aufschreiben, Päckchen verbalisieren und begründen); das Tag bleibt `kompass4-2025` wie bei Deutsch (seit Batch B8, 2026-10-26)
 - Zahlenraum **10 000** in allen Niveaus. Zehntausender und größer kommen weder im Test noch bis November in der Klasse vor
 - I (Reproduzieren): schriftlich vierstellig ± dreistellig mit Übertrag, Einmaleins-Erweiterung (5 · 18, 6 · 38, 48 : 4), einschrittige Sachaufgabe dreistellig, Nachbarzehner/-hunderter, Größenvorstellung zuordnen, sicher/möglich/unmöglich
 - II (Zusammenhänge): Darstellungswechsel Situation ↔ Bild ↔ Term, nicht-kanonische Bündelung (H 5 / Z 13 / E 2), Mitte zwischen zwei Zahlen, Zahlenreihe mit Regelwechsel verbalisieren, Zahlenmauer optimieren, räumlich operieren **mit Bild** (Figuren zusammensetzen, Flächen vergleichen, gedrehte Figur erkennen, Ansicht eines Würfelgebäudes, Spiegelachsen jenseits Rechteck, Netz ergänzen), zwei Informationen aus Tabelle oder Preisschild verknüpfen, Uhrzeit mit Minutenübergang über die volle Stunde, Dezimal-Längen in cm umrechnen

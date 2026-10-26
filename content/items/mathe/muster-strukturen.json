@@ -1004,5 +1004,466 @@
       "calibration": "kompass4-2025",
       "pilotNote": "Patch P: ersetzt m-ms-3-001, Niveau II nach Kompass 4 2025 (Reihe prüfen, zwei Fehler)"
     }
+  },
+  {
+    "id": "m-ms-1-009",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "In jedem Stein steht die Summe der zwei Steine darunter. Der oberste Stein heißt Deckstein.",
+      "assetId": "ms-mauer-2",
+      "assetAlt": "Eine Zahlenmauer mit drei Reihen. Unten stehen 15, 40 und 20, in der Mitte 55 und 60, oben ein Fragezeichen."
+    },
+    "prompt": "Welche Zahl steht im Deckstein?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 115
+    },
+    "feedback": {
+      "correct": "Richtig! 55 + 60 = 115. Der Deckstein ist die Summe der zwei Steine darunter.",
+      "incorrect": "Der Deckstein liegt auf 55 und 60. Zähle diese beiden Zahlen zusammen.",
+      "misconception": "Wer 75 schreibt, hat 15 + 40 + 20 gerechnet. Der Deckstein kommt aus der mittleren Reihe, nicht aus der ersten."
+    },
+    "tags": [
+      "zahlenmauer",
+      "deckstein",
+      "addition"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-1-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 1,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben schreibt eine Zahlenfolge mit zwei Regeln im Wechsel: erst plus 10, dann minus 3. Seine Folge: 40, 50, 47, 57, 54, …"
+    },
+    "prompt": "Welche Zahl kommt als Nächstes?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 64
+    },
+    "feedback": {
+      "correct": "Richtig! Nach minus 3 kommt wieder plus 10: 54 + 10 = 64.",
+      "incorrect": "Die Regeln wechseln sich ab. Der letzte Schritt war 57 zu 54, also minus 3. Jetzt ist plus 10 dran.",
+      "misconception": "Wer 51 schreibt, rechnet noch einmal minus 3. Nach minus 3 kommt immer plus 10."
+    },
+    "tags": [
+      "zahlenfolge",
+      "regelwechsel",
+      "fortsetzen"
+    ],
+    "estimatedSeconds": 45,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-2-010",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Mia hat eine Zahlenfolge mit zwei Regeln geschrieben. Ihre Folge: 320, 360, 350, 390, 380, 420, …"
+    },
+    "prompt": "Welche Regel entdeckst du? Wähle aus.",
+    "payload": {
+      "template": "Regel: erst {1}, dann {2}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "plus 40",
+            "plus 30",
+            "minus 40"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "minus 10",
+            "plus 10",
+            "minus 30"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "plus 40",
+        "2": "minus 10"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! Von 320 zu 360 sind es plus 40, von 360 zu 350 minus 10. Das wiederholt sich bis zum Ende.",
+      "incorrect": "Rechne jeden Schritt einzeln aus: 320 zu 360, dann 360 zu 350. Prüfe, ob sich die zwei Schritte wiederholen.",
+      "misconception": "Wer „plus 30“ wählt, schaut von 320 gleich zu 350. Dazwischen liegt aber noch die 360."
+    },
+    "tags": [
+      "zahlenfolge",
+      "regelwechsel",
+      "regel-finden",
+      "verbalisieren"
+    ],
+    "estimatedSeconds": 70,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-2-011",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "Elias schreibt eine Zahlenfolge mit zwei Regeln im Wechsel. Seine Folge: 20, 16, 32, 28, 56, 52, 104, …"
+    },
+    "prompt": "Welche Zahl kommt als Nächstes?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 100
+    },
+    "feedback": {
+      "correct": "Richtig! Die Regeln sind minus 4 und mal 2 im Wechsel. Nach mal 2 kommt minus 4: 104 − 4 = 100.",
+      "incorrect": "Rechne die Schritte aus: 20 zu 16, 16 zu 32, 32 zu 28. Zwei Regeln wechseln sich ab. Welche ist nach 104 dran?",
+      "misconception": "Wer 208 schreibt, rechnet zweimal hintereinander mal 2. Nach mal 2 ist aber minus 4 dran."
+    },
+    "tags": [
+      "zahlenfolge",
+      "regelwechsel",
+      "verdoppeln",
+      "fortsetzen"
+    ],
+    "estimatedSeconds": 75,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-2-012",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "In jedem Stein steht die Summe der zwei Steine darunter. Die Zahlen 30, 40 und 50 kommen in die erste Reihe.",
+      "assetId": "ms-mauer-3",
+      "assetAlt": "Eine leere Zahlenmauer mit drei Reihen. Darüber stehen die Zahlen 30, 40 und 50."
+    },
+    "prompt": "Wie muss die erste Reihe heißen, damit der Deckstein am größten wird?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "30, 50, 40"
+        },
+        {
+          "id": "b",
+          "text": "50, 40, 30"
+        },
+        {
+          "id": "c",
+          "text": "30, 40, 50"
+        },
+        {
+          "id": "d",
+          "text": "40, 30, 50"
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Mit 50 in der Mitte wird der Deckstein 80 + 90 = 170. Die mittlere Zahl zählt zweimal.",
+      "incorrect": "Die mittlere Zahl steckt in beiden Steinen der zweiten Reihe. Welche Zahl soll also in die Mitte?",
+      "misconception": "Wer die Zahlen der Größe nach ordnet, bekommt nur 160. Die größte Zahl gehört in die Mitte, nicht an den Rand."
+    },
+    "tags": [
+      "zahlenmauer",
+      "optimieren",
+      "deckstein"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-2-013",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "number-input",
+    "status": "draft",
+    "stimulus": {
+      "text": "In einer Zahlenmauer steht in jedem Stein die Summe der zwei Steine darunter. Leyla legt unten 10, 20 und 60 so, dass der Deckstein am größten wird."
+    },
+    "prompt": "Welche Zahl steht im Deckstein?",
+    "payload": {
+      "maxDigits": 3
+    },
+    "solution": {
+      "value": 150
+    },
+    "feedback": {
+      "correct": "Genau! 60 kommt in die Mitte: 10 + 60 = 70 und 60 + 20 = 80, oben 70 + 80 = 150.",
+      "incorrect": "Die mittlere Zahl zählt zweimal. Lege die 60 in die Mitte und rechne die Mauer von unten nach oben.",
+      "misconception": "Wer 110 schreibt, hat die 60 an den Rand gelegt. So wird nur die 20 zweimal gezählt."
+    },
+    "tags": [
+      "zahlenmauer",
+      "optimieren",
+      "deckstein",
+      "zweischrittig"
+    ],
+    "estimatedSeconds": 90,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-2-014",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 2,
+    "format": "cloze-select",
+    "status": "draft",
+    "stimulus": {
+      "text": "Schau dir das Päckchen an. Die drei Aufgaben gehören zusammen.",
+      "assetId": "ms-paeckchen-1",
+      "assetAlt": "Drei Aufgaben untereinander: 150 plus 60 gleich 210, 260 plus 50 gleich 310, 370 plus 40 gleich 410."
+    },
+    "prompt": "Was verändert sich von Aufgabe zu Aufgabe? Wähle aus.",
+    "payload": {
+      "template": "1. Zahl: immer {1}. 2. Zahl: immer {2}. Ergebnis: immer {3}.",
+      "gaps": [
+        {
+          "key": "1",
+          "options": [
+            "110 größer",
+            "100 größer",
+            "10 größer"
+          ]
+        },
+        {
+          "key": "2",
+          "options": [
+            "10 kleiner",
+            "10 größer",
+            "100 kleiner"
+          ]
+        },
+        {
+          "key": "3",
+          "options": [
+            "100 größer",
+            "110 größer",
+            "120 größer"
+          ]
+        }
+      ]
+    },
+    "solution": {
+      "gaps": {
+        "1": "110 größer",
+        "2": "10 kleiner",
+        "3": "100 größer"
+      }
+    },
+    "feedback": {
+      "correct": "Genau! 150, 260, 370 geht plus 110. 60, 50, 40 geht minus 10. Die Ergebnisse 210, 310, 410 gehen plus 100.",
+      "incorrect": "Vergleiche die Zahlen in einer Spalte untereinander: 150 und 260, dann 60 und 50. Was kommt dazu, was geht weg?",
+      "misconception": "Wer bei der 1. Zahl „100 größer“ wählt, schaut nur auf die Hunderter. Von 150 zu 260 sind es 110."
+    },
+    "tags": [
+      "rechenmuster",
+      "paeckchen",
+      "verbalisieren"
+    ],
+    "estimatedSeconds": 80,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-3-005",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "In einer Zahlenmauer steht in jedem Stein die Summe der zwei Steine darunter. Unten liegen drei Zahlen, oben liegt der Deckstein."
+    },
+    "prompt": "Ergänze den Satz: Der Deckstein ist am größten, wenn …",
+    "payload": {
+      "maxChars": 120,
+      "hint": "Welche der drei Zahlen unten zählt zweimal mit?"
+    },
+    "solution": {
+      "model": "… die größte Zahl in der Mitte steht. Die mittlere Zahl zählt zweimal, die äußeren nur einmal.",
+      "keyPoints": [
+        "die größte Zahl steht in der Mitte",
+        "die mittlere Zahl zählt zweimal"
+      ]
+    },
+    "feedback": {
+      "correct": "Stark! Du hast gesehen, warum die Mitte so wichtig ist.",
+      "incorrect": "Probiere es mit 1, 2 und 3: Lege einmal die 3 in die Mitte, einmal an den Rand. Vergleiche die Decksteine.",
+      "misconception": "Viele meinen, die Reihenfolge sei egal, weil immer dieselben Zahlen addiert werden. Die Mitte wird aber doppelt gezählt."
+    },
+    "tags": [
+      "zahlenmauer",
+      "begruenden",
+      "deckstein"
+    ],
+    "estimatedSeconds": 120,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-3-006",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "short-answer",
+    "status": "draft",
+    "stimulus": {
+      "text": "Amira schreibt eine Zahlenfolge mit zwei Regeln. Ihre Folge: 3, 6, 4, 8, 6, 12, 10, 20, …"
+    },
+    "prompt": "Schreibe die Regel auf.",
+    "payload": {
+      "maxChars": 100,
+      "hint": "Rechne die Schritte nacheinander aus: von 3 zu 6, von 6 zu 4, von 4 zu 8."
+    },
+    "solution": {
+      "model": "Erst mal 2, dann minus 2. Die zwei Regeln wechseln sich immer ab.",
+      "keyPoints": [
+        "mal 2",
+        "minus 2",
+        "im Wechsel"
+      ]
+    },
+    "feedback": {
+      "correct": "Stark! Zwei Regeln im Wechsel, beide hast du gefunden.",
+      "incorrect": "Von 3 zu 6 wird verdoppelt, von 6 zu 4 werden 2 abgezogen. Prüfe, ob das bis zum Ende so weitergeht.",
+      "misconception": "Wer nur „plus 3“ schreibt, hat den ersten Schritt gesehen. Eine Regel muss für die ganze Folge gelten."
+    },
+    "tags": [
+      "zahlenfolge",
+      "regelwechsel",
+      "verbalisieren",
+      "verdoppeln"
+    ],
+    "estimatedSeconds": 110,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
+  },
+  {
+    "id": "m-ms-3-007",
+    "schemaVersion": "1.0",
+    "fach": "mathe",
+    "bereich": "muster-strukturen",
+    "niveau": 3,
+    "format": "single-choice",
+    "status": "draft",
+    "stimulus": {
+      "text": "Ben schaut das Päckchen an. Er sagt: „Das Ergebnis wird immer 100 größer, weil die erste Zahl 100 größer wird.“",
+      "assetId": "ms-paeckchen-1",
+      "assetAlt": "Drei Aufgaben untereinander: 150 plus 60 gleich 210, 260 plus 50 gleich 310, 370 plus 40 gleich 410."
+    },
+    "prompt": "Hat Ben recht?",
+    "payload": {
+      "options": [
+        {
+          "id": "a",
+          "text": "Nein, 110 − 10 = 100.",
+          "readAloud": "Nein, 110 minus 10 gleich 100."
+        },
+        {
+          "id": "b",
+          "text": "Ja, Ben hat recht."
+        },
+        {
+          "id": "c",
+          "text": "Nein, 110 + 10 = 120.",
+          "readAloud": "Nein, 110 plus 10 gleich 120."
+        },
+        {
+          "id": "d",
+          "text": "Nein, immer 110 mehr."
+        }
+      ]
+    },
+    "solution": {
+      "optionId": "a"
+    },
+    "feedback": {
+      "correct": "Richtig! Die erste Zahl wird 110 größer, die zweite 10 kleiner. 110 − 10 = 100, darum wächst das Ergebnis um 100.",
+      "incorrect": "Prüfe Bens Begründung: Wird die erste Zahl wirklich 100 größer? Und was passiert mit der zweiten Zahl?",
+      "misconception": "Wer Ben zustimmt, übersieht die zweite Zahl. Sie wird kleiner und nimmt 10 wieder weg."
+    },
+    "tags": [
+      "rechenmuster",
+      "paeckchen",
+      "begruenden",
+      "fehler-finden"
+    ],
+    "estimatedSeconds": 100,
+    "meta": {
+      "author": "claude",
+      "createdAt": "2026-10-26",
+      "calibration": "kompass4-2025"
+    }
   }
 ]

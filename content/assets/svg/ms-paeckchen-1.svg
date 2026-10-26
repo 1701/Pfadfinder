@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260" width="520" height="260" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<rect x="20.0" y="12.0" width="480.0" height="52.0" fill="currentColor" fill-opacity="0.12" stroke-width="2"/>
+<text x="108.0" y="38.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">1. Zahl</text>
+<text x="252.0" y="38.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">2. Zahl</text>
+<text x="418.0" y="38.0" font-family="inherit" font-size="34" font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">Ergebnis</text>
+<text x="140.0" y="100.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">150</text>
+<text x="178.0" y="100.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">+</text>
+<text x="282.0" y="100.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">60</text>
+<text x="322.0" y="100.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">=</text>
+<text x="452.0" y="100.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">210</text>
+<text x="140.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">260</text>
+<text x="178.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">+</text>
+<text x="282.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">50</text>
+<text x="322.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">=</text>
+<text x="452.0" y="160.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">310</text>
+<text x="140.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">370</text>
+<text x="178.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">+</text>
+<text x="282.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">40</text>
+<text x="322.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">=</text>
+<text x="452.0" y="220.0" font-family="inherit" font-size="34" font-weight="normal" fill="currentColor" stroke="none" text-anchor="end" dominant-baseline="central">410</text>
+<rect x="20.0" y="12.0" width="480.0" height="236.0" fill="none" stroke-width="3"/>
+</svg>

@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-26 – Content: Batch B8 muster-strukturen, 10 Items, 3 SVG
+- **Zip b8 (wörtlich):** 10 Items (I 1-009, 1-010 · II 2-010…2-014 · III 3-005…3-007) an `muster-strukturen.json` angehängt, SVG ms-mauer-2, ms-mauer-3, ms-paeckchen-1. Kein Retire, kein Probetest, kein Unit-Test geändert. check.py vorher und `--applied` 0/0, content:validate 0/0.
+- **Manifest Mathe I/II/III:** zo 17/20/7, rf 15/16/6, gm 12/14/4, dz 9/7/4, ms 10/13/6 (vorher 8/8/3) = 160 aktiv, 28 retired. Deutsch unverändert 124/0. Probetests unverändert (mathe 26,92/27,33/29,00, deutsch 25,89/26,73/25,97 Min.).
+- **Doku (E1, kein Versionssprung):** CONTENT_SCHEMA §7, Kalibrierung Mathe: Kompass-4-Test 2024 als zweite Typquelle für muster-strukturen, Tag bleibt `kompass4-2025`.
+- **Sweep 10 Items:** knappste Luft Üben/Durchsehen iPad quer 166/190, iPad hoch 240/239, Safari quer 103/103 (m-ms-3-006), Safari hoch 116/115 px; kein Item unter 18 px. m-ms-2-014 (drei Lücken neben Bild): ≥ 137 px.
+- **Offen:** Sichtprüfung der 3 Bilder am iPad neben ms-mauer-1 (Markus); Vorlesen bei 2-010, 2-014, 3-007; Tausch der ms-Plätze in mathe-03 (eigener Block).
+- **Lokal:** `npm run check` grün (unit 1 148, smoke 7), Smoke 41/41, Layout ohne Schalter 59/60 in 28,0 Min. (probetest-layout safari-landscape „Page crashed“ bei deutsch-01/d-su-1-009, einzeln 1/1 grün), keine Screenshot-Änderung.
+
 ## 2026-10-26 – Content: Batch D Deutsch, Probetests neu gemischt, su Pflicht (Schema 1.0.26, Branch `d`)
 - **Eingespielt (Zip d Fassung 3, wörtlich):** 23 Items (lsa 7 an t-sach-005, rsl 2, rss 4, su 10), Text t-sach-005 „Vom Nektar zum Honig“ (244 Wörter), Patch d-rss-2-001 (Pferd/Feld), deutsch-01/02/03 ersetzt. Pool Deutsch 124 aktiv, 0 retired: lsa 11/12/5, lli 8/8/4, rsl 9/9/4, rss 9/10/5, su 11/14/5; 9 Texte; Mathe unverändert 150 / 28 retired.
 - **Probetests:** deutsch-01 25,89, deutsch-02 26,73, deutsch-03 25,97 Min. (App = Zip). deutsch-03 im Testaufbau (ein Sachtext, Lesen → RS → SU, 7/13/4, kein lli).
