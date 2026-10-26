@@ -9,6 +9,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Knappstes-Bilder** folgen dem globalen `slack`-Block (knappster Fall über alle Mathe-Probetests). Ziele liegen weiter in mathe-01/02 (z. B. Durchsehen m-dz-3-002, m-gm-3-002, m-gm-1-009), unverändert, Bilder auf der Platte identisch. zeit45/zeit5 und Druck unverändert.
 - **Sweep 7 Items (sechs neue und Platz 24):** knappste Luft Üben/Durchsehen iPad quer 176/172, iPad hoch 279/239, Safari quer 68/68 (m-dz-3-003), Safari hoch 155/115 px (m-ms-2-012). Kein Item unter 18 px.
 - **B8:** Sichtprüfung der drei Bilder (auch neben ms-mauer-1) und Vorlesen am iPad am 26.10. abgenommen, kein Befund.
+- **t2:** Sichtprüfung am iPad am 26.10. abgenommen (Plätze 2, 5, 6, 7, 17, 23, Vergleichen bei 7, Mauerbild in 6, Platz 24, echter Lauf), kein Befund.
 - **Flakes:** „Execution context was destroyed“ ist der dritte lokale Fall (Phase A, D, T2) → Ticket. ERR_INSUFFICIENT_RESOURCES ist ein neuer Typ (Lauf 36,8 statt ~28 Min.), die drei probetest-layout-Timeouts gehen darauf zurück.
 - **Lokal:** `npm run check` grün (unit 1 148, smoke 7), Smoke 41/41. Layout mit Schalter 55/60, einzeln mit Schalter probetest-layout 6/6, layout.spec und text-layout 2/2, die drei Viewports noch einmal 3/3 ohne Budget-Änderung. Committet nur 3 `probetest-budget-*.json`.
 
