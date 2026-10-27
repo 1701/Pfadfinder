@@ -20,7 +20,8 @@ export default defineConfig({
       // Dev build for /dev/item previews (layout checks of every item).
       command: 'npx vite --port 5199 --strictPort',
       url: DEV,
-      reuseExistingServer: !process.env.CI,
+      // Never a leftover dev server (issue #1): a taken port 5199 stops the run at once.
+      reuseExistingServer: false,
     },
   ],
   projects: [

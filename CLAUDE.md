@@ -53,7 +53,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 Seiten für Erwachsene (/eltern, /so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
 
 ## Definition of Done (je Aufgabe)
-1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`). In der GitHub-CI läuft es nicht von selbst (docs/DEPLOY.md, Abschnitt 9)
+1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`, Standard-Worker; probetest-layout läuft darin seriell, Issue #1; Port 5199 muss frei sein, `lsof -i :5199`). In der GitHub-CI läuft es nicht von selbst (docs/DEPLOY.md, Abschnitt 9)
 2. Betroffene Tests ergänzt/aktualisiert
 3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --workflow=ci.yml --limit 1` lesen (Lint, Content, Unit, Build, Chromium- und WebKit-Smoke) und als Link nennen, nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)
@@ -77,5 +77,5 @@ npm run screenshots      Dev-Seiten in iPad quer/hoch → tests/e2e/output (mit 
 npm run analyze          Build mit Modul-Treemap (bundle-stats.html) und Chunk-Größen
 npm run deploy:preview   Build + Vorschau-Version bei Cloudflare (nur lokal, braucht wrangler login)
 npm run icons            public/icon.svg → PNG-Icons in public/icons (RGB, ohne Alpha)
-gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI (~23 Min.; nur auf Bitte von Markus)
+gh workflow run layout.yml --ref main   Layout-Projekt in GitHub-CI (~30 Min.; nur auf Bitte von Markus)
 ```

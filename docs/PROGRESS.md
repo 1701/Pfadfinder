@@ -2,6 +2,14 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-27 – Layout-Flakes: probetest-layout seriell (Aufgabe M, Issue #1)
+- **Gebaut:** `probetest-layout.spec` `mode: 'default'` (ein Worker für die Datei, andere Specs parallel), Dev-Server 5199 `reuseExistingServer: false`. Doku: ARCHITECTURE §8, DEPLOY §9 (Laufzeit, Port 5199, iPad-Dev auf 5200), CLAUDE.md DoD 1; Layout-CI „~23“ → „~30 Min.“.
+- **Läufe** (iPad quer / iPad hoch / Safari quer / Safari hoch): C0 HEAD, 6 Worker: C / T / C / C in 20,1 Min., alle vier um 13:06:36 bei `zustand=auswertung&zeit-um`, Vite „Failed to fetch dynamically imported module“, 5 Core-Dumps. C1 seriell: 6/6 grün, alle w0, 29,6 Min. (je 7,4). E1 Layout komplett: 64/64 in 33,2 Min. (9,0 / 8,5 / 7,4 / 7,3). E2: 64/64 in 33,3 Min. (9,1 / 8,5 / 7,4 / 7,4).
+- C0: alle vier Viewports in derselben Sekunde beim Nachladen von Match, Order und ProbetestPage abgestürzt (Vite: Failed to fetch dynamically imported module), Vite 26 % CPU, Chrome 445 MB, kein Speichermangel; Hypothese (f) Vite-Dependency-Discovery oder Transform-Race bei gleichzeitigem erstem dynamischen Import, Prüfung in F0.
+- **Entschieden (Markus):** Datei seriell statt globaler Worker-Zahl (Fallback workers 3 nicht nötig); `.nvmrc` bleibt 24.
+- **Offen:** Crash-Ursache (Issue #1 bleibt offen, Diagnosen folgen als Kommentar); Mess-Spec (Luft 18 px mit Ausnahmeliste, Sweep am echten Platz) folgt in Commit 2.
+- **Lokal:** `npm run check` grün (Vitest 1 178: unit 1 169, smoke 9, unverändert); Smoke nicht betroffen; Layout ohne Schalter 2 × 64/64, keine Screenshot-Änderung.
+
 ## 2026-10-27 – Seite für Eltern und Lehrkräfte, Gerätebereich nach /eltern/geraet (Aufgabe L, Schema 1.0.27)
 - **Gebaut:** `/eltern` (Sie-Form, `ElternScreen`, Text `ui/text/eltern`): Übersicht aus Manifest und neuer `content/typen.json` (`checkTypen` in `validateContent`, CONTENT_SCHEMA §1/§7 1.0.27), mailto „Aufgabe vorschlagen“/„Fehler melden“, GitHub-Link. Bisheriger Bereich unverändert als `GeraetScreen` unter `/eltern/geraet`. Impressum/Datenschutz: „Für Eltern · Sicherung und Gerät · So geht’s“; /so-gehts: Schlussabschnitt mit „Für Eltern“ (Sie, bis /so-gehts nachgezogen ist). check-bundle prüft vier Erwachsenen-Chunks im Precache.
 - **Kartenlink (Messung, Budgets karte-budget-*):** a „Für Eltern“ links und b rechts vor „Impressum“ identisch: quer unverändert, hoch zwei Reihen (`/` iPad hoch 22,7 → 21,4 px, Karte 850 → 802; Safari hoch 19,4 → 18,1, 726 → 678; mit „Neu laden“ drei Reihen, Safari hoch 15,9 px). c „Eltern“ am Platz von b: alle vier Budgets byte-gleich → gebaut (`RechtlichesLinks eltern`).

@@ -112,9 +112,11 @@ Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
 | Workflow | Wann | Was | Dauer |
 |---|---|---|---|
 | `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
-| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~23 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~30 Min. |
 
 - **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur das Layout-Projekt. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist; das Layout-Projekt läuft vor jedem UI- oder Content-Commit lokal (CLAUDE.md, DoD 1).
+- **Laufzeit Layout:** In CI zuletzt 29 m 12 s (Lauf 40457270697, 27.10., vor der Serialisierung); die Laufzeit danach trägt Markus nach dem nächsten nächtlichen Lauf nach. Lokal (12 Kerne, 6 Worker) seit der Serialisierung von `probetest-layout` (Issue #1) 33,2 und 33,3 Min. für 64 Tests; die serielle Datei (~30 Min.) bestimmt die Dauer.
+- **Port 5199:** Der Dev-Server des Layout-Projekts wird nie wiederverwendet (`reuseExistingServer: false`). Läuft schon etwas auf 5199, bricht der Lauf sofort ab; vorher `lsof -i :5199`. Dev-Seiten für das iPad deshalb künftig auf 5200 starten (`npx vite --port 5200 --host`).
 - **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien, `tests/e2e/screenshots/**` oder `.github/workflows/layout.yml` starten kein `CI`.
 - **Nächtlicher Layout-Lauf:** läuft nachts, Repo ist öffentlich.
 - **Warum nicht per Pfad:** Das Layout hängt auch an `src/domain` (z. B. `presentation`, Grenzen neben Lesetexten), `src/app`, `index.html`, den Schriften und den Paketen. Ein Pfadfilter auf `src/ui/**` und `content/**` hätte 27 von 219 Commits (8.–22.10.) mit Layout-Wirkung übersehen.
