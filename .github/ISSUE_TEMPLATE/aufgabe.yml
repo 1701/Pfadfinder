@@ -1,0 +1,57 @@
+name: Aufgabe vorschlagen
+description: Eine Übungsaufgabe für Pfadfinder vorschlagen (wird unter CC BY-SA 4.0 veröffentlicht)
+title: 'Aufgabe: '
+labels: [aufgabe]
+body:
+  - type: dropdown
+    id: fach
+    attributes:
+      label: Fach
+      options: [Mathe, Deutsch]
+    validations:
+      required: true
+  - type: input
+    id: gebiet
+    attributes:
+      label: Gebiet
+      placeholder: z. B. Muster und Zahlenfolgen
+    validations:
+      required: true
+  - type: input
+    id: ziel
+    attributes:
+      label: Was das Kind können soll
+    validations:
+      required: true
+  - type: textarea
+    id: aufgabe
+    attributes:
+      label: Aufgabentext
+    validations:
+      required: true
+  - type: input
+    id: richtig
+    attributes:
+      label: Richtige Antwort
+    validations:
+      required: true
+  - type: textarea
+    id: falsch
+    attributes:
+      label: Zwei bis drei falsche Antworten
+      description: Und warum ein Kind sie wählen könnte.
+  - type: input
+    id: rueckmeldung
+    attributes:
+      label: Ein Satz Rückmeldung, wenn es nicht klappt
+  - type: input
+    id: nennung
+    attributes:
+      label: Optional – Klasse, Schule, Name für die Nennung
+  - type: checkboxes
+    id: lizenz
+    attributes:
+      label: Lizenz
+      options:
+        - label: Ich bin einverstanden, dass die Aufgabe geprüft, angepasst und unter CC BY-SA 4.0 veröffentlicht wird.
+          required: true
