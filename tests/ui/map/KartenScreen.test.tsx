@@ -60,18 +60,20 @@ describe('KartenScreen', () => {
     expect(screen.queryByRole('button', { name: 'Neu laden' })).toBeNull();
   });
 
-  it('links Impressum and Datenschutz in the legend line', async () => {
+  it('links Eltern (task L), Impressum and Datenschutz in the legend line, never the device area', async () => {
     renderScreen(() => Promise.reject(new Error('blocked')));
     await screen.findAllByRole('group', { name: 'Karte' });
-    const nav = screen.getByRole('navigation', { name: 'Rechtliches' });
+    const nav = screen.getByRole('navigation', { name: 'Eltern und Rechtliches' });
     expect(
       within(nav)
         .getAllByRole('link')
         .map((l) => [l.textContent, l.getAttribute('href')]),
     ).toEqual([
+      ['Eltern', '/eltern'],
       ['Impressum', '/impressum'],
       ['Datenschutz', '/datenschutz'],
     ]);
+    expect(document.querySelectorAll('a[href*="geraet"]')).toHaveLength(0);
   });
 
   it('reloads for a waiting version on a tap, "Neu laden" only (the line is short)', async () => {

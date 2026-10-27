@@ -16,6 +16,7 @@ function renderAt(entries: string[]) {
       <Routes>
         <Route path="/" element={<h1>Karte</h1>} />
         <Route path="/eltern" element={<h1>Eltern</h1>} />
+        <Route path="/eltern/geraet" element={<h1>Gerät</h1>} />
         <Route path="/impressum" element={<RechtlichesScreen page="impressum" />} />
         <Route path="/datenschutz" element={<RechtlichesScreen page="datenschutz" />} />
       </Routes>
@@ -61,20 +62,26 @@ describe('Impressum and Datenschutz', () => {
     expect(text).toContain('Zugriffsprotokollen');
   });
 
-  it('end with quiet links "Für Eltern" (the way there in the installed app) and "So geht’s"', async () => {
+  it('end with quiet links "Für Eltern", "Sicherung und Gerät" (the ways there in the installed app) and "So geht’s"', async () => {
     for (const page of ['/impressum', '/datenschutz']) {
-      renderAt([page]);
-      const links = screen
-        .getAllByRole('link')
-        .filter((l) => !l.getAttribute('href')!.startsWith('mailto:'));
-      expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
-        ['Für Eltern', '/eltern'],
-        ['So geht’s', '/so-gehts'],
-      ]);
-      expect(links[0]!.className).not.toContain('bg-signal');
-      await userEvent.click(links[0]!);
-      expect(screen.getByRole('heading', { name: 'Eltern' })).toBeTruthy();
-      cleanup();
+      for (const [index, heading] of [
+        [0, 'Eltern'],
+        [1, 'Gerät'],
+      ] as const) {
+        renderAt([page]);
+        const links = screen
+          .getAllByRole('link')
+          .filter((l) => !l.getAttribute('href')!.startsWith('mailto:'));
+        expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
+          ['Für Eltern', '/eltern'],
+          ['Sicherung und Gerät', '/eltern/geraet'],
+          ['So geht’s', '/so-gehts'],
+        ]);
+        for (const link of links) expect(link.className).not.toContain('bg-signal');
+        await userEvent.click(links[index]!);
+        expect(screen.getByRole('heading', { name: heading })).toBeTruthy();
+        cleanup();
+      }
     }
   });
 

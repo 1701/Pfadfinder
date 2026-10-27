@@ -1,6 +1,7 @@
-// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map and /eltern. Written for
-// adults and in Du like the Eltern page; legal text may be longer than two sentences. Name, address
-// and e-mail are filled in since 2026-10-22; the e-mail shows as a mailto link (EmailText).
+// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map, /eltern and
+// /eltern/geraet. Written for adults and in Du like the device area; legal text may be longer than
+// two sentences. Name, address and e-mail are filled in since 2026-10-22; the e-mail shows as a
+// mailto link (EmailText).
 
 import { EMAIL } from './kontakt';
 
@@ -90,5 +91,3 @@ export const DATENSCHUTZ: LegalPage = {
 };
 
 export const LEGAL_BACK = 'Zurück';
-/** At the end of both pages: the way to /eltern in the installed app, which has no address bar. */
-export const ELTERN_LINK = 'Für Eltern';

@@ -1,4 +1,4 @@
-// "Neue Version – Neu laden" on /eltern, "Neu laden" in the line below the map: quiet, for adults,
+// "Neue Version – Neu laden" on /eltern/geraet, "Neu laden" in the line below the map: quiet, for adults,
 // never during a round or a Probetest (task 11). Not yellow: it is no step on the child's way.
 
 import { UPDATE_RELOAD, UPDATE_RELOAD_SHORT } from '../text/update';

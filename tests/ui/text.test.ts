@@ -3,7 +3,7 @@ import { BEREICHE, FAECHER } from '../../src/domain/content';
 import { formatGermanNumber, groupDraft, toDraft } from '../../src/ui/formats/number-format';
 import { BEREICH_NAME, FACH_NAME } from '../../src/ui/text/bereiche';
 import { EINSTIEG_TEXTS } from '../../src/ui/text/einstieg';
-import { ELTERN_TEXTS } from '../../src/ui/text/eltern';
+import { GERAET_TEXTS } from '../../src/ui/text/geraet';
 import { FALLE_LABEL, FALLE_TEXT } from '../../src/ui/text/feedback';
 import { DONE, PROBETEST_TEXTS, listEntryName } from '../../src/ui/text/probetest';
 import { UEBEN_TEXTS } from '../../src/ui/text/ueben';
@@ -55,8 +55,8 @@ describe('the choice before practice goes on', () => {
   });
 });
 
-describe('the Eltern page', () => {
-  it.each([...ELTERN_TEXTS, ...UPDATE_TEXTS])(
+describe('the device area (/eltern/geraet)', () => {
+  it.each([...GERAET_TEXTS, ...UPDATE_TEXTS])(
     '"%s" is at most 2 sentences, no exclamation',
     (text) => {
       expect(text).not.toContain('!');

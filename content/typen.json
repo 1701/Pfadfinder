@@ -1,0 +1,34 @@
+{
+  "zahlen-operationen": [
+    "Stellentafel",
+    "Zahlen ordnen und runden",
+    "Nachbarzehner und Nachbarhunderter",
+    "schriftlich rechnen mit Übertrag",
+    "Fehler in einer Rechnung finden",
+    "Malaufgabe am Punktefeld",
+    "Sachaufgaben mit einem und zwei Schritten"
+  ],
+  "raum-form": [
+    "Würfelnetze ergänzen und prüfen",
+    "Spiegelachsen",
+    "Figuren und Lagebeziehungen",
+    "Umfang und Fläche anschaulich"
+  ],
+  "groessen-messen": ["Geld", "Uhrzeit und Dauer", "Längen", "Gewichte", "Umrechnen", "Sachsituationen"],
+  "daten-zufall": [
+    "Tabellen und Diagramme lesen",
+    "sicher – möglich – unmöglich",
+    "Glücksrad prüfen und selbst bauen"
+  ],
+  "muster-strukturen": [
+    "Zahlenfolgen fortsetzen (auch mit Regelwechsel)",
+    "Regel aufschreiben",
+    "Zahlenmauern ergänzen, optimieren und begründen",
+    "Rechenpäckchen erklären"
+  ],
+  "lesen-sachtext": ["Informationen entnehmen", "Aussagen prüfen", "Absätze erkennen"],
+  "lesen-literarisch": ["Figuren", "Handlung", "Schlussfolgern"],
+  "rs-laut-buchstabe": ["Dehnung", "Doppelkonsonant", "s-Laute"],
+  "rs-strategien": ["Groß- und Kleinschreibung", "Wortbausteine", "Verlängern und Ableiten", "Fehler finden"],
+  "sprache-untersuchen": ["Wortarten", "Satzglieder", "Zeitformen"]
+}

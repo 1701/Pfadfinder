@@ -14,6 +14,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Code, Kommentare, Commits, Dateinamen: Englisch
 - Alles, was ein Kind oder Elternteil sieht: Deutsch, Du-Form, kindgerecht (siehe PRODUCT.md Abschnitt 7). Keine Anglizismen in der UI ("Weiter", nicht "Next"; "Entdeckungen", nicht "Badges")
 - Content-Dateien: Deutsch
+- Seiten für Erwachsene (`/eltern`, README): Sie-Form; die älteren Erwachsenenseiten (/so-gehts, Impressum, Datenschutz, /eltern/geraet) duzen noch und werden in der Pflege nachgezogen.
 - Rückfragen und Berichte an Markus (Chat, Abschlussbericht): Deutsch
 
 ## Arbeitsweise
@@ -49,7 +50,7 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - [ ] Funktioniert offline nach erstem Laden
 - [ ] Ziffernblock bietet nur bei allowDecimal ein Komma an, nie einen Punkt.
 
-Seiten für Erwachsene (/so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
+Seiten für Erwachsene (/eltern, /so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
 
 ## Definition of Done (je Aufgabe)
 1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`). In der GitHub-CI läuft es nicht von selbst (docs/DEPLOY.md, Abschnitt 9)

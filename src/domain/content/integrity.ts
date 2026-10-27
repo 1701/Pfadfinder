@@ -1,5 +1,6 @@
 // Validates a whole content tree: schema per file plus cross-file rules
-// (file placement, unique ids, textRef, assetId, probetest composition – CONTENT_SCHEMA.md §1, §5, §6).
+// (file placement, unique ids, textRef, assetId, probetest composition – CONTENT_SCHEMA.md §1, §5, §6;
+// typen.json since 1.0.27).
 // Pure: file system access is injected by the caller (scripts/validate-content.ts).
 
 import type { z } from 'zod';
@@ -21,6 +22,7 @@ import {
   type Bereich,
   type Fach,
 } from './taxonomy';
+import { TYPEN_FILE, checkTypen } from './typen';
 import type { Item, ItemOf, Niveau, Probetest, ReadingText } from './types';
 import { splitSentences, splitWords } from './units';
 
@@ -156,6 +158,12 @@ export function validateContent(
     if (file === 'schema-version.json') {
       hasSchemaVersion = true;
       parse(schemaVersionFileSchema, data, file);
+      continue;
+    }
+
+    // Task types for the page for parents (since 1.0.27): content, not part of the item contract.
+    if (file === TYPEN_FILE) {
+      for (const problem of checkTypen(data)) error(file, problem);
       continue;
     }
 

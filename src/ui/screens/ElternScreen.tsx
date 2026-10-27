@@ -1,293 +1,148 @@
-// Route /eltern, by URL or "Für Eltern" at the end of Impressum and Datenschutz (task 11), never
-// from a child's screen: a sum to get in, then the hint on a better voice for Vorlesen and three
-// buttons: "Sicherung herunterladen" (a file with all data, since 2026-10-16), "Sicherung
-// einlesen" (2026-10-22: pick a file, check it, ask back, replace everything, back to the map)
-// and "Alles löschen" after asking back. An overview comes later (PRODUCT.md §8). No Vorlesen
-// here: reading the question aloud would only help a child in.
-// So geht’s, Impressum and Datenschutz top right, already before the sum (task 10, /so-gehts since
-// 2026-10-22); also on the map (task 11).
-// Bottom left, quietly: the build ("Version a1b2c3d · 18.10.2026") and, once a new version
-// waits, "Neue Version – Neu laden" (task 11), also before the sum.
+// Route /eltern: the page for parents and teachers (task L). Linked as "Für Eltern" from the end of
+// Impressum, Datenschutz and /so-gehts. Built like /so-gehts: a narrow column (--container-measure),
+// only the text scrolls, "Zurück" to the map stays in the band; no Vorlesen. The overview of the
+// Gebiete is static text from the manifest and content/typen.json (passed in, never typed), the two
+// mail buttons open a mail to the contact address with a template. The device area
+// (/eltern/geraet) is one link further.
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { parseImport } from '../../domain/learner';
+import clsx from 'clsx';
 import { Link } from 'react-router';
-import { gateQuestion, isGateAnswer, type GateQuestion } from '../../domain/parents';
-import { Button } from '../components/Button';
-import { RechtlichesLinks } from '../components/RechtlichesLinks';
-import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
-import { ZiffernBlock } from '../components/ZiffernBlock';
-import { focusQuietly } from '../focus';
-import { TO_MAP } from '../text/einstieg';
+import type { ContentManifest } from '../../domain/content/manifest';
+import { BEREICHE_BY_FACH, FAECHER } from '../../domain/content/taxonomy';
+import type { AufgabenTypen } from '../../domain/content/typen';
+import { buttonClass } from '../components/Button';
+import { EmailText } from '../components/EmailText';
+import { QuietLinks } from '../components/QuietLinks';
+import { QUIET_ACTION_CLASS } from '../components/quiet';
+import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 import {
-  BACKUP,
-  BACKUP_FAILED,
-  CANCEL,
-  CONFIRM_DELETE,
-  CONFIRM_TITLE,
-  DELETE_ALL,
-  DELETE_FAILED,
-  DELETE_TEXT,
-  DELETE_TITLE,
-  GATE_RETRY,
-  GATE_SUBMIT,
-  IMPORT,
-  IMPORT_CONFIRM,
-  IMPORT_FAILED,
-  IMPORT_GO,
-  IMPORT_INVALID,
-  IMPORT_NEWER,
-  PREMIUM_VOICE,
-  gateTitle,
+  BEISPIEL,
+  BEISPIEL_TITLE,
+  BEREICH_HINWEIS,
+  ELTERN_BACK,
+  ELTERN_FOOTER,
+  ELTERN_SECTIONS,
+  ELTERN_TITLE,
+  FEHLER_BODY,
+  FEHLER_BUTTON,
+  FEHLER_SUBJECT,
+  VORSCHLAG_BODY,
+  VORSCHLAG_BUTTON,
+  VORSCHLAG_SUBJECT,
+  bereichZeile,
+  mailtoHref,
+  probetestZeile,
+  typenText,
+  type ElternParagraph,
 } from '../text/eltern';
-import { versionLine } from '../text/update';
-import { Blatt } from './Blatt';
-import { QUIET_ACTION_CLASS } from './ItemScreen';
+
+// Tall enough to tap, like the mailto link of EmailText.
+const LINK_CLASS =
+  'inline-flex min-h-touch items-center rounded-control underline underline-offset-4';
+const MAIL_CLASS = clsx(buttonClass('secondary'), 'flex items-center');
 
 export interface ElternScreenProps {
-  /** Writes all data of this device into a file and hands it to the browser. */
-  downloadBackup(): Promise<void>;
-  /** Deletes every table on this device. */
-  deleteAll(): Promise<void>;
-  /** After deleting: back to the map, which offers the Einstieg again. */
-  onDeleted(): void;
-  /** Replaces everything on this device with a checked backup file's text (parseImport ok). */
-  importBackup(text: string): Promise<void>;
-  /** After reading a backup in: back to the map, which shows the backup's state. */
-  onImported(): void;
-  /** Tests pass a fixed question. */
-  newQuestion?: () => GateQuestion;
-  /** Short commit hash and build day. */
-  buildId: string;
-  update?: AppUpdate;
+  manifest: ContentManifest;
+  typen: AufgabenTypen;
 }
 
-type Step = 'frage' | 'offen' | 'rueckfrage' | 'loeschen' | 'import-rueckfrage' | 'einlesen';
-type Failure = 'backup' | 'delete' | 'invalid' | 'newer' | 'import';
-
-const FAILURE_TEXT: Record<Failure, string> = {
-  backup: BACKUP_FAILED,
-  delete: DELETE_FAILED,
-  invalid: IMPORT_INVALID,
-  newer: IMPORT_NEWER,
-  import: IMPORT_FAILED,
-};
-
-const zurKarte = (
-  <Link to="/" className={QUIET_ACTION_CLASS}>
-    {TO_MAP}
-  </Link>
-);
-
-function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
+function Paragraph({ parts }: { parts: ElternParagraph }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-sm text-ink-muted">
-      <p className="px-sm">{versionLine(buildId)}</p>
-      <UpdateHinweis update={update} />
-    </div>
+    <p>
+      {parts.map((part, i) =>
+        typeof part === 'string' ? (
+          <EmailText key={i} text={part} />
+        ) : 'to' in part ? (
+          <Link key={i} to={part.to} className={LINK_CLASS}>
+            {part.text}
+          </Link>
+        ) : (
+          <a key={i} href={part.href} target="_blank" rel="noopener" className={LINK_CLASS}>
+            {part.text}
+          </a>
+        ),
+      )}
+    </p>
   );
 }
 
-const rechtliches = <RechtlichesLinks soGehts />;
-
-export function ElternScreen({
-  downloadBackup,
-  deleteAll,
-  onDeleted,
-  importBackup,
-  onImported,
-  newQuestion = gateQuestion,
-  buildId,
-  update = null,
-}: ElternScreenProps) {
-  const version = <Version buildId={buildId} update={update} />;
-  const [step, setStep] = useState<Step>('frage');
-  const [failed, setFailed] = useState<Failure | null>(null);
-  const [saving, setSaving] = useState(false);
-  // The checked text of the picked file, while asking back.
-  const [backupText, setBackupText] = useState('');
-  const filePicker = useRef<HTMLInputElement>(null);
-
-  if (step === 'frage') {
-    return <Frage newQuestion={newQuestion} version={version} onPass={() => setStep('offen')} />;
-  }
-  if (step === 'offen') {
-    // A file that is no backup changes nothing and says so; a valid one is asked back first.
-    const pick = async (input: HTMLInputElement) => {
-      const file = input.files?.[0];
-      input.value = ''; // The same file can be picked again.
-      if (!file) return;
-      // parseImport takes the file's text as it is (no JSON, unknown version: no backup; a newer
-      // version: an update first).
-      const text = await file.text();
-      const parsed = parseImport(text);
-      if (!parsed.ok) return setFailed(parsed.newerVersion ? 'newer' : 'invalid');
-      setFailed(null);
-      setBackupText(text);
-      setStep('import-rueckfrage');
-    };
-    const backup = async () => {
-      setSaving(true);
-      try {
-        await downloadBackup();
-        setFailed(null);
-      } catch {
-        setFailed('backup');
-      }
-      setSaving(false);
-    };
-    return (
-      <Blatt
-        left={zurKarte}
-        right={rechtliches}
-        title={DELETE_TITLE}
-        text={failed ? FAILURE_TEXT[failed] : DELETE_TEXT}
-        readAloud={false}
-        actions={
-          <>
-            {version}
-            {/* Not yellow: none is a next step on the way (task 6b). */}
-            <div className="flex flex-col items-stretch gap-sm">
-              <Button size="large" disabled={saving} onClick={() => void backup()}>
-                {BACKUP}
-              </Button>
-              <Button size="large" onClick={() => filePicker.current?.click()}>
-                {IMPORT}
-              </Button>
-              <Button size="large" onClick={() => setStep('rueckfrage')}>
-                {DELETE_ALL}
-              </Button>
-            </div>
-          </>
-        }
-      >
-        <p className="w-full px-lg">{PREMIUM_VOICE}</p>
-        {/* Opened by "Sicherung einlesen"; outside the band, whose last child is a button. */}
-        <input
-          ref={filePicker}
-          type="file"
-          accept=".json,application/json"
-          hidden
-          onChange={(event) => void pick(event.currentTarget)}
-        />
-      </Blatt>
-    );
-  }
-  if (step === 'import-rueckfrage' || step === 'einlesen') {
-    const read = async () => {
-      setStep('einlesen');
-      try {
-        await importBackup(backupText);
-      } catch {
-        setFailed('import');
-        setStep('offen');
-        return;
-      }
-      onImported();
-    };
-    return (
-      <Rueckfrage
-        title={IMPORT_CONFIRM}
-        confirm={IMPORT_GO}
-        busy={step === 'einlesen'}
-        onCancel={() => setStep('offen')}
-        onConfirm={() => void read()}
-      />
-    );
-  }
-  const remove = async () => {
-    setStep('loeschen');
-    try {
-      await deleteAll();
-    } catch {
-      setFailed('delete');
-      setStep('offen');
-      return;
-    }
-    onDeleted();
-  };
+function Uebersicht({ manifest, typen }: ElternScreenProps) {
   return (
-    <Rueckfrage
-      title={CONFIRM_TITLE}
-      confirm={CONFIRM_DELETE}
-      busy={step === 'loeschen'}
-      onCancel={() => setStep('offen')}
-      onConfirm={() => void remove()}
-    />
+    <>
+      {FAECHER.map((fach) => (
+        <section key={fach} className="grid gap-xs">
+          <h3 className="font-bold">{FACH_NAME[fach]}</h3>
+          {BEREICHE_BY_FACH[fach].map((bereich) => (
+            <p key={bereich}>
+              <span className="font-bold">
+                {bereichZeile(BEREICH_NAME[bereich], manifest.bereiche[bereich].items)}
+              </span>
+              <br />
+              {typenText(typen[bereich], BEREICH_HINWEIS[bereich])}
+            </p>
+          ))}
+        </section>
+      ))}
+      <p>
+        {probetestZeile(
+          FAECHER.map((fach) => ({ fach: FACH_NAME[fach], n: manifest.probetests[fach].length })),
+        )}
+      </p>
+    </>
   );
 }
 
-function Frage({
-  newQuestion,
-  version,
-  onPass,
-}: {
-  newQuestion: () => GateQuestion;
-  version: ReactNode;
-  onPass(): void;
-}) {
-  const [question, setQuestion] = useState(newQuestion);
-  const [draft, setDraft] = useState('');
-  const [retry, setRetry] = useState(false);
-  const submit = () => {
-    if (isGateAnswer(question, draft === '' ? null : Number(draft))) return onPass();
-    setQuestion(newQuestion());
-    setDraft('');
-    setRetry(true);
-  };
+function Vorschlag() {
   return (
-    <Blatt
-      left={zurKarte}
-      right={rechtliches}
-      title={gateTitle(question)}
-      text={retry ? GATE_RETRY : undefined}
-      readAloud={false}
-      actions={
-        <>
-          {version}
-          <Button variant="primary" disabled={draft === ''} onClick={submit}>
-            {GATE_SUBMIT}
-          </Button>
-        </>
-      }
-    >
-      <div className="flex flex-col items-center gap-lg landscape:flex-row landscape:gap-3xl">
-        <output
-          aria-label="Deine Zahl"
-          className="flex min-h-2xl min-w-3xs items-center justify-end rounded-control border-2 border-line-strong bg-surface px-lg text-prompt font-bold"
-        >
-          {draft}
-        </output>
-        <ZiffernBlock value={draft} onChange={setDraft} allowDecimal={false} maxDigits={3} />
+    <>
+      <div className="flex flex-wrap gap-md">
+        <a href={mailtoHref(VORSCHLAG_SUBJECT, VORSCHLAG_BODY)} className={MAIL_CLASS}>
+          {VORSCHLAG_BUTTON}
+        </a>
+        <a href={mailtoHref(FEHLER_SUBJECT, FEHLER_BODY)} className={MAIL_CLASS}>
+          {FEHLER_BUTTON}
+        </a>
       </div>
-    </Blatt>
+      <p>{BEISPIEL_TITLE}</p>
+      <dl className="grid gap-xs border-l-4 border-line-strong pl-md">
+        {BEISPIEL.map(([label, value]) => (
+          <div key={label}>
+            <dt className="inline font-bold">{label}: </dt>
+            <dd className="inline">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
   );
 }
 
-function Rueckfrage(props: {
-  title: string;
-  confirm: string;
-  busy: boolean;
-  onCancel(): void;
-  onConfirm(): void;
-}) {
-  // The safe answer has the focus; no "Zur Karte" here, "Abbrechen" already leads back.
-  const cancel = useRef<HTMLButtonElement>(null);
-  useEffect(() => focusQuietly(cancel.current), []);
+export function ElternScreen({ manifest, typen }: ElternScreenProps) {
   return (
-    <Blatt
-      title={props.title}
-      readAloud={false}
-      actions={
-        <>
-          <Button ref={cancel} size="large" disabled={props.busy} onClick={props.onCancel}>
-            {CANCEL}
-          </Button>
-          <Button size="large" disabled={props.busy} onClick={props.onConfirm}>
-            {props.confirm}
-          </Button>
-        </>
-      }
-    />
+    <main className="screen-fit mx-auto grid max-w-page grid-rows-[minmax(0,1fr)_auto] gap-sm px-lg py-sm">
+      {/* Room for the focus ring inside the scroll box. */}
+      <div className="-mx-xs min-h-0 overflow-y-auto px-xs">
+        <article className="mx-auto grid max-w-measure gap-lg pt-sm pb-lg">
+          <h1 className="text-heading font-bold">{ELTERN_TITLE}</h1>
+          {ELTERN_SECTIONS.map((section, i) => (
+            <section key={i} className="grid gap-xs">
+              {section.heading && <h2 className="text-option font-bold">{section.heading}</h2>}
+              {section.paragraphs.map((parts, j) => (
+                <Paragraph key={j} parts={parts} />
+              ))}
+              {section.extra === 'uebersicht' && <Uebersicht manifest={manifest} typen={typen} />}
+              {section.extra === 'vorschlag' && <Vorschlag />}
+            </section>
+          ))}
+          <footer>
+            <QuietLinks label={ELTERN_TITLE} links={ELTERN_FOOTER} className="flex-wrap" />
+          </footer>
+        </article>
+      </div>
+      <div data-region="band" className="flex items-end justify-between gap-md">
+        <Link to="/" className={QUIET_ACTION_CLASS}>
+          {ELTERN_BACK}
+        </Link>
+      </div>
+    </main>
   );
 }

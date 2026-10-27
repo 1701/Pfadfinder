@@ -1,27 +1,23 @@
-// Routes /impressum and /datenschutz: static text for adults, linked from the map and /eltern.
-// Unlike a task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in the history, or
-// to the map when the page was opened directly. At the end, quietly, "Für Eltern" leads to /eltern:
-// the home-screen app has no address bar, so this is its only way there (task 11). Beside it
-// "So geht’s" (/so-gehts, 2026-10-22).
+// Routes /impressum and /datenschutz: static text for adults, linked from the map, /eltern and
+// /eltern/geraet. Unlike a task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in
+// the history, or to the map when the page was opened directly. At the end, quietly, "Für Eltern"
+// leads to the page for parents and teachers (/eltern, task L) and "Sicherung und Gerät" to the
+// device area (/eltern/geraet): the home-screen app has no address bar, so these are its way there
+// (task 11). Beside them "So geht’s" (/so-gehts, 2026-10-22).
 
 import { useLocation, useNavigate } from 'react-router';
 import { EmailText } from '../components/EmailText';
 import { QuietLinks } from '../components/QuietLinks';
 import { QUIET_ACTION_CLASS } from '../components/quiet';
-import { SO_GEHTS_LINK } from '../text/rechtliches-links';
-import {
-  DATENSCHUTZ,
-  ELTERN_LINK,
-  IMPRESSUM,
-  LEGAL_BACK,
-  type LegalPage,
-} from '../text/rechtliches';
+import { ELTERN_LINK, GERAET_LINK, SO_GEHTS_LINK } from '../text/rechtliches-links';
+import { DATENSCHUTZ, IMPRESSUM, LEGAL_BACK, type LegalPage } from '../text/rechtliches';
 
 const PAGES = { impressum: IMPRESSUM, datenschutz: DATENSCHUTZ } as const;
 
-// From the map in two taps: Impressum → So geht’s (2026-10-22).
+// From the map in two taps: Impressum → So geht’s (2026-10-22), → Sicherung und Gerät (task L).
 const END_LINKS = [
   { to: '/eltern', text: ELTERN_LINK },
+  { to: '/eltern/geraet', text: GERAET_LINK },
   { to: '/so-gehts', text: SO_GEHTS_LINK },
 ] as const;
 
@@ -56,7 +52,7 @@ function Rechtliches({ page }: { page: LegalPage }) {
         </section>
       ))}
       <footer className="flex">
-        <QuietLinks label="Für Eltern" links={END_LINKS} />
+        <QuietLinks label="Für Eltern" links={END_LINKS} className="flex-wrap" />
       </footer>
     </main>
   );

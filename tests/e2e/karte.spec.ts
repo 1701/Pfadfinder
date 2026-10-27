@@ -8,6 +8,9 @@
 // Before the very first Fundstück (task 17, /dev/karte?erstes and / after "Später") one sentence
 // stands in place of the dashes, in portrait also of "Heute …": no Gebietsname and no Gebiet gets
 // smaller than without it.
+// "Eltern" (/eltern, task L) stands right before "Impressum" in every viewport and state: "Für
+// Eltern" there or behind the Probetests took the line to two rows in portrait. The map never links
+// the device area (/eltern/geraet).
 // Signs of the Gebiete (SU Phase B): ≥ 18 px apart in portrait, ≥ 15 px in landscape (decision
 // Markus 2026-10-25), inside their Gebiet, clear of the island names. / shows no sign on a Gebiet
 // without items; /dev/karte?alle shows all ten, as / does once every Bereich has items.
@@ -65,6 +68,10 @@ async function measure(page: Page) {
         .filter(({ rect }) => rect.width > 0)
         .map(({ name, rect }) => ({ name, height: rect.height, bottom: rect.bottom })),
       line: document.querySelector('main > div:last-child')!.getBoundingClientRect().height,
+      elternHref: [...document.querySelectorAll('main > div:last-child a')]
+        .find((a) => a.textContent === 'Eltern')
+        ?.getAttribute('href'),
+      geraetLinks: document.querySelectorAll('a[href*="geraet"]').length,
       // The Tagesziel: dashes, "Heute …" and the sentence before the first Fundstück, if shown.
       dashes: document.querySelector('header ol')?.getBoundingClientRect().width ?? 0,
       heute: [...document.querySelectorAll('header p')]
@@ -137,6 +144,12 @@ for (const viewport of VIEWPORTS) {
       expect(m.legend.map((l) => l.name)).toEqual(
         expect.arrayContaining(['Impressum', 'Datenschutz']),
       );
+      const names = m.legend.map((l) => l.name);
+      expect(names[names.indexOf('Impressum') - 1], `${url}: "Eltern" before "Impressum"`).toBe(
+        'Eltern',
+      );
+      expect(m.elternHref, `${url}: "Eltern" leads to /eltern`).toBe('/eltern');
+      expect(m.geraetLinks, `${url}: link to the device area`).toBe(0);
       const rows = [...new Set(m.legend.map((l) => Math.round(l.bottom)))].sort((a, b) => a - b);
       if (neu) {
         // Both Probetests, "Neu laden" and Impressum · Datenschutz: one row in landscape; in

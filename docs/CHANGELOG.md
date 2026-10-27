@@ -4,6 +4,11 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.27 – 2026-10-26
+- §1 Dateistruktur: neue Datei `content/typen.json` (Bereich → Liste von Aufgabentypen) für die Seite „Für Eltern und Lehrkräfte“ (`/eltern`). Kein Teil des Item-Vertrags; der Validator prüft die Schlüssel gegen `BEREICHE_BY_FACH`, nicht leere Listen und nur Texte. Grund: §1 ist der Dateibaum, den der Validator durchsetzt; ohne Eintrag wäre die Datei eine „Unerwartete Content-Datei“. Für jeden Fork ist das eine Vertragsänderung.
+- §7 Batch-Abgabe: `typen.json` wird mit jedem Batch gepflegt.
+- Nur eine neue Datei: Alle Items und Probetests bleiben gültig, `schemaVersion` bleibt `"1.0"`, das Manifest ist unverändert.
+
 ### 1.0.26 – 2026-10-25
 - §6 Pflichtbereiche Deutsch: `lesen-sachtext`, `rs-laut-buchstabe`, `rs-strategien`, `sprache-untersuchen` (je ≥ 2 Items). `sprache-untersuchen` wird Pflicht, `lesen-literarisch` ist erlaubt, aber nicht mehr Pflicht. Grund: Die Deutsch-Probetests sind neu gemischt (Batch D); Kompass 4 Deutsch 2024 und 2025 haben keinen literarischen Text und 11 von 24 Aufgaben Sprache untersuchen. Die Übergangssätze („bis zum Neu-Mischen …“) in §6 entfallen.
 - §6 Niveau-Band: Beispiele auf die neuen Probetests (deutsch-01/02 8/12/4, deutsch-03 7/13/4 im Testaufbau). §7: Kalibrierung Deutsch (Kompass 4 2024/2025) ersetzt den Block „Sprache untersuchen“.

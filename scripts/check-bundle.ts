@@ -1,7 +1,8 @@
 // Runs after `vite build`: guards properties of the production bundle that unit tests cannot see.
 //  - developer pages (/dev/*) must not be in the bundle
 //  - test fixtures (reading text t-sach-900) only reach the dev pages, never the bundle
-//  - self-hosted fonts and reading texts must be precached for offline use
+//  - self-hosted fonts and reading texts must be precached for offline use, and so must the pages
+//    for adults (/eltern, /eltern/geraet, /so-gehts, Impressum and Datenschutz), each its own chunk
 //  - updates wait for "Neu laden" (task 11): sw.js only skips waiting on request, never on its own,
 //    and the app registers the worker itself (no registerSW.js); the build id is filled in
 //  - the start page's JS (entry + modulepreloads) stays below the budget and contains neither
@@ -55,6 +56,15 @@ for (const file of readdirSync(textsDir).filter((f) => f.endsWith('.json'))) {
   );
   if (!chunk) errors.push(`assets: kein Chunk für content/texts/deutsch/${file}`);
   else if (!sw.includes(`assets/${chunk}`)) errors.push(`sw.js: Lesetext ${id} fehlt im Precache`);
+}
+// Pages for adults (task L): each in its own lazy chunk, named after its module, and precached, so
+// they open offline after the first load.
+for (const name of ['eltern-route', 'geraet-route', 'SoGehtsScreen', 'RechtlichesScreen']) {
+  const chunk = readdirSync(path.join(dist, 'assets')).find(
+    (f) => f.startsWith(`${name}-`) && f.endsWith('.js'),
+  );
+  if (!chunk) errors.push(`assets: kein eigener Chunk für ${name}`);
+  else if (!sw.includes(`assets/${chunk}`)) errors.push(`sw.js: ${name} fehlt im Precache`);
 }
 // Updates (src/app/pwa-update.ts): a new worker waits until the app sends SKIP_WAITING.
 if (!/"SKIP_WAITING"===\w+\.data\.type&&self\.skipWaiting\(\)/.test(sw)) {
@@ -149,6 +159,6 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(
-  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften und Icons im Precache, ` +
+  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften, Icons und Erwachsenenseiten im Precache, ` +
     `Startseite ${initialKb.toFixed(1)} kB JS (Budget ${START_PAGE_BUDGET_KB} kB, ohne Zod/Dexie), dnd-kit nur in ${withDnd.join(', ')}.`,
 );

@@ -64,7 +64,7 @@ for (const viewport of VIEWPORTS) {
     await expectFits(page, `wahl ${viewport.name}`);
     await shot('ueben-wahl');
 
-    await page.goto('/eltern');
+    await page.goto('/eltern/geraet');
     const question = await page.getByRole('heading', { level: 1 }).textContent();
     const [, a, b] = question!.match(/(\d+) \+ (\d+)/)!;
     for (const digit of String(Number(a) + Number(b))) {

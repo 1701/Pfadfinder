@@ -1,4 +1,4 @@
-// Quiet, for adults: the build on /eltern and, once a new version waits, the reload (task 11).
+// Quiet, for adults: the build on /eltern/geraet and, once a new version waits, the reload (task 11).
 // Its own module: the map in the start bundle needs only these two.
 
 export const versionLine = (buildId: string) => `Version ${buildId}`;

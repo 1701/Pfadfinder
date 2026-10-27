@@ -1,7 +1,8 @@
 // Route /so-gehts: how Pfadfinder works, for parents (Markus, 2026-10-22). Linked as "So geht’s"
-// from /eltern and from the end of Impressum and Datenschutz (from the map: Impressum → So geht’s). Static text in a narrow column (at most 70
+// from /eltern/geraet and from the end of Impressum and Datenschutz (from the map: Impressum → So
+// geht’s), as "So funktioniert Pfadfinder" from /eltern. Static text in a narrow column (at most 70
 // characters per line, --container-measure); only the text scrolls, "Zurück" to the map stays in
-// the band. No Vorlesen, no lists: headings and paragraphs only.
+// the band. No Vorlesen, no lists: headings, paragraphs and, near the end, "Für Eltern" (/eltern).
 
 import { Link } from 'react-router';
 import { EmailText } from '../components/EmailText';
@@ -23,6 +24,16 @@ export function SoGehtsScreen() {
                   <EmailText text={text} />
                 </p>
               ))}
+              {section.link && (
+                <p>
+                  <Link
+                    to={section.link.to}
+                    className="inline-flex min-h-touch items-center rounded-control underline underline-offset-4"
+                  >
+                    {section.link.text}
+                  </Link>
+                </p>
+              )}
             </section>
           ))}
         </article>

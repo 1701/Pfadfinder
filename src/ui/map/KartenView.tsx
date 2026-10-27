@@ -8,7 +8,10 @@
 // unerforscht." 824/849, with gap-sm 812/837, "Noch unerforscht: …" 768/793, "Unerforscht: …"
 // 686/711 with gap-sm and 698/723 with gap-md. Hence the short title, with gap-md.
 // The line below the map (task 14): left the Probetests as one quiet group "Probetest Mathe ·
-// Probetest Deutsch", right "Impressum · Datenschutz" (DDG) in the same look, both at the edges.
+// Probetest Deutsch", right "Eltern · Impressum · Datenschutz" (DDG) in the same look, both at the
+// edges. "Eltern" (/eltern, task L) is short on purpose: "Für Eltern" there or behind the
+// Probetests took the line to two rows in portrait (names 22.7 → 21.4 px on the iPad, 19.4 → 18.1
+// in Safari); "Eltern" keeps every budget unchanged.
 // In portrait the water between the islands is too narrow for a 48 px target (measured
 // 2026-10-15), so the Probetests stay in this line. "Neu laden" (a new version waits, for adults)
 // stands left of "Impressum" in landscape; in portrait it gets its own row above the groups,
@@ -121,7 +124,7 @@ export function KartenView({
             <UpdateHinweis update={update} onMap />
           </div>
         )}
-        <RechtlichesLinks className={update ? 'portrait:ml-auto' : 'ml-auto'} />
+        <RechtlichesLinks eltern className={update ? 'portrait:ml-auto' : 'ml-auto'} />
       </div>
     </main>
   );

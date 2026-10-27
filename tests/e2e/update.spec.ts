@@ -1,6 +1,6 @@
 // The update of the installed app (task 11) with a real second build: version A is installed,
 // the server switches to B, the app finds B when it comes back to the foreground. The quiet
-// "Neue Version – Neu laden" shows on /eltern, "Neu laden" on the map (landscape here), nothing
+// "Neue Version – Neu laden" shows on /eltern/geraet, "Neu laden" on the map (landscape here), nothing
 // reloads during a round, and a tap on the map brings B. Chromium only: Playwright's WebKit has no service workers.
 
 import { expect, test, type Page } from '@playwright/test';
@@ -46,10 +46,10 @@ async function backToForeground(page: Page) {
   });
 }
 
-test('neue Version: leiser Hinweis auf /eltern und der Karte, Neuladen nur auf Tipp', async ({
+test('neue Version: leiser Hinweis auf /eltern/geraet und der Karte, Neuladen nur auf Tipp', async ({
   page,
 }) => {
-  await page.goto(`${server.url}/eltern`);
+  await page.goto(`${server.url}/eltern/geraet`);
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
   });
@@ -80,7 +80,7 @@ test('neue Version: leiser Hinweis auf /eltern und der Karte, Neuladen nur auf T
   await page.getByRole('link', { name: 'Pause' }).click();
   await Promise.all([page.waitForEvent('load'), page.getByRole('button', MAP_RELOAD).click()]);
   expect(await page.evaluate(() => 'stillHere' in window)).toBe(false);
-  await page.goto(`${server.url}/eltern`);
+  await page.goto(`${server.url}/eltern/geraet`);
   await expect(page.getByText(`Version ${SECOND}`)).toBeVisible();
   await expect(page.getByRole('button', MAP_RELOAD)).toHaveCount(0);
 });

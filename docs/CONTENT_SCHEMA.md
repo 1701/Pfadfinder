@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.26 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.27 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -34,9 +34,12 @@ content/
   assets/
     svg/                       nur SVG, Dateiname = asset-id
   manifest.json                ERZEUGT von `npm run content:validate`, nie von Hand bearbeiten
+  typen.json                   { Bereich: string[] } Aufgabentypen je Bereich für /eltern (seit 1.0.27)
 ```
 
 `manifest.json` ist kein Teil des Item-Vertrags: Es fasst je Bereich die aktiven Items (ohne `retired`) je Format und Niveau sowie die Text-IDs zusammen, dazu die IDs der Probetests je Fach (seit 1.0.9), damit die Startseite keine Items laden muss. Autorinnen und Autoren committen es nach jeder Content-Änderung mit (der pre-commit-Hook verlangt das, in CI ist ein veraltetes Manifest ein Fehler).
+
+`typen.json` (seit 1.0.27) ist ebenfalls kein Teil des Item-Vertrags, sondern von Hand gepflegter Content (CC BY-SA): je Bereich eine nicht leere Liste von Aufgabentypen in Elternsprache, z. B. `"zahlen-operationen": ["Stellentafel", …]`. `npm run content:validate` prüft genau die Bereiche aus `BEREICHE_BY_FACH` als Schlüssel (keiner fehlt, keiner ist unbekannt), jede Liste nicht leer, nur Texte.
 
 ## 2. Identifikatoren
 
@@ -297,6 +300,7 @@ Regeln:
 
 **Batch-Abgabe**
 - 20 Items je Batch, ein Bereich, als valide JSON-Datei
+- `content/typen.json` nennt je Bereich die Aufgabentypen für die Elternseite; Pflege bei jedem Batch (seit 1.0.27): Ein neuer Typ kommt hinzu, wenn der Batch ihn bringt; genannt wird nur, was im Pool vorkommt
 - Jeder Batch enthält eine Kopfzeile im Chat: Niveauverteilung, Formatverteilung, Kalibrierungsquelle
 - Status bei Abgabe: `draft`; nach Papier-Pilot `piloted`; nach Markus-Freigabe `approved`
 

@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { execSync } from 'node:child_process';
 
 /**
- * Shown quietly on /eltern: short commit hash and build day, e.g. "a1b2c3d · 18.10.2026".
+ * Shown quietly on /eltern/geraet: short commit hash and build day, e.g. "a1b2c3d · 18.10.2026".
  * Cloudflare Workers Builds also passes the commit as WORKERS_CI_COMMIT_SHA.
  * PFADFINDER_BUILD_ID replaces it (the second build of the update e2e test).
  */

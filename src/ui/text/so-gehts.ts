@@ -1,12 +1,17 @@
 // /so-gehts: how Pfadfinder works, for parents (Markus, 2026-10-22, text verbatim). Like Impressum
 // and Datenschutz a page for adults, so paragraphs may be longer than two sentences (CLAUDE.md).
+// Still Du; only the section "Für Eltern und Lehrkräfte" (task L) speaks like /eltern, in the Sie
+// form, until this page follows.
 
 import { EMAIL } from './kontakt';
+import { ELTERN_LINK } from './rechtliches-links';
 
 export interface SoGehtsSection {
   /** None for the opening paragraph and the contact line at the end. */
   heading?: string;
   paragraphs: string[];
+  /** A link below the paragraphs. */
+  link?: { to: string; text: string };
 }
 
 export const SO_GEHTS_TITLE = 'So funktioniert Pfadfinder';
@@ -34,7 +39,7 @@ export const SO_GEHTS: SoGehtsSection[] = [
   {
     heading: 'Die Sicherung',
     paragraphs: [
-      'Pfadfinder braucht kein Konto und keinen Namen. Der Fortschritt bleibt auf diesem Gerät. Wer das Gerät wechselt oder Daten löscht, braucht vorher eine Sicherung. Du findest sie unter „Für Eltern“ am Ende von Impressum und Datenschutz: „Sicherung herunterladen“ tippen und die Datei speichern, zum Beispiel in „Dateien“. Auf dem neuen Gerät unter „Für Eltern“ auf „Sicherung einlesen“ tippen. Das ersetzt alles, was dort gespeichert ist.',
+      'Pfadfinder braucht kein Konto und keinen Namen. Der Fortschritt bleibt auf diesem Gerät. Wer das Gerät wechselt oder Daten löscht, braucht vorher eine Sicherung. Du findest sie unter „Sicherung und Gerät“ am Ende von Impressum und Datenschutz: „Sicherung herunterladen“ tippen und die Datei speichern, zum Beispiel in „Dateien“. Auf dem neuen Gerät unter „Sicherung und Gerät“ auf „Sicherung einlesen“ tippen. Das ersetzt alles, was dort gespeichert ist.',
     ],
   },
   {
@@ -54,6 +59,13 @@ export const SO_GEHTS: SoGehtsSection[] = [
     paragraphs: [
       'Die App selbst sendet nichts an einen Server, setzt keine Cookies und zeigt keine Werbung. Beim Vorlesen auf dem iPad bleibt die Stimme auf dem Gerät. Was dein Browser darüber hinaus tut, steht unter „Datenschutz“.',
     ],
+  },
+  {
+    heading: 'Für Eltern und Lehrkräfte',
+    paragraphs: [
+      'Was Pfadfinder ist, woher die Aufgaben kommen und wie Sie eine Aufgabe vorschlagen können, steht auf der Seite für Eltern und Lehrkräfte. Dort finden Sie auch die Sicherung des Übungsstands.',
+    ],
+    link: { to: '/eltern', text: ELTERN_LINK },
   },
   { paragraphs: [`Fragen oder Fehler gefunden? ${EMAIL}`] },
 ];

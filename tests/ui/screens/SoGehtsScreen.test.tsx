@@ -31,13 +31,14 @@ describe('So funktioniert Pfadfinder (/so-gehts)', () => {
       'Warum die Probetest-Liste kein Ergebnis zeigt',
       'Was Pfadfinder nicht ist',
       'Datenschutz',
+      'Für Eltern und Lehrkräfte',
     ]);
   });
 
   it('is running text: paragraphs, no lists, no Vorlesen', () => {
     renderPage();
     expect(document.querySelectorAll('ul, ol')).toHaveLength(0);
-    expect(document.querySelectorAll('main p')).toHaveLength(9);
+    expect(document.querySelectorAll('main p')).toHaveLength(11);
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
   });
 
@@ -48,6 +49,20 @@ describe('So funktioniert Pfadfinder (/so-gehts)', () => {
     expect(mail.closest('p')!.textContent).toBe(
       'Fragen oder Fehler gefunden? pfadfinder@steireif.de',
     );
+  });
+
+  it('leads to the page for parents and teachers with "Für Eltern" (task L)', async () => {
+    renderPage();
+    const link = screen.getByRole('link', { name: 'Für Eltern' });
+    expect(link.getAttribute('href')).toBe('/eltern');
+    expect(document.body.textContent).toContain(
+      'Du findest sie unter „Sicherung und Gerät“ am Ende von Impressum und Datenschutz',
+    );
+    expect(document.body.textContent).toContain(
+      'Auf dem neuen Gerät unter „Sicherung und Gerät“ auf „Sicherung einlesen“ tippen.',
+    );
+    await userEvent.click(link);
+    expect(screen.getByRole('heading', { name: 'Eltern' })).toBeTruthy();
   });
 
   it('"Zurück" in the band leads to the map, wherever the page was opened from', async () => {
