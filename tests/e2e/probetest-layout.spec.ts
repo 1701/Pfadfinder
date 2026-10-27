@@ -31,11 +31,10 @@ import {
 } from './helpers';
 import { overflowProblems, overlapProblems } from './screen-checks';
 
-// One after another in one worker (2026-10-27, issue #1): side by side, the four viewports with
-// about 320 screens each against the one dev server crashed Chrome, hit
-// ERR_INSUFFICIENT_RESOURCES or timed out locally with 6 workers; with one worker they pass.
-// The other specs of the project stay parallel.
-test.describe.configure({ mode: 'default' });
+// The viewports share nothing (own browser context, own report, files named per viewport), and
+// the print tests write their own files, so they run side by side, like layout.spec.
+// Parallel needs TMPDIR outside a tmpfs with a quota (playwright.config.ts, issue #1).
+test.describe.configure({ mode: 'parallel' });
 
 /** Every Probetest in content (task 16: a new file is measured without touching this spec). */
 const PROBETESTS = readdirSync('content/probetests')

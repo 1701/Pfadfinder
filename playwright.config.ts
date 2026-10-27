@@ -1,4 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+
+// Browsers write their temporary files to TMPDIR. A /tmp with a per-user quota (tmpfs usrquota,
+// 6 256 MiB here) fills within seconds with parallel Chrome, and pages hang (issue #1).
+if (!process.env.CI && !process.env.TMPDIR) {
+  process.env.TMPDIR = join(homedir(), '.cache', 'pfadfinder-playwright');
+  mkdirSync(process.env.TMPDIR, { recursive: true });
+}
 
 // iPad touch profile with exactly the viewports from the pfadfinder-ui skill.
 const landscape = { ...devices['iPad (gen 7) landscape'], viewport: { width: 1024, height: 768 } };

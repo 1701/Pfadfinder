@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-27 – Layout-Flakes: Ursache /tmp-Quota, probetest-layout wieder parallel (Aufgabe M, Commit 3, Issue #1)
+- **Ursache (F0g):** `/tmp` ist ein tmpfs mit Benutzer-Quota (6 256 MiB = 80 %). Parallel stieg die Belegung von 0,1 auf 6,1 GiB in 10 s (20:56:33: 6 406 236 von 6 406 614 KiB), alle vier Viewports hingen ab 20:56:32; `/dev/shm` blieb unter 53 MiB. Vite, Node 26, Headless-Shell und optimizeDeps vorher ausgeschlossen (F0a–F2, Kommentare in #1).
+- **Abhilfe (F0h):** `TMPDIR=~/.cache/pfadfinder-playwright` aus der Shell: parallel 6/6 grün in 9,4 Min., Budgets byte-gleich.
+- **Gebaut:** `playwright.config.ts` setzt lokal (nicht CI, nur ohne eigenes TMPDIR) `TMPDIR` auf `~/.cache/pfadfinder-playwright` und legt es an; `probetest-layout.spec` wieder `mode: 'parallel'`. Doku: DEPLOY §9 (TMPDIR, Laufzeit), ARCHITECTURE §8, CLAUDE.md DoD 1.
+- **Läufe:** Layout komplett ohne Schalter, TMPDIR in der Shell nicht gesetzt: 64/64 in 31,4 Min. und 64/64 in 31,1 Min. (probetest-layout je Viewport 8,9–9,2 Min.); `/tmp` höchstens 70,0 MiB; vier Budgets byte-gleich.
+- **Korrektur:** C0-Sampler zeigte Vite 12,2 % CPU, nicht 26 % (Eintrag unten).
+- **Entschieden (Markus):** Variante A (TMPDIR in der Config statt nur Doku); Serialisierung zurückgenommen; Issue #1 wird geschlossen.
+- **Lokal:** `npm run check` grün (Vitest 1 178); Layout 2 × 64/64.
+
 ## 2026-10-27 – Layout-Flakes: probetest-layout seriell (Aufgabe M, Issue #1)
 - **Gebaut:** `probetest-layout.spec` `mode: 'default'` (ein Worker für die Datei, andere Specs parallel), Dev-Server 5199 `reuseExistingServer: false`. Doku: ARCHITECTURE §8, DEPLOY §9 (Laufzeit, Port 5199, iPad-Dev auf 5200), CLAUDE.md DoD 1; Layout-CI „~23“ → „~30 Min.“.
 - **Läufe** (iPad quer / iPad hoch / Safari quer / Safari hoch): C0 HEAD, 6 Worker: C / T / C / C in 20,1 Min., alle vier um 13:06:36 bei `zustand=auswertung&zeit-um`, Vite „Failed to fetch dynamically imported module“, 5 Core-Dumps. C1 seriell: 6/6 grün, alle w0, 29,6 Min. (je 7,4). E1 Layout komplett: 64/64 in 33,2 Min. (9,0 / 8,5 / 7,4 / 7,3). E2: 64/64 in 33,3 Min. (9,1 / 8,5 / 7,4 / 7,4).
