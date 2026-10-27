@@ -166,6 +166,35 @@ export const VIEWPORTS = [
   { name: 'safari-portrait', width: 768, height: 900 },
 ];
 
+/** Air between the answers and the band that every screen keeps (Freigabe Teil B, task 13). */
+export const AIR = 18;
+
+/**
+ * The closed list of items that keep less air (decision Markus 2026-10-27): looking through beside
+ * a reading text in Safari landscape, where Falle, Zurück and Weiter stack. Measured 1 px
+ * (d-lsa-2-002, d-lli-2-005, d-lsa-2-004, d-lli-2-002, fixture order d-lsa-2-950) and 15 px
+ * (fixture match d-lsa-2-952). The band is rebuilt after the MVP. A new item below 18 px is red;
+ * it is rebuilt or deliberately added to the list by Markus, case by case.
+ */
+export const AIR_EXCEPTIONS: ReadonlySet<string> = new Set([
+  'd-lsa-2-002',
+  'd-lli-2-005',
+  'd-lsa-2-004',
+  'd-lli-2-002',
+  'd-lsa-2-950',
+  'd-lsa-2-952',
+]);
+
+/** The air a screen must keep: 0 only for an item of AIR_EXCEPTIONS in its exception, else AIR. */
+export function airWanted(state: string, viewport: string, withText: boolean, id: string): number {
+  return state === 'durchsehen' &&
+    viewport === 'safari-landscape' &&
+    withText &&
+    AIR_EXCEPTIONS.has(id)
+    ? 0
+    : AIR;
+}
+
 export interface FitMetrics {
   /** Page scroll in px (> 0 is a problem). */
   overflow: number;

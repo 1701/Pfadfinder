@@ -23,6 +23,7 @@ import {
   ITEMS,
   SCREENSHOTS,
   VIEWPORTS,
+  airWanted,
   fitMetrics,
   fitProblems,
   matchProblems,
@@ -79,17 +80,6 @@ const READING = [
   { item: 'd-lsa-1-950', title: 'Baumeister am Bach', current: 1 },
   { item: 'd-lli-1-900', title: 'Der Igel im Winter', current: 7 },
 ] as const;
-/** Air above the band beside a reading text, as in text-layout.spec. */
-const AIR = 18;
-/**
- * Exception (decision Markus, task 13): looking through beside a text in Safari landscape stacks
- * Falle, Zurück and Weiter; there only no overflow and no overlap, air ≥ 0 (measured: order 1,
- * match 15, short-answer 19 px). Every other state and viewport keeps 18 px.
- */
-function airWanted(state: string, viewport: string): number {
-  return state === 'durchsehen' && viewport === 'safari-landscape' ? 0 : AIR;
-}
-
 const MEASURED = process.env.CI ? VIEWPORTS.filter((v) => v.name.startsWith('safari')) : VIEWPORTS;
 
 async function open(page: Page, query: string) {
@@ -171,7 +161,8 @@ for (const viewport of MEASURED) {
     });
     await page.close();
 
-    // Every Mathe item: answering, looking through with a wrong answer and without one.
+    // Every Mathe item: answering, looking through with a wrong answer and without one, each with
+    // 18 px air (airWanted).
     // slack: the tightest over all tests (for the screenshots); mathe: per test and item.
     const slack: Record<string, { probetest: string; id: string; slack: number }> = {};
     const keep = (state: string, id: string, value: number, probetest = PROBETEST.id) => {
@@ -182,11 +173,15 @@ for (const viewport of MEASURED) {
     for (const test of MATHE) {
       const least: Record<string, { id: string; slack: number }> = {};
       for (const id of test.itemIds) {
+        const withText = ITEMS.find((i) => i.id === id)?.stimulus?.textRef !== undefined;
         page = await context.newPage();
         for (const state of ['aufgabe', 'durchsehen', 'fehlt'] as const) {
           await open(page, `probetest=${test.id}&zustand=${state}&item=${id}`);
           for (const p of await fitProblems(page)) red.push(`${test.id} ${state} ${id}: ${p}`);
           const at = Math.round((await fitMetrics(page))!.slack);
+          const wanted = airWanted(state, viewport.name, withText, id);
+          if (at < wanted)
+            red.push(`${test.id} ${state} ${id}: only ${at} px air (${wanted} px wanted)`);
           keep(state, id, at, test.id);
           if (!least[state] || at < least[state].slack) least[state] = { id, slack: at };
         }
@@ -195,8 +190,9 @@ for (const viewport of MEASURED) {
       mathe[test.id] = { slack: least };
     }
     report.mathe = mathe;
-    // Every Deutsch Probetest (task 13, 16): every item; beside a text no overflow, no overlap,
-    // 18 px air (the Safari landscape review exception as for the fixture). Air per item and state.
+    // Every Deutsch Probetest (task 13, 16): every item with 18 px air in every state, except the
+    // closed list AIR_EXCEPTIONS (airWanted); beside a text also no overflow, no overlap. Air per
+    // item and state.
     const deutschReport: Record<string, unknown> = {};
     for (const test of DEUTSCH) {
       const deutsch: Record<string, Record<string, number>> = {};
@@ -219,9 +215,9 @@ for (const viewport of MEASURED) {
             for (const p of await overlapProblems(page)) red.push(`${label}: ${p}`);
             if (item.format === 'match')
               for (const p of await matchProblems(page)) red.push(`${label}: ${p}`);
-            const wanted = airWanted(state, viewport.name);
-            if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
           }
+          const wanted = airWanted(state, viewport.name, withText, id);
+          if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
           (deutsch[id] ??= {})[state] = at;
           if (withText) (promptRows[id] ??= {})[state] = await promptLines(page, item.prompt);
           if (!deutschMin[state] || at < deutschMin[state].slack)
@@ -265,7 +261,7 @@ for (const viewport of MEASURED) {
         if ((await page.locator('[data-region="text"]').count()) !== 1)
           red.push(`${label}: no text box`);
         const at = Math.round((await fitMetrics(page))!.slack);
-        const wanted = airWanted(state, viewport.name);
+        const wanted = airWanted(state, viewport.name, true, id);
         if (at < wanted) red.push(`${label}: only ${at} px air (${wanted} px wanted)`);
         (text[state] ??= {})[format] = at;
         if (!tightest[state] || at < tightest[state].slack) tightest[state] = { query, slack: at };

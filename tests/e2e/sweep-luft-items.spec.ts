@@ -4,21 +4,27 @@
 //   PFADFINDER_SWEEP=1 PFADFINDER_SWEEP_ITEMS=d-lsa-1-008,d-lli-3-004 \
 //     npx playwright test --project=sweep sweep-luft-items
 // Per item and viewport: Üben /dev/item (answering, richtig, noch-nicht; short-answer also
-// vergleichen) and Durchsehen /dev/probetest with <fach>-01 (durchsehen; short-answer also
-// vergleichen). An item that is not in that Probetest takes the place of its first item of the same
-// format (ProbetestPage). Per screen: air above the band (fitMetrics), lines of the prompt, page
-// scroll, overflow and overlap (screen-checks).
-// Rule of a content batch: Üben ≥ 18 px, Durchsehen ≥ 0 (in Safari landscape the exception of
-// ARCHITECTURE §5; elsewhere probetest-layout wants 18). `failing` lists what breaks it.
+// vergleichen) and Durchsehen /dev/probetest at the item's real place in every Probetest of
+// content/probetests that holds it (keys durchsehen@<id>, durchsehen-vergleichen@<id> for a short
+// answer, fehlt@<id>): the place matters, at place 24 the band says "Zur Auswertung" (224 instead
+// of 180 px), in fehlt the message column gets 44 px narrower, wraps one more line and the band
+// grows 110 → 136 px (m-dz-3-003: 44 px air at place 24 of mathe-03, 70 px at an earlier place).
+// Only an item in no Probetest takes the place of the first item of the same format in <fach>-01
+// (ProbetestPage; keys durchsehen, durchsehen-vergleichen, fehlt). Per screen: air above the band
+// (fitMetrics), lines of the prompt, page scroll, overflow and overlap (screen-checks).
+// Rule (airWanted, helpers.ts): ≥ 18 px everywhere; less only for the closed list AIR_EXCEPTIONS
+// (looking through beside a text in Safari landscape). `failing` lists what breaks it.
 // Output: tests/e2e/output/sweep-luft-items.json (always the output folder, it is no screenshot).
 // First used for muster-strukturen patch 2 (then as a temporary spec), checked in with the
 // Lesen batch 004.
 
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import {
+  AIR,
   ITEMS,
   VIEWPORTS,
+  airWanted,
   expectItemOnScreen,
   fitMetrics,
   promptLines,
@@ -32,7 +38,17 @@ const IDS = (process.env.PFADFINDER_SWEEP_ITEMS ?? '')
   .map((id) => id.trim())
   .filter(Boolean);
 const OUT = 'tests/e2e/output';
-const AIR = 18;
+/** Every Probetest of content/ with its items (as in probetest-layout.spec). */
+const PROBETESTS = readdirSync('content/probetests')
+  .filter((f) => /^(mathe|deutsch)-\d{2}\.json$/.test(f))
+  .sort()
+  .map(
+    (f) =>
+      JSON.parse(readFileSync(`content/probetests/${f}`, 'utf8')) as {
+        id: string;
+        itemIds: string[];
+      },
+  );
 
 interface Screen {
   air: number;
@@ -67,24 +83,37 @@ async function measure(page: Page, item: ContentItem, label: string): Promise<Sc
   };
 }
 
-/** Screens of one item: Üben states, then Durchsehen states (prefix "durchsehen"). */
+/**
+ * Screens of one item: Üben states, then Durchsehen states at the real place of every Probetest
+ * that holds the item (stand-in place in <fach>-01 only without one). `state` is the zustand.
+ */
 function screensOf(item: ContentItem, fach: string) {
   const short = item.format === 'short-answer';
   const ueben = ['answering', 'richtig', 'noch-nicht', ...(short ? ['vergleichen'] : [])];
-  const durchsehen = ['durchsehen', ...(short ? ['vergleichen'] : [])];
+  const durchsehen = ['durchsehen', ...(short ? ['vergleichen'] : []), 'fehlt'];
+  const holding = PROBETESTS.filter((p) => p.itemIds.includes(item.id)).map((p) => p.id);
+  const places = holding.length > 0 ? holding : [`${fach}-01`];
+  const key = (zustand: string) => (zustand === 'vergleichen' ? 'durchsehen-vergleichen' : zustand);
   return [
     ...ueben.map((state) => ({
       key: state,
+      state,
       ueben: true,
       url: `/dev/item/${item.id}?state=${state}`,
     })),
-    ...durchsehen.map((zustand) => ({
-      key: zustand === 'durchsehen' ? zustand : `durchsehen-${zustand}`,
-      ueben: false,
-      url: `/dev/probetest?probetest=${fach}-01&zustand=${zustand}&item=${item.id}`,
-    })),
+    ...places.flatMap((probetest) =>
+      durchsehen.map((zustand) => ({
+        key: holding.length > 0 ? `${key(zustand)}@${probetest}` : key(zustand),
+        state: zustand,
+        ueben: false,
+        url: `/dev/probetest?probetest=${probetest}&zustand=${zustand}&item=${item.id}`,
+      })),
+    ),
   ];
 }
+
+/** A Durchsehen screen (looking through, comparing, missing answer). */
+const isDurchsehen = (key: string) => key.startsWith('durchsehen') || key.startsWith('fehlt');
 
 test('Sweep: Luft je Item', async ({ page }) => {
   test.skip(!RUN || IDS.length === 0, 'nur mit PFADFINDER_SWEEP=1 und PFADFINDER_SWEEP_ITEMS');
@@ -101,11 +130,13 @@ test('Sweep: Luft je Item', async ({ page }) => {
     await page.setViewportSize(viewport);
     for (const item of items) {
       const fach = item.id.startsWith('m-') ? 'mathe' : 'deutsch';
-      for (const { key, ueben, url } of screensOf(item, fach)) {
+      const withText = item.stimulus?.textRef !== undefined;
+      for (const { key, state, ueben, url } of screensOf(item, fach)) {
         await open(page, url);
         const s = await measure(page, item, `${item.id} ${viewport.name} ${key}`);
         ((results[item.id] ??= {})[viewport.name] ??= {})[key] = s;
-        if (s.air < (ueben ? AIR : 0)) failing.push(`${item.id} ${viewport.name} ${key} ${s.air}`);
+        const wanted = ueben ? AIR : airWanted(state, viewport.name, withText, item.id);
+        if (s.air < wanted) failing.push(`${item.id} ${viewport.name} ${key} ${s.air}`);
       }
     }
   }
@@ -116,7 +147,7 @@ test('Sweep: Luft je Item', async ({ page }) => {
         let best: { air: number; at: string } | null = null;
         for (const [viewport, screens] of Object.entries(results[item.id]!))
           for (const [key, s] of Object.entries(screens))
-            if (key.startsWith('durchsehen') !== ueben && (!best || s.air < best.air))
+            if (isDurchsehen(key) !== ueben && (!best || s.air < best.air))
               best = { air: s.air, at: `${viewport} ${key}` };
         return best;
       };
