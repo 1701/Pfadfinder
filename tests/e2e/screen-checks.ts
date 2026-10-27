@@ -44,9 +44,11 @@ export async function overflowProblems(page: Page): Promise<string[]> {
  * SVG content is skipped (see overflowProblems): a diagram is one picture. A task picture
  * (ContentAsset) counts with its box, so text that runs into it overlaps (task 19: a narrow text
  * column beside the picture in portrait let its words run into the drawing).
+ * With `scope`, only pairs with at least one element inside it count (the pages for adults: the
+ * Kopf, task N; the example on /eltern has inline dt/dd whose line boxes touch by 3 px).
  */
-export async function overlapProblems(page: Page): Promise<string[]> {
-  return page.evaluate(() => {
+export async function overlapProblems(page: Page, scope?: string): Promise<string[]> {
+  return page.evaluate((scope) => {
     type Rect = { left: number; top: number; right: number; bottom: number };
     const TARGETS = 'button, a[href], input, textarea, select, [role="button"]';
     const PICTURE = '.content-asset > svg';
@@ -95,6 +97,7 @@ export async function overlapProblems(page: Page): Promise<string[]> {
         const a = boxes[i]!;
         const b = boxes[j]!;
         if (a.el.contains(b.el) || b.el.contains(a.el)) continue;
+        if (scope && !a.el.closest(scope) && !b.el.closest(scope)) continue;
         let worst = 0;
         for (const ra of a.rects)
           for (const rb of b.rects) {
@@ -106,5 +109,62 @@ export async function overlapProblems(page: Page): Promise<string[]> {
       }
     }
     return problems;
+  }, scope);
+}
+
+/** The top line of the pages for adults (ErwachsenenKopf). */
+export const KOPF = '[data-region="kopf"]';
+
+/** What `kopfMetrics` measures; rounded px. */
+export interface KopfMetrics {
+  height: number;
+  top: number;
+  bottom: number;
+  /** Top of what follows the Kopf (the scroll box with the text, or the sheet). */
+  next: number;
+  middles: number;
+  minGap: number;
+  smallest: number;
+}
+
+/**
+ * The top line of the pages for adults (ErwachsenenKopf, data-region="kopf", task N), measured
+ * like the Kopf of the Probetest (headerMetrics in probetest-layout): "Zurück" and every link in
+ * one row means their middles at most 12 px apart and a gap above 0 from each to the next.
+ */
+export async function kopfMetrics(page: Page): Promise<KopfMetrics> {
+  return page.evaluate(() => {
+    const kopf = document.querySelector('[data-region="kopf"]')!;
+    const box = kopf.getBoundingClientRect();
+    const links = [...kopf.querySelectorAll('a')].map((a) => a.getBoundingClientRect());
+    const mids = links.map((b) => b.top + b.height / 2);
+    return {
+      height: Math.round(box.height),
+      top: Math.round(box.top),
+      bottom: Math.round(box.bottom),
+      next: Math.round(kopf.nextElementSibling!.getBoundingClientRect().top),
+      middles: Math.round(Math.max(...mids) - Math.min(...mids)),
+      minGap: Math.round(Math.min(...links.slice(1).map((b, i) => b.left - links[i]!.right))),
+      smallest: Math.round(Math.min(...links.map((b) => Math.min(b.width, b.height)))),
+    };
   });
 }
+
+/** The criterion of task N for the Kopf; `before` is the Kopf before scrolling, if any. */
+export function kopfProblems(m: KopfMetrics, before?: KopfMetrics): string[] {
+  return [
+    m.middles > 12 && `Kopf in more than one row (middles ${m.middles} px apart)`,
+    m.minGap <= 0 && `links in the Kopf touch or wrap (gap ${m.minGap} px)`,
+    m.smallest < 48 && `a link in the Kopf is only ${m.smallest} px`,
+    m.next < m.bottom && `the text begins ${m.bottom - m.next} px under the Kopf`,
+    before && m.top !== before.top && `the Kopf moved from ${before.top} to ${m.top} px`,
+  ].filter((p): p is string => typeof p === 'string');
+}
+
+/** The numbers of the Kopf for a budget file. */
+export const kopfBudget = ({ height, middles, minGap, smallest }: KopfMetrics) => ({
+  height,
+  middles,
+  minGap,
+  smallest,
+});

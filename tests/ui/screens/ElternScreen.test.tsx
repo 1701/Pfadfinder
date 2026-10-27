@@ -57,9 +57,11 @@ describe('Für Eltern und Lehrkräfte (/eltern)', () => {
 
   it('lists every Gebiet with its number of items and its types, then the Probetests', () => {
     renderPage();
-    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(
-      FAECHER.map((fach) => FACH_NAME[fach]),
-    );
+    // The Fächer of the overview, then "Vorlesen auf dem iPad" in "So nutzen Sie es".
+    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
+      ...FAECHER.map((fach) => FACH_NAME[fach]),
+      'Vorlesen auf dem iPad',
+    ]);
     for (const fach of FAECHER) {
       for (const bereich of BEREICHE_BY_FACH[fach]) {
         const n = FIXTURE_MANIFEST.bereiche[bereich].items;
@@ -138,17 +140,41 @@ Mit dem Senden bin ich einverstanden, dass die Aufgabe geprüft, angepasst und u
     }
   });
 
-  it('ends with quiet links to Impressum, Datenschutz, So funktioniert Pfadfinder and the device', () => {
+  it('has the top line of the pages for adults, no footer and no band (task N)', () => {
     renderPage();
-    const footer = within(screen.getByRole('navigation', { name: 'Für Eltern und Lehrkräfte' }));
-    expect(footer.getAllByRole('link').map((a) => [a.textContent, a.getAttribute('href')])).toEqual(
-      [
-        ['Impressum', '/impressum'],
-        ['Datenschutz', '/datenschutz'],
-        ['So funktioniert Pfadfinder', '/so-gehts'],
-        ['Sicherung und Gerät', '/eltern/geraet'],
-      ],
+    const kopf = within(document.querySelector('[data-region="kopf"]') as HTMLElement);
+    expect(kopf.getAllByRole('link').map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+      ['Zurück', '/'],
+      ['So geht’s', '/so-gehts'],
+      ['Impressum', '/impressum'],
+      ['Datenschutz', '/datenschutz'],
+      ['Sicherung und Gerät', '/eltern/geraet'],
+    ]);
+    expect(document.querySelector('footer')).toBeNull();
+    expect(document.querySelector('[data-region="band"]')).toBeNull();
+  });
+
+  it('says how Vorlesen sounds better on the iPad, in "So nutzen Sie es" (from /eltern/geraet)', () => {
+    renderPage();
+    const heading = screen.getByRole('heading', { level: 3, name: 'Vorlesen auf dem iPad' });
+    expect(heading.closest('section')!.parentElement!.querySelector('h2')!.textContent).toBe(
+      'So nutzen Sie es',
     );
+    expect(heading.nextElementSibling!.textContent).toBe(
+      'Auf dem iPad klingt das Vorlesen besser, wenn Sie in Einstellungen → Bedienungshilfen → Gesprochene Inhalte eine Premium-Stimme für Deutsch laden. Die App wählt keine Stimme selbst, nur die Sprache.',
+    );
+  });
+
+  it('recommends the iPad, not a phone, and announces no review by a teacher (task N)', () => {
+    renderPage();
+    const text = document.body.textContent!;
+    expect(text).toContain(
+      'Die App ist unter kompassheld.de erreichbar und läuft nach dem ersten Laden auch ohne Internet. Pfadfinder ist für das iPad gemacht und wird nur dort geprüft; am Laptop im Browser geht es auch. Auf dem Handy ist der Bildschirm zu klein, das empfehlen wir nicht.',
+    );
+    expect(text).toContain('Geprüft hat sie weder das Land noch eine Lehrkraft.');
+    expect(text).toContain('nicht amtlich geprüft');
+    for (const gone of ['Tablet, Laptop und Handy', 'Durchsicht', 'Lehrerin', 'bisher'])
+      expect(text).not.toContain(gone);
   });
 
   it('leads to the device area and to /so-gehts from the text', async () => {
@@ -158,10 +184,9 @@ Mit dem Senden bin ich einverstanden, dass die Aufgabe geprüft, angepasst und u
     expect(screen.getByRole('heading', { name: 'Gerät' })).toBeTruthy();
   });
 
-  it('has no Vorlesen and "Zurück" in the band leads to the map', async () => {
+  it('has no Vorlesen and "Zurück" in the top line leads to the map', async () => {
     renderPage();
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
-    expect(document.querySelector('[data-region="band"]')!.textContent).toBe('Zurück');
     await userEvent.click(screen.getByRole('link', { name: 'Zurück' }));
     expect(screen.getByRole('heading', { name: 'Karte' })).toBeTruthy();
   });

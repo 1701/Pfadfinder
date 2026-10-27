@@ -1,6 +1,7 @@
-// Route /eltern: the page for parents and teachers (task L). Linked as "Für Eltern" from the end of
-// Impressum, Datenschutz and /so-gehts. Built like /so-gehts: a narrow column (--container-measure),
-// only the text scrolls, "Zurück" to the map stays in the band; no Vorlesen. The overview of the
+// Route /eltern: the page for parents and teachers (task L). Linked as "Eltern" from the map and
+// from the top line of the other pages for adults, as "Für Eltern" from the end of /so-gehts. Built
+// like /so-gehts: the top line of the pages for adults (ErwachsenenKopf, task N) stays, below it
+// only the text scrolls, in a narrow column (--container-measure); no Vorlesen. The overview of the
 // Gebiete is static text from the manifest and content/typen.json (passed in, never typed), the two
 // mail buttons open a mail to the contact address with a template. The device area
 // (/eltern/geraet) is one link further.
@@ -12,15 +13,12 @@ import { BEREICHE_BY_FACH, FAECHER } from '../../domain/content/taxonomy';
 import type { AufgabenTypen } from '../../domain/content/typen';
 import { buttonClass } from '../components/Button';
 import { EmailText } from '../components/EmailText';
-import { QuietLinks } from '../components/QuietLinks';
-import { QUIET_ACTION_CLASS } from '../components/quiet';
+import { ErwachsenenKopf } from '../components/ErwachsenenKopf';
 import { BEREICH_NAME, FACH_NAME } from '../text/bereiche';
 import {
   BEISPIEL,
   BEISPIEL_TITLE,
   BEREICH_HINWEIS,
-  ELTERN_BACK,
-  ELTERN_FOOTER,
   ELTERN_SECTIONS,
   ELTERN_TITLE,
   FEHLER_BODY,
@@ -118,7 +116,8 @@ function Vorschlag() {
 
 export function ElternScreen({ manifest, typen }: ElternScreenProps) {
   return (
-    <main className="screen-fit mx-auto grid max-w-page grid-rows-[minmax(0,1fr)_auto] gap-sm px-lg py-sm">
+    <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_minmax(0,1fr)] gap-sm px-lg py-sm">
+      <ErwachsenenKopf page="/eltern" />
       {/* Room for the focus ring inside the scroll box. */}
       <div className="-mx-xs min-h-0 overflow-y-auto px-xs">
         <article className="mx-auto grid max-w-measure gap-lg pt-sm pb-lg">
@@ -131,17 +130,17 @@ export function ElternScreen({ manifest, typen }: ElternScreenProps) {
               ))}
               {section.extra === 'uebersicht' && <Uebersicht manifest={manifest} typen={typen} />}
               {section.extra === 'vorschlag' && <Vorschlag />}
+              {section.subsections?.map((sub) => (
+                <section key={sub.heading} className="grid gap-xs">
+                  <h3 className="font-bold">{sub.heading}</h3>
+                  {sub.paragraphs.map((parts, j) => (
+                    <Paragraph key={j} parts={parts} />
+                  ))}
+                </section>
+              ))}
             </section>
           ))}
-          <footer>
-            <QuietLinks label={ELTERN_TITLE} links={ELTERN_FOOTER} className="flex-wrap" />
-          </footer>
         </article>
-      </div>
-      <div data-region="band" className="flex items-end justify-between gap-md">
-        <Link to="/" className={QUIET_ACTION_CLASS}>
-          {ELTERN_BACK}
-        </Link>
       </div>
     </main>
   );

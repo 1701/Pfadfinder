@@ -5,7 +5,7 @@
 
 import type { Bereich } from '../../domain/content/taxonomy';
 import { EMAIL } from './kontakt';
-import { DATENSCHUTZ_LINK, GERAET_LINK, IMPRESSUM_LINK } from './rechtliches-links';
+import { GERAET_LINK } from './rechtliches-links';
 
 /** A link inside a paragraph: internal (`to`) or to another site (`href`, new tab). */
 export type ElternLink = { text: string } & ({ to: string } | { href: string });
@@ -18,10 +18,11 @@ export interface ElternSection {
   paragraphs: readonly ElternParagraph[];
   /** Rendered after the paragraphs: the overview of Gebiete, or the mail buttons with the example. */
   extra?: 'uebersicht' | 'vorschlag';
+  /** At the end of the section, each with its own smaller heading (h3). */
+  subsections?: readonly { heading: string; paragraphs: readonly ElternParagraph[] }[];
 }
 
 export const ELTERN_TITLE = 'Für Eltern und Lehrkräfte';
-export const ELTERN_BACK = 'Zurück';
 
 const SO_GEHTS_PAGE = 'So funktioniert Pfadfinder';
 export const REPO_URL = 'https://github.com/1701/Pfadfinder';
@@ -30,7 +31,7 @@ export const ELTERN_SECTIONS: readonly ElternSection[] = [
   {
     paragraphs: [
       [
-        'Pfadfinder ist eine kostenlose Übungs-App für Kinder der 4. Klasse in Baden-Württemberg, die sich auf Kompass 4 vorbereiten. Keine Anmeldung, keine Werbung, kein Tracking: Alles, was Ihr Kind übt, bleibt auf dem Gerät. Die App ist unter kompassheld.de erreichbar und läuft auf Tablet, Laptop und Handy – nach dem ersten Laden auch ohne Internet.',
+        'Pfadfinder ist eine kostenlose Übungs-App für Kinder der 4. Klasse in Baden-Württemberg, die sich auf Kompass 4 vorbereiten. Keine Anmeldung, keine Werbung, kein Tracking: Alles, was Ihr Kind übt, bleibt auf dem Gerät. Die App ist unter kompassheld.de erreichbar und läuft nach dem ersten Laden auch ohne Internet. Pfadfinder ist für das iPad gemacht und wird nur dort geprüft; am Laptop im Browser geht es auch. Auf dem Handy ist der Bildschirm zu klein, das empfehlen wir nicht.',
       ],
       [
         'Die Aufgaben sind selbst geschrieben und nicht amtlich geprüft; mehr dazu weiter unten. Kompass 4 ist eine Lernstandserhebung des Landes Baden-Württemberg. Pfadfinder ist ein privates Angebot und nicht damit verbunden.',
@@ -63,12 +64,23 @@ export const ELTERN_SECTIONS: readonly ElternSection[] = [
         '.',
       ],
     ],
+    // From /eltern/geraet (task N): the app picks no voice (VorlesenButton), only the language.
+    subsections: [
+      {
+        heading: 'Vorlesen auf dem iPad',
+        paragraphs: [
+          [
+            'Auf dem iPad klingt das Vorlesen besser, wenn Sie in Einstellungen → Bedienungshilfen → Gesprochene Inhalte eine Premium-Stimme für Deutsch laden. Die App wählt keine Stimme selbst, nur die Sprache.',
+          ],
+        ],
+      },
+    ],
   },
   {
     heading: 'Woher die Aufgaben kommen',
     paragraphs: [
       [
-        'Alle Aufgaben hat ein Vater aus Marxzell geschrieben, mit Hilfe von KI, während seine Tochter sich auf den Test vorbereitet hat. Sie orientieren sich an Aufbau, Niveau und Aufgabentypen der Kompass-4-Tests 2024 und 2025; keine Aufgabe stammt aus einem echten Test. Geprüft hat sie bisher weder das Land noch eine Lehrkraft; eine Durchsicht durch eine Grundschullehrerin läuft. Pfadfinder sagt kein Testergebnis und keine Schulempfehlung voraus und ersetzt kein Gespräch mit der Lehrkraft Ihres Kindes.',
+        'Alle Aufgaben hat ein Vater aus Marxzell geschrieben, mit Hilfe von KI, während seine Tochter sich auf den Test vorbereitet hat. Sie orientieren sich an Aufbau, Niveau und Aufgabentypen der Kompass-4-Tests 2024 und 2025; keine Aufgabe stammt aus einem echten Test. Geprüft hat sie weder das Land noch eine Lehrkraft. Pfadfinder sagt kein Testergebnis und keine Schulempfehlung voraus und ersetzt kein Gespräch mit der Lehrkraft Ihres Kindes.',
       ],
       [
         'Wenn Ihnen eine Aufgabe falsch, unklar, zu leicht oder zu schwer vorkommt: Schreiben Sie es bitte, mit Fach, Gebiet und dem Wortlaut der Aufgabe. Jede Rückmeldung wird gelesen.',
@@ -159,11 +171,3 @@ export const BEISPIEL: readonly (readonly [string, string])[] = [
   ],
   ['Nennung', 'Familie Beispiel, Klasse 4b, Grundschule Musterstadt'],
 ];
-
-/** Quietly at the end of the text. */
-export const ELTERN_FOOTER = [
-  { to: '/impressum', text: IMPRESSUM_LINK },
-  { to: '/datenschutz', text: DATENSCHUTZ_LINK },
-  { to: '/so-gehts', text: SO_GEHTS_PAGE },
-  { to: '/eltern/geraet', text: GERAET_LINK },
-] as const;

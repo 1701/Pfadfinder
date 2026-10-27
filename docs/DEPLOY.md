@@ -96,11 +96,11 @@ Seit Aufgabe 11 (`src/app/pwa-update.ts`):
 **Einmaliger Übergang:** Die Version vor Aufgabe 11 hat keine Update-Logik. Auf ein Gerät mit dieser alten Version kommt die neue nur auf die alte Art: App im App-Umschalter ganz schließen und neu öffnen (bei Bedarf zweimal). Danach gilt der Ablauf oben.
 
 **Prüfschritt am iPad** (nach einem Deploy, wenn auf dem iPad schon eine Version ab Aufgabe 11 läuft):
-1. Die App auf dem Home-Bildschirm öffnen. Sie hat keine Adresszeile; `/eltern/geraet` erreicht sie über Karte → „Impressum“ → „Sicherung und Gerät“. Kennung notieren. Safari hat auf dem iPad einen eigenen Speicher und einen eigenen Service Worker, `/eltern/geraet` in Safari zeigt die Version von Safari.
+1. Die App auf dem Home-Bildschirm öffnen. Sie hat keine Adresszeile; `/eltern/geraet` erreicht sie über Karte → „Impressum“ → „Sicherung und Gerät“ in der Kopfzeile. Kennung notieren. Safari hat auf dem iPad einen eigenen Speicher und einen eigenen Service Worker, `/eltern/geraet` in Safari zeigt die Version von Safari.
 2. Einen neuen Stand auf `main` pushen und warten, bis Workers Builds grün ist.
 3. Die App in den Hintergrund schicken und wieder holen (nicht neu starten). Nach wenigen Sekunden steht in der Zeile unter der Karte „Neu laden“.
 4. Eine Runde beginnen, die App in den Hintergrund und zurück: kein Hinweis, kein Neuladen, die Runde läuft weiter.
-5. Zur Karte, „Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg, `/eltern/geraet` (über „Impressum“ → „Sicherung und Gerät“) zeigt die neue Kennung.
+5. Zur Karte, „Neu laden“ tippen: Die App lädt neu, der Hinweis ist weg, `/eltern/geraet` (über „Impressum“ → Kopfzeile „Sicherung und Gerät“) zeigt die neue Kennung.
 6. In der installierten App auf `/eltern/geraet` „Sicherung herunterladen“ tippen: Liefert iOS eine Datei (Teilen-Menü oder „In Dateien sichern“)? Ergebnis hier eintragen; ohne Datei braucht die Sicherung in der installierten App einen anderen Weg.
 6b. Sicherung wieder einlesen (seit 2026-10-22): auf `/eltern/geraet` „Sicherung einlesen“ tippen, die Datei aus Schritt 6 wählen. Erwartet: Rückfrage „Ersetzt alles auf diesem Gerät. Weiter?“, nach „Einlesen“ die Karte mit dem Stand der Sicherung. Eine andere Datei (z. B. ein Foto, falls wählbar) ergibt „Das ist keine Pfadfinder-Sicherung.“ und ändert nichts.
 7. Probetest-Liste zeigt Stand nach Update: Vor dem Update in der installierten App einen Probetest abgeben (oder einen schon abgegebenen nutzen). Nach „Neu laden“ Karte → „Probetest Mathe“ (bzw. „Probetest Deutsch“): Der Eintrag zeigt „gemacht“ (ohne Datum, seit 2026-10-22), die anderen „noch nicht gemacht“.

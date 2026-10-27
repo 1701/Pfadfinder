@@ -1,8 +1,8 @@
 // The page for parents and teachers (/eltern, task L) and the device area (/eltern/geraet, by URL,
-// from /eltern or "Sicherung und Gerät" on the legal pages, never from a child's screen): the way
-// there and back, offline after the first load; on the device area the sum on the digit pad,
-// "Alles löschen" with a question back, then the map of a new device that offers the Einstieg
-// again. Production build.
+// from /eltern or "Sicherung und Gerät" in the top line of the other pages for adults, never from a
+// child's screen): the way there and back (static targets, task N), offline after the first load;
+// on the device area the sum on the digit pad, "Alles löschen" with a question back, then the map
+// of a new device that offers the Einstieg again. Production build.
 
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
@@ -96,34 +96,34 @@ const LEGAL = [
   ['Datenschutz', 'Hosting bei Cloudflare'],
 ] as const;
 
-test('Impressum und Datenschutz: von der Karte (seit Aufgabe 11, DDG) und von /eltern/geraet vor der Rechenfrage', async ({
+test('Impressum und Datenschutz: von der Karte (seit Aufgabe 11, DDG) und von /eltern/geraet vor der Rechenfrage; Zurück immer zur Karte', async ({
   page,
 }) => {
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
-  for (const [link, section] of LEGAL) {
-    await page.getByRole('link', { name: link }).click();
-    await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
-    await page.getByRole('button', { name: 'Zurück' }).click();
-    await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+  for (const start of ['/', '/eltern/geraet']) {
+    for (const [link, section] of LEGAL) {
+      await page.goto(start);
+      await page.getByRole('link', { name: link }).click();
+      await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
+      await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
+      // Static target (task N): to the map, not back in the history.
+      await page.getByRole('link', { name: 'Zurück' }).click();
+      await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
+      await expect(page).toHaveURL(/\/$/);
+    }
   }
+});
 
+test('/eltern/geraet → Zurück → /eltern → Zurück → Karte', async ({ page }) => {
   await page.goto('/eltern/geraet');
-  for (const [link, section] of LEGAL) {
-    await page.getByRole('link', { name: link }).click();
-    await expect(page.getByRole('heading', { level: 1, name: link })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
-    await page.getByRole('button', { name: 'Zurück' }).click();
-    await expect(page.getByRole('heading', { name: /^Für Erwachsene/ })).toBeVisible();
-  }
+  await page.getByRole('link', { name: 'Zurück' }).click();
+  await expect(page).toHaveURL(/\/eltern$/);
+  await page.getByRole('link', { name: 'Zurück' }).click();
+  await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
 });
 
 const ELTERN = 'Für Eltern und Lehrkräfte';
 
-test('Karte → Eltern → Seite → Zurück → Karte, auch über Impressum → Für Eltern', async ({
-  page,
-}) => {
+test('Karte → Eltern → Seite → Zurück → Karte, auch über Impressum → Eltern', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: OFFER })).toBeVisible();
   // The quiet link in the line below the map, right before "Impressum" (task L).
@@ -140,7 +140,7 @@ test('Karte → Eltern → Seite → Zurück → Karte, auch über Impressum →
   await expect(page).toHaveURL(/\/$/);
 
   await page.getByRole('link', { name: 'Impressum' }).click();
-  await page.getByRole('link', { name: 'Für Eltern' }).click();
+  await page.getByRole('link', { name: 'Eltern', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1, name: ELTERN })).toBeVisible();
 });
 

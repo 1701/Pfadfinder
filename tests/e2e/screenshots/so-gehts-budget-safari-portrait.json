@@ -1,5 +1,11 @@
 {
   "longestLine": 67,
   "textScrolls": true,
-  "bandTop": 840
+  "kopfBottom": 60,
+  "kopf": {
+    "height": 48,
+    "middles": 0,
+    "minGap": 6,
+    "smallest": 48
+  }
 }

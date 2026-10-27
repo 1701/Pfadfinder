@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '../dom';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
@@ -62,38 +62,43 @@ describe('Impressum and Datenschutz', () => {
     expect(text).toContain('Zugriffsprotokollen');
   });
 
-  it('end with quiet links "Für Eltern", "Sicherung und Gerät" (the ways there in the installed app) and "So geht’s"', async () => {
+  it('have the top line of the pages for adults (task N): the other four pages, no footer', async () => {
     for (const page of ['/impressum', '/datenschutz']) {
-      for (const [index, heading] of [
-        [0, 'Eltern'],
-        [1, 'Gerät'],
+      for (const [name, heading] of [
+        ['Eltern', 'Eltern'],
+        ['Sicherung und Gerät', 'Gerät'],
       ] as const) {
         renderAt([page]);
-        const links = screen
-          .getAllByRole('link')
-          .filter((l) => !l.getAttribute('href')!.startsWith('mailto:'));
-        expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
-          ['Für Eltern', '/eltern'],
-          ['Sicherung und Gerät', '/eltern/geraet'],
-          ['So geht’s', '/so-gehts'],
-        ]);
+        const kopf = within(document.querySelector('[data-region="kopf"]') as HTMLElement);
+        const links = kopf.getAllByRole('link');
+        expect(links.map((l) => [l.textContent, l.getAttribute('href')])).toEqual(
+          [
+            ['Zurück', '/'],
+            ['Eltern', '/eltern'],
+            ['So geht’s', '/so-gehts'],
+            ['Impressum', '/impressum'],
+            ['Datenschutz', '/datenschutz'],
+            ['Sicherung und Gerät', '/eltern/geraet'],
+          ].filter(([, to]) => to !== page),
+        );
         for (const link of links) expect(link.className).not.toContain('bg-signal');
-        await userEvent.click(links[index]!);
+        expect(document.querySelector('footer')).toBeNull();
+        await userEvent.click(kopf.getByRole('link', { name }));
         expect(screen.getByRole('heading', { name: heading })).toBeTruthy();
         cleanup();
       }
     }
   });
 
-  it('"Zurück" goes back to the Eltern page it came from', async () => {
+  it('"Zurück" is a link to the map, also when the page was opened from /eltern', async () => {
     renderAt(['/eltern', '/datenschutz']);
-    await userEvent.click(screen.getByRole('button', { name: 'Zurück' }));
-    expect(screen.getByRole('heading', { name: 'Eltern' })).toBeTruthy();
+    await userEvent.click(screen.getByRole('link', { name: 'Zurück' }));
+    expect(screen.getByRole('heading', { name: 'Karte' })).toBeTruthy();
   });
 
   it('"Zurück" leads to the map when the page was opened directly', async () => {
     renderAt(['/impressum']);
-    await userEvent.click(screen.getByRole('button', { name: 'Zurück' }));
+    await userEvent.click(screen.getByRole('link', { name: 'Zurück' }));
     expect(screen.getByRole('heading', { name: 'Karte' })).toBeTruthy();
   });
 });

@@ -1,0 +1,28 @@
+{
+  "geraet-frage": {
+    "height": 48,
+    "middles": 0,
+    "minGap": 6,
+    "smallest": 48
+  },
+  "geraet-loeschen": {
+    "height": 48,
+    "middles": 0,
+    "minGap": 6,
+    "smallest": 48
+  },
+  "impressum": {
+    "height": 48,
+    "middles": 0,
+    "minGap": 6,
+    "smallest": 48,
+    "textScrolls": true
+  },
+  "datenschutz": {
+    "height": 48,
+    "middles": 0,
+    "minGap": 6,
+    "smallest": 48,
+    "textScrolls": true
+  }
+}

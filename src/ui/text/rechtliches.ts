@@ -1,5 +1,5 @@
-// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map, /eltern and
-// /eltern/geraet. Written for adults and in Du like the device area; legal text may be longer than
+// Impressum (§ 5 DDG) and Datenschutz (PRODUCT.md §12), linked from the map and from the top line
+// of the other pages for adults. Written for adults and in Du like the device area; legal text may be longer than
 // two sentences. Name, address and e-mail are filled in since 2026-10-22; the e-mail shows as a
 // mailto link (EmailText).
 
@@ -89,5 +89,3 @@ export const DATENSCHUTZ: LegalPage = {
     { heading: 'Stand', paragraphs: ['Oktober 2026'] },
   ],
 };
-
-export const LEGAL_BACK = 'Zurück';

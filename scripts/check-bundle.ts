@@ -7,6 +7,8 @@
 //    and the app registers the worker itself (no registerSW.js); the build id is filled in
 //  - the start page's JS (entry + modulepreloads) stays below the budget and contains neither
 //    Zod nor Dexie: both belong to the lazy practice chunk (ARCHITECTURE.md §5)
+//  - the pages for adults without IndexedDB (/eltern, /so-gehts, Impressum, Datenschutz) load no
+//    Dexie, not even through a shared chunk (task N)
 
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -129,19 +131,23 @@ const staticImports = (file: string): string[] =>
       /import\s*(?:[^"'()]*?from\s*)?["']\.\/([^"']+\.js)["']/g,
     ),
   ].map((m) => `assets/${m[1]}`);
-const roots = [
+/** The files and everything they import statically. */
+function staticClosure(roots: string[]): Set<string> {
+  const closure = new Set<string>();
+  for (const queue = [...roots]; queue.length > 0;) {
+    const file = queue.pop() as string;
+    if (closure.has(file)) continue;
+    closure.add(file);
+    queue.push(...staticImports(file));
+  }
+  return closure;
+}
+const closure = staticClosure([
   ...initial,
   ...readdirSync(assets)
     .filter((f) => /-route-[\w-]+\.js$/.test(f))
     .map((f) => `assets/${f}`),
-];
-const closure = new Set<string>();
-for (const queue = [...roots]; queue.length > 0;) {
-  const file = queue.pop() as string;
-  if (closure.has(file)) continue;
-  closure.add(file);
-  queue.push(...staticImports(file));
-}
+]);
 const withDnd = readdirSync(assets)
   .filter(
     (f) => f.endsWith('.js') && readFileSync(path.join(assets, f), 'utf8').includes(DND_MARKER),
@@ -154,11 +160,22 @@ for (const file of withDnd.filter((f) => closure.has(f))) {
   );
 }
 
+// Pages for adults (task N): static text, no IndexedDB. geraet-route is the exception on purpose:
+// backup, import and delete need Dexie (data/dexie/instance).
+for (const name of ['eltern-route', 'SoGehtsScreen', 'RechtlichesScreen']) {
+  const chunk = readdirSync(assets).find((f) => f.startsWith(`${name}-`) && f.endsWith('.js'));
+  if (!chunk) continue; // reported above
+  for (const file of staticClosure([`assets/${chunk}`])) {
+    if (readFileSync(path.join(dist, file), 'utf8').includes('Dexie'))
+      errors.push(`${file}: Dexie im Chunk von ${name}, Erwachsenenseiten ohne IndexedDB`);
+  }
+}
+
 if (errors.length > 0) {
   for (const e of errors) console.error(`FEHLER   dist/${e}`);
   process.exit(1);
 }
 console.log(
-  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften, Icons und Erwachsenenseiten im Precache, ` +
+  `Bundle geprüft: ${files.length} Dateien, keine Entwicklerseiten, Schriften, Icons und Erwachsenenseiten im Precache (ohne Dexie außer geraet-route), ` +
     `Startseite ${initialKb.toFixed(1)} kB JS (Budget ${START_PAGE_BUDGET_KB} kB, ohne Zod/Dexie), dnd-kit nur in ${withDnd.join(', ')}.`,
 );

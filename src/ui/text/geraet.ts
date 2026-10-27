@@ -1,5 +1,6 @@
-// The device area (/eltern/geraet, by URL or from /eltern, Impressum and Datenschutz). Written for adults, still Du and at most two sentences
-// per element, like everything else in the app.
+// The device area (/eltern/geraet, by URL or from the top line of the other pages for adults).
+// Written for adults, still Du and at most two sentences per element, like everything else in the
+// app.
 
 import type { GateQuestion } from '../../domain/parents';
 
@@ -25,10 +26,6 @@ export const IMPORT_CONFIRM = 'Ersetzt alles auf diesem Gerät. Weiter?';
 export const IMPORT_GO = 'Einlesen';
 export const IMPORT_FAILED = 'Das Einlesen hat nicht geklappt. Versuch es bitte noch einmal.';
 
-/** The app picks no voice (VorlesenButton), so a better one comes from iPadOS (2026-10-22). */
-export const PREMIUM_VOICE =
-  'Auf dem iPad klingt das Vorlesen besser, wenn du in Einstellungen → Bedienungshilfen → Gesprochene Inhalte eine Premium-Stimme für Deutsch lädst.';
-
 export const CONFIRM_TITLE = 'Wirklich alles löschen? Das kann nicht rückgängig gemacht werden.';
 export const CANCEL = 'Abbrechen';
 export const CONFIRM_DELETE = 'Ja, alles löschen';
@@ -50,7 +47,6 @@ export const GERAET_TEXTS = [
   IMPORT_CONFIRM,
   IMPORT_GO,
   IMPORT_FAILED,
-  PREMIUM_VOICE,
   CONFIRM_TITLE,
   CANCEL,
   CONFIRM_DELETE,

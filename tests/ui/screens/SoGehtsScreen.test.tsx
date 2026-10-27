@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '../dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
@@ -56,7 +56,7 @@ describe('So funktioniert Pfadfinder (/so-gehts)', () => {
     const link = screen.getByRole('link', { name: 'Für Eltern' });
     expect(link.getAttribute('href')).toBe('/eltern');
     expect(document.body.textContent).toContain(
-      'Du findest sie unter „Sicherung und Gerät“ am Ende von Impressum und Datenschutz',
+      'Du findest sie unter „Sicherung und Gerät“ oben in Impressum und Datenschutz',
     );
     expect(document.body.textContent).toContain(
       'Auf dem neuen Gerät unter „Sicherung und Gerät“ auf „Sicherung einlesen“ tippen.',
@@ -65,10 +65,17 @@ describe('So funktioniert Pfadfinder (/so-gehts)', () => {
     expect(screen.getByRole('heading', { name: 'Eltern' })).toBeTruthy();
   });
 
-  it('"Zurück" in the band leads to the map, wherever the page was opened from', async () => {
+  it('has the top line of the pages for adults; "Zurück" leads to the map, not back to /eltern', async () => {
     renderPage();
-    const band = document.querySelector('[data-region="band"]')!;
-    expect(band.textContent).toBe('Zurück');
+    const kopf = within(document.querySelector('[data-region="kopf"]') as HTMLElement);
+    expect(kopf.getAllByRole('link').map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+      ['Zurück', '/'],
+      ['Eltern', '/eltern'],
+      ['Impressum', '/impressum'],
+      ['Datenschutz', '/datenschutz'],
+      ['Sicherung und Gerät', '/eltern/geraet'],
+    ]);
+    expect(document.querySelector('[data-region="band"]')).toBeNull();
     await userEvent.click(screen.getByRole('link', { name: 'Zurück' }));
     expect(screen.getByRole('heading', { name: 'Karte' })).toBeTruthy();
   });

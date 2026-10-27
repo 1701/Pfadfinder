@@ -1,10 +1,16 @@
 // The quiet sheets added in task 6b on four viewports (the two iPad sizes and the same iPad in
-// Safari with its bars): Fortsetzen / Neu anfangen before practice, and the Eltern page with its
-// sum, the delete button and the question back. No scrolling, large targets, the band on screen.
-// Driven through the real app on the dev server; screenshots for review.
+// Safari with its bars): Fortsetzen / Neu anfangen before practice, and the device area
+// (/eltern/geraet) with its sum, the delete button and the question back. No scrolling, large
+// targets, the band on screen. Then Impressum and Datenschutz: only the text scrolls. On the
+// device area (not while asking back) and the legal pages the top line of the pages for adults
+// (ErwachsenenKopf, task N) stays in one row; its numbers go to blatt-kopf-budget-<viewport>.json
+// in SCREENSHOTS (output-dir.ts). Driven through the real app on the dev server; screenshots for
+// review.
 
+import { writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENSHOTS, answer, check, currentItem } from './helpers';
+import { KOPF, kopfBudget, kopfMetrics, kopfProblems, overlapProblems } from './screen-checks';
 
 const VIEWPORTS = [
   { name: 'ipad-landscape', width: 1024, height: 768 },
@@ -46,6 +52,14 @@ for (const viewport of VIEWPORTS) {
     await page.setViewportSize(viewport);
     const shot = (name: string) =>
       page.screenshot({ path: `${SCREENSHOTS}/${name}-${viewport.name}.png` });
+    const budget: Record<string, unknown> = {};
+    const kopf = async (label: string) => {
+      const m = await kopfMetrics(page);
+      console.log(`kopf ${label} ${viewport.name}: ${JSON.stringify(m)}`);
+      expect([...kopfProblems(m), ...(await overlapProblems(page, KOPF))], label).toEqual([]);
+      budget[label] = kopfBudget(m);
+      return m;
+    };
 
     // Three answers, Pause, back into the Gebiet: the choice.
     await page.goto('/');
@@ -70,30 +84,58 @@ for (const viewport of VIEWPORTS) {
     for (const digit of String(Number(a) + Number(b))) {
       await page.getByRole('button', { name: digit, exact: true }).click();
     }
-    await expectFits(page, `eltern-frage ${viewport.name}`);
-    await shot('eltern-frage');
+    await expectFits(page, `geraet-frage ${viewport.name}`);
+    await kopf('geraet-frage');
+    await shot('geraet-frage');
     await page.getByRole('button', { name: 'Weiter' }).click();
     await expect(page.getByRole('button', { name: 'Alles löschen' })).toBeVisible();
-    await expectFits(page, `eltern-loeschen ${viewport.name}`);
-    await shot('eltern-loeschen');
+    await expectFits(page, `geraet-loeschen ${viewport.name}`);
+    await kopf('geraet-loeschen');
+    await shot('geraet-loeschen');
     await page.getByRole('button', { name: 'Alles löschen' }).click();
     await expect(page.getByRole('button', { name: 'Ja, alles löschen' })).toBeVisible();
-    await expectFits(page, `eltern-rueckfrage ${viewport.name}`);
-    await shot('eltern-rueckfrage');
+    await expectFits(page, `geraet-rueckfrage ${viewport.name}`);
+    await expect(page.locator('[data-region="kopf"]')).toHaveCount(0);
+    await shot('geraet-rueckfrage');
 
-    // Impressum and Datenschutz may scroll (text for adults), never sideways.
+    // Impressum and Datenschutz: only the text scrolls (text for adults), never the page, the Kopf
+    // stays. The end gets its own picture only where the text scrolls.
     for (const legal of ['impressum', 'datenschutz']) {
       await page.goto(`/${legal}`);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
-      const overflowX = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
-      );
-      expect(overflowX, `${legal} ${viewport.name}: page scrolls sideways`).toBeLessThanOrEqual(0);
-      await page.screenshot({
-        path: `${SCREENSHOTS}/${legal}-${viewport.name}.png`,
-        fullPage: true,
-      });
+      const scroll = () =>
+        page.evaluate(() => {
+          const box = document.querySelector('[data-region="kopf"]')!.nextElementSibling!;
+          return {
+            overflow: document.documentElement.scrollHeight - window.innerHeight,
+            overflowX: document.documentElement.scrollWidth - window.innerWidth,
+            textScrolls: box.scrollHeight > box.clientHeight,
+          };
+        });
+      const label = `${legal} ${viewport.name}`;
+      const top = await scroll();
+      expect(top.overflow, `${label}: page scrolls`).toBeLessThanOrEqual(0);
+      expect(top.overflowX, `${label}: page scrolls sideways`).toBeLessThanOrEqual(0);
+      const before = await kopf(legal);
+      budget[legal] = { ...(budget[legal] as object), textScrolls: top.textScrolls };
+      await shot(legal);
+      if (!top.textScrolls) continue;
+      await page.locator('main article > :last-child').scrollIntoViewIfNeeded();
+      const end = await scroll();
+      expect(end.overflow, `${label}: page scrolls at the end`).toBeLessThanOrEqual(0);
+      expect(end.overflowX, `${label}: page scrolls sideways at the end`).toBeLessThanOrEqual(0);
+      const after = await kopfMetrics(page);
+      expect(
+        [...kopfProblems(after, before), ...(await overlapProblems(page, KOPF))],
+        label,
+      ).toEqual([]);
+      await shot(`${legal}-ende`);
     }
+
+    writeFileSync(
+      `${SCREENSHOTS}/blatt-kopf-budget-${viewport.name}.json`,
+      `${JSON.stringify(budget, null, 2)}\n`,
+    );
   });
 }

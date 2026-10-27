@@ -54,7 +54,7 @@ const ProbetestListeRoute = lazy(() =>
 );
 const PrintRoute = lazy(() => import('./print-route').then((m) => ({ default: m.PrintRoute })));
 
-// The page for parents and teachers (task L, from the legal pages and /so-gehts) in its own chunk.
+// The page for parents and teachers (task L, from the map and the other pages for adults).
 const ElternRoute = lazy(() => import('./eltern-route').then((m) => ({ default: m.ElternRoute })));
 // The device area (backup, delete; from /eltern and the legal pages, never from a child's screen).
 const GeraetRoute = lazy(() => import('./geraet-route').then((m) => ({ default: m.GeraetRoute })));

@@ -1,11 +1,12 @@
 // /so-gehts (how Pfadfinder works, for parents, 2026-10-22) in four viewports: never sideways,
-// running text at most 70 characters per line, the text may scroll while the band with "Zurück"
-// stays where it is, targets ≥ 48 px. Numbers go to so-gehts-budget-<viewport>.json in
-// SCREENSHOTS (output-dir.ts).
+// running text at most 70 characters per line, the text may scroll while the top line of the pages
+// for adults (ErwachsenenKopf, task N) stays where it is, in one row, targets ≥ 48 px, nothing
+// overlaps. Numbers go to so-gehts-budget-<viewport>.json in SCREENSHOTS (output-dir.ts).
 
 import { writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENSHOTS, VIEWPORTS } from './helpers';
+import { KOPF, kopfBudget, kopfMetrics, kopfProblems, overlapProblems } from './screen-checks';
 
 const MAX_CHARS = 70;
 
@@ -29,8 +30,7 @@ async function measure(page: Page) {
         return [...lines.values()].map((line) => line.trim().length);
       }),
     );
-    const band = document.querySelector('[data-region="band"]')!.getBoundingClientRect();
-    const scroller = document.querySelector('main')!.children[0]!;
+    const scroller = document.querySelector('[data-region="kopf"]')!.nextElementSibling!;
     const targets = [...document.querySelectorAll('main a, main button')].map((e) => {
       const r = e.getBoundingClientRect();
       return Math.min(r.width, r.height);
@@ -39,9 +39,6 @@ async function measure(page: Page) {
       overflow: document.documentElement.scrollHeight - window.innerHeight,
       overflowX: document.documentElement.scrollWidth - window.innerWidth,
       longestLine,
-      bandTop: Math.round(band.top),
-      bandBottom: Math.round(band.bottom),
-      height: window.innerHeight,
       scrolls: scroller.scrollHeight > scroller.clientHeight,
       smallestTarget: Math.min(...targets),
     };
@@ -63,13 +60,19 @@ for (const viewport of VIEWPORTS) {
       MAX_CHARS,
     );
     expect(top.smallestTarget, 'target below 48 px').toBeGreaterThanOrEqual(48);
-    expect(top.bandBottom, 'band leaves the screen').toBeLessThanOrEqual(top.height);
+    const kopf = await kopfMetrics(page);
+    console.log(`kopf /so-gehts ${viewport.name}: ${JSON.stringify(kopf)}`);
+    expect([...kopfProblems(kopf), ...(await overlapProblems(page, KOPF))]).toEqual([]);
     await page.screenshot({ path: `${SCREENSHOTS}/so-gehts-${viewport.name}.png` });
 
-    // To the end of the text: the band has not moved, the e-mail is on screen.
+    // To the end of the text: the Kopf has not moved, the e-mail is on screen.
     await page.getByRole('link', { name: 'pfadfinder@steireif.de' }).scrollIntoViewIfNeeded();
     const end = await measure(page);
-    expect(end.bandTop, 'band moved while scrolling').toBe(top.bandTop);
+    expect(end.overflow, 'only the text scrolls, not the page, at the end').toBeLessThanOrEqual(0);
+    expect([
+      ...kopfProblems(await kopfMetrics(page), kopf),
+      ...(await overlapProblems(page, KOPF)),
+    ]).toEqual([]);
     expect(end.overflowX, 'page scrolls sideways at the end').toBeLessThanOrEqual(0);
     await expect(page.getByRole('link', { name: 'pfadfinder@steireif.de' })).toBeInViewport();
     await page.screenshot({ path: `${SCREENSHOTS}/so-gehts-ende-${viewport.name}.png` });
@@ -77,7 +80,12 @@ for (const viewport of VIEWPORTS) {
     writeFileSync(
       `${SCREENSHOTS}/so-gehts-budget-${viewport.name}.json`,
       `${JSON.stringify(
-        { longestLine: top.longestLine, textScrolls: top.scrolls, bandTop: top.bandTop },
+        {
+          longestLine: top.longestLine,
+          textScrolls: top.scrolls,
+          kopfBottom: kopf.bottom,
+          kopf: kopfBudget(kopf),
+        },
         null,
         2,
       )}\n`,

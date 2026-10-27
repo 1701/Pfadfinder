@@ -2,6 +2,16 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-27 – Erwachsenenseiten: einheitliche Kopfzeile, Vorlesen-Hinweis auf /eltern, Handy und Lehrkraft (Aufgabe N)
+- **Gebaut:** `components/ErwachsenenKopf` auf /eltern, /eltern/geraet (Blatt-Prop `kopf`, nicht in den Rückfragen), /impressum, /datenschutz, /so-gehts: links „Zurück“ statisch (geraet → /eltern, sonst Karte), rechts die anderen vier Seiten; nur der Text scrollt. Band, Footer, `END_LINKS`/`ELTERN_FOOTER` und History-Back entfernt; Impressum/Datenschutz scrollen nicht mehr als Seite. Karte unverändert.
+- **Kandidaten:** (a) „Eltern · So geht’s · Impressum · Datenschutz · Sicherung und Gerät“ passt in allen vier Viewports und auf allen Seiten (Kopf 48 px, Mitten 0, kleinster Abstand 6, kleinstes Ziel 48 px) → gebaut; (b) und (c) nicht gemessen.
+- **Texte:** Vorlesen-Hinweis von /eltern/geraet nach /eltern („So nutzen Sie es“, h3 „Vorlesen auf dem iPad“, Sie-Form); Handy-Satz auf /eltern und im README ersetzt (Offline-Satz bleibt), PRODUCT §7 „Smartphone nicht empfohlen“; Lehrkraft-Durchsicht aus /eltern und README entfernt („bisher“ gestrichen); so-gehts „am Ende von“ → „oben in“. Alle Sätze vorher/nachher im Abschlussbericht.
+- **Bundle:** check-bundle prüft, dass eltern-route, SoGehtsScreen und RechtlichesScreen statisch kein Dexie laden (geraet-route ausgenommen). geraet-route 12 329 → 12 055 B (importiert nicht mehr ItemScreen). Kopf eigener Chunk 627 B.
+- **Tests:** `kopfMetrics`/`kopfProblems` in screen-checks, `overlapProblems(page, scope)`. Screenshots eltern-frage/loeschen/rueckfrage → geraet-* (`git mv`).
+- overlapProblems in eltern-layout nur gegen die Kopfzeile; der Beispielkasten (dt/dd) meldet 3 px wegen der Andika-Zeilenboxen, Messartefakt, bestand vorher schon.
+- **Entschieden (Markus):** „Geprüft hat sie weder das Land noch eine Lehrkraft.“ ohne „bisher“; Offline-Satz bleibt; Rückfrage ohne Kopf; bei (b) wäre so-gehts auf „Gerät“ korrigiert worden.
+- **Läufe:** C1 mit Schalter eltern-layout, so-gehts-layout, blatt-layout 12/12; Layout komplett ohne Schalter 64/64 in 31,1 Min., alle Budgets und karte-* (36) byte-gleich; Smoke Chromium 49/49 (+2: geraet → Zurück → /eltern → Karte); `npm run check` grün, Vitest 1 178 → 1 190.
+
 ## 2026-10-27 – Layout-Flakes: Ursache /tmp-Quota, probetest-layout wieder parallel (Aufgabe M, Commit 3, Issue #1)
 - **Ursache (F0g):** `/tmp` ist ein tmpfs mit Benutzer-Quota (6 256 MiB = 80 %). Parallel stieg die Belegung von 0,1 auf 6,1 GiB in 10 s (20:56:33: 6 406 236 von 6 406 614 KiB), alle vier Viewports hingen ab 20:56:32; `/dev/shm` blieb unter 53 MiB. Vite, Node 26, Headless-Shell und optimizeDeps vorher ausgeschlossen (F0a–F2, Kommentare in #1).
 - **Abhilfe (F0h):** `TMPDIR=~/.cache/pfadfinder-playwright` aus der Shell: parallel 6/6 grün in 9,4 Min., Budgets byte-gleich.

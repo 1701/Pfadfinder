@@ -64,7 +64,10 @@ test('neue Version: leiser Hinweis auf /eltern/geraet und der Karte, Neuladen nu
   await backToForeground(page);
   await expect(page.getByRole('button', RELOAD)).toBeVisible({ timeout: 20_000 });
 
-  await page.getByRole('link', { name: 'Zur Karte' }).click();
+  // "Zurück" leads to /eltern, from there to the map (task N).
+  await page.getByRole('link', { name: 'Zurück' }).click();
+  await expect(page).toHaveURL(/\/eltern$/);
+  await page.getByRole('link', { name: 'Zurück' }).click();
   await expect(page.getByRole('button', MAP_RELOAD)).toBeVisible();
 
   // A round: no hint, and nothing reloads on its own, not even back in the foreground.

@@ -59,17 +59,20 @@ describe('GeraetScreen', () => {
     expect(screen.getByRole('button', { name: 'Weiter' }).hasAttribute('disabled')).toBe(true);
     expect(screen.queryByRole('button', { name: 'Alles löschen' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Vorlesen' })).toBeNull();
-    expect(screen.getByRole('link', { name: 'Zur Karte' }).getAttribute('href')).toBe('/');
+    // "Zurück" to /eltern, the page it is reached from (task N).
+    expect(screen.getByRole('link', { name: 'Zurück' }).getAttribute('href')).toBe('/eltern');
   });
 
-  it('links So geht’s, Impressum and Datenschutz before the sum and after it', async () => {
+  it('has the top line of the pages for adults before the sum and after it, not when asking back', async () => {
     renderScreen();
     const links = () =>
-      screen
-        .getAllByRole('link')
-        .filter((l) => l.closest('nav'))
-        .map((l) => [l.textContent, l.getAttribute('href')]);
+      [...document.querySelectorAll('[data-region="kopf"] a')].map((l) => [
+        l.textContent,
+        l.getAttribute('href'),
+      ]);
     const expected = [
+      ['Zurück', '/eltern'],
+      ['Eltern', '/eltern'],
       ['So geht’s', '/so-gehts'],
       ['Impressum', '/impressum'],
       ['Datenschutz', '/datenschutz'],
@@ -77,6 +80,10 @@ describe('GeraetScreen', () => {
     expect(links()).toEqual(expected);
     await passGate();
     expect(links()).toEqual(expected);
+    // Asking back is a step, not a page: "Abbrechen" is the only way back.
+    await userEvent.click(screen.getByRole('button', { name: 'Alles löschen' }));
+    expect(document.querySelector('[data-region="kopf"]')).toBeNull();
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
   });
 
   it('shows the build quietly, before the sum and after it, and no update without one', async () => {
@@ -199,15 +206,10 @@ describe('GeraetScreen', () => {
     expect(deleteAll).not.toHaveBeenCalled();
   });
 
-  it('shows the hint on a Premium voice after the sum, above the buttons, without a switch', async () => {
+  it('has no hint on a Premium voice any more (on /eltern since task N) and no switch', async () => {
     renderScreen();
-    const hint =
-      'Auf dem iPad klingt das Vorlesen besser, wenn du in Einstellungen → Bedienungshilfen → Gesprochene Inhalte eine Premium-Stimme für Deutsch lädst.';
-    expect(screen.queryByText(hint)).toBeNull();
     await passGate();
-    const text = screen.getByText(hint);
-    const backup = screen.getByRole('button', { name: 'Sicherung herunterladen' });
-    expect(text.compareDocumentPosition(backup) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.queryByText(/Premium-Stimme/)).toBeNull();
     expect(screen.queryByRole('checkbox')).toBeNull();
     expect(screen.queryByRole('switch')).toBeNull();
   });

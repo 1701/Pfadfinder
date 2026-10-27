@@ -1,10 +1,10 @@
 # Pfadfinder
 
-Kostenlose Übungs-App für Kinder der 4. Klasse in Baden-Württemberg zur Vorbereitung auf Kompass 4 (Deutsch und Mathe). Keine Anmeldung, keine Werbung, kein Tracking; alle Daten bleiben auf dem Gerät. Läuft als PWA auf Tablet, Laptop und Handy, nach dem ersten Laden auch offline.
+Kostenlose Übungs-App für Kinder der 4. Klasse in Baden-Württemberg zur Vorbereitung auf Kompass 4 (Deutsch und Mathe). Keine Anmeldung, keine Werbung, kein Tracking; alle Daten bleiben auf dem Gerät. Läuft als PWA, nach dem ersten Laden auch offline. Pfadfinder ist für das iPad gemacht und wird nur dort geprüft; am Laptop im Browser geht es auch. Auf dem Handy ist der Bildschirm zu klein, das empfehlen wir nicht.
 
 Live: https://kompassheld.de · Für Eltern und Lehrkräfte: https://kompassheld.de/eltern
 
-Kompass 4 ist eine Lernstandserhebung des Landes Baden-Württemberg. Pfadfinder ist ein privates Projekt und nicht damit verbunden. Die Aufgaben sind selbst geschrieben, mit Hilfe von KI, an den Tests 2024 und 2025 orientiert und nicht amtlich geprüft; eine Durchsicht durch eine Lehrkraft läuft. Die Original-Tests (Prüfungsaufgaben, Testhefte, Scans) liegen nicht im Repo und dürfen nie hinein – auch nicht umformuliert.
+Kompass 4 ist eine Lernstandserhebung des Landes Baden-Württemberg. Pfadfinder ist ein privates Projekt und nicht damit verbunden. Die Aufgaben sind selbst geschrieben, mit Hilfe von KI, an den Tests 2024 und 2025 orientiert und nicht amtlich und nicht von einer Lehrkraft geprüft. Die Original-Tests (Prüfungsaufgaben, Testhefte, Scans) liegen nicht im Repo und dürfen nie hinein – auch nicht umformuliert.
 
 ![Die Karte mit den Gebieten in Mathe und Deutsch, iPad quer](tests/e2e/screenshots/karte-ipad-landscape.png)
 ![Eine Aufgabe: Rechne aus: 350 : 7, mit Ziffernblock und Prüfen-Knopf](tests/e2e/screenshots/item-number-input-ipad-landscape.png)

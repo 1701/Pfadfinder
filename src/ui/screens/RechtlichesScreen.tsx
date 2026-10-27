@@ -1,59 +1,40 @@
-// Routes /impressum and /datenschutz: static text for adults, linked from the map, /eltern and
-// /eltern/geraet. Unlike a task, the page may scroll; no Vorlesen (task 10). "Zurück" goes back in
-// the history, or to the map when the page was opened directly. At the end, quietly, "Für Eltern"
-// leads to the page for parents and teachers (/eltern, task L) and "Sicherung und Gerät" to the
-// device area (/eltern/geraet): the home-screen app has no address bar, so these are its way there
-// (task 11). Beside them "So geht’s" (/so-gehts, 2026-10-22).
+// Routes /impressum and /datenschutz: static text for adults, linked from the map and from the top
+// line of the other pages for adults; no Vorlesen (task 10). Since task N they are built like
+// /so-gehts: the top line of the pages for adults (ErwachsenenKopf) stays, below it only the text
+// scrolls. "Zurück" there leads to the map, never back in the history. Its links ("Eltern", "So
+// geht’s", the other legal page, "Sicherung und Gerät") are the installed app's way to /eltern and
+// the device area: it has no address bar (task 11).
 
-import { useLocation, useNavigate } from 'react-router';
 import { EmailText } from '../components/EmailText';
-import { QuietLinks } from '../components/QuietLinks';
-import { QUIET_ACTION_CLASS } from '../components/quiet';
-import { ELTERN_LINK, GERAET_LINK, SO_GEHTS_LINK } from '../text/rechtliches-links';
-import { DATENSCHUTZ, IMPRESSUM, LEGAL_BACK, type LegalPage } from '../text/rechtliches';
+import { ErwachsenenKopf } from '../components/ErwachsenenKopf';
+import { DATENSCHUTZ, IMPRESSUM, type LegalPage } from '../text/rechtliches';
 
 const PAGES = { impressum: IMPRESSUM, datenschutz: DATENSCHUTZ } as const;
 
-// From the map in two taps: Impressum → So geht’s (2026-10-22), → Sicherung und Gerät (task L).
-const END_LINKS = [
-  { to: '/eltern', text: ELTERN_LINK },
-  { to: '/eltern/geraet', text: GERAET_LINK },
-  { to: '/so-gehts', text: SO_GEHTS_LINK },
-] as const;
-
 export function RechtlichesScreen({ page }: { page: keyof typeof PAGES }) {
-  return <Rechtliches page={PAGES[page]} />;
+  return <Rechtliches path={`/${page}`} page={PAGES[page]} />;
 }
 
-function Rechtliches({ page }: { page: LegalPage }) {
-  const navigate = useNavigate();
-  // React Router names the first entry of this tab "default": nothing to go back to.
-  const opened = useLocation().key === 'default';
+function Rechtliches({ path, page }: { path: '/impressum' | '/datenschutz'; page: LegalPage }) {
   return (
-    <main className="mx-auto grid max-w-reading gap-lg px-lg pt-sm pb-2xl">
-      <header className="flex min-h-touch items-center">
-        <button
-          type="button"
-          className={QUIET_ACTION_CLASS}
-          onClick={() => void (opened ? navigate('/') : navigate(-1))}
-        >
-          {LEGAL_BACK}
-        </button>
-      </header>
-      <h1 className="text-heading font-bold">{page.title}</h1>
-      {page.sections.map((section) => (
-        <section key={section.heading} className="grid gap-xs">
-          <h2 className="text-option font-bold">{section.heading}</h2>
-          {section.paragraphs.map((text) => (
-            <p key={text} className="whitespace-pre-line">
-              <EmailText text={text} />
-            </p>
+    <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_minmax(0,1fr)] gap-sm px-lg py-sm">
+      <ErwachsenenKopf page={path} />
+      {/* Room for the focus ring inside the scroll box. */}
+      <div className="-mx-xs min-h-0 overflow-y-auto px-xs">
+        <article className="mx-auto grid max-w-reading gap-lg pt-sm pb-lg">
+          <h1 className="text-heading font-bold">{page.title}</h1>
+          {page.sections.map((section) => (
+            <section key={section.heading} className="grid gap-xs">
+              <h2 className="text-option font-bold">{section.heading}</h2>
+              {section.paragraphs.map((text) => (
+                <p key={text} className="whitespace-pre-line">
+                  <EmailText text={text} />
+                </p>
+              ))}
+            </section>
           ))}
-        </section>
-      ))}
-      <footer className="flex">
-        <QuietLinks label="Für Eltern" links={END_LINKS} className="flex-wrap" />
-      </footer>
+        </article>
+      </div>
     </main>
   );
 }

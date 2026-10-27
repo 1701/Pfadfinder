@@ -15,7 +15,6 @@ export interface SoGehtsSection {
 }
 
 export const SO_GEHTS_TITLE = 'So funktioniert Pfadfinder';
-export const SO_GEHTS_BACK = 'Zurück';
 
 export const SO_GEHTS: SoGehtsSection[] = [
   {
@@ -39,7 +38,7 @@ export const SO_GEHTS: SoGehtsSection[] = [
   {
     heading: 'Die Sicherung',
     paragraphs: [
-      'Pfadfinder braucht kein Konto und keinen Namen. Der Fortschritt bleibt auf diesem Gerät. Wer das Gerät wechselt oder Daten löscht, braucht vorher eine Sicherung. Du findest sie unter „Sicherung und Gerät“ am Ende von Impressum und Datenschutz: „Sicherung herunterladen“ tippen und die Datei speichern, zum Beispiel in „Dateien“. Auf dem neuen Gerät unter „Sicherung und Gerät“ auf „Sicherung einlesen“ tippen. Das ersetzt alles, was dort gespeichert ist.',
+      'Pfadfinder braucht kein Konto und keinen Namen. Der Fortschritt bleibt auf diesem Gerät. Wer das Gerät wechselt oder Daten löscht, braucht vorher eine Sicherung. Du findest sie unter „Sicherung und Gerät“ oben in Impressum und Datenschutz: „Sicherung herunterladen“ tippen und die Datei speichern, zum Beispiel in „Dateien“. Auf dem neuen Gerät unter „Sicherung und Gerät“ auf „Sicherung einlesen“ tippen. Das ersetzt alles, was dort gespeichert ist.',
     ],
   },
   {

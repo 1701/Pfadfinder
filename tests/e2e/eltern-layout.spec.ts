@@ -1,11 +1,13 @@
 // /eltern (the page for parents and teachers, task L) in four viewports: never sideways, running
-// text at most 70 characters per line, the text may scroll while the band with "Zurück" stays where
-// it is, every target ≥ 48 px (the two mail buttons included). Numbers go to
-// eltern-budget-<viewport>.json in SCREENSHOTS (output-dir.ts).
+// text at most 70 characters per line, the text may scroll while the top line of the pages for
+// adults (ErwachsenenKopf, task N) stays where it is, in one row, every target ≥ 48 px (the two mail
+// buttons included), nothing overlaps. Numbers go to eltern-budget-<viewport>.json in SCREENSHOTS
+// (output-dir.ts).
 
 import { writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { SCREENSHOTS, VIEWPORTS } from './helpers';
+import { KOPF, kopfBudget, kopfMetrics, kopfProblems, overlapProblems } from './screen-checks';
 
 const MAX_CHARS = 70;
 
@@ -29,8 +31,7 @@ async function measure(page: Page) {
         return [...lines.values()].map((line) => line.trim().length);
       }),
     );
-    const band = document.querySelector('[data-region="band"]')!.getBoundingClientRect();
-    const scroller = document.querySelector('main')!.children[0]!;
+    const scroller = document.querySelector('[data-region="kopf"]')!.nextElementSibling!;
     const targets = [...document.querySelectorAll('main a, main button')].map((e) => {
       const r = e.getBoundingClientRect();
       return { name: e.textContent, size: Math.min(r.width, r.height) };
@@ -42,9 +43,6 @@ async function measure(page: Page) {
       overflow: document.documentElement.scrollHeight - window.innerHeight,
       overflowX: document.documentElement.scrollWidth - window.innerWidth,
       longestLine,
-      bandTop: Math.round(band.top),
-      bandBottom: Math.round(band.bottom),
-      height: window.innerHeight,
       scrolls: scroller.scrollHeight > scroller.clientHeight,
       smallest: targets.reduce((a, b) => (b.size < a.size ? b : a)),
       mail,
@@ -68,19 +66,26 @@ for (const viewport of VIEWPORTS) {
     );
     expect(top.smallest.size, `"${top.smallest.name}" below 48 px`).toBeGreaterThanOrEqual(48);
     expect(top.mail, 'two mail buttons').toHaveLength(2);
-    expect(top.bandBottom, 'band leaves the screen').toBeLessThanOrEqual(top.height);
+    const kopf = await kopfMetrics(page);
+    console.log(`kopf /eltern ${viewport.name}: ${JSON.stringify(kopf)}`);
+    expect([...kopfProblems(kopf), ...(await overlapProblems(page, KOPF))]).toEqual([]);
     await page.screenshot({ path: `${SCREENSHOTS}/eltern-seite-${viewport.name}.png` });
 
-    // The mail buttons and the example, then the end of the text: the band has not moved.
+    // The mail buttons and the example, then the end of the text: the Kopf has not moved.
     await page.getByRole('link', { name: 'Aufgabe vorschlagen' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('link', { name: 'Fehler melden' })).toBeInViewport();
+    expect(kopfProblems(await kopfMetrics(page), kopf)).toEqual([]);
     await page.screenshot({ path: `${SCREENSHOTS}/eltern-seite-vorschlag-${viewport.name}.png` });
-    const footer = page.getByRole('navigation', { name: 'Für Eltern und Lehrkräfte' });
-    await footer.scrollIntoViewIfNeeded();
+    const github = page.getByRole('link', { name: 'github.com/1701/Pfadfinder' });
+    await github.scrollIntoViewIfNeeded();
     const end = await measure(page);
-    expect(end.bandTop, 'band moved while scrolling').toBe(top.bandTop);
+    expect(end.overflow, 'only the text scrolls, not the page, at the end').toBeLessThanOrEqual(0);
     expect(end.overflowX, 'page scrolls sideways at the end').toBeLessThanOrEqual(0);
-    await expect(footer.getByRole('link', { name: 'Sicherung und Gerät' })).toBeInViewport();
+    expect([
+      ...kopfProblems(await kopfMetrics(page), kopf),
+      ...(await overlapProblems(page, KOPF)),
+    ]).toEqual([]);
+    await expect(github).toBeInViewport();
     await page.screenshot({ path: `${SCREENSHOTS}/eltern-seite-ende-${viewport.name}.png` });
 
     writeFileSync(
@@ -89,7 +94,8 @@ for (const viewport of VIEWPORTS) {
         {
           longestLine: top.longestLine,
           textScrolls: top.scrolls,
-          bandTop: top.bandTop,
+          kopfBottom: kopf.bottom,
+          kopf: kopfBudget(kopf),
           smallestTarget: Math.round(top.smallest.size),
           mailButtonHeight: Math.min(...top.mail),
         },

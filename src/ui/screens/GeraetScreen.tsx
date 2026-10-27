@@ -1,25 +1,24 @@
 // Route /eltern/geraet (the device area, at /eltern until task L), by URL or "Sicherung und Gerät"
-// on /eltern and at the end of Impressum and Datenschutz, never from a child's screen: a sum to get
-// in, then the hint on a better voice for Vorlesen and three buttons: "Sicherung herunterladen" (a
-// file with all data, since 2026-10-16), "Sicherung einlesen" (2026-10-22: pick a file, check it,
-// ask back, replace everything, back to the map) and "Alles löschen" after asking back. An overview
-// comes later (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child
-// in.
-// So geht’s, Impressum and Datenschutz top right, already before the sum (task 10, /so-gehts since
-// 2026-10-22); also on the map (task 11).
+// on /eltern and in the top line of the other pages for adults, never from a child's screen: a sum
+// to get in, then three buttons: "Sicherung herunterladen" (a file with all data, since
+// 2026-10-16), "Sicherung einlesen" (2026-10-22: pick a file, check it, ask back, replace
+// everything, back to the map) and "Alles löschen" after asking back. An overview comes later
+// (PRODUCT.md §8). No Vorlesen here: reading the question aloud would only help a child in. The
+// hint on a better voice for Vorlesen moved to /eltern (task N).
+// The top line of the pages for adults (ErwachsenenKopf, task N) already before the sum: "Zurück"
+// to /eltern, then Eltern · So geht’s · Impressum · Datenschutz. Not while asking back: there
+// "Abbrechen" is the only way back.
 // Bottom left, quietly: the build ("Version a1b2c3d · 18.10.2026") and, once a new version
 // waits, "Neue Version – Neu laden" (task 11), also before the sum.
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { parseImport } from '../../domain/learner';
-import { Link } from 'react-router';
 import { gateQuestion, isGateAnswer, type GateQuestion } from '../../domain/parents';
 import { Button } from '../components/Button';
-import { RechtlichesLinks } from '../components/RechtlichesLinks';
+import { ErwachsenenKopf } from '../components/ErwachsenenKopf';
 import { UpdateHinweis, type AppUpdate } from '../components/UpdateHinweis';
 import { ZiffernBlock } from '../components/ZiffernBlock';
 import { focusQuietly } from '../focus';
-import { TO_MAP } from '../text/einstieg';
 import {
   BACKUP,
   BACKUP_FAILED,
@@ -38,12 +37,10 @@ import {
   IMPORT_GO,
   IMPORT_INVALID,
   IMPORT_NEWER,
-  PREMIUM_VOICE,
   gateTitle,
 } from '../text/geraet';
 import { versionLine } from '../text/update';
 import { Blatt } from './Blatt';
-import { QUIET_ACTION_CLASS } from './ItemScreen';
 
 export interface GeraetScreenProps {
   /** Writes all data of this device into a file and hands it to the browser. */
@@ -74,11 +71,7 @@ const FAILURE_TEXT: Record<Failure, string> = {
   import: IMPORT_FAILED,
 };
 
-const zurKarte = (
-  <Link to="/" className={QUIET_ACTION_CLASS}>
-    {TO_MAP}
-  </Link>
-);
+const kopf = <ErwachsenenKopf page="/eltern/geraet" />;
 
 function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
   return (
@@ -88,8 +81,6 @@ function Version({ buildId, update }: { buildId: string; update: AppUpdate }) {
     </div>
   );
 }
-
-const rechtliches = <RechtlichesLinks soGehts />;
 
 export function GeraetScreen({
   downloadBackup,
@@ -139,8 +130,7 @@ export function GeraetScreen({
     };
     return (
       <Blatt
-        left={zurKarte}
-        right={rechtliches}
+        kopf={kopf}
         title={DELETE_TITLE}
         text={failed ? FAILURE_TEXT[failed] : DELETE_TEXT}
         readAloud={false}
@@ -162,7 +152,6 @@ export function GeraetScreen({
           </>
         }
       >
-        <p className="w-full px-lg">{PREMIUM_VOICE}</p>
         {/* Opened by "Sicherung einlesen"; outside the band, whose last child is a button. */}
         <input
           ref={filePicker}
@@ -238,8 +227,7 @@ function Frage({
   };
   return (
     <Blatt
-      left={zurKarte}
-      right={rechtliches}
+      kopf={kopf}
       title={gateTitle(question)}
       text={retry ? GATE_RETRY : undefined}
       readAloud={false}
@@ -272,7 +260,7 @@ function Rueckfrage(props: {
   onCancel(): void;
   onConfirm(): void;
 }) {
-  // The safe answer has the focus; no "Zur Karte" here, "Abbrechen" already leads back.
+  // The safe answer has the focus; no top line here, "Abbrechen" already leads back.
   const cancel = useRef<HTMLButtonElement>(null);
   useEffect(() => focusQuietly(cancel.current), []);
   return (

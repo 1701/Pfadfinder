@@ -1,5 +1,5 @@
 // The quiet frame around the questions: the Einstieg's intro, pause and hints, the choice between
-// Fortsetzen and Neu anfangen, and the Eltern page. Same rows as the item screen (top line, sheet
+// Fortsetzen and Neu anfangen, and the device area (/eltern/geraet). Same rows as the item screen (top line, sheet
 // with Vorlesen, bottom band), so the hand finds the next step in the same place.
 
 import type { ReactNode } from 'react';
@@ -10,6 +10,8 @@ export interface BlattProps {
   left?: ReactNode;
   /** Top right, e.g. the Wegstriche. */
   right?: ReactNode;
+  /** Instead of left and right: a whole top line, the ErwachsenenKopf of /eltern/geraet (task N). */
+  kopf?: ReactNode;
   title: string;
   text?: string;
   /** A quieter line under the text, read aloud with it (Probetest: "schon gemacht"). */
@@ -17,13 +19,14 @@ export interface BlattProps {
   readAloud: boolean;
   /** The bottom band; the last action sits at the bottom right. */
   actions: ReactNode;
-  /** Below the sheet, e.g. the digit pad of the Eltern question. */
+  /** Below the sheet, e.g. the digit pad of the question on /eltern/geraet. */
   children?: ReactNode;
 }
 
 export function Blatt({
   left,
   right,
+  kopf,
   title,
   text,
   note,
@@ -34,10 +37,12 @@ export function Blatt({
   const speech = [title, text, note].filter(Boolean).join(' ');
   return (
     <main className="screen-fit mx-auto grid max-w-page grid-rows-[auto_1fr_auto] gap-sm px-lg py-sm">
-      <header className="flex min-h-touch items-center justify-between gap-md">
-        {left ?? <span />}
-        {right}
-      </header>
+      {kopf ?? (
+        <header className="flex min-h-touch items-center justify-between gap-md">
+          {left ?? <span />}
+          {right}
+        </header>
+      )}
       <div className="flex min-h-0 flex-col items-center justify-center gap-lg">
         <section className="flex w-full items-start gap-lg rounded-sheet border border-line bg-surface px-lg py-sm">
           {readAloud && <VorlesenButton key={title} text={speech} />}
