@@ -28,11 +28,13 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Keine Netzwerkaufrufe zur Laufzeit außer dem Laden der eigenen Assets
 - Keine Platzhalter-Items im Code erfinden; nutze `content/` oder frage nach Testdaten
 - Keine echten Kompass-Aufgaben, Testhefte oder Scans ins Repo (das Repo ist öffentlich)
-- Kindernamen in Doku und Commits ab jetzt als „Tochter“; bestehende Einträge bleiben unverändert
+- Keine Personen aus dem Umfeld des Projekts (Familie, Lehrkräfte, Schule) in versionierten Dateien und Commits; Rollen statt Bezüge („Pilotkind“, „ein Kind der Zielgruppe“, „eine Lehrkraft“, „fachliche Durchsicht“). Der Projektinhaber steht im Impressum
 - Renderer für mark-in-text und segment-text nutzen zwingend splitUnits() aus src/domain/content/units.ts.
 - Option-/Element-Reihenfolge wird zur Laufzeit deterministisch gemischt (Seed: itemId + attemptIndex). Ausnahme: `payload.keepOrder: true` (Optionen benennen Bildbeschriftungen A–D), dann bleibt die Reihenfolge wie im Content. Zweite Ausnahme: `segment-text` wird nie gemischt und kennt kein `keepOrder` (die Reihenfolge ist der Satz).
 - Messungen für Layout-Entscheidungen laufen nur in der App mit geladener Andika, nie mit einem separaten Skript ohne Schrift.
-- Während ein Playwright-Lauf gegen den Dev-Server läuft, werden keine Dateien im Repo bearbeitet.
+- Textänderungen an derselben Datei bündeln: ein Schalter-Lauf, ein Screenshot-Satz
+- Texte in `src/ui/text/so-gehts.ts` gehören dem Projektinhaber: nur Tatsachenkorrekturen (Linknamen, Orte), satzweise gemeldet, keine Umformulierung
+- Der Commit ist ein eigener Schritt nach bestätigtem Bericht. Nie `git stash` mit uncommitteter Arbeit. Neue Pfade und Namen vorher per grep gegen das Repo prüfen
 
 ## Screenshots
 - Ein normaler Lauf (`npm run e2e`, einzelne Specs, `npm run screenshots`) schreibt Screenshots und Budget-JSON nach `tests/e2e/output/` (gitignored, in CI Artefakt `e2e-output`). Danach ist `git status` sauber.
@@ -40,6 +42,18 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 - Versionierte Screenshots entstehen nur aus einem Lauf mit Schalter, auch wenn ein Lauf ohne Schalter denselben Code hatte: nie Dateien aus `tests/e2e/output/` nach `tests/e2e/screenshots/` kopieren (Entscheidung Markus, 2026-10-21)
 - Ein neu eingespielter Probetest schreibt sein Budget mit Schalter, im selben Commit.
 - Beispiel: `PFADFINDER_UPDATE_SCREENSHOTS=1 npx playwright test --project=layout einstieg-layout`
+
+## Tests und Läufe
+- Vorab-Prüfung vor jedem Playwright-Lauf: `lsof -i :5199` ist leer, sonst Stopp, der Mensch beendet den Prozess. Dazu `free -m` und `ps -eo pid,etime,cmd | grep -E 'chrom|playwright|vite|node'`: Reste nur melden, nie beenden. Hängt ein Lauf, zuerst `df -h /tmp` und die Benutzerquota prüfen (Issue #1)
+- Nie zwei Playwright-Läufe gleichzeitig: Sie teilen sich Port 5199 und den Preview-Server
+- Während ein Playwright-Lauf läuft, werden keine Dateien im Repo bearbeitet: Vite-HMR lädt die Seite mitten in der Messung neu
+- Budget-Gleichheit heißt `cmp` der Datei in `tests/e2e/output/` gegen `tests/e2e/screenshots/`, nicht `git status`: Ein Lauf ohne Schalter schreibt nie ins versionierte Verzeichnis
+- Die Smoke-Zahl kommt aus `npx playwright test --project=chromium-landscape --project=chromium-portrait`. `npm run e2e:chromium` enthält das Layout-Projekt
+- Flakes nach Typ zählen (z. B. Timeout, Target crashed, ERR_INSUFFICIENT_RESOURCES, Execution context destroyed), einmal wiederholen, beide Ergebnisse melden. Bei gescheiterten Anfragen den Fehlertext (`request.failure().errorText`) immer mitschreiben
+- Jede Zahl in einem Bericht stammt aus einer Messdatei oder Kommandoausgabe, nie aus dem Gedächtnis oder einem früheren Bericht
+- CI nach einem Push: alle drei Jobs (`check`, `smoke`, `webkit`) mit ihren Testzahlen nennen (`gh run view <id> --log`). Startet der Push keinen Lauf (nur Doku, docs/DEPLOY.md §9), das melden
+- `AIR_EXCEPTIONS` (`tests/e2e/helpers.ts`) ist eine geschlossene Liste: Ein neues Item unter 18 px Luft ist rot und braucht eine Entscheidung des Menschen (umbauen oder bewusst aufnehmen), nie eine stille Erweiterung
+- Der Sweep (`sweep-luft-items`, nur mit `PFADFINDER_SWEEP=1`) misst Durchsehen, Durchsehen-Vergleichen und fehlt am echten Platz jedes Probetests, der das Item enthält. Platz 24 im Zustand fehlt ist der engste („Zur Auswertung“ macht das Band höher)
 
 ## Kinder-UX-Checkliste (vor jedem UI-Commit)
 - [ ] Touch-Ziele ≥ 48 px, eine Aufgabe pro Screen, kein Scrollen innerhalb der Aufgabe (iPad quer und hoch)
@@ -53,9 +67,9 @@ Widerspricht eine Aufgabe einem dieser Dokumente: nicht stillschweigend abweiche
 Seiten für Erwachsene (/eltern, /so-gehts, Impressum, Datenschutz) sind von ‚≤ 2 Sätze‘ und den Sprachtests für Kindertexte ausgenommen.
 
 ## Definition of Done (je Aufgabe)
-1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`, Standard-Worker; Port 5199 muss frei sein, `lsof -i :5199`; bei hängenden Läufen zuerst die /tmp-Quota prüfen, Issue #1). In der GitHub-CI läuft es nicht von selbst (docs/DEPLOY.md, Abschnitt 9)
+1. `npm run check` grün; nach UI-Änderungen lokal auch die Chromium-Smoke-Projekte (`npx playwright test --project=chromium-landscape --project=chromium-portrait`); bei UI- und Content-Änderungen vor dem Commit außerdem das Layout-Projekt lokal, alle vier Viewports (`npx playwright test --project=layout`, Standard-Worker; vorher die Vorab-Prüfung aus „Tests und Läufe“). In der GitHub-CI läuft es nur nachts nach einem neuen Commit auf main oder von Hand (docs/DEPLOY.md, Abschnitt 9)
 2. Betroffene Tests ergänzt/aktualisiert
-3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --workflow=ci.yml --limit 1` lesen (Lint, Content, Unit, Build, Chromium- und WebKit-Smoke) und als Link nennen, nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
+3. `docs/PROGRESS.md`: Eintrag mit Datum, was gebaut, was offen, welche Entscheidungen getroffen, lokaler Teststatus (max. 10 Zeilen). Der CI-Status gehört nicht in PROGRESS, sondern in den Abschlussbericht: nach dem Push mit `gh run list --workflow=ci.yml --limit 1` lesen und als Link mit den Testzahlen je Job nennen („Tests und Läufe“), nie aus einem früheren Lauf übernehmen; kein eigener docs-Commit dafür. Ist `gh` nicht installiert oder nicht angemeldet: das melden, statt den Status zu raten
 4. Commit-Message nach Conventional Commits (`feat:`, `fix:`, `content:`, `docs:`, `chore:`)
 5. Abschlussbericht im Chat: Zusammenfassung (≤ 10 Zeilen), CI-Link, geänderte Dateien, offene Fragen, nächster sinnvoller Schritt – dieser Bericht wird extern reviewt
 

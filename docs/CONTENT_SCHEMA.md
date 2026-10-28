@@ -1,6 +1,6 @@
 # CONTENT_SCHEMA.md – Item-Format und Autorenregeln
 
-Status: v1.0.27 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
+Status: v1.0.28 **eingefroren** für das MVP · Änderungen nur mit Versionssprung und Eintrag in `CHANGELOG.md`
 Versionierung: Das Feld `schemaVersion` und `content/schema-version.json` tragen nur `Major.Minor` (aktuell `"1.0"`). Patch-Versionen präzisieren Regeln oder ergänzen optionale Felder, mit denen jedes bisherige Item gültig bleibt (seit 1.0.4).
 Dieses Dokument ist der Vertrag zwischen Content-Spur (Items) und Code-Spur (App). Der Code validiert jede Content-Datei beim Build gegen dieses Schema (Zod, siehe `ARCHITECTURE.md`). Ungültiger Content bricht den Build.
 
@@ -302,7 +302,7 @@ Regeln:
 - 20 Items je Batch, ein Bereich, als valide JSON-Datei
 - `content/typen.json` nennt je Bereich die Aufgabentypen für die Elternseite; Pflege bei jedem Batch (seit 1.0.27): Ein neuer Typ kommt hinzu, wenn der Batch ihn bringt; genannt wird nur, was im Pool vorkommt
 - Jeder Batch enthält eine Kopfzeile im Chat: Niveauverteilung, Formatverteilung, Kalibrierungsquelle
-- Status bei Abgabe: `draft`; nach Papier-Pilot `piloted`; nach Markus-Freigabe `approved`
+- Status bei Abgabe: `draft`; nach Papier-Pilot `piloted`; nach Freigabe durch den Projektinhaber `approved`
 
 ## 8. Beispiele
 

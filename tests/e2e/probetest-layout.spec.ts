@@ -9,7 +9,7 @@
 //                match, short-answer) while answering and looking through (short answer also
 //                comparing), ≥ 18 px air, nothing overflows or overlaps; the reading screen with
 //                the Probetest's Kopf before each text
-//   deutsch      every item of every Deutsch Probetest (deutsch-01, deutsch-02) answering, looking
+//   deutsch      every item of every Deutsch Probetest in content/probetests answering, looking
 //                through, missing (short answers also comparing); beside a text the same rules as
 //                the fixture, air per item in the budget
 //   map          the line "Probetest Mathe" (and "Probetest Deutsch") in the legend line: ≥ 48 px,

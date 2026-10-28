@@ -15,7 +15,7 @@ Code: MIT ([`LICENSE`](LICENSE)). Aufgaben, Texte und Bilder unter `content/`: C
 
 ## Mitmachen ohne Technik
 
-Eine Aufgabe vorschlagen oder einen Fehler melden geht per E-Mail an pfadfinder@steireif.de; eine Vorlage öffnet sich auf https://kompassheld.de/eltern. Oder Sie legen hier ein Issue mit der Vorlage „Aufgabe vorschlagen“ an.
+Eine Aufgabe vorschlagen oder einen Fehler melden geht per E-Mail an pfadfinder@steireif.de; eine Vorlage öffnet sich auf https://kompassheld.de/eltern. Oder Sie legen hier ein Issue mit der Vorlage „Aufgabe vorschlagen“ an. Offene Arbeit steht als [Issue mit den Labels „aufgabe“ und „pflege“](https://github.com/1701/Pfadfinder/issues?q=is%3Aopen+label%3Aaufgabe%2Cpflege); den Wiedereinstieg in den Code beschreibt [`docs/UEBERGABE.md`](docs/UEBERGABE.md).
 
 ## Selbst betreiben oder erweitern
 

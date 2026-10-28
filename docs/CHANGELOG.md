@@ -4,6 +4,9 @@ Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/). Zw
 
 ## Content-Schema
 
+### 1.0.28 – 2026-10-28
+- §7 Status: „nach Freigabe durch den Projektinhaber `approved`“ statt eines Namens. Nur Wortlaut, keine Regeländerung; alle Items und Probetests bleiben gültig, `schemaVersion` bleibt `"1.0"`.
+
 ### 1.0.27 – 2026-10-26
 - §1 Dateistruktur: neue Datei `content/typen.json` (Bereich → Liste von Aufgabentypen) für die Seite „Für Eltern und Lehrkräfte“ (`/eltern`). Kein Teil des Item-Vertrags; der Validator prüft die Schlüssel gegen `BEREICHE_BY_FACH`, nicht leere Listen und nur Texte. Grund: §1 ist der Dateibaum, den der Validator durchsetzt; ohne Eintrag wäre die Datei eine „Unerwartete Content-Datei“. Für jeden Fork ist das eine Vertragsänderung.
 - §7 Batch-Abgabe: `typen.json` wird mit jedem Batch gepflegt.

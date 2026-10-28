@@ -1,7 +1,7 @@
 name: CI
 
 # Every push: check (lint, content, unit tests, build) and the Chromium and WebKit smoke
-# projects, as three parallel jobs. The layout project (~23 min) runs in layout.yml, nightly
+# projects, as three parallel jobs. The layout project (~30 min) runs in layout.yml, nightly
 # and by hand. Docs, Markdown, versioned screenshots and layout.yml start no run at all.
 on:
   push:

@@ -76,7 +76,7 @@ Jedes Item hat ein Niveau nach IQB-Logik:
 - **II – Zusammenhänge herstellen**: mehrschrittig, Information aus Text/Tabelle holen und verarbeiten
 - **III – Verallgemeinern/Reflektieren**: begründen, Fehler in fremder Lösung finden, Strategie übertragen
 
-Zielverteilung im Pool: **40 % I / 40 % II / 20 % III**. Im Probetest gilt seit 2026-10-25 ein Band je Niveau (I 29–44 %, II 38–55 %, III 16–23 %, CONTENT_SCHEMA §6), damit auch der Testmix von Kompass 4 Mathe 2025 (7 / 13 / 4, mathe-03) passt. (Kalibrierung gegen Originalaufgaben 2024 und IQB-Beispiele; wird nach dem Papier-Pilot mit Tochter angepasst.)
+Zielverteilung im Pool: **40 % I / 40 % II / 20 % III**. Im Probetest gilt seit 2026-10-25 ein Band je Niveau (I 29–44 %, II 38–55 %, III 16–23 %, CONTENT_SCHEMA §6), damit auch der Testmix von Kompass 4 Mathe 2025 (7 / 13 / 4, mathe-03) passt. (Kalibrierung gegen Originalaufgaben 2024 und IQB-Beispiele; wird nach dem Papier-Pilot mit einem Kind der Zielgruppe angepasst.)
 
 ### 5.3 Aufgabenformate
 
@@ -187,14 +187,14 @@ Begründung: Zielgruppe ist angstbesetzt; Wettbewerbsmechaniken erhöhen bei uns
 | Lesetexte | 6 (3 Sach-, 3 literarische, je 150–250 Wörter) | 20 |
 | Probetests | 3 je Fach (seit 2026-10-25) | 5 je Fach |
 
-Produktionsweg: Claude generiert Items nach `CONTENT_SCHEMA.md` in Batches à 20, kalibriert gegen Originalaufgaben 2024 und IQB/VERA-3-Beispiele. **Qualitätssicherung ohne Lehrkraft:** (a) jeder Batch wird auf Niveauverteilung, Sprachniveau (Satzlänge, Fachwörter) und Distraktorqualität geprüft, (b) die ersten 30 Items je Fach werden mit Tochter auf Papier getestet, (c) Items mit auffälliger Trefferquote (<20 % oder >95 %) werden markiert und überarbeitet. Offen: eine Lehrkraft als Gegenleserin nach dem Test gewinnen (Klassenlehrerin der Tochter, Elternbeirat).
+Produktionsweg: Claude generiert Items nach `CONTENT_SCHEMA.md` in Batches à 20, kalibriert gegen Originalaufgaben 2024 und IQB/VERA-3-Beispiele. **Qualitätssicherung ohne Lehrkraft:** (a) jeder Batch wird auf Niveauverteilung, Sprachniveau (Satzlänge, Fachwörter) und Distraktorqualität geprüft, (b) die ersten 30 Items je Fach werden mit einem Kind der Zielgruppe auf Papier getestet, (c) Items mit auffälliger Trefferquote (<20 % oder >95 %) werden markiert und überarbeitet. Offen: fachliche Durchsicht durch eine Lehrkraft.
 
 ## 10. MVP-Scope (harte Liste)
 
 Drin:
 1. Startbildschirm mit Expeditionskarte (10 Gebiete, Fortschritt sichtbar)
 2. Einstiegscheck je Fach
-3. Üben-Modus mit allen 9 Formaten, sofortigem Feedback, Mastery-Logik
+3. Üben-Modus mit allen 10 Formaten, sofortigem Feedback, Mastery-Logik
 4. Fehlerkiste (Wiederholung nach 1 und 3 Tagen)
 5. Probetest mit Timer und Auswertung
 6. Probetest als druckbares PDF (Aufgaben + Lösungen)
@@ -205,7 +205,7 @@ Drin:
 
 Nicht drin: alles aus Abschnitt 4 und Abschnitt 11.
 
-**Done-Kriterien MVP:** Tochter nutzt die App an 5 Tagen freiwillig mindestens 10 Min.; sie kann jede Formatart ohne Erklärung durch Eltern bedienen; ein Probetest liefert eine Bereichsauswertung, die mit Markus' Einschätzung plausibel übereinstimmt; keine Abstürze auf Tablet und Laptop.
+**Done-Kriterien MVP:** Das Pilotkind nutzt die App an 5 Tagen freiwillig mindestens 10 Min.; sie kann jede Formatart ohne Erklärung durch Eltern bedienen; ein Probetest liefert eine Bereichsauswertung, die mit Markus' Einschätzung plausibel übereinstimmt; keine Abstürze auf Tablet und Laptop.
 
 ## 11. Roadmap (Big Picture)
 
@@ -218,7 +218,7 @@ Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: 
 ## 12. Rechtliches und Datenschutz
 
 - Keine personenbezogenen Daten verlassen das Gerät; kein Analytics, keine Cookies außer technisch notwendigen → Datenschutzerklärung kurz, DSGVO Art. 8 (Einwilligung bei Kindern) greift nicht
-- Impressumspflicht nach DDG gilt trotzdem (Markus privat). Seit Aufgabe 10 (2026-10-18): `/impressum` und `/datenschutz` als statische Seiten, ohne Vorlesen, verlinkt aus der Kopfzeile der anderen Erwachsenenseiten (seit Aufgabe N; auf `/eltern/geraet` schon vor der Rechenfrage) und seit Aufgabe 11 auch rechts in der Zeile unter der Karte, in jedem Viewport („leicht erkennbar, unmittelbar erreichbar“, DDG); Name, Anschrift und E-Mail stehen dort seit 2026-10-22 ausgeschrieben (Markus Steireif, Maisenbachstraße 2, 76359 Marxzell, pfadfinder@steireif.de als mailto-Link). Die Datenschutzerklärung nennt Cloudflare als Hoster (Zugriffsprotokolle) und die Sprachausgabe des Browsers (Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google)
+- Impressumspflicht nach DDG gilt trotzdem (Markus privat). Seit Aufgabe 10 (2026-10-18): `/impressum` und `/datenschutz` als statische Seiten, ohne Vorlesen, verlinkt aus der Kopfzeile der anderen Erwachsenenseiten (seit Aufgabe N; auf `/eltern/geraet` schon vor der Rechenfrage) und seit Aufgabe 11 auch rechts in der Zeile unter der Karte, in jedem Viewport („leicht erkennbar, unmittelbar erreichbar“, DDG); Name, Anschrift und E-Mail stehen dort seit 2026-10-22 ausgeschrieben (Quelle `src/ui/text/rechtliches.ts`, die E-Mail als mailto-Link). Die Datenschutzerklärung nennt Cloudflare als Hoster (Zugriffsprotokolle) und die Sprachausgabe des Browsers (Chrome mit Google-Stimmen schickt den vorzulesenden Text an Google)
 - Produktname darf "Kompass 4" beschreibend nennen ("Übungen zur Vorbereitung auf Kompass 4"), nicht als Marke führen
 - Alle Items sind Eigenschöpfungen; Originalaufgaben und IQB/VERA-Items dienen nur als Format- und Niveaureferenz, werden nicht übernommen
 - Lizenz: offen – Code MIT, Content CC BY-SA 4.0
@@ -227,11 +227,11 @@ Architekturfolgen aus der Roadmap, die das MVP **jetzt** berücksichtigen muss: 
 
 | Woche | Code | Content |
 |---|---|---|
-| 1 (bis 18.10.) | Repo, Docs, Item-Player für MC + Zahleneingabe, Fortschritt lokal | Schema einfrieren, 30 Pilot-Items je Fach, Papier-Pilot mit Tochter |
+| 1 (bis 18.10.) | Repo, Docs, Item-Player für MC + Zahleneingabe, Fortschritt lokal | Schema einfrieren, 30 Pilot-Items je Fach, Papier-Pilot mit einem Kind der Zielgruppe |
 | 2 (bis 25.10.) | Alle Formate, Üben-Modus, Mastery-Logik, Entdeckerkarte | +60 Items je Fach, Pilot-Erkenntnisse einarbeiten |
 | 3 (bis 1.11.) | Einstiegscheck, Fehlerkiste, Probetest + Timer, Vorlesen | +60 Items, 2 Probetests je Fach, 6 Lesetexte |
 | 4 (bis 8.11.) | PDF-Druck, Eltern-Bereich, PWA/offline, Polish | Letzte Lücken, Qualitätsrunde |
-| 5 | Puffer, tägliche Nutzung durch Tochter | – |
+| 5 | Puffer, tägliche Nutzung durch das Pilotkind | – |
 
 ## 14. Getroffene Entscheidungen (2026-10-11)
 

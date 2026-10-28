@@ -2,6 +2,15 @@
 
 Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen, Entscheidungen, lokaler Teststatus. Der CI-Link steht ab 2026-10-19 im Abschlussbericht, nicht hier (CLAUDE.md, DoD 3).
 
+## 2026-10-28 – Z: Entwicklungspause, Übergabe
+- **Stand:** `97d2498` live; aktiv Mathe 160, Deutsch 124 Items (alle `draft`), 9 Lesetexte, 6 Probetests (25,89–30,00 Min.), 10 Formate, Schema 1.0.28 (nur Wortlaut §7).
+- **Gebaut:** `docs/UEBERGABE.md` (Stand, Dokumente, Wiedereinstieg, Content-Batch, Entscheidungen); CLAUDE.md mit Abschnitt „Tests und Läufe“, drei Arbeitsregeln und Personenregel statt der bisherigen Namensregel; README und CONTRIBUTING je ein Satz.
+- **Doku-Abgleich:** 15 Korrekturen (DEPLOY 5, ARCHITECTURE 4, CLAUDE.md DoD 1, PRODUCT §10, `tests/e2e/README.md`, Kommentare in `playwright.config.ts`, `probetest-layout.spec.ts`, `ci.yml`, `layout.yml`); 13 Personen- und Adressstellen neutralisiert (CLAUDE.md, PRODUCT, PROGRESS, CONTENT_SCHEMA).
+- **Issues:** Labels `aufgabe`, `pflege`. aufgabe: Z1 #2, Z2 #3, Z3 #4, Z12 #11; pflege: Z4 #5, Z5 #6, Z7 #7, Z8 #8, Z9 #9, Z10 #10. Z6 und Z11 nicht auffindbar, entfallen.
+- **Offen:** Herkunftssatz auf `/eltern` (#11); Z3 setzt nach der Durchsicht `approved` (vorhandener Status).
+- **Lokal:** `npm run check` grün (Vitest 1 190); kein Playwright-Lauf (nur Doku und Kommentare).
+- **Wiedereinstieg:** `docs/UEBERGABE.md`.
+
 ## 2026-10-27 – Erwachsenenseiten: einheitliche Kopfzeile, Vorlesen-Hinweis auf /eltern, Handy und Lehrkraft (Aufgabe N)
 - **Gebaut:** `components/ErwachsenenKopf` auf /eltern, /eltern/geraet (Blatt-Prop `kopf`, nicht in den Rückfragen), /impressum, /datenschutz, /so-gehts: links „Zurück“ statisch (geraet → /eltern, sonst Karte), rechts die anderen vier Seiten; nur der Text scrollt. Band, Footer, `END_LINKS`/`ELTERN_FOOTER` und History-Back entfernt; Impressum/Datenschutz scrollen nicht mehr als Seite. Karte unverändert.
 - **Kandidaten:** (a) „Eltern · So geht’s · Impressum · Datenschutz · Sicherung und Gerät“ passt in allen vier Viewports und auf allen Seiten (Kopf 48 px, Mitten 0, kleinster Abstand 6, kleinstes Ziel 48 px) → gebaut; (b) und (c) nicht gemessen.
@@ -169,11 +178,11 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Lokal:** `npm run check` grün (1066 Tests), content:validate 0 Fehler, 0 Warnungen, check.py der Zip „OK – 0 Fehler“ (nicht im Repo). Layout-Projekt 52/52 in 20,9 Min., Chromium-Projekte 39/39.
 
 ## 2026-10-23 – Chore: Repo wird öffentlich
-- **Historie umgeschrieben (git filter-repo, Go Markus):** Name der Tochter → „Tochter“ (24 Vorkommen in `git log -p`, 0 in Messages), Autor-Adresse → pfadfinder@steireif.de, Cloudflare-Account-ID → `REDACTED-CLOUDFLARE-ACCOUNT-ID`. 227 Commits, Stand des HEAD gleich dem alten bis auf die Ersetzungen, Force-Push auf main. Andere Klone müssen neu geklont werden.
+- **Historie umgeschrieben (git filter-repo, Go Markus):** Kindername → Platzhalter (24 Vorkommen in `git log -p`, 0 in Messages), Autor-Adresse → pfadfinder@steireif.de, Cloudflare-Account-ID → `REDACTED-CLOUDFLARE-ACCOUNT-ID`. 227 Commits, Stand des HEAD gleich dem alten bis auf die Ersetzungen, Force-Push auf main. Andere Klone müssen neu geklont werden.
 - **Historienprüfung danach:** keine Tokens, Schlüssel, `.env`, Account- oder Zone-IDs; E-Mails nur pfadfinder@, die Anthropic-Trailer und i@izs.me (npm-Text in package-lock, erlaubt).
 - **Lizenzen:** `LICENSE` (MIT), `content/LICENSE` (CC BY-SA 4.0, Text von creativecommons.org), neues `README.md` mit Zweck, Lizenzabsatz (Andika: `public/fonts/andika/OFL.txt`) und dem Hinweis, dass echte Prüfungsaufgaben nie im Repo liegen. `package.json` hatte „MIT“ schon.
 - **Account-ID:** nicht mehr in `wrangler.jsonc`; `deploy:preview` braucht `CLOUDFLARE_ACCOUNT_ID` (DEPLOY §3). Testnamen: Lerner „Mia“, Stimme „Helena“.
-- **CLAUDE.md:** keine echten Kompass-Aufgaben, Testhefte oder Scans; Kindernamen ab jetzt als „Tochter“.
+- **CLAUDE.md:** keine echten Kompass-Aufgaben, Testhefte oder Scans; keine Kindernamen.
 - **layout.yml:** Nachtlauf 01:00 UTC wieder aktiv, mit dem Job „kein neuer Commit, kein Lauf“ aus 8f80fcf^, jetzt mit Playwright-Container. DEPLOY §9 nachgezogen.
 - **Lokal:** `npm run check` grün. Keine UI-Änderung, keine Playwright-Projekte.
 - **Nachtrag:** Layout-Lauf im Container nach dem Umschalten grün in 23 Min. (vorher ~40). CLAUDE.md „Befehle“ ohne „kostet Minuten“, Dauer dort und in DEPLOY §9 ~23 Min.
@@ -305,7 +314,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 - **Entschieden (Markus):** Kürzung in Runde 3 des Einstiegs bleibt im Code.
 - **Lokal:** `npm run check` grün, `text-layout` (echte Lesetexte) 4/4.
 
-## 2026-10-21 – Content: muster-strukturen Patch 1 (Pilot Tochter)
+## 2026-10-21 – Content: muster-strukturen Patch 1 (Pilot)
 - **Eingespielt:** m-ms-2-002 Zahlenmauer als Bild `ms-mauer-1.svg` (400 × 230, Schrift 36 ≥ 28,75), Stimulus ein Satz; m-ms-2-008 misconception nennt 350 und 410; `pilotNote` an beiden, Status `draft`. `content:validate` 0 Fehler, 1 Warnung (d-lsa-2-005, aus 1.0.17, unverändert).
 - **Gemessen (knappste Luft, iPad quer/hoch, Safari quer/hoch; antworten/richtig/noch nicht):** m-ms-2-002 166/189/114/65 (antworten), m-ms-2-008 264/448/156/324; kein Scrollen.
 - **Lokal:** `npm run check` grün, `layout.spec` 4/4 (vier Viewports).
@@ -622,7 +631,7 @@ Neueste Einträge oben. Je Eintrag max. 10 Zeilen: Datum, was gebaut, was offen,
 ## 2026-10-14 – Entscheidungen zu Aufgabe 6b, Rechenfrage ist ein Schild
 - **Entschieden (Markus):** Der Auswahl-Screen „Fortsetzen“/„Neu anfangen“ bleibt; ein Tipp mehr beim Fortsetzen verhindert ein versehentliches Neu anfangen. „Später“ gilt je Gerät (im MVP ein Lernender pro Gerät, alles andere ist PRODUCT §11). Beim Löschen ist kein Knopf gelb, weil Löschen kein nächster Schritt auf dem Weg ist.
 - **Geändert:** ARCHITECTURE §7 und PRODUCT §7: Die Rechenfrage ist kein Schutz, sondern ein Schild „für Eltern“. Der Schutz ist allein, dass kein Link zu `/eltern` führt. PRODUCT §7 sagt nicht mehr „Kindersicherung“, der Kommentar in `domain/parents/gate.ts` sagt dasselbe.
-- **Offen (Pilot):** Der Weg vom Fehler zum Neustart ist Pause → Karte → Gebiet → „Neu anfangen“, vier Tipps. Wenn Tochter nach einem Fehler sichtbar den Neustart sucht, kommt „Neu anfangen“ zusätzlich in die Üben-Pause. Erst dann, nicht vorsorglich.
+- **Offen (Pilot):** Der Weg vom Fehler zum Neustart ist Pause → Karte → Gebiet → „Neu anfangen“, vier Tipps. Wenn das Pilotkind nach einem Fehler sichtbar den Neustart sucht, kommt „Neu anfangen“ zusätzlich in die Üben-Pause. Erst dann, nicht vorsorglich.
 - **CI:** [CI #38581940617](https://github.com/1701/Pfadfinder/actions/runs/38581940617) grün (7330608), Workers Builds grün; 618 Tests, e2e 51 bestanden, 4 übersprungen (WebKit offline).
 
 ## 2026-10-14 – Aufgabe 6b: Neu anfangen, Später bis Tagesende, Eltern-Seite

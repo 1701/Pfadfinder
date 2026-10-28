@@ -64,7 +64,7 @@ Gegen die Live-URL am 2026-10-12 (Stand `db8afaa`, Bundle-Hash identisch mit dem
 - SEO war vor `public/robots.txt` bei 91 (der SPA-Fallback lieferte HTML als robots.txt). Seitdem 100; vereinzelt 91, wenn Lighthouse beim Abruf von robots.txt in eine Zeitüberschreitung läuft (Datei kommt korrekt als `text/plain`, der nächste Lauf ist wieder 100).
 - Barrierefreiheit 100. Die versteckte Regel `label-content-name-mismatch` schlug bei den Karten-Links an (sichtbarer Name „Formenund Raum“); behoben in `a6c3f89`, live bestätigt mit `f1bed82`.
 
-## 6. Noch nicht öffentlich
+## 6. Veröffentlichung
 
 Seit 2026-10-22 ist Pfadfinder für Suchmaschinen freigegeben: `public/robots.txt` erlaubt alles (`Allow: /`), das `noindex` in `index.html` ist entfernt. Eine Sitemap gibt es nicht (eine Seite, eine Adresse). Die Angaben in Impressum und Datenschutz (`src/ui/text/rechtliches.ts`) sind seit 2026-10-22 eingetragen.
 
@@ -111,12 +111,12 @@ Zwei GitHub-Workflows laufen neben Workers Builds und liefern nichts aus.
 
 | Workflow | Wann | Was | Dauer |
 |---|---|---|---|
-| `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~3 Min. |
-| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext in vier Viewports | ~30 Min. |
+| `CI` (`.github/workflows/ci.yml`) | jeder Push auf `main`, jeder Pull Request, von Hand | drei parallele Jobs: `check` (Lint, Content-Prüfung, Unit-Tests, Build), `smoke` (Projekte `chromium-landscape`, `chromium-portrait`), `webkit` (Projekte `webkit-landscape`, `webkit-portrait`) | ~2 Min. |
+| `Layout` (`.github/workflows/layout.yml`) | nachts 01:00 UTC, wenn `main` einen Commit ohne grünen Layout-Lauf hat; von Hand | Projekt `layout`: jedes Item, Probetest und Lesetext; lokal vier Viewports, in CI `layout.spec` und `probetest-layout` nur die beiden Safari-Viewports (CI 56 Tests, lokal 64) | ~30 Min. |
 
 - **Welcher Lauf welchen Status liefert:** `CI` sagt, ob ein Commit baut, die Tests besteht und den Üben-, Einstieg-, Eltern-, Probetest- und PWA-Ablauf in Chromium und WebKit schafft. Ob alles auf den Bildschirm passt, sagt nur das Layout-Projekt. Ein grünes `CI` heißt also nicht, dass das Layout geprüft ist; das Layout-Projekt läuft vor jedem UI- oder Content-Commit lokal (CLAUDE.md, DoD 1).
-- **Laufzeit Layout:** In CI zuletzt 29 m 12 s (Lauf 40457270697, 27.10.). Lokal (12 Kerne, 6 Worker, `probetest-layout` parallel) 31,4 und 31,1 Min. für 64 Tests; `text-layout` (~12,6 Min.) ist die längste Datei.
-- **TMPDIR:** Browser schreiben ihre Temp-Dateien nach `TMPDIR`, sonst nach `/tmp`. Hier ist `/tmp` ein tmpfs mit Benutzer-Quota (`usrquota`, 6 256 MiB = 80 % des tmpfs); parallele Chrome-Instanzen füllten es in rund 10 s, danach hingen die Seiten (`ERR_INSUFFICIENT_RESOURCES`, „Failed to fetch dynamically imported module“, Issue #1). Deshalb setzt `playwright.config.ts` lokal (nicht in CI) `TMPDIR=~/.cache/pfadfinder-playwright`, wenn es nicht schon gesetzt ist. Das Verzeichnis darf jederzeit gelöscht werden, es wird neu angelegt. Andere Linux-Nutzer mit `usrquota` auf `/tmp` brauchen nichts zu tun; wer `TMPDIR` selbst setzt, sollte auf ein Verzeichnis ohne enge Quota zeigen. Hängt ein Lauf, zuerst die Belegung von `/tmp` während des Laufs prüfen (`df /tmp`).
+- **Laufzeit Layout:** In CI zuletzt 27,9 Min. für 56 Tests, Job 28 m 42 s (Lauf 40643752248, 28.10., Stand `97d2498`). Lokal (Standard-Worker, `probetest-layout` parallel) 31,4 und 31,1 Min. für 64 Tests; `text-layout` (~12,6 Min.) ist die längste Datei.
+- **TMPDIR:** Browser schreiben ihre Temp-Dateien nach `TMPDIR`, sonst nach `/tmp`. Ist `/tmp` ein tmpfs mit Benutzerquota (`usrquota`), füllen parallele Chrome-Instanzen die Quota in Sekunden, danach hängen die Seiten (`ERR_INSUFFICIENT_RESOURCES`, „Failed to fetch dynamically imported module“, Issue #1). Deshalb setzt `playwright.config.ts` lokal (nicht in CI) `TMPDIR=~/.cache/pfadfinder-playwright`, wenn es nicht schon gesetzt ist. Das Verzeichnis darf jederzeit gelöscht werden, es wird neu angelegt. Andere Linux-Nutzer mit `usrquota` auf `/tmp` brauchen nichts zu tun; wer `TMPDIR` selbst setzt, sollte auf ein Verzeichnis ohne enge Quota zeigen. Hängt ein Lauf, zuerst die Belegung von `/tmp` während des Laufs prüfen (`df /tmp`).
 - **Port 5199:** Der Dev-Server des Layout-Projekts wird nie wiederverwendet (`reuseExistingServer: false`). Läuft schon etwas auf 5199, bricht der Lauf sofort ab; vorher `lsof -i :5199`. Dev-Seiten für das iPad deshalb künftig auf 5200 starten (`npx vite --port 5200 --host`).
 - **Ohne Lauf:** Änderungen nur an `docs/**`, Markdown-Dateien, `tests/e2e/screenshots/**` oder `.github/workflows/layout.yml` starten kein `CI`.
 - **Nächtlicher Layout-Lauf:** läuft nachts, Repo ist öffentlich.

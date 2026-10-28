@@ -2,6 +2,8 @@
 
 Ohne Technik: Aufgaben und Fehler per E-Mail an pfadfinder@steireif.de oder als Issue „Aufgabe vorschlagen“. Wir prüfen, passen bei Bedarf an und veröffentlichen unter CC BY-SA 4.0, auf Wunsch mit Nennung.
 
+Offene Arbeit gibt es als Issues mit den Labels `aufgabe` und `pflege`; wie du einsteigst, beschreibt `docs/UEBERGABE.md`.
+
 Mit Pull Request:
 
 - Lies `docs/CONTENT_SCHEMA.md` (Aufgaben) oder `docs/ARCHITECTURE.md` (Code), bevor du anfängst.

@@ -1,6 +1,7 @@
 name: Layout
 
-# The layout project (every item, Probetest and reading text in four viewports, ~23 min).
+# The layout project (every item, Probetest and reading text, ~30 min; layout.spec and
+# probetest-layout measure only the two Safari viewports in CI).
 # Not per path: layout also depends on src/domain, src/app, index.html, fonts and packages.
 # Nightly, but only when main has a commit without a green layout run yet (the repo is public,
 # Actions minutes are free); by hand always:
